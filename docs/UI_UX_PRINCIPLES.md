@@ -1,0 +1,45 @@
+# STRATHVISION UI/UX Principles
+
+Binding. The backend can be as sophisticated as required. The surface cannot.
+
+## Core Contract
+
+- Usable by someone who is reluctant to touch a phone and who already finds OnForm difficult. Coaches’ job is to convey movement, not operate software.
+- Coach and athlete should feel they are only coaching or reviewing the human subject. They remain blissfully unaware of densities, reinforcement learning, importance weights, and parameter updates.
+- Every interaction should feel like reviewing video.
+
+## Design Feel
+
+- Clean, calm, precise. Animations short and purposeful.
+- Feels like an advanced tool that stays out of the way.
+- No clutter, no feature walls, no setup rituals.
+- Preserve and improve the useful OnForm primitives (dual video, sync, slow-mo, mirror). Everything else is optional.
+
+## Progressive Enhancement
+
+Layers work independently and stack:
+
+1. Just footage — dual or single video, playback, sync, slow-mo, mirror. Already useful.
+2. Per-stroke stepping + simple red/green. Model improves.
+3. Voice notes or walkthroughs. Model improves more.
+4. Incoming coach marks and notes. Model improves further.
+
+No layer is required. Additional clean footage alone produces recursive improvement. Deep review is available and never mandatory. No one should need twenty minutes of marking to receive value.
+
+## Interaction Rules
+
+- Recovery from mistakes is instant and obvious (one-tap undo or equivalent that always works).
+- The current stroke and current attribute are unmistakable without relying on memory or text-heavy labels.
+- Defaults are aggressively good. Most users never open settings.
+- Controls (red/green, boundary drag, sync, record) respond on the frame they are touched. Backend latency is acceptable; control latency is not.
+- Empty and partial states (below Good, missing implement, single video, no coach package) look finished and useful, not disabled.
+- One primary action per screen.
+- Layout consistency supports spatial memory (big video left, mark controls bottom-right, stepper under video, etc.).
+
+## Aha Standard
+
+The model should surface real subtle patterns that experienced coaches and competitors already see—spacing that avoids overlap, opening/closing motions, small hinge or path changes—before anyone has named or tagged them.
+
+When it does so correctly and the user recognizes “it caught that,” the tool feels like magic. Present the difference cleanly (overlay, ghost, ranked delta). No invented labels or coaching language. The recognition comes from the user.
+
+Self-learning from additional clean footage is what makes those unnamed distinctions appear and sharpen.

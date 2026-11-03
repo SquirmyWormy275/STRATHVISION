@@ -1,111 +1,32 @@
 # STRATHVISION Architecture
 
-## Purpose
+See docs/DECISIONS.md for the full binding list. This file summarizes the runtime shape.
 
-STRATHVISION is a local-first athletic video analysis workstation with an inspectable style-matching engine.
+## Pipeline
 
-Primary product: excellent dual-video review (independent scrub, set-sync-point, locked playback, mirror, variable speed, frame step).
+Video → 3D full-body pose (root-relative) + implement track → phase and stroke segmentation → feature vector → profile density / manifold / importance weights → ranked deltas + counterfactual ghost (re-projected).
 
-Secondary product: pack-driven comparison of a swing/lift against private coach or mentor profiles, producing ranked, inspectable deltas.
+## Profile Structure
 
-Timber is the first pack. Olympic lifting is the second. The core never hard-codes either.
+- Shared base layer: body model, general ranges, implement-class attachments, cross-event mobility.
+- Per-event overlays: phase-conditioned mixture (μ, Σ), importance vector w, residual exemplars, reinforcement history, phase/segmenter state.
+- Coaching packages are exportable overlays (athlete-derived or coach-authored) with stable IDs and versions.
 
-## Non-Negotiable Invariants
+## Learning Loop
 
-1. The dual-video workspace is usable and excellent even if the analysis engine is disabled or fails.
-2. Analysis is pack-driven. The engine does not contain timber- or lifting-specific logic.
-3. Coach/mentor profiles are versioned, inspectable artifacts. They are built on a capable machine and consumed on mobile.
-4. Every match score is accompanied by ranked deltas that reference explicit metric definitions, user values, and coach ranges.
-5. A profile is not marked ready until it passes defined quality gates (minimum clean clips, self-consistency check).
-6. No required accounts or cloud. All primary data lives on the user’s devices. Transfer of profiles is user-controlled.
-7. Confidence and coverage are first-class. Low-quality pose or phase detection must degrade results visibly, never silently.
-8. Interfaces are strict. Implementation may not invent new top-level concepts without updating the contracts in INTERFACES.md.
-
-## High-Level System
-
-```
-┌──────────────────────────────────────────┐
-│  Flutter Application (all platforms)     │
-│  - Local library & projects             │
-│  - Dual-video workspace                 │
-│  - Analysis result & delta views        │
-│  - Profile consumption                  │
-│  - Drift history                        │
-└──────────────────────────────────────────┘
-                    │
-                    │ uses
-                    ▼
-┌──────────────────────────────────────────┐
-│  Analysis Runtime                       │
-│  - Rust core (comparison, profiles,     │
-│    quality gates, Flutter bridge)       │
-│  - Pose estimation (replaceable)        │
-│  - Phase & metrics (pack-driven)        │
-│  - Python only for early experimentation│
-└──────────────────────────────────────────┘
-                    │
-         ┌──────────┴──────────┐
-         ▼                     ▼
-┌──────────────┐     ┌──────────────┐
-│ Timber Pack    │     │ Oly Lifting  │
-│ (first)        │     │ Pack         │
-└──────────────┘     └──────────────┘
-```
+Clean frames and winning red/green/voice bindings produce discounted updates to mixture parameters and w. Inference always reads the current parameters. Light updates (w + exemplars) can apply on-phone immediately; full fits update μ/Σ.
 
 ## Device Roles
 
-- **Laptop / desktop**: Full library management, profile building, batch processing, deeper inspection. Primary place for heavy analysis and quality gates.
-- **Phone**: Capture, dual-video review, scoring against installed profiles, drift view. Consumes finished profile packages. Does not build profiles from scratch in v1.
+- Phone: full coach flows, inference, light updates, basic-to-advanced review, remote exchange.
+- Laptop/desktop: automatic workbench ingest/fit/push, heavier merges, archive. Optional for athletes; not required for coaches.
 
-Transfer of profile packages is explicit (export/import or local network). No silent cloud sync.
+## Sync
 
-## Technology Constraints
+Local/P2P profile packages only. No required cloud. Workbench mode is primary; manual transfer is secondary.
 
-- UI: Flutter (single codebase for iOS, Android, macOS, Windows, Linux).
-- Analysis engine: Rust/Python hybrid (see DECISIONS.md ADR-001).
-  - Rust owns comparison, profile fitting, quality gates, serialization, and the Flutter bridge.
-  - Python is limited to early experimentation; production definitions live in Rust or as pack data.
-- Local storage: SQLite (Drift or equivalent) + filesystem for videos and profile packages.
-- Pose estimation: replaceable backend. Start with a strong off-the-shelf 2D model. Do not hard-code a single provider deep into the engine.
-- All public contracts remain those defined in INTERFACES.md regardless of implementation language.
+## Gating
 
-## Pack Model
+Usable-action thresholds (Good/Great/Excellent) control when implement-specific and weighted features activate. Below Good the app remains a capable dual-video reviewer.
 
-A pack defines:
-- Ordered phases and detection rules/hints
-- Metric catalog (definitions, units, version)
-- Default weights for style matching
-- Profile schema extensions if needed
-- Filming guidance and quality heuristics
-- UI labels
-
-The comparison engine only knows how to compare feature vectors against profiles according to the active pack’s schema. It contains no domain vocabulary.
-
-## Profile Lifecycle
-
-1. User imports reference clips for a coach + event on laptop.
-2. System runs pose → phase → metrics.
-3. Quality gates are evaluated (clip count, detection confidence, self-consistency).
-4. If gates pass, a versioned profile artifact is produced.
-5. Profile is exported and imported to phone (or used locally).
-6. Phone scores new clips against the installed profile and stores results for drift.
-
-Profiles are immutable once published. Updates create a new version.
-
-## Failure Modes That Must Be Explicit
-
-- Insufficient clean reference clips
-- Low pose confidence on critical frames
-- Phase detection failure
-- Missing required metrics for the pack
-- Profile version mismatch with current metric definitions
-
-These must surface as structured errors or degraded results, never as confident scores.
-
-## Out of Scope for Architecture v1
-
-- Multi-user collaboration
-- Server-side training or inference
-- Learned style embeddings (explicit metrics + statistical profiles only)
-- Automatic drill prescription
-- Live streaming or multi-device simultaneous capture
+All detailed rules, conflict handling, retention, recovery, and edge cases are in DECISIONS.md.

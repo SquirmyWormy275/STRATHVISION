@@ -1,229 +1,76 @@
-# Architectural Decisions
-
-## ADR-001: Rust/Python hybrid analysis engine
-
-**Status**: Accepted
-
-**Context**
-
-The analysis runtime (pose orchestration, phase detection, metric extraction, comparison, profile fitting) must be fast, distributable, and callable from Flutter on desktop and mobile. Early metric and phase definitions will change frequently.
-
-**Decision**
-
-- **Rust** owns the stable, performance-sensitive core and the Flutter boundary:
-  - Frame/keypoint containers
-  - Metric vector assembly
-  - Comparison engine
-  - Profile serialization and fitting
-  - Quality-gate evaluation
-  - C ABI / `flutter_rust_bridge` (or equivalent) interface
-- **Python** is permitted only for early experimentation on phase rules and metric definitions. Winning definitions are ported into Rust (or expressed as pack data consumed by Rust) before they are considered production.
-- The contracts in INTERFACES.md remain the source of truth. Neither language may introduce concepts that are not in the contracts.
-
-**Consequences**
-
-- Desktop and mobile can share the same comparison and profile logic.
-- Profile packages are produced by Rust code, so they are consistent across platforms.
-- Iteration on new metrics is slightly slower once ported, but the final artifact is a single, predictable binary component.
-- Pose estimation itself stays behind a replaceable backend interface; the language choice does not lock the pose model.
-
-**Rejected alternatives**
-
-- Pure Python: simpler iteration, harder distribution and mobile story.
-- Pure Rust from day one: cleaner, but higher cost on the first rounds of phase/metric experimentation.
-
-## ADR-002: Pose estimation backend interface
-
-**Status**: Accepted
-
-**Context**
-
-Pose estimation is the most likely component to be replaced or upgraded. The rest of the pipeline (phase detection, metrics, comparison) must not depend on any single model's output format or quirks.
-
-**Decision**
-
-Pose estimation sits behind a narrow interface owned by the Rust core:
-
-```text
-PoseBackend::extract(video_path: &Path) -> Result<Vec<FrameKeypoints>, PoseError>
-```
-
-- `FrameKeypoints` contains timestamp or frame index, joint positions, and per-joint confidence.
-- v1 default implementation may use MediaPipe, an ONNX model, or equivalent. The choice is an implementation detail.
-- Swapping or adding a backend requires no changes to phase detection, metric extraction, comparison, or profile code.
-- All downstream stages consume only `FrameKeypoints`. They never call a pose library directly.
-
-**Consequences**
-
-- Backend upgrades are localized.
-- Tests for phase and metric logic can use recorded or synthetic `FrameKeypoints` fixtures.
-- Low per-joint or per-frame confidence is available for the degradation rules in ADR-005.
-
-## ADR-003: Dual-video sync model
-
-**Status**: Accepted
-
-**Context**
-
-Users need to align two clips (own movement vs reference, or two of their own) and scrub or play them together. Complex time-warping is unnecessary for v1 and easy to get wrong.
-
-**Decision**
-
-- Each synced pair stores a single primary offset (in milliseconds or frame delta) inside the Project.
-- Offset is set by the user choosing a frame on stage A and a frame on stage B and invoking "Set Sync Point".
-- When locked, both timelines advance by the same media-time delta after the offset is applied.
-- Frame step operates on the locked pair when sync is active; otherwise it operates on the active stage.
-- Mirror affects display only and does not alter the offset.
-- Only one primary offset per pair in v1. Multi-point or dynamic warping is out of scope.
-
-**Consequences**
-
-- Sync state is simple to persist and restore.
-- Implementation and testing stay bounded.
-- The interaction remains fast enough for the "align in under 15 seconds" acceptance criterion.
-
-## ADR-004: Device capability split (v1)
-
-**Status**: Accepted
-
-**Context**
-
-Profile building requires multiple clean reference clips, quality-gate evaluation, and self-consistency checks. Mobile devices are poor hosts for that workflow in v1.
-
-**Decision**
-
-**Laptop / desktop may**:
-- Manage full library and projects
-- Run pose → phase → metrics on reference sets
-- Build, validate, and export profile packages
-- Perform deeper metric inspection
-
-**Phone may**:
-- Capture and import video
-- Run the full dual-video workspace
-- Score clips against already-installed profile packages
-- Display ranked deltas and drift history
-- Import/export profile packages
-
-**Phone may not (v1)**:
-- Build or refit profiles from raw reference clips
-- Bypass quality gates
-
-**Consequences**
-
-- Mobile scope stays shippable.
-- The same Rust comparison code runs on both sides; only profile *construction* is desktop-only.
-- Users who want new profiles use the laptop, then move the package.
-
-## ADR-005: Confidence and score degradation
-
-**Status**: Accepted
-
-**Context**
-
-Low-quality pose or phase detection must not produce confident-looking style-match scores.
-
-**Decision**
-
-- Packs define critical phases and minimum confidence thresholds.
-- If pose or phase confidence on a critical phase falls below threshold:
-  - The Comparison Result must include an explicit warning.
-  - The overall score is visually secondary or marked degraded.
-  - Affected deltas are marked low-confidence.
-- Implementation may not suppress these warnings or present a clean primary score when coverage is insufficient.
-
-**Consequences**
-
-- Results stay trustworthy under poor filming conditions.
-- Users can see when they need a better clip instead of receiving a misleading number.
-
-## ADR-006: Local storage layout
-
-**Status**: Accepted
-
-**Context**
-
-All primary data must remain on-device. Videos are large. Profiles must be portable between laptop and phone. Projects, sync state, annotations, and analysis results must survive app restarts without a server.
-
-**Decision**
-
-Storage is split by data type:
-
-| Data | Location | Notes |
-|------|----------|-------|
-| Video files | Filesystem (app documents or user-chosen directory) | Referenced by relative path or content hash. Never stored as blobs in the database. |
-| Projects, clips metadata, sync relationships, annotations | SQLite | Single local database per device. |
-| Analysis results and drift history | SQLite | Linked to clip and profile version. |
-| Profile packages | Self-contained directory or zip on filesystem | Contains the profile JSON (per INTERFACES.md) plus any supporting files. Copied as a unit between devices. |
-| Pack definitions | Bundled with app or loaded from local files | Treated as read-only configuration. |
-
-Rules:
-
-- The database stores references, not video bytes.
-- A profile package is the unit of transfer. Importing one on a new device requires no other data.
-- Deleting a project does not delete video files unless the user explicitly chooses to.
-- No cloud path is required for any of the above to function.
-
-**Consequences**
-
-- Backup and device transfer are understandable (copy videos + copy profile packages + optional DB export).
-- The app remains usable offline after initial install.
-- Implementation cannot "simplify" by putting videos in SQLite or requiring an account for library access.
-
-**Rejected alternatives**
-
-- Single SQLite file containing everything: poor performance and portability for video.
-- Mandatory cloud sync: violates local-first invariant.
-
-## ADR-007: Profile package internal layout
-
-**Status**: Accepted
-
-**Context**
-
-A profile package is the unit of transfer between devices. Its contents must be sufficient for scoring and for basic inspection without access to the original reference videos.
-
-**Decision**
-
-A profile package is a directory or zip with this structure:
-
-```text
-profile-<profile_id>-v<version>/
-├── profile.json          # Required. Conforms to INTERFACES.md Profile schema.
-├── manifest.json         # Required. Package metadata (see below).
-├── references/           # Optional. Small supporting files only.
-│   ├── thumbnails/       # Optional low-res stills for UI.
-│   └── phase_examples/   # Optional short frame sequences or key frame indices.
-└── README.txt            # Optional human-readable summary.
-```
-
-`manifest.json` minimum fields:
-
-```json
-{
-  "package_format_version": 1,
-  "profile_id": "uuid",
-  "profile_version": 1,
-  "pack_id": "string",
-  "event_id": "string",
-  "metric_schema_version": "string",
-  "created_at": "iso8601",
-  "source_clip_count": 0,
-  "quality_gates_passed": true
-}
-```
-
-Rules:
-
-- `profile.json` alone is sufficient to score new clips.
-- Reference videos are **not** included in the package. Only derived data and optional small thumbnails.
-- The package must be loadable on a device that has never seen the original clips.
-- Invalid or missing `profile.json` / `manifest.json` causes import to fail with a structured error.
-- Packages are immutable. A new version is a new directory/zip.
-
-**Consequences**
-
-- Transfer size stays small.
-- Phone can score against a profile without the multi-gigabyte reference set.
-- Inspection of what the profile contains is possible from the package itself.
-- Original reference footage remains under user control on the machine that built the profile.
+# STRATHVISION Architectural Decisions
+
+All decisions below are binding. Later implementation must conform.
+
+## Core Engine
+
+- Full-body 3D, root-relative, camera-agnostic pose before any metrics or manifold work.
+- Implement track is required. Lightweight tracker supplies 3D point or short rigid segment in the same root-relative frame. Low-confidence implement frames drop implement dimensions, skip importance updates on them, and suppress dependent overlays/ghosts. Body-only comparison continues.
+- Per-profile online-adapted rigid attachment for implements. Optional one-time photo/video seed for length, offset, and tracking prior. Class-level templates (axe, crosscut, chainsaw, hot saw, barbell, etc.) are required; per-instance refinement is optional. Untagged clips infer class; implement-specific updates only on match.
+- Phase labeling is hybrid by default. Athlete/coach can switch between Automatic, Seeded, and Hybrid via dropdown. Corrections are soft bindings that gradually update the detector.
+- Stroke boundaries detected from pack-supplied signals (implement-speed peaks + phase transitions). Manual drag/split/merge stored as soft corrections that can update the segmenter.
+- Style manifold + counterfactual layer on top of phase-conditioned density. Sparse minimal-change ghost re-projected into the athlete’s camera.
+- Shared base layer (body, general ranges, implement classes, cross-event mobility) + per-event overlays (density, importance weights, exemplars, reinforcement history).
+
+## Continuous Learning (parameter updates, not context)
+
+- Density is a phase-conditioned mixture. New clean frames perform discounted online updates to μ and Σ.
+- Importance vector w is updated from feedback embeddings. Corrective language raises weights; dismissive language lowers them.
+- Residual exemplars store (feature delta, feedback embedding, weight).
+- Inference sorts by w-scaled deviation and solves weighted sparse counterfactual. Parameters actually change; behavior changes.
+- Recency bias on all bindings. Visual demonstration is ground truth; speech/tags only re-weight or add exemplars.
+- Attribute-priority hybrid: session priority isolates learning rate to chosen dimension(s). Green/red marks are per-stroke, per-attribute reinforcement. Coach mark overrides athlete mark; newest coach mark wins. Only the winning label updates parameters.
+- Soft personal pull: athlete accepted swings can slightly shift the target inside the coach-supported region at reduced learning rate.
+- Multi-coach footage tightens shared directions and leaves style differences as higher variance.
+
+## Thresholds and Gating (timber defaults)
+
+- Usable action = confident 3D pose + confident implement + assigned phase + actual stroke.
+- Good: 2 min usable. Great: 6 min. Excellent: 15 min.
+- Below Good: store everything, body tracking and basic dual-video tools work, suppress implement-specific ghosts, weighted rankings, and parameter updates. Persistent encouragement to add footage.
+- At Good and above: advanced features unlock progressively.
+- Explanatory coach speech during swings receives boosted binding weight.
+
+## Coaching Packages and Remote
+
+- Athlete-derived and coach-authored packages. Coach-authored built in this iteration: coach uploads own footage, runs reinforcement, exports.
+- Package contains densities, w, exemplars, phase/segmenter state, implement-class templates. No raw video, no base layer.
+- Stable IDs: coach:<name>:<event>:<origin>. Monotonic versions + content hash. Non-mutating. Import offers replace / keep / merge.
+- Export choices: Coaching profile only (default), + my marks, or Full local overlay. Explicit summary before write. Contribution to shared/merged requires opt-in.
+- Soft revoke: blocks new imports, flags existing copies, no remote deletion. Opt-in update notices only.
+- Phone-first for all coach flows (create, reinforce, export, merge, revoke). Athletes may use laptop for heavier comparative work.
+- Remote exchange paths (all produce identical bindings):
+  1. One-time clip code / QR (primary)
+  2. Shared local inbox folder (Syncthing etc.)
+  3. Message-attachment round-trip
+- Incoming coach marks: immediate light update (w + exemplars + re-rank + ghost) then queued for next full fit. Coach overrides athlete on same stroke+attribute.
+
+## Sync, Tiers, Recovery
+
+- Profile package is the fitted result (parameters, w, exemplars, bindings index, etc.). Raw video stays local.
+- Primary: automatic workbench loop (laptop ingests, fits, pushes when phone reachable).
+- Secondary: manual transfer when convenient (AirDrop, local network, P2P code).
+- Opportunistic local Wi-Fi + one-time peer-to-peer. No required cloud.
+- Phone base / laptop-trained package / desktop full. Phone never required to do heavy fit for personal use; coaches can do everything on phone.
+- Single writer queue per overlay. Fits run on snapshot; mid-fit arrivals apply after.
+- Automatic rollback (keep last two versions). Soft reset (parameters only). Full export-and-rebuild archive.
+- Format versioning: newer readers accept older packages; older readers refuse or read-only.
+
+## Edge Cases
+
+- One phone + one laptop.
+- Deleted source clips: invalidate tied marks/exemplars and rebuild without them.
+- Extreme mismatch: auto-scale imported ranges to athlete mobility.
+- Clock sync / logical timestamps for recency.
+- Partial fit crash: previous version remains intact.
+- Transcript failure: drop language binding after retry; keep audio. Robust local transcriber is priority.
+- Single user per install.
+- Design target 20–30 min sessions.
+
+## UI/UX Principles (see also docs/UI_UX_PRINCIPLES.md)
+
+- Backend may be arbitrarily complex. Frontend must be usable by someone reluctant to use a phone.
+- Coach and athlete feel they are only coaching/reviewing the human. Blissfully unaware of the model.
+- Progressive enhancement: footage alone → per-stroke red/green → voice → coach notes. Each layer independent. Model improves from clean footage alone.
+- Instant obvious undo. Unmistakable current stroke/attribute. Aggressively good defaults. Physical-feeling control latency. Finished-looking empty/partial states. One primary action per screen. Spatial memory over menu paths.
+- Aha standard: surface subtle unnamed patterns (spacing, opening/closing, etc.) cleanly so the user recognizes them. No invented coaching language.
