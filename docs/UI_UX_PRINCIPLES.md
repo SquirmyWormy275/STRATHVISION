@@ -97,3 +97,20 @@ A single calm filmstrip control panel. The file system and the control surface a
 - All secondary actions (export, settings, packages, gesture mapper) live one level down and are invisible here.
 
 The home screen’s only job is to place the next footage under the thumb. It looks finished and quietly alive even when nearly empty, and never asks the user to manage files, models, or status.
+
+## Vibe-Coded Smells to Avoid
+
+Drawn from the YC Design Review critiques of AI-generated interfaces. These patterns make a product feel generic, frustrating, or unfinished. They are forbidden in STRATHVISION.
+
+- Cryptic or unlabeled primary actions. Buttons must say what they do by position, color, and clear short text. No mystery labels.
+- Extra clicks or reveals before the main verb. The action the user came to perform is visible and one step away.
+- Fake interactivity. Anything that looks tappable must respond immediately. No decorative controls.
+- Scroll-jacking or forced pacing. The user controls the timeline and filmstrip. No hijacked scroll, no auto-advancing tabs or steppers.
+- Decorative motion. Animation exists only to signal real system state (stroke detected, update applied, recording live). Glows, random pulses, and flourish are out.
+- Model-default typography and styling (Instrument Serif, Space Grotesk, generic gradients, random bolding, em-dash spam). Typography, spacing, and accent are chosen once and locked.
+- Tiny, angled, or low-contrast critical text. Usable-time marks, attribute names, and CTAs must be readable at a glance.
+- Investor or internal language on user-facing surfaces. Speak only about the footage and the marks.
+- Dense, fast, or auto-playing demos that hide the point. Show one clear thing.
+- Progress or status that feels like a chore. Quiet living underlines and brief sweeps only.
+
+Positive patterns to keep: motion that reinforces a real change, generous spacing, immediate obvious actions, and visual calm that still signals intelligence.
