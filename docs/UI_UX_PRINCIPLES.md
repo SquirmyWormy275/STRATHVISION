@@ -81,3 +81,19 @@ Single clean sheet launched from the review screen.
 - Language is limited to “Send to coach” and “Coach notes arrived.” No account creation, no sync jargon, no status dashboards.
 
 The flow must feel as light as handing someone a phone.
+
+## Library / Home
+
+A single calm filmstrip control panel. The file system and the control surface are the same object.
+
+- Full-width horizontal filmstrip is the only primary content. Most recent session is largest. Thumbnails are pure video frames.
+- Restrained living underline (same language as partial-state stroke traces) appears only when the system has already detected strokes or applied an update. No badges, percentages, or competing icons.
+- Tap any thumbnail opens review immediately, landed on the last-viewed stroke if one exists.
+- Active overlay name is a quiet top-left wordmark; tap to switch. It does not resemble a menu until touched.
+- Add footage is a slim “+” at the leading edge of the filmstrip itself.
+- Incoming coach notes: the relevant thumbnail receives the brief elegant sweep, then keeps a faint accent edge until opened (opening applies the light update and clears the edge).
+- Earlier clips continue on the same strip and simply become smaller and quieter. No secondary “see all” screen.
+- Empty state: the filmstrip region is the calm pulsing drop target; the first clip resolves the pulse into the underline.
+- All secondary actions (export, settings, packages, gesture mapper) live one level down and are invisible here.
+
+The home screen’s only job is to place the next footage under the thumb. It looks finished and quietly alive even when nearly empty, and never asks the user to manage files, models, or status.
