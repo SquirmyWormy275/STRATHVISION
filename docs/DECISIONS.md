@@ -57,7 +57,7 @@ PoseBackend::extract(video_path: &Path) -> Result<Vec<FrameKeypoints>, PoseError
 
 - Backend upgrades are localized.
 - Tests for phase and metric logic can use recorded or synthetic `FrameKeypoints` fixtures.
-- Low per-joint or per-frame confidence is available for the degradation rules in ADR-004.
+- Low per-joint or per-frame confidence is available for the degradation rules in ADR-005.
 
 ## ADR-003: Dual-video sync model
 
@@ -136,3 +136,41 @@ Low-quality pose or phase detection must not produce confident-looking style-mat
 
 - Results stay trustworthy under poor filming conditions.
 - Users can see when they need a better clip instead of receiving a misleading number.
+
+## ADR-006: Local storage layout
+
+**Status**: Accepted
+
+**Context**
+
+All primary data must remain on-device. Videos are large. Profiles must be portable between laptop and phone. Projects, sync state, annotations, and analysis results must survive app restarts without a server.
+
+**Decision**
+
+Storage is split by data type:
+
+| Data | Location | Notes |
+|------|----------|-------|
+| Video files | Filesystem (app documents or user-chosen directory) | Referenced by relative path or content hash. Never stored as blobs in the database. |
+| Projects, clips metadata, sync relationships, annotations | SQLite | Single local database per device. |
+| Analysis results and drift history | SQLite | Linked to clip and profile version. |
+| Profile packages | Self-contained directory or zip on filesystem | Contains the profile JSON (per INTERFACES.md) plus any supporting files. Copied as a unit between devices. |
+| Pack definitions | Bundled with app or loaded from local files | Treated as read-only configuration. |
+
+Rules:
+
+- The database stores references, not video bytes.
+- A profile package is the unit of transfer. Importing one on a new device requires no other data.
+- Deleting a project does not delete video files unless the user explicitly chooses to.
+- No cloud path is required for any of the above to function.
+
+**Consequences**
+
+- Backup and device transfer are understandable (copy videos + copy profile packages + optional DB export).
+- The app remains usable offline after initial install.
+- Implementation cannot "simplify" by putting videos in SQLite or requiring an account for library access.
+
+**Rejected alternatives**
+
+- Single SQLite file containing everything: poor performance and portability for video.
+- Mandatory cloud sync: violates local-first invariant.
