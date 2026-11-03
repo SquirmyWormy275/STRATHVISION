@@ -36,12 +36,12 @@ Timber is the first pack. Olympic lifting is the second. The core never hard-cod
                     │ uses
                     ▼
 ┌──────────────────────────────────────────┐
-│  Analysis Runtime (shared)              │
+│  Analysis Runtime                       │
+│  - Rust core (comparison, profiles,     │
+│    quality gates, Flutter bridge)       │
 │  - Pose estimation (replaceable)        │
-│  - Phase detection (pack-driven)        │
-│  - Metric extraction (pack-driven)      │
-│  - Style comparison engine              │
-│  - Profile fitting                      │
+│  - Phase & metrics (pack-driven)        │
+│  - Python only for early experimentation│
 └──────────────────────────────────────────┘
                     │
          ┌──────────┴──────────┐
@@ -62,9 +62,12 @@ Transfer of profile packages is explicit (export/import or local network). No si
 ## Technology Constraints
 
 - UI: Flutter (single codebase for iOS, Android, macOS, Windows, Linux).
+- Analysis engine: Rust/Python hybrid (see DECISIONS.md ADR-001).
+  - Rust owns comparison, profile fitting, quality gates, serialization, and the Flutter bridge.
+  - Python is limited to early experimentation; production definitions live in Rust or as pack data.
 - Local storage: SQLite (Drift or equivalent) + filesystem for videos and profile packages.
 - Pose estimation: replaceable backend. Start with a strong off-the-shelf 2D model. Do not hard-code a single provider deep into the engine.
-- Analysis engine: must expose a clean interface consumable from Flutter. Language of the engine core is implementation detail; contracts are not.
+- All public contracts remain those defined in INTERFACES.md regardless of implementation language.
 
 ## Pack Model
 
