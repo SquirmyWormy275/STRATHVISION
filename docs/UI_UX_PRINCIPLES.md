@@ -55,3 +55,16 @@ Self-learning from additional clean footage is what makes those unnamed distinct
 - Empty, loading, and below-threshold states are fully designed screens.
 
 Coding agents must treat the frontend as a primary deliverable equal in importance to the engine. Basic HTML, minimal scaffolding, or placeholder UIs do not meet this bar.
+
+## Empty and Partial States — Quiet Intelligence
+
+These states are fully designed and screenshot-worthy. They communicate that capable work is occurring behind the scenes without requiring user action or explanation. Motion is restrained, geometric, and optional (can be disabled).
+
+- Visual language: generous space, clean lines, slow breathing outlines, faint traveling highlights on timelines or stroke segments, soft pulses on progress marks. Single accent color used only on living elements. No conventional spinners or chore-like progress bars.
+- Below Good: complete base review tools present. Delicate animated trace on already-detected strokes; usable-time indicator has a soft living underline. Feeling of “already studying,” not “features missing.”
+- Implement untracked: body skeleton appears cleanly; faint expected path yields after a moment.
+- Model update or fit completing: brief elegant sweep or ghost re-draw, then silence. No mandatory toast.
+- True empty library: calm drop target with slow pulse that resolves into stroke highlights on first clip.
+- Single-video, no-coach, and sync-pending states remain finished and quiet; advanced controls omitted rather than disabled.
+
+The goal is understated wonder: the user senses intelligence and occasional sharpness without ever managing the backend. This is a primary differentiator of the product.
