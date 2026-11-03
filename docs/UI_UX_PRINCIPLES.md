@@ -43,3 +43,15 @@ The model should surface real subtle patterns that experienced coaches and compe
 When it does so correctly and the user recognizes “it caught that,” the tool feels like magic. Present the difference cleanly (overlay, ghost, ranked delta). No invented labels or coaching language. The recognition comes from the user.
 
 Self-learning from additional clean footage is what makes those unnamed distinctions appear and sharpen.
+
+## Frontend Quality Bar (mandatory for implementation)
+
+- Production-grade, component-driven UI. Not static HTML, not a thin wrapper around video tags, not a WebView.
+- Flutter is the cross-platform target (iOS, Android, desktop). Implementation must use Flutter’s full widget and composition model, custom painters for overlays, ghosts, and paths, and proper state management.
+- Visual standard: tight typography, consistent spacing system, restrained motion, high-contrast mark controls, video-first layouts that feel like dedicated pro training / sports-analysis software.
+- Dual-video surfaces, stroke steppers, re-projected ghosts, and path overlays are first-class rendered elements.
+- Same UI shell serves timber, Olympic lifting, and other packs; sport-specific controls are data-driven additions inside the existing layout.
+- Performance requirement: 60 fps scrubbing and immediate control response while pose and implement overlays are active. Jank is a defect.
+- Empty, loading, and below-threshold states are fully designed screens.
+
+Coding agents must treat the frontend as a primary deliverable equal in importance to the engine. Basic HTML, minimal scaffolding, or placeholder UIs do not meet this bar.
