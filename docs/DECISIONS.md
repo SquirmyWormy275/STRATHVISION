@@ -174,3 +174,56 @@ Rules:
 
 - Single SQLite file containing everything: poor performance and portability for video.
 - Mandatory cloud sync: violates local-first invariant.
+
+## ADR-007: Profile package internal layout
+
+**Status**: Accepted
+
+**Context**
+
+A profile package is the unit of transfer between devices. Its contents must be sufficient for scoring and for basic inspection without access to the original reference videos.
+
+**Decision**
+
+A profile package is a directory or zip with this structure:
+
+```text
+profile-<profile_id>-v<version>/
+├── profile.json          # Required. Conforms to INTERFACES.md Profile schema.
+├── manifest.json         # Required. Package metadata (see below).
+├── references/           # Optional. Small supporting files only.
+│   ├── thumbnails/       # Optional low-res stills for UI.
+│   └── phase_examples/   # Optional short frame sequences or key frame indices.
+└── README.txt            # Optional human-readable summary.
+```
+
+`manifest.json` minimum fields:
+
+```json
+{
+  "package_format_version": 1,
+  "profile_id": "uuid",
+  "profile_version": 1,
+  "pack_id": "string",
+  "event_id": "string",
+  "metric_schema_version": "string",
+  "created_at": "iso8601",
+  "source_clip_count": 0,
+  "quality_gates_passed": true
+}
+```
+
+Rules:
+
+- `profile.json` alone is sufficient to score new clips.
+- Reference videos are **not** included in the package. Only derived data and optional small thumbnails.
+- The package must be loadable on a device that has never seen the original clips.
+- Invalid or missing `profile.json` / `manifest.json` causes import to fail with a structured error.
+- Packages are immutable. A new version is a new directory/zip.
+
+**Consequences**
+
+- Transfer size stays small.
+- Phone can score against a profile without the multi-gigabyte reference set.
+- Inspection of what the profile contains is possible from the package itself.
+- Original reference footage remains under user control on the machine that built the profile.
