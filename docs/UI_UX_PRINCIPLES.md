@@ -68,3 +68,16 @@ These states are fully designed and screenshot-worthy. They communicate that cap
 - Single-video, no-coach, and sync-pending states remain finished and quiet; advanced controls omitted rather than disabled.
 
 The goal is understated wonder: the user senses intelligence and occasional sharpness without ever managing the backend. This is a primary differentiator of the product.
+
+## Send / Receive
+
+Single clean sheet launched from the review screen.
+
+- Three large, equal targets (shown only when available):
+  - Code / QR — generated immediately, large type, copy or display.
+  - System Share sheet (Messages, WhatsApp, etc.).
+  - Folder — only if a paired inbox already exists; otherwise omitted.
+- Incoming coach returns appear as a quiet badge or notification. Opening the return applies the light update, plays the brief elegant sweep, and restores the user to the same stroke.
+- Language is limited to “Send to coach” and “Coach notes arrived.” No account creation, no sync jargon, no status dashboards.
+
+The flow must feel as light as handing someone a phone.
