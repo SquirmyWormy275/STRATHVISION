@@ -21,7 +21,7 @@ Secondary claims tested by the system:
 - **Private coach/mentor profiles** — built from an athlete’s own reference footage on a laptop, consumed on phone. No public marketplace, no required accounts.
 - **Pack-driven style matching** — timber first, Olympic lifting second. The engine contains no domain-specific logic; packs supply phases, metrics, and weights.
 - **Inspectable AI + weight-space programming** — every match score produces ranked deltas. Specialist nets accept sparse patches. Fuzzy decisions compile once into local adapters. CARNE ASADA (desktop-only) recursively edits the style mixture under hard bounds.
-- **Cross-platform** — Flutter UI for iOS, Android, Windows, macOS, Linux. Rust core + Python for analysis and editing.
+- **Cross-platform** — Flutter UI for iOS, Android, Windows, macOS, Linux. The analysis engine is a pure-Dart package (`packages/analysis_engine`) shared by phone and desktop (see docs/DECISIONS.md, Phase 3).
 
 ## Device Roles
 
@@ -63,6 +63,27 @@ Results published in this section:
 
 No cherry-picking. Date, footage count, and numbers go here.
 
+### How to run it
+
+Prerequisites:
+- A desktop build (docs/DISTRIBUTION.md).
+- The footage on that computer.
+- A real 3D pose model and implement tracker in place of the Phase 3 stand-ins (see `docs/handoff/STATUS.md`). With the stand-ins the numbers mean nothing.
+
+1. **Choose the event.** In the Library, pick **Underhand** (later **Standing block**) from the event menu in the top bar.
+2. **Build each coach's profile.** For each of Matthew Gurr and Daniel Gurr, tap **Build a profile** (person-plus icon), name it, and add that coach's clips for the event. Every clip reports Clean or why not. **Build profile** needs 15+ clean clips that pass self-consistency. Record the clip counts it reports.
+3. **Optional: marks.** Review clips in a workspace and add green/red **Slope** marks on strokes. CARNE ASADA binds marks from any review of the same file to the stroke at that time. Coach marks override athlete marks.
+4. **Feed CARNE ASADA.** Open the profile's **Workbench** (tune icon) → **CARNE ASADA**. Priority starts at slope (a text note `priority: spacing` or `priority: hinge` changes it before the first edit). Drop the whole set onto **Feed CARNE ASADA**. Record each status line.
+5. **Let it run.** Updates are tried automatically once usable footage passes Good (2 min), and **Look for an update** tries again. It stops at the session limit. **What did it just do?** lists every explanation, and **Undo** is one click.
+6. **Save as vN+1.** The package gets `carne_asada/mixture_edits_vN.json` holding the priority, usable minutes, the coach hull, and every edit (before/after values, objective before/after, explanation, time).
+7. **Publish** the numbers above from that file, plus the profile versions.
+   - Usable strokes: the "Found N strokes. K are clean enough…" lines.
+   - Accepted edits: the `edits` count.
+   - Before/after residual on the priority attribute: `objective_before` of the first edit against `objective_after` of the last.
+   - Explanations: copy each `explanation` verbatim.
+   - Hull compliance: every `after.center` lies within `hull`.
+   - Raw logs: attach the zip.
+
 ## Repository map
 
 | Document | Purpose |
@@ -76,7 +97,7 @@ No cherry-picking. Date, footage count, and numbers go here.
 
 ## Current status
 
-Architecture, contracts, specialist net, CARNE ASADA, distribution, and execution plan are locked. Implementation has not started. The plan produces a usable dual-video product before any analysis or research code.
+Phases 1–9 of docs/EXECUTION_PLAN.md are implemented on the `implementation` branch. Live progress, open checks, and questions for the human are in [docs/handoff/STATUS.md](docs/handoff/STATUS.md). Pose, implement tracking and phase detection are still stand-ins behind real interfaces: the review tools are real, but analysis numbers are placeholders until real models are chosen. App usage and manual checks are in [apps/strathvision/README.md](apps/strathvision/README.md). Test builds are described in [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md).
 
 ## For reviewers
 

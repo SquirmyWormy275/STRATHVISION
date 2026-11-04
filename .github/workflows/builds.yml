@@ -1,0 +1,105 @@
+# Test builds for every locked distribution path (docs/DISTRIBUTION.md):
+# Android APK, desktop zips (Linux, Windows, macOS), and an unsigned iOS
+# build that is signed ad hoc on a Mac. Artifacts attach to each run.
+name: builds
+
+on:
+  push:
+    branches: [implementation, main]
+    paths: ['apps/**', 'packages/**', '.github/workflows/builds.yml']
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: '3.47.9'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - name: Engine tests
+        working-directory: packages/analysis_engine
+        run: dart pub get && dart analyze && dart test
+      - name: App tests
+        working-directory: apps/strathvision
+        run: flutter pub get && flutter analyze && flutter test
+
+  android:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - working-directory: apps/strathvision
+        run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: strathvision-android-apk
+          path: apps/strathvision/build/app/outputs/flutter-apk/app-release.apk
+
+  linux:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: System libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libmpv-dev
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - working-directory: apps/strathvision
+        run: |
+          flutter build linux --release
+          cd build/linux/x64/release/bundle && zip -r ../../../../../strathvision-linux-x64.zip .
+      - uses: actions/upload-artifact@v4
+        with: { name: strathvision-linux-x64, path: apps/strathvision/strathvision-linux-x64.zip }
+
+  windows:
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - working-directory: apps/strathvision
+        shell: pwsh
+        run: |
+          flutter build windows --release
+          Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath strathvision-windows-x64.zip
+      - uses: actions/upload-artifact@v4
+        with: { name: strathvision-windows-x64, path: apps/strathvision/strathvision-windows-x64.zip }
+
+  macos:
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - working-directory: apps/strathvision
+        run: |
+          flutter build macos --release
+          ditto -c -k --keepParent build/macos/Build/Products/Release/strathvision.app strathvision-macos.zip
+      - uses: actions/upload-artifact@v4
+        with: { name: strathvision-macos, path: apps/strathvision/strathvision-macos.zip }
+
+  ios:
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - name: Unsigned build (sign ad hoc on a Mac, see docs/DISTRIBUTION.md)
+        working-directory: apps/strathvision
+        run: |
+          flutter build ios --release --no-codesign
+          ditto -c -k --keepParent build/ios/iphoneos/Runner.app strathvision-ios-unsigned.zip
+      - uses: actions/upload-artifact@v4
+        with: { name: strathvision-ios-unsigned, path: apps/strathvision/strathvision-ios-unsigned.zip }

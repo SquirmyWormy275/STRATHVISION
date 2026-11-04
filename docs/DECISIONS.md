@@ -178,6 +178,21 @@ See docs/CARNE_ASADA.md for full specification.
   - Undo removes the last accepted edit and restores its metric exactly.
   - **Save as vN+1** writes one new package version per session: the edited mixture in `profile.json`, plus `carne_asada/mixture_edits_vN.json`.
 
+## Phase 9 Drift, Health, Distribution Decisions
+
+- **Drift view** (Library → a profile's chart icon). It shows stored comparisons for that profile across all its versions. With one user per install, the athlete is implicit. Comparisons are grouped by local day into sessions.
+  - The view shows the latest session's style match, the change since the first session, and the trend. "Getting closer" or "Drifting away" applies when the least-squares change exceeds 1 point per session; otherwise it reads "Holding steady".
+  - The chart has one line, plus a table view and per-measurement distance sparklines.
+- **Profile health** (shown on each Library tile): ready, clips against the pack minimum, schema up to date (otherwise "Needs rebuild"), patches applied or rejected, adapters current or out of date, pack not installed, and how often the profile has been used.
+- **Moving packages, with no cloud:**
+  - **Export** writes the coaching profile only (the default export choice): profile, patches and adapters. `carne_asada/` stays on the computer.
+  - **Import** works from a file.
+  - A **shared inbox folder** (for example Syncthing, or a folder you copy into) is scanned at startup and when chosen. New `(profile_id, version)` packages are copied into the app and listed.
+  - The "+ my marks" and "full local overlay" export choices, replace/keep/merge on import, QR codes, and P2P transfer are not built in v1.
+- **Builds:**
+  - `.github/workflows/builds.yml` (public repo) builds the APK, the Linux, Windows and macOS zips, and an unsigned iOS app on every app change, after the tests pass.
+  - `docs/DISTRIBUTION.md` covers sideloading, ad-hoc IPA signing, and running the zips.
+
 ## Thresholds and Gating (timber defaults)
 
 - Usable action = confident 3D pose + confident implement + assigned phase + actual stroke.

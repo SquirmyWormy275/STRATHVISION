@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:analysis_engine/analysis_engine.dart' show PackDefinition;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:media_kit/media_kit.dart';
 
 import 'analysis/analysis_controller.dart';
 import 'data/database.dart';
 import 'packs/pack_registry.dart';
+import 'profiles/inbox.dart';
 import 'screens/library_screen.dart';
 import 'screens/workspace_route.dart';
 import 'screens/workspace_screen.dart';
@@ -14,7 +19,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
   final packs = await loadPacks(rootBundle);
-  runApp(StrathvisionApp(db: AppDatabase(), packs: packs));
+  final db = AppDatabase();
+  runApp(StrathvisionApp(db: db, packs: packs));
+  // Packages dropped into the shared inbox folder since last time.
+  final inbox = await db.watchSetting(inboxFolderKey).first;
+  if (inbox != null) {
+    final support = await getApplicationSupportDirectory();
+    await scanInbox(db, inbox, Directory(p.join(support.path, 'profiles')));
+  }
 }
 
 class StrathvisionApp extends StatelessWidget {

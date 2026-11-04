@@ -4,7 +4,10 @@ import 'package:uuid/uuid.dart';
 
 import 'dart:io';
 
-import 'package:analysis_engine/analysis_engine.dart' show PackDefinition, Profile;
+import 'dart:convert';
+
+import 'package:analysis_engine/analysis_engine.dart'
+    show DriftPoint, PackDefinition, Profile, summarizeDrift;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -20,7 +23,10 @@ import '../profiles/profile_export.dart';
 import '../workbench/claude_compiler.dart';
 import '../workbench/workbench_controller.dart';
 import 'profile_builder_screen.dart';
+import '../profiles/inbox.dart';
+import '../profiles/profile_health.dart';
 import '../workbench/carne_controller.dart';
+import 'drift_screen.dart';
 import 'carne_screen.dart';
 import 'workbench_screen.dart';
 import 'workspace_route.dart';
@@ -52,6 +58,9 @@ class LibraryScreen extends StatelessWidget {
     this.packs = const [],
     this.workbench,
     this.carne,
+    this.saveFile = savePackageCopy,
+    this.pickFolder = pickInboxFolder,
+    this.profileStore,
   });
 
   final AppDatabase db;
@@ -72,6 +81,69 @@ class LibraryScreen extends StatelessWidget {
 
   /// Builds the CARNE ASADA playground (desktop default when null).
   final CarneFactory? carne;
+
+  /// Saves an exported package wherever the user chooses.
+  final Future<String?> Function(String fileName, List<int> bytes) saveFile;
+
+  /// Picks the shared inbox folder.
+  final Future<String?> Function() pickFolder;
+
+  /// Where imported inbox packages are copied (default: app support).
+  final Future<Directory> Function()? profileStore;
+
+  Future<Directory> _store() async => profileStore != null
+      ? profileStore!()
+      : Directory(p.join((await getApplicationSupportDirectory()).path, 'profiles'));
+
+  /// Coaching profile only (the default export choice): profile, patches,
+  /// adapters. Research records (`carne_asada/`) stay on this computer.
+  Future<void> _export(BuildContext context, ProfileRow row) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final b = await readProfileBundle(row.sourcePath);
+      final where = await saveFile(packageFileName(b.profile),
+          zipProfilePackage(b.profile, patches: b.patchFiles, adapters: b.adapterFiles));
+      if (where != null) {
+        messenger.showSnackBar(SnackBar(
+            content: Text('Saved ${packageFileName(b.profile)}. Send it like any file.')));
+      }
+    } on AnalysisError catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(e.message)));
+    }
+  }
+
+  Future<void> _trend(BuildContext context, ProfileRow row) async {
+    final navigator = Navigator.of(context);
+    final rows = await db.comparisonsForProfile(row.profileId);
+    final summary = summarizeDrift([
+      for (final r in rows)
+        DriftPoint.fromResult(r.createdAt, jsonDecode(r.json) as Map<String, Object?>),
+    ]);
+    await navigator.push(MaterialPageRoute<void>(
+      builder: (_) => DriftScreen(
+          title: '${row.coachName} · ${_workbenchFor(row)?.event.label ?? row.eventId}',
+          summary: summary,
+          pack: _workbenchFor(row)),
+    ));
+  }
+
+  Future<void> _setInbox(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final folder = await pickFolder();
+    if (folder == null) return;
+    await db.setSetting(inboxFolderKey, folder);
+    final n = await scanInbox(db, folder, await _store());
+    messenger.showSnackBar(SnackBar(
+        content: Text(n == 0
+            ? 'Inbox set. New packages dropped there will appear here.'
+            : 'Inbox set. Added $n ${n == 1 ? 'package' : 'packages'}.')));
+  }
+
+  Future<List<HealthItem>> _health(ProfileRow row) async {
+    final bundle = await readProfileBundle(row.sourcePath);
+    final n = (await db.comparisonsForProfile(row.profileId)).length;
+    return profileHealth(bundle: bundle, events: PackInfo.all(_packs), comparisons: n);
+  }
 
   CarneFactory get _carne => carne ?? defaultCarne(db);
 
@@ -224,6 +296,16 @@ class LibraryScreen extends StatelessWidget {
             icon: const Icon(Icons.person_add_alt),
             onPressed: () => _buildProfile(context, pack),
           ),
+          PopupMenuButton<String>(
+            key: const Key('library-menu'),
+            onSelected: (v) {
+              if (v == 'inbox') _setInbox(context);
+            },
+            itemBuilder: (_) => const [
+              PopupMenuItem(
+                  key: Key('menu-inbox'), value: 'inbox', child: Text('Inbox folder…')),
+            ],
+          ),
           IconButton(
             key: const Key('import-profile'),
             tooltip: 'Import profile',
@@ -261,6 +343,9 @@ class LibraryScreen extends StatelessWidget {
                   for (final row in profiles)
                     _ProfileTile(
                       profile: row,
+                      health: _health(row),
+                      onTrend: () => _trend(context, row),
+                      onExport: () => _export(context, row),
                       onWorkbench: _workbenchFor(row) == null || _workbench == null
                           ? null
                           : () => _openWorkbench(context, row, _workbenchFor(row)!),
@@ -347,10 +432,19 @@ class _EmptyLibrary extends StatelessWidget {
 }
 
 class _ProfileTile extends StatelessWidget {
-  const _ProfileTile({required this.profile, this.onWorkbench});
+  const _ProfileTile({
+    required this.profile,
+    this.onWorkbench,
+    this.onTrend,
+    this.onExport,
+    this.health,
+  });
 
   final ProfileRow profile;
   final VoidCallback? onWorkbench;
+  final VoidCallback? onTrend;
+  final VoidCallback? onExport;
+  final Future<List<HealthItem>>? health;
 
   @override
   Widget build(BuildContext context) {
@@ -363,17 +457,58 @@ class _ProfileTile extends StatelessWidget {
             : profile.coachName.characters.first.toUpperCase()),
       ),
       title: Text('${profile.coachName} · v${profile.version}'),
-      subtitle: Text(
-        '${profile.packId} / ${profile.eventId}\n'
-        '${profile.sourceClipCount} clips · ${profile.metricCount} metrics · '
-        'schema ${profile.metricSchemaVersion}',
-      ),
+      subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          '${profile.packId} / ${profile.eventId}\n'
+          '${profile.sourceClipCount} clips · ${profile.metricCount} metrics · '
+          'schema ${profile.metricSchemaVersion}',
+        ),
+        if (health != null)
+          FutureBuilder<List<HealthItem>>(
+            future: health,
+            builder: (context, snap) {
+              final items = snap.data;
+              if (items == null) return const SizedBox.shrink();
+              final scheme = Theme.of(context).colorScheme;
+              return Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Wrap(spacing: 10, runSpacing: 2, children: [
+                  for (final h in items)
+                    Row(
+                      key: Key('health-${h.label}'),
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(h.ok ? Icons.check_circle_outline : Icons.error_outline,
+                            size: 14, color: h.ok ? scheme.primary : scheme.error),
+                        const SizedBox(width: 3),
+                        Text(h.label, style: Theme.of(context).textTheme.bodySmall),
+                      ],
+                    ),
+                ]),
+              );
+            },
+          ),
+      ]),
       isThreeLine: true,
       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
         Chip(
           label: Text(ready ? 'Ready' : 'Not ready'),
           visualDensity: VisualDensity.compact,
         ),
+        if (onTrend != null)
+          IconButton(
+            key: Key('trend-${profile.profileId}-${profile.version}'),
+            tooltip: 'Match trend',
+            icon: const Icon(Icons.show_chart),
+            onPressed: onTrend,
+          ),
+        if (onExport != null)
+          IconButton(
+            key: Key('export-${profile.profileId}-${profile.version}'),
+            tooltip: 'Export package',
+            icon: const Icon(Icons.ios_share),
+            onPressed: onExport,
+          ),
         if (onWorkbench != null && ready)
           IconButton(
             key: Key('workbench-${profile.profileId}-${profile.version}'),
@@ -433,3 +568,6 @@ CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async => CarneContr
         return path;
       },
     );
+
+Future<String?> pickInboxFolder() =>
+    FilePicker.getDirectoryPath(dialogTitle: 'Choose a shared inbox folder');

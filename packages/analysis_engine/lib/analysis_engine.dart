@@ -22,3 +22,4 @@ export 'src/harness.dart';
 export 'src/adapters.dart';
 export 'src/strokes.dart';
 export 'src/carne.dart';
+export 'src/drift.dart';

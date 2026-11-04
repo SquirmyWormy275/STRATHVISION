@@ -57,6 +57,13 @@ scripts/run_android_player_test.sh [device-id]
 
 Flutter only builds Windows apps on Windows, and only builds iOS and macOS apps on macOS.
 
+## Phase 9 manual check
+
+1. After comparing clips with a profile on a few different days, tap that profile's chart icon in the Library. You see the latest match, the change since the first session, "Getting closer / Holding steady / Drifting away", a line by session (tap a point for its tooltip, or use the table toggle), and distance-from-coach sparklines.
+2. Each profile tile shows health: Ready, N of 15 clips, Up to date or Needs rebuild, patches, adapters, and how much it has been used.
+3. The share icon exports `<Coach>_vN.zip`. Move it to the phone by any local means and import it there. You can also set Library → ⋮ → **Inbox folder…** to a synced folder.
+4. Build distributables as described in `docs/DISTRIBUTION.md`.
+
 ## Phase 8 manual check (desktop)
 
 1. Open the Workbench for a ready Underhand profile and tap **CARNE ASADA**. The feed opens with "Priority is slope. Only slope updates will be considered this session."
