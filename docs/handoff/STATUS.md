@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T16:03:09Z
+heartbeat: 2026-11-04T16:44:23Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Watch the first builds.yml run on GitHub Actions (gh run list --workflow builds.yml); fix any Windows/macOS/iOS build failures it reports
+next: Human items in STATUS Blockers. Agent: rerun macOS/iOS CI later (gh run rerun 41863714173 --failed) and fix anything it reports.
 <!-- STATE:END -->
 
 ## Phase progress
@@ -15,7 +15,7 @@ next: Watch the first builds.yml run on GitHub Actions (gh run list --workflow b
 | Phase | State |
 |-------|-------|
 | 0 Contracts | done |
-| 1 Project Skeleton | done on Linux + Android emulator (launch, real file-picker import, persistence, navigation). **Open: Windows launch check (human, on a Windows PC)** |
+| 1 Project Skeleton | done on Linux + Android emulator (launch, real file-picker import, persistence, navigation). Windows **release build succeeds in CI**. **Open: launching it on a Windows PC (human): download the `strathvision-windows-x64` artifact, unzip, run `strathvision.exe`** |
 | 2 Dual-Video Workspace | tasks 1–9 implemented. 49 unit/widget tests plus a real-decoder test passing 3/3 on Linux. **Open: real video on Android** (see Blockers) |
 | 3 Analysis Runtime Skeleton | **done**. `packages/analysis_engine` (18 tests), Analyze button and panel (6 app tests), real-decoder Analyze test passes on Linux. Pose, implement and phase stages are stubs behind real interfaces |
 | 4 Profile Builder | **done**. The engine builder (quality, fit, leave-one-out self-consistency, gates, export) has 31 engine tests. The Build a profile screen has 4 app tests. The real-decoder probe test passes on Linux |
@@ -23,7 +23,7 @@ next: Watch the first builds.yml run on GitHub Actions (gh run list --workflow b
 | 6 Timber Pack + Specialist Net | **done**. Timber pack (underhand and standing block) as JSON, loaded at runtime. Heads and probes are pack-declared, and the residual head is real (measured error + MLP correction). Engine: 56 tests, including a no-domain-strings scan. App: 71 tests. 3 Linux real-decoder tests pass |
 | 7 Workbench Harness + Adapters | **done**. Harness (probe-only search, pack-declared accept rules, cumulative patches), adapters (`.paw` local logistic models, example-validated compile through Claude over raw HTTP), and a workbench screen that saves vN+1. Inference applies the patch and adapters. Engine: 75 tests. App: 77 tests. 3 Linux real-decoder tests pass. A live Claude compile has not been run: there is no API key on this machine |
 | 8 CARNE ASADA Playground | **done**. Engine: stroke segmentation and `CarneSession` (exact copy, bounded loop, hull, limit, baseline gate, undo, record). App: playground with drop zone, feed, meters, what-did-it-do and undo, saving vN+1 with `carne_asada/`. Phones ignore `carne_asada/` (tested). Engine: 87 tests. App: 80 tests. 3 Linux real-decoder tests pass |
-| 9 Drift, Polish, Distribution | **done** locally: drift view, health indicators, export/import plus inbox folder, a release APK and a Linux zip built and launched here, and the CI workflow for every target. App: 85 tests. Engine: 90. **Open:** confirm the first CI run's Windows, macOS and iOS builds, and install them via the locked methods on real devices |
+| 9 Drift, Polish, Distribution | **done** locally: drift view, health indicators, export/import plus inbox folder, a release APK and a Linux zip built and launched here, and the CI workflow for every target. App: 85 tests. Engine: 90. CI run 41863714173: tests (90 engine + 85 app), Android APK, Linux zip and **Windows zip** all succeed. **Open:** the macOS and iOS jobs were refused twice by GitHub's hosted macOS arm64 capacity ("job was not acquired by Runner"). This is not a code failure. Rerun with `gh run rerun 41863714173 --failed`, then install the builds via the locked methods on real devices |
 
 ## Blockers / questions for the human
 
@@ -53,6 +53,7 @@ next: Watch the first builds.yml run on GitHub Actions (gh run list --workflow b
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T16:44:23Z **claude** — All 9 phases implemented. CI: tests + Android + Linux + Windows builds pass; macOS/iOS jobs refused by GitHub macOS runner capacity (not code). Open items are hardware/human: Android real-video run, Windows launch, macOS/iOS rerun + device installs, pose model / transcriber / API key choices, timber pack review, Gurr footage. → next: Human items in STATUS Blockers. Agent: rerun macOS/iOS CI later (gh run rerun 41863714173 --failed) and fix anything it reports.
 - 2026-11-04T16:03:09Z **claude** — Phase 9 done locally: drift view (sessions by day, trend, chart+table+sparklines), profile health on Library tiles, export (coaching profile only) + import + shared inbox folder, release APK + Linux zip built and launched, .github/workflows/builds.yml (tests → APK, Linux/Windows/macOS zips, unsigned iOS), docs/DISTRIBUTION.md, Gurr experiment steps in README. 90 engine + 85 app tests. → next: Watch the first builds.yml run on GitHub Actions (gh run list --workflow builds.yml); fix any Windows/macOS/iOS build failures it reports
 - 2026-11-04T15:53:17Z **claude** — Phase 8 done: CARNE ASADA playground (desktop, from Workbench): drop zone + choose files, feed with exact DECISIONS copy, meters, priority chips, chaos toggle, what-did-it-just-do, undo, Save as vN+1 with carne_asada/mixture_edits_vN.json; marks from projects bound to strokes; phones ignore carne_asada/ (tested). Engine stroke segmentation + CarneSession. 87 engine + 80 app + 3 Linux real-decoder tests; release build runs. → next: Phase 9: read EXECUTION_PLAN Phase 9 (drift, polish, distribution builds) and start task 1
 - 2026-11-04T15:46:49Z **claude** — Phase 8 engine: stroke segmentation from implement-speed peaks + per-stroke analysis (usable action: phases, critical pose, implement dropout), CarneSession (exact DECISIONS copy templated from pack words, diagnose→propose→evaluate→accept loop on priority attribute, coach hull + held-out check, 5–10 limit, Good baseline gate, chaos, undo, carne_asada edits record), timber attribute_metrics + direction words. 87 engine tests. → next: Phase 8 app: CARNE ASADA playground screen (desktop, drop zone via desktop_drop), feed routing (video/package/text/voice), marks from projects bound to strokes, auto loop step, what-did-it-do + undo, save vN+1 with carne_asada/mixture_edits_vN.json; phone ignores carne_asada/
