@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T15:31:41Z
+heartbeat: 2026-11-04T15:39:38Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Phase 7 app: bundle reads adapters/*.paw, store packages with patches+adapters as new versions, adapters applied at inference (usable warning + focus), Claude Messages API compiler (raw HTTP, claude-opus-5-5, json_schema), workbench screen (harness + compile) on desktop
+next: Phase 8: read EXECUTION_PLAN Phase 8 and docs/CARNE_ASADA.md fully; start task 1
 <!-- STATE:END -->
 
 ## Phase progress
@@ -21,9 +21,13 @@ next: Phase 7 app: bundle reads adapters/*.paw, store packages with patches+adap
 | 4 Profile Builder | **done**. The engine builder (quality, fit, leave-one-out self-consistency, gates, export) has 31 engine tests. The Build a profile screen has 4 app tests. The real-decoder probe test passes on Linux |
 | 5 Style Comparison | **done**. `compare()` and the patch loader have 47 engine tests. The panel shows score, expandable ranked deltas, warnings and the profile picker. Results are stored (DB v3). 68 app tests and 3 Linux real-decoder tests pass |
 | 6 Timber Pack + Specialist Net | **done**. Timber pack (underhand and standing block) as JSON, loaded at runtime. Heads and probes are pack-declared, and the residual head is real (measured error + MLP correction). Engine: 56 tests, including a no-domain-strings scan. App: 71 tests. 3 Linux real-decoder tests pass |
-| 7–9 | not started |
+| 7 Workbench Harness + Adapters | **done**. Harness (probe-only search, pack-declared accept rules, cumulative patches), adapters (`.paw` local logistic models, example-validated compile through Claude over raw HTTP), and a workbench screen that saves vN+1. Inference applies the patch and adapters. Engine: 75 tests. App: 77 tests. 3 Linux real-decoder tests pass. A live Claude compile has not been run: there is no API key on this machine |
+| 8–9 | not started |
 
 ## Blockers / questions for the human
+
+- **The adapter compiler needs an Anthropic API key on the workbench.** Set `ANTHROPIC_API_KEY`. The default model is `claude-opus-5-5`. The provider and model are a human decision the docs don't make, so confirm or change them. The compile path is unit-tested against the Messages API request and response shape but has not been run live here.
+- **"Import cleanly on phone" is verified only through the shared Dart import path on Linux.** It needs the Android device run (same blocker as Phase 2).
 
 - **Review the timber pack v1** (`apps/strathvision/assets/packs/timber.json`): phases, metrics, weights, attribute names. It is an initial catalog written without a coach. Also review the probe interpretations in DECISIONS.md Phase 6.
 
@@ -45,6 +49,7 @@ next: Phase 7 app: bundle reads adapters/*.paw, store packages with patches+adap
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T15:39:38Z **claude** — Phase 7 done: workbench screen (desktop) — harness on coach clips with probe table + rule-by-rule decision, adapter compile via Claude Messages API (raw HTTP, claude-opus-5-5, json_schema, fallbacks default, key from ANTHROPIC_API_KEY), Save as vN+1 with patch + .paw adapters; inference loads patches/adapters (usable warning, Focus next). INTERFACES: acceptance rules, adapter specs, .paw format. 75 engine + 77 app + 3 Linux real-decoder tests; release build OK. → next: Phase 8: read EXECUTION_PLAN Phase 8 and docs/CARNE_ASADA.md fully; start task 1
 - 2026-11-04T15:31:41Z **claude** — Phase 7 task 4 (engine): compile-once adapters — AdapterSpec in pack (timber: usable_footage, priority_scorer with examples), .paw logistic format, local runtime, example validation with feedback retries, ADAPTER_COMPILE_FAILED, stale/foreign detection by spec hash, generic adapter inputs. 75 engine tests. → next: Phase 7 app: bundle reads adapters/*.paw, store packages with patches+adapters as new versions, adapters applied at inference (usable warning + focus), Claude Messages API compiler (raw HTTP, claude-opus-5-5, json_schema), workbench screen (harness + compile) on desktop
 - 2026-11-04T15:28:41Z **claude** — Phase 7 tasks 1-3 (engine): SpecialistHarness — probe-only black-box coordinate search over the head output layer, DECISIONS.md accept rules declared per head in the pack (timber.json acceptance), typed rule checks, cumulative versioned patches that the phone loader accepts. 66 engine tests. → next: Phase 7 task 4-5: compile-once adapters (spec in pack → .paw adapter JSON, local runtime, example validation, ADAPTER_COMPILE_FAILED), then workbench UI (tune + compile, write patch/adapters into a new package version) and adapter loading in inference
 - 2026-11-04T15:25:19Z **claude** — Phase 6 done: timber pack (underhand, standing block) as runtime-loaded JSON; event picker in Library (settings table, DB v4); heads + five probes declared by the pack; real slope_residual = measured entry-slope error vs coach + MLP correction (patchable); generic aggregates; PackDefinition parser; engine has no timber strings (test-enforced). 56 engine + 71 app + 3 Linux real-decoder tests; release build runs. → next: Phase 7: read EXECUTION_PLAN Phase 7 (workbench harness + compile-once adapters) and DECISIONS weight-space layers 1-2; start task 1

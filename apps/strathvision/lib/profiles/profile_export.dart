@@ -8,9 +8,19 @@ import 'package:path/path.dart' as p;
 
 /// Zip bytes for a profile package: `profile.json`, plus the empty
 /// `specialist_patches/` and `adapters/` directories (INTERFACES.md).
-Uint8List zipProfilePackage(Profile profile) {
+///
+/// [patches] and [adapters] (file name → contents) go into
+/// `specialist_patches/` and `adapters/`.
+Uint8List zipProfilePackage(Profile profile,
+    {Map<String, String> patches = const {},
+    Map<String, String> adapters = const {}}) {
   final archive = Archive();
-  for (final e in profile.packageEntries().entries) {
+  final entries = {
+    ...profile.packageEntries(),
+    for (final e in patches.entries) 'specialist_patches/${e.key}': e.value,
+    for (final e in adapters.entries) 'adapters/${e.key}': e.value,
+  };
+  for (final e in entries.entries) {
     final content = e.value;
     archive.add(content == null
         ? ArchiveFile.directory(e.key)
@@ -30,10 +40,14 @@ String packageFileName(Profile profile) {
 
 /// Writes the package into [dir] (the app's own profile store) and returns
 /// its path.
-Future<String> storeProfilePackage(Profile profile, Directory dir) async {
+Future<String> storeProfilePackage(Profile profile, Directory dir,
+    {Map<String, String> patches = const {},
+    Map<String, String> adapters = const {}}) async {
   await dir.create(recursive: true);
   final path =
       p.join(dir.path, '${profile.profileId}_v${profile.version}.zip');
-  await File(path).writeAsBytes(zipProfilePackage(profile), flush: true);
+  await File(path).writeAsBytes(
+      zipProfilePackage(profile, patches: patches, adapters: adapters),
+      flush: true);
   return path;
 }

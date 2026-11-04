@@ -55,7 +55,7 @@ void main() {
         final pack = activePack(packs,
                 key == 'Underhand' ? 'timber/underhand' : 'timber/standing_block')
             .analysisPack;
-        return AnalysisEngine(pack: pack).analyze(clip);
+        return AnalysisEngine(pack: pack).analyzeDetailed(clip);
       },
     ));
     await tester.pumpAndSettle();

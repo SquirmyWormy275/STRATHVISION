@@ -57,6 +57,14 @@ scripts/run_android_player_test.sh [device-id]
 
 Flutter only builds Windows apps on Windows, and only builds iOS and macOS apps on macOS.
 
+## Phase 7 manual check (desktop)
+
+1. Build or import a ready profile for **Underhand**. In the Library, tap its tune icon (**Workbench**).
+2. **Add coach clips**: clips of that coach. The probe table shows `slope_error_deg`, `slope_bias`, `priority_agreement`, `phase_stability` and `track_confidence_correlation`.
+3. **Run harness**. You get either "Accepted: slope_residual_v1" with the after column filled in, or "Not accepted" with the rule that failed (for example, `slope_bias must improve by at least 0.8`).
+4. With `ANTHROPIC_API_KEY` set, **Compile** `usable_footage` and `priority_scorer`. Without the key, the card says compiling needs it.
+5. **Save as v2**. The Library lists **<Coach> · v2**. Compare a clip with v2 in Analyze: the coverage line names the patch, "Focus next" shows the priority adapter's pick, and inference makes no AI call.
+
 ## Phase 6 manual check
 
 1. Launch. The Library's top bar shows **Underhand ▾**, the first event of the bundled Timber pack.

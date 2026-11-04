@@ -9,14 +9,14 @@ import '../workspace/workspace_controller.dart';
 
 /// Runs the engine for one clip with the given specialist patches applied.
 /// [reference] holds the coach's metric centers (empty without a profile).
-typedef AnalysisRunner = Future<AnalysisOutcome> Function(ClipSource clip,
+typedef AnalysisRunner = Future<AnalysisDetail> Function(ClipSource clip,
     List<SpecialistPatch> patches, Map<String, double> reference);
 
 /// Runs the engine off the UI isolate so scrubbing stays at 60 fps.
 AnalysisRunner isolateRunner(AnalysisPack pack) =>
     (clip, patches, reference) => Isolate.run(() => AnalysisEngine(
             pack: pack, heads: applyPatches(headsFor(pack), patches))
-        .analyze(clip, reference: reference));
+        .analyzeDetailed(clip, reference: reference));
 
 /// An installed profile the user can compare against.
 class ProfileChoice {
@@ -42,11 +42,27 @@ typedef ResultSaver = Future<void> Function(ComparisonResult result);
 /// Analysis for one clip: the Metric Vector (or error) and, when a profile
 /// is selected, its comparison.
 class ClipAnalysis {
-  const ClipAnalysis({required this.outcome, this.comparison, this.profileKey});
+  const ClipAnalysis({
+    required this.outcome,
+    this.comparison,
+    this.profileKey,
+    this.focus,
+    this.usable,
+  });
   final AnalysisOutcome outcome;
   final ComparisonOutcome? comparison;
   final String? profileKey;
+
+  /// Attribute suggested by the package's priority adapter, if any.
+  final String? focus;
+
+  /// Verdict of the package's usable-footage adapter, if any.
+  final bool? usable;
 }
+
+/// Names of the adapters the app knows how to apply at inference.
+const usableAdapter = 'usable_footage';
+const priorityAdapter = 'priority_scorer';
 
 /// Analyze state for the open workspace. The workspace keeps working when
 /// analysis fails or is never used.
@@ -140,11 +156,14 @@ class AnalysisController extends ChangeNotifier {
       final choice = _selected;
       ProfileBundle? bundle;
       var patches = PatchSet.empty;
+      var adapters = AdapterSet.empty;
       _profileError = null;
       if (choice != null) {
         try {
           bundle = _bundles[choice.key] ??= await loadBundle(choice.path);
           patches = loadPatches(bundle.patchFiles, headsFor(pack));
+          adapters =
+              loadAdapters(bundle.adapterFiles, pack, pack.adapters);
         } on AnalysisError catch (e) {
           _profileError = e;
         }
@@ -163,9 +182,19 @@ class AnalysisController extends ChangeNotifier {
               for (final e in bundle.profile.metrics.entries)
                 e.key: e.value.center,
             };
-      final outcome = await run(source, patches.applied, reference);
+      final detail = await run(source, patches.applied, reference);
+      final outcome = detail.outcome;
       ComparisonOutcome? comparison;
+      String? focus;
+      bool? usable;
       if (outcome is AnalysisSuccess && bundle != null) {
+        // Adapters run locally: no LLM call at inference.
+        final pre = adapterInputs(outcome.vector,
+            implementConfidence: detail.implementConfidence, fps: fps);
+        usable = adapters.adapters[usableAdapter]
+            ?.decide(pre)
+            .values
+            .every((v) => v);
         comparison = compare(
           vector: outcome.vector,
           profile: bundle.profile,
@@ -174,13 +203,28 @@ class AnalysisController extends ChangeNotifier {
           rejectedPatches: [
             for (final e in patches.rejected) '${e.details['file']}',
           ],
+          extraWarnings: [
+            if (usable == false) 'This clip is below the usable threshold.',
+            ...adapters.rejected,
+          ],
         );
         if (comparison is ComparisonSuccess) {
+          final scorer = adapters.adapters[priorityAdapter];
+          if (scorer != null) {
+            focus = scorer.top(adapterInputs(outcome.vector,
+                implementConfidence: detail.implementConfidence,
+                comparison: comparison.result,
+                fps: fps));
+          }
           await saveResult?.call(comparison.result);
         }
       }
       _results[clip.clipId] = ClipAnalysis(
-          outcome: outcome, comparison: comparison, profileKey: choice?.key);
+          outcome: outcome,
+          comparison: comparison,
+          profileKey: choice?.key,
+          focus: focus,
+          usable: usable);
       _fps[clip.clipId] = fps;
     } finally {
       _running.remove(clip.clipId);

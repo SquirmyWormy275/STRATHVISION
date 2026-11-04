@@ -130,6 +130,7 @@ class AnalysisPanel extends StatelessWidget {
             fps: analysis.fps,
             comparison: analysis.comparison,
             profileLabel: analysis.selectedProfile?.label,
+            focus: analysis.analysis?.focus,
           ),
         AnalysisFailure(:final error) => _Failure(error: error),
       };
@@ -277,6 +278,7 @@ class _Metrics extends StatelessWidget {
     required this.fps,
     this.comparison,
     this.profileLabel,
+    this.focus,
   });
 
   final MetricVector vector;
@@ -284,6 +286,7 @@ class _Metrics extends StatelessWidget {
   final double fps;
   final ComparisonOutcome? comparison;
   final String? profileLabel;
+  final String? focus;
 
   String _units(String key) {
     for (final m in pack.analysisPack.metrics) {
@@ -317,7 +320,10 @@ class _Metrics extends StatelessWidget {
         if (comparison case final c?)
           switch (c) {
             ComparisonSuccess(:final result) => _Comparison(
-                result: result, pack: pack, profileLabel: profileLabel ?? ''),
+                result: result,
+                pack: pack,
+                profileLabel: profileLabel ?? '',
+                focus: focus),
             ComparisonFailure(:final error) => Padding(
                 key: const Key('comparison-error'),
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
@@ -446,11 +452,15 @@ class _Comparison extends StatelessWidget {
     required this.result,
     required this.pack,
     required this.profileLabel,
+    this.focus,
   });
 
   final ComparisonResult result;
   final PackInfo pack;
   final String profileLabel;
+
+  /// From the package's priority adapter.
+  final String? focus;
 
   @override
   Widget build(BuildContext context) {
@@ -488,6 +498,19 @@ class _Comparison extends StatelessWidget {
               key: const Key('comparison-coverage'),
               style: muted),
         ),
+        if (focus != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: Row(children: [
+              Icon(Icons.center_focus_strong, size: 18, color: scheme.primary),
+              const SizedBox(width: 8),
+              Text('Focus next: ', style: theme.textTheme.bodyMedium),
+              Text(focus!,
+                  key: const Key('focus'),
+                  style: theme.textTheme.bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w600)),
+            ]),
+          ),
         for (final w in result.warnings)
           Container(
             key: Key('warning-${result.warnings.indexOf(w)}'),

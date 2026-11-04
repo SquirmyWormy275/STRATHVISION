@@ -141,6 +141,68 @@ Per metric (optional): `"aggregate": "mean | start | end | min | max"` (default 
 
 A probe that is undefined for its samples (no marks, or no variation) is null.
 
+**Acceptance rules** (optional per head; a head can be patched on the workbench only if it has them). They restate the DECISIONS.md harness rules in terms of the pack's probe names:
+
+```json
+"acceptance": {
+  "primary_probe": "slope_bias", "min_improvement": 0.8,
+  "no_regress": ["slope_error_deg"],
+  "within_fraction": {"phase_stability": 0.05, "track_confidence_correlation": 0.05},
+  "max_weight_fraction": 0.02
+}
+```
+
+A patch is accepted only if all of these hold:
+- |primary| shrinks by at least `min_improvement`.
+- No `no_regress` probe's magnitude grows.
+- Each `within_fraction` probe changes by no more than that fraction of its previous value. Null → null counts as unchanged.
+- The cumulative patch touches fewer than `max_weight_fraction` of the head's weights.
+
+**Adapters** (optional per event): short English specs compiled once on the workbench.
+
+```json
+"adapters": [
+  { "name": "usable_footage", "spec": "English rule…", "outputs": ["usable"], "threshold": 0.5,
+    "examples": [ { "inputs": {"pose_confidence": 0.85}, "expect": {"usable": true} } ] },
+  { "name": "priority_scorer", "spec": "English rule…", "outputs": ["Slope", "Hinge"],
+    "examples": [ { "inputs": {"abs_delta.entry_slope": 3.0}, "expect": {"top": "Slope"} } ] }
+]
+```
+
+With `threshold`, each output is a yes/no decision. Without it, the outputs compete and the highest score wins. A compiled adapter must reproduce every example.
+
+**Adapter inputs** come from one analysis and, when a profile is selected, its comparison:
+- `pose_confidence` and `implement_confidence`
+- `phase_confidence.PHASE` and `phase_seconds.PHASE`
+- `metric.KEY` and `metric_confidence.KEY`
+- `delta.KEY`, `abs_delta.KEY` (distance from the coach, in spreads) and `contribution.KEY`
+
+Inputs that are absent count as 0.
+
+## Compiled Adapter (`adapters/<name>.paw`)
+
+A tiny local model, JSON despite the extension. Inference runs it with no LLM call.
+
+```json
+{
+  "format": "paw/1", "adapter": "usable_footage", "kind": "logistic",
+  "pack_id": "string", "event_id": "string", "spec_hash": "16 hex chars",
+  "compiled_by": "model id", "compiled_at": "iso8601", "threshold": 0.5,
+  "outputs": { "usable": { "bias": -20.0, "weights": { "pose_confidence": 10.0 } } }
+}
+```
+
+- `score = sigmoid(bias + Σ weight·input)`.
+- An adapter is skipped, with a warning, when:
+  - its `spec_hash` no longer matches the pack's spec, so it is stale and must be recompiled
+  - it belongs to another pack or event
+  - the file is unreadable (`ADAPTER_COMPILE_FAILED`)
+- Compiling fails with `ADAPTER_COMPILE_FAILED` (`details.problems`) when the result uses unknown inputs, has the wrong outputs, or still misses examples after the compiler has been given the mismatches.
+
+At inference:
+- When `usable_footage` says no, the comparison carries the warning "This clip is below the usable threshold."
+- `priority_scorer`'s winner is shown as the suggested focus.
+
 ## Pack File
 
 A pack ships as one JSON file. The app loads every bundled pack file at startup, and swapping a pack needs no change to the engine.

@@ -35,10 +35,10 @@ void main() {
 
   AnalysisRunner recording(AnalysisEngine engine) => (clip, patches, reference) async {
         requests.add(clip);
-        final out = await engine.analyze(clip);
+        final d = await engine.analyzeDetailed(clip);
         outputs.add(
-            jsonDecode(jsonEncode(out.toJson())) as Map<String, Object?>);
-        return out;
+            jsonDecode(jsonEncode(d.outcome.toJson())) as Map<String, Object?>);
+        return d;
       };
 
   Future<void> pumpApp(WidgetTester tester, AnalysisRunner runner,
@@ -159,8 +159,9 @@ void main() {
   test('isolate runner returns a valid Metric Vector', () async {
     final out = await isolateRunner(pack)(const ClipSource(
         clipId: 'c1', path: '/clips/a.mp4', durationMs: 8000, fps: 25), const [], const {});
-    expect(out, isA<AnalysisSuccess>());
-    expect(validateMetricVector(out.toJson()), isEmpty);
+    expect(out.outcome, isA<AnalysisSuccess>());
+    expect(validateMetricVector(out.outcome.toJson()), isEmpty);
+    expect(out.features, hasLength(featureWidth));
   });
 
   test('placeholder pack analysis section is valid and domain-neutral', () {

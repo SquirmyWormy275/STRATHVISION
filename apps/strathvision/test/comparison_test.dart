@@ -91,7 +91,7 @@ void main() {
                   // The athlete: a different style from the coach.
                   pose: const StubPoseEstimator(styleSeed: 7),
                   heads: applyPatches(headsFor(pack), p))
-              .analyze(clip, reference: reference);
+              .analyzeDetailed(clip, reference: reference);
         },
         listProfiles: () async => choices ??
             const [

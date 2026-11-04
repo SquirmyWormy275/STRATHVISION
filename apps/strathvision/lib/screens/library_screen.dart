@@ -2,7 +2,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:analysis_engine/analysis_engine.dart' show PackDefinition;
+import 'dart:io';
+
+import 'package:analysis_engine/analysis_engine.dart' show PackDefinition, Profile;
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 import '../analysis/analysis_controller.dart';
 import '../data/database.dart';
@@ -11,7 +15,12 @@ import '../packs/placeholder_pack.dart';
 import '../profiles/builder_controller.dart';
 import '../profiles/profile_package.dart';
 import '../workspace/project.dart';
+import '../profiles/clip_probe.dart';
+import '../profiles/profile_export.dart';
+import '../workbench/claude_compiler.dart';
+import '../workbench/workbench_controller.dart';
 import 'profile_builder_screen.dart';
+import 'workbench_screen.dart';
 import 'workspace_route.dart';
 import 'workspace_screen.dart';
 
@@ -39,6 +48,7 @@ class LibraryScreen extends StatelessWidget {
     this.profileBuilder = defaultProfileBuilder,
     this.pickClips = pickReferenceClips,
     this.packs = const [],
+    this.workbench,
   });
 
   final AppDatabase db;
@@ -52,6 +62,36 @@ class LibraryScreen extends StatelessWidget {
 
   /// Installed packs (empty = built-in placeholder only).
   final List<PackDefinition> packs;
+
+  /// Builds the workbench for a profile. Null: the default on desktop,
+  /// hidden on phones (phones load patches and adapters, never edit).
+  final WorkbenchFactory? workbench;
+
+  WorkbenchFactory? get _workbench =>
+      workbench ??
+      (Platform.isLinux || Platform.isMacOS || Platform.isWindows
+          ? defaultWorkbench(db)
+          : null);
+
+  Future<void> _openWorkbench(
+      BuildContext context, ProfileRow row, PackInfo pack) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final WorkbenchController controller;
+    try {
+      controller = await _workbench!(row, pack);
+    } on AnalysisError catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(e.message)));
+      return;
+    }
+    await navigator.push(MaterialPageRoute<void>(
+      builder: (_) => WorkbenchScreen(
+          controller: controller,
+          title: '${row.coachName} · v${row.version}',
+          pickClips: pickClips),
+    ));
+    controller.dispose();
+  }
 
   List<PackDefinition> get _packs => packs.isEmpty ? [placeholderDefinition] : packs;
 
@@ -123,6 +163,11 @@ class LibraryScreen extends StatelessWidget {
             _build(context, activePack(_packs, snap.data)),
       );
 
+  /// The pack event a profile belongs to, if installed.
+  PackInfo? _workbenchFor(ProfileRow row) => PackInfo.all(_packs)
+      .where((x) => x.packId == row.packId && x.eventId == row.eventId)
+      .firstOrNull;
+
   Widget _eventPicker(BuildContext context, PackInfo pack) {
     final all = PackInfo.all(_packs);
     if (all.length < 2) return const SizedBox.shrink();
@@ -193,7 +238,13 @@ class LibraryScreen extends StatelessWidget {
                 ],
                 if (profiles.isNotEmpty) ...[
                   _SectionHeader('Profiles', theme: theme),
-                  for (final p in profiles) _ProfileTile(profile: p),
+                  for (final row in profiles)
+                    _ProfileTile(
+                      profile: row,
+                      onWorkbench: _workbenchFor(row) == null || _workbench == null
+                          ? null
+                          : () => _openWorkbench(context, row, _workbenchFor(row)!),
+                    ),
                 ],
               ],
             );
@@ -276,9 +327,10 @@ class _EmptyLibrary extends StatelessWidget {
 }
 
 class _ProfileTile extends StatelessWidget {
-  const _ProfileTile({required this.profile});
+  const _ProfileTile({required this.profile, this.onWorkbench});
 
   final ProfileRow profile;
+  final VoidCallback? onWorkbench;
 
   @override
   Widget build(BuildContext context) {
@@ -297,10 +349,44 @@ class _ProfileTile extends StatelessWidget {
         'schema ${profile.metricSchemaVersion}',
       ),
       isThreeLine: true,
-      trailing: Chip(
-        label: Text(ready ? 'Ready' : 'Not ready'),
-        visualDensity: VisualDensity.compact,
-      ),
+      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+        Chip(
+          label: Text(ready ? 'Ready' : 'Not ready'),
+          visualDensity: VisualDensity.compact,
+        ),
+        if (onWorkbench != null && ready)
+          IconButton(
+            key: Key('workbench-${profile.profileId}-${profile.version}'),
+            tooltip: 'Workbench',
+            icon: const Icon(Icons.tune),
+            onPressed: onWorkbench,
+          ),
+      ]),
     );
   }
 }
+
+typedef WorkbenchFactory = Future<WorkbenchController> Function(
+    ProfileRow row, PackInfo pack);
+
+/// Production workbench: reads the package, probes and analyzes clips off
+/// the UI isolate, compiles with Claude when ANTHROPIC_API_KEY is set, and
+/// stores each saved version under app support.
+WorkbenchFactory defaultWorkbench(AppDatabase db) => (row, pack) async {
+      final bundle = await readProfileBundle(row.sourcePath);
+      return WorkbenchController(
+        pack: pack.analysisPack,
+        bundle: bundle,
+        probe: probeClip,
+        analyze: isolateProbeAnalyzer(pack.analysisPack),
+        compiler: ClaudeAdapterCompiler.fromEnvironment(),
+        write: (Profile profile, patches, adapters) async {
+          final support = await getApplicationSupportDirectory();
+          final path = await storeProfilePackage(
+              profile, Directory(p.join(support.path, 'profiles')),
+              patches: patches, adapters: adapters);
+          await db.saveProfile(await readProfilePackage(path), path);
+          return path;
+        },
+      );
+    };

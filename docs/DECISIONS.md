@@ -125,6 +125,30 @@ See docs/CARNE_ASADA.md for full specification.
   - `track_confidence_correlation` is the correlation of |r| with implement-track confidence.
   - The stub tracker reports constant confidence, so that correlation stays null until a real tracker exists.
 
+## Phase 7 Workbench Decisions
+
+- **Harness** (`SpecialistHarness`, engine).
+  - The probe clips are analyzed once against the profile's metric centers, and the harness keeps each clip's feature vector and measured error, so trying a patch costs one MLP pass per clip.
+  - The search is a deterministic black-box coordinate search over the output layer (`b2`, `w2[i]`). It reads only the five probe values, and every step must keep the side rules (no regression, within 5%) intact.
+  - The result is judged by the pack's acceptance rules.
+  - Patches are cumulative and versioned: v2 includes v1's edits.
+- **Workbench screen** (desktop only: Linux, macOS, Windows). It opens from a ready profile in the Library.
+  - Add the coach's clips, then **Run harness**. The screen shows a probe table (now vs with patch) and the decision with every rule's reason.
+  - **Compile** each adapter spec.
+  - **Save as vN+1** writes the next package version (published versions are never edited) and adds it to the Library. Phones load it and never edit.
+  - The priority-agreement probe needs red/green marks. Clips added on the workbench carry none, so that probe reads n/a there.
+- **Compile-once adapters.**
+  - The compiler is Claude through the Messages API, using model `claude-opus-5-5`.
+  - Dart has no official SDK, so the call is raw HTTP with `anthropic-version: 2026-10-21`.
+  - The request uses structured output (`output_config.format` `json_schema`, with input names and outputs restricted by enum) and server-side fallbacks (`fallbacks: "default"`).
+  - The API key comes from `ANTHROPIC_API_KEY` on the workbench computer. Without it, Compile is disabled and the screen says why.
+  - Each compile is validated against the spec's examples, with up to 3 attempts. Each retry sends the mismatches back.
+  - The resulting `.paw` is a logistic model run locally on the phone and desktop. Inference never calls an LLM.
+- **Adapters at inference.** When the selected profile's package has adapters:
+  - `usable_footage` adds "This clip is below the usable threshold." to the comparison warnings (DECISIONS.md status message).
+  - `priority_scorer` shows "Focus next: <attribute>".
+  - Stale or foreign adapters are skipped and named in the warnings.
+
 ## Thresholds and Gating (timber defaults)
 
 - Usable action = confident 3D pose + confident implement + assigned phase + actual stroke.

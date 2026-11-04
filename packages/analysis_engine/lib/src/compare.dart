@@ -40,6 +40,7 @@ ComparisonOutcome compare({
   required String resultId,
   List<String> appliedPatches = const [],
   List<String> rejectedPatches = const [],
+  List<String> extraWarnings = const [],
 }) {
   if (profile.packId != vector.packId || profile.eventId != vector.eventId) {
     return ComparisonFailure(AnalysisError(ErrorCode.schemaMismatch,
@@ -126,6 +127,7 @@ ComparisonOutcome compare({
   for (final p in rejectedPatches) {
     warnings.add('Specialist patch $p was rejected and not applied.');
   }
+  warnings.addAll(extraWarnings);
 
   // Nearest reference clips: weighted RMS distance in spreads.
   final refs = <(String, double)>[];
