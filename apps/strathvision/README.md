@@ -57,6 +57,17 @@ scripts/run_android_player_test.sh [device-id]
 
 Flutter only builds Windows apps on Windows, and only builds iOS and macOS apps on macOS.
 
+## Phase 4 manual check
+
+1. In **Library**, tap the person-plus icon (**Build a profile**).
+2. Type a name, tap **Add clips**, and pick 15 or more clips of one person. Each clip shows a spinner, then **Clean** or the reason it can't be used. The bar counts clean clips toward 15.
+3. Tap **Build profile**.
+   - **Ready:** "<Name> · v1 is ready", with the held-out match. The profile is added to the Library. **Save a copy** writes `<Name>_v1.zip`, which holds `profile.json`, `specialist_patches/` and `adapters/`.
+   - **Rejected:** a plain message and the error code, for example "Add 6 more clean clips…" (`INSUFFICIENT_CLIPS`). Nothing is stored.
+4. Go back. The Library lists the new profile as Ready.
+
+With the stand-in pose model, any 15 clips build. Real gating needs the real pose model.
+
 ## Phase 3 manual check
 
 1. Open a review and add a clip on A.

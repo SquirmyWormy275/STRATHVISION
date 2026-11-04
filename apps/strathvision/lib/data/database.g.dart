@@ -3,7 +3,8 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
-class $ProfilesTable extends Profiles with TableInfo<$ProfilesTable, Profile> {
+class $ProfilesTable extends Profiles
+    with TableInfo<$ProfilesTable, ProfileRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -178,7 +179,7 @@ class $ProfilesTable extends Profiles with TableInfo<$ProfilesTable, Profile> {
   static const String $name = 'profiles';
   @override
   VerificationContext validateIntegrity(
-    Insertable<Profile> instance, {
+    Insertable<ProfileRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -308,9 +309,9 @@ class $ProfilesTable extends Profiles with TableInfo<$ProfilesTable, Profile> {
   @override
   Set<GeneratedColumn> get $primaryKey => {profileId, version};
   @override
-  Profile map(Map<String, dynamic> data, {String? tablePrefix}) {
+  ProfileRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Profile(
+    return ProfileRow(
       profileId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}profile_id'],
@@ -372,7 +373,7 @@ class $ProfilesTable extends Profiles with TableInfo<$ProfilesTable, Profile> {
   }
 }
 
-class Profile extends DataClass implements Insertable<Profile> {
+class ProfileRow extends DataClass implements Insertable<ProfileRow> {
   final String profileId;
   final int version;
   final String coachName;
@@ -386,7 +387,7 @@ class Profile extends DataClass implements Insertable<Profile> {
   final bool selfConsistencyPassed;
   final String sourcePath;
   final DateTime importedAt;
-  const Profile({
+  const ProfileRow({
     required this.profileId,
     required this.version,
     required this.coachName,
@@ -438,12 +439,12 @@ class Profile extends DataClass implements Insertable<Profile> {
     );
   }
 
-  factory Profile.fromJson(
+  factory ProfileRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Profile(
+    return ProfileRow(
       profileId: serializer.fromJson<String>(json['profileId']),
       version: serializer.fromJson<int>(json['version']),
       coachName: serializer.fromJson<String>(json['coachName']),
@@ -483,7 +484,7 @@ class Profile extends DataClass implements Insertable<Profile> {
     };
   }
 
-  Profile copyWith({
+  ProfileRow copyWith({
     String? profileId,
     int? version,
     String? coachName,
@@ -497,7 +498,7 @@ class Profile extends DataClass implements Insertable<Profile> {
     bool? selfConsistencyPassed,
     String? sourcePath,
     DateTime? importedAt,
-  }) => Profile(
+  }) => ProfileRow(
     profileId: profileId ?? this.profileId,
     version: version ?? this.version,
     coachName: coachName ?? this.coachName,
@@ -512,8 +513,8 @@ class Profile extends DataClass implements Insertable<Profile> {
     sourcePath: sourcePath ?? this.sourcePath,
     importedAt: importedAt ?? this.importedAt,
   );
-  Profile copyWithCompanion(ProfilesCompanion data) {
-    return Profile(
+  ProfileRow copyWithCompanion(ProfilesCompanion data) {
+    return ProfileRow(
       profileId: data.profileId.present ? data.profileId.value : this.profileId,
       version: data.version.present ? data.version.value : this.version,
       coachName: data.coachName.present ? data.coachName.value : this.coachName,
@@ -546,7 +547,7 @@ class Profile extends DataClass implements Insertable<Profile> {
 
   @override
   String toString() {
-    return (StringBuffer('Profile(')
+    return (StringBuffer('ProfileRow(')
           ..write('profileId: $profileId, ')
           ..write('version: $version, ')
           ..write('coachName: $coachName, ')
@@ -583,7 +584,7 @@ class Profile extends DataClass implements Insertable<Profile> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Profile &&
+      (other is ProfileRow &&
           other.profileId == this.profileId &&
           other.version == this.version &&
           other.coachName == this.coachName &&
@@ -599,7 +600,7 @@ class Profile extends DataClass implements Insertable<Profile> {
           other.importedAt == this.importedAt);
 }
 
-class ProfilesCompanion extends UpdateCompanion<Profile> {
+class ProfilesCompanion extends UpdateCompanion<ProfileRow> {
   final Value<String> profileId;
   final Value<int> version;
   final Value<String> coachName;
@@ -658,7 +659,7 @@ class ProfilesCompanion extends UpdateCompanion<Profile> {
        selfConsistencyPassed = Value(selfConsistencyPassed),
        sourcePath = Value(sourcePath),
        importedAt = Value(importedAt);
-  static Insertable<Profile> custom({
+  static Insertable<ProfileRow> custom({
     Expression<String>? profileId,
     Expression<int>? version,
     Expression<String>? coachName,
@@ -1377,14 +1378,17 @@ class $$ProfilesTableTableManager
         RootTableManager<
           _$AppDatabase,
           $ProfilesTable,
-          Profile,
+          ProfileRow,
           $$ProfilesTableFilterComposer,
           $$ProfilesTableOrderingComposer,
           $$ProfilesTableAnnotationComposer,
           $$ProfilesTableCreateCompanionBuilder,
           $$ProfilesTableUpdateCompanionBuilder,
-          (Profile, BaseReferences<_$AppDatabase, $ProfilesTable, Profile>),
-          Profile,
+          (
+            ProfileRow,
+            BaseReferences<_$AppDatabase, $ProfilesTable, ProfileRow>,
+          ),
+          ProfileRow,
           PrefetchHooks Function()
         > {
   $$ProfilesTableTableManager(_$AppDatabase db, $ProfilesTable table)
@@ -1465,8 +1469,8 @@ class $$ProfilesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable<$ProfilesTable, Profile>(table),
-                  BaseReferences<_$AppDatabase, $ProfilesTable, Profile>(
+                  e.readTable<$ProfilesTable, ProfileRow>(table),
+                  BaseReferences<_$AppDatabase, $ProfilesTable, ProfileRow>(
                     db,
                     table,
                     e,
@@ -1483,14 +1487,14 @@ typedef $$ProfilesTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $ProfilesTable,
-      Profile,
+      ProfileRow,
       $$ProfilesTableFilterComposer,
       $$ProfilesTableOrderingComposer,
       $$ProfilesTableAnnotationComposer,
       $$ProfilesTableCreateCompanionBuilder,
       $$ProfilesTableUpdateCompanionBuilder,
-      (Profile, BaseReferences<_$AppDatabase, $ProfilesTable, Profile>),
-      Profile,
+      (ProfileRow, BaseReferences<_$AppDatabase, $ProfilesTable, ProfileRow>),
+      ProfileRow,
       PrefetchHooks Function()
     >;
 typedef $$ProjectRowsTableCreateCompanionBuilder =

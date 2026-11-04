@@ -41,6 +41,18 @@ Additional required/optional objects:
 
 The JSON above is the minimum required contract for inference.
 
+Optional in `profile.json`:
+
+```json
+"reference_clips": [
+  { "clip_id": "uuid", "metrics": { "metric_key": 0.0 } }
+]
+```
+
+These are metric values of the clips the profile was built from, used for `nearest_reference_clip_ids`. They never contain video or file paths.
+
+A package written by the builder is a zip that holds `profile.json`, plus the empty directories `specialist_patches/` and `adapters/`.
+
 ## Metric Vector (per analyzed clip)
 
 ```json
@@ -96,9 +108,17 @@ The part of a pack the analysis runtime reads (one per event). Labels and domain
     }
   ],
   "min_phase_frames": 3,
-  "min_pose_confidence": 0.5
+  "min_pose_confidence": 0.5,
+  "min_clips": 15,
+  "critical_phases": ["phase_id"],
+  "min_critical_pose_confidence": 0.6,
+  "self_consistency_threshold": 0.5
 }
 ```
+
+Per metric (optional): `"weight": 1.0` is the pack default weight for style matching. `"min_spread": 0.0` is a floor on the fitted spread, in the metric's unit.
+
+`min_clips`, `critical_phases` (default: all phases), `min_critical_pose_confidence` and `self_consistency_threshold` drive the Quality Gates below.
 
 - `phases` are in movement order.
 - `joints` names exactly 3 joints for `joint_angle` and `joint_range` (the angle sits at the middle joint), and none for the other kinds. Joint names come from the generic body set: `pelvis, spine, neck, head, left_/right_shoulder, left_/right_elbow, left_/right_wrist, left_/right_hip, left_/right_knee, left_/right_ankle`.
@@ -249,6 +269,16 @@ A profile may not be marked ready unless:
 - Self-consistency check passes: held-out clips from the same coach score above a defined match threshold against the profile built from the remaining clips
 
 Failure of any gate produces a structured rejection, not a weak profile with a high score.
+
+How the builder applies the gates:
+
+- A clip is usable when analysis succeeds and its mean pose confidence over the critical phases is at least `min_critical_pose_confidence`.
+- Too few usable clips → `INSUFFICIENT_CLIPS`. `details` lists the gates and each unusable clip with its reasons.
+- The average critical-phase pose confidence across usable clips is below the threshold → `LOW_POSE_CONFIDENCE`.
+- Self-consistency is leave-one-out. Each usable clip is scored against the profile fitted from the others. If the mean score is below `self_consistency_threshold` → `PROFILE_NOT_READY`, with `details.held_out_scores`.
+- A previous profile for another pack or event, or one built under another `metric_schema_version` → `SCHEMA_MISMATCH`.
+
+Style-match score: weighted mean over profile metrics of `exp(-d²/2)`, where `d = |value - center| / spread`. It ranges from 0 to 1.
 
 ## Error Contract
 

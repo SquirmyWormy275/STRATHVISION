@@ -11,6 +11,7 @@ import '../workspace/workspace_controller.dart';
 part 'database.g.dart';
 
 /// Installed profile metadata. Phase 1 stores metadata only.
+@DataClassName('ProfileRow')
 class Profiles extends Table {
   TextColumn get profileId => text()();
   IntColumn get version => integer()();
@@ -91,7 +92,7 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
 
   // ---- profiles -----------------------------------------------------------
 
-  Stream<List<Profile>> watchProfiles() => (select(profiles)
+  Stream<List<ProfileRow>> watchProfiles() => (select(profiles)
         ..orderBy([
           (t) => OrderingTerm.desc(t.importedAt),
           (t) => OrderingTerm.desc(t.version),

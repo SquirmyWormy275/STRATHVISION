@@ -6,7 +6,7 @@ import 'package:path/path.dart' as p;
 
 import 'package:analysis_engine/analysis_engine.dart';
 
-export 'package:analysis_engine/analysis_engine.dart' show AnalysisError, ErrorCode;
+export 'package:analysis_engine/analysis_engine.dart' show AnalysisError, ErrorCode, profileManifestName;
 
 /// Metadata read from the minimum Profile Package contract
 /// (docs/INTERFACES.md "Profile Package").
@@ -43,100 +43,32 @@ class ProfileMetadata {
   /// Validates [json] against the minimum required contract and returns its
   /// metadata, or throws [AnalysisError] with `SCHEMA_MISMATCH`.
   factory ProfileMetadata.fromJson(Object? json) {
-    final problems = <String>[];
     if (json is! Map<String, Object?>) {
       throw AnalysisError(ErrorCode.schemaMismatch, 'Profile must be a JSON object.');
     }
-
-    T? field<T>(Map<String, Object?> m, String key, String path) {
-      final v = m[key];
-      if (v is T) return v;
-      problems.add(v == null ? '$path is missing' : '$path has the wrong type');
-      return null;
-    }
-
-    final profileId = field<String>(json, 'profile_id', 'profile_id');
-    final version = field<int>(json, 'version', 'version');
-    final coachName = field<String>(json, 'coach_name', 'coach_name');
-    final packId = field<String>(json, 'pack_id', 'pack_id');
-    final eventId = field<String>(json, 'event_id', 'event_id');
-    final schema =
-        field<String>(json, 'metric_schema_version', 'metric_schema_version');
-    final createdAtRaw = field<String>(json, 'created_at', 'created_at');
-    final clipCount =
-        field<int>(json, 'source_clip_count', 'source_clip_count');
-    final gates = field<Map<String, Object?>>(
-        json, 'quality_gates', 'quality_gates');
-    final metrics = field<Map<String, Object?>>(json, 'metrics', 'metrics');
-
-    bool? minClipsMet;
-    bool? selfConsistency;
-    if (gates != null) {
-      minClipsMet =
-          field<bool>(gates, 'min_clips_met', 'quality_gates.min_clips_met');
-      selfConsistency = field<bool>(gates, 'self_consistency_passed',
-          'quality_gates.self_consistency_passed');
-      field<String>(gates, 'notes', 'quality_gates.notes');
-    }
-
-    if (metrics != null) {
-      for (final entry in metrics.entries) {
-        final path = 'metrics.${entry.key}';
-        final m = entry.value;
-        if (m is! Map<String, Object?>) {
-          problems.add('$path must be an object');
-          continue;
-        }
-        for (final k in ['center', 'spread', 'weight']) {
-          if (m[k] is! num) problems.add('$path.$k must be a number');
-        }
-        for (final k in ['unit', 'phase']) {
-          if (m[k] is! String) problems.add('$path.$k must be a string');
-        }
-      }
-    }
-
-    DateTime? createdAt;
-    if (createdAtRaw != null) {
-      createdAt = DateTime.tryParse(createdAtRaw);
-      if (createdAt == null) problems.add('created_at is not ISO 8601');
-    }
-    if (version != null && version < 1) problems.add('version must be >= 1');
-    if (clipCount != null && clipCount < 0) {
-      problems.add('source_clip_count must be >= 0');
-    }
-    for (final (name, v) in [
-      ('profile_id', profileId),
-      ('pack_id', packId),
-      ('event_id', eventId),
-      ('metric_schema_version', schema),
-    ]) {
-      if (v != null && v.trim().isEmpty) problems.add('$name is empty');
-    }
-
+    final problems = validateProfile(json);
     if (problems.isNotEmpty) {
       throw AnalysisError(ErrorCode.schemaMismatch,
           'This file is not a valid profile package.', {'problems': problems});
     }
 
+    final profile = Profile.fromJson(json);
     return ProfileMetadata(
-      profileId: profileId!,
-      version: version!,
-      coachName: coachName!,
-      packId: packId!,
-      eventId: eventId!,
-      metricSchemaVersion: schema!,
-      createdAt: createdAt!,
-      sourceClipCount: clipCount!,
-      metricCount: metrics!.length,
-      minClipsMet: minClipsMet!,
-      selfConsistencyPassed: selfConsistency!,
+      profileId: profile.profileId,
+      version: profile.version,
+      coachName: profile.coachName,
+      packId: profile.packId,
+      eventId: profile.eventId,
+      metricSchemaVersion: profile.metricSchemaVersion,
+      createdAt: profile.createdAt,
+      sourceClipCount: profile.sourceClipCount,
+      metricCount: profile.metrics.length,
+      minClipsMet: profile.minClipsMet,
+      selfConsistencyPassed: profile.selfConsistencyPassed,
     );
   }
 }
 
-/// Name of the manifest inside a directory or zip package.
-const profileManifestName = 'profile.json';
 
 /// Reads profile metadata from a `.json` file, a `.zip` package, or a package
 /// directory. Throws [AnalysisError] on anything unreadable or invalid.

@@ -78,6 +78,23 @@ See docs/CARNE_ASADA.md for full specification.
 - Long clips are pose-sampled at a stride, up to 1,800 samples per clip. Phase frames still refer to the clip's own frame indices.
 - Analyze works on the clip on the active stage. Results are kept per clip for the open session only. Storing results for drift starts in Phase 5.
 
+## Phase 4 Profile Builder Decisions
+
+- The builder lives in `packages/analysis_engine` (`ProfileBuilder`), so the phone and the workbench share it. DECISIONS says coaches can do everything on the phone, so the Build a profile screen is on every platform.
+- Fitting:
+  - center = mean.
+  - spread = sample SD, floored at the metric's `min_spread` (and never 0).
+  - weight = pack default weight × the metric's mean confidence, rescaled so weights average 1.
+- Self-consistency is leave-one-out, as described in INTERFACES.md Quality Gates. Because spreads are fitted from the clips themselves, held-out scores without a `min_spread` tolerance sit around 0.6–0.7 for most footage, so the gate only discriminates once a pack sets a `min_spread` tolerance. This is covered by tests: one synthetic coach passes and mixed footage fails at threshold 0.8 with `min_spread` 1.0.
+- Defaults are provisional until the human confirms them (see STATUS Blockers):
+  - `min_clips` 15 (from INTERFACES.md)
+  - `min_critical_pose_confidence` 0.6
+  - `self_consistency_threshold` 0.5
+- A ready profile is stored as a zip under app support (`profiles/<id>_v<version>.zip`), re-read through the importer, and listed in the Library. "Save a copy" exports the same zip anywhere.
+- Rebuilding from a previous profile keeps `profile_id` and increments `version`.
+- Clip duration and frame rate come from a headless media_kit player. With no video controller attached, media_kit sets `vid=no` and mpv never reports the frame rate, so the probe sets `vid=auto` with `vo=null`.
+- Synthetic clips come from the stub pose with a style seed and up to 3% jitter per clip. The Phase 4 acceptance allows synthetic clips.
+
 ## Thresholds and Gating (timber defaults)
 
 - Usable action = confident 3D pose + confident implement + assigned phase + actual stroke.

@@ -4,8 +4,10 @@ import 'package:uuid/uuid.dart';
 
 import '../analysis/analysis_controller.dart';
 import '../data/database.dart';
+import '../profiles/builder_controller.dart';
 import '../profiles/profile_package.dart';
 import '../workspace/project.dart';
+import 'profile_builder_screen.dart';
 import 'workspace_route.dart';
 import 'workspace_screen.dart';
 
@@ -30,6 +32,8 @@ class LibraryScreen extends StatelessWidget {
     this.pickClip = pickClipFile,
     this.playerFactory = defaultStagePlayer,
     this.analysisRunner,
+    this.profileBuilder = defaultProfileBuilder,
+    this.pickClips = pickReferenceClips,
   });
 
   final AppDatabase db;
@@ -37,6 +41,17 @@ class LibraryScreen extends StatelessWidget {
   final ClipPathPicker pickClip;
   final StagePlayerFactory playerFactory;
   final AnalysisRunner? analysisRunner;
+  final ProfileBuilderController Function(AppDatabase db) profileBuilder;
+  final ClipsPicker pickClips;
+
+  Future<void> _buildProfile(BuildContext context) async {
+    final controller = profileBuilder(db);
+    await Navigator.of(context).push(MaterialPageRoute<void>(
+      builder: (_) =>
+          ProfileBuilderScreen(controller: controller, pickClips: pickClips),
+    ));
+    controller.dispose();
+  }
 
   Future<void> _import(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
@@ -94,6 +109,12 @@ class LibraryScreen extends StatelessWidget {
         title: const Text('Library'),
         actions: [
           IconButton(
+            key: const Key('build-profile'),
+            tooltip: 'Build a profile',
+            icon: const Icon(Icons.person_add_alt),
+            onPressed: () => _buildProfile(context),
+          ),
+          IconButton(
             key: const Key('import-profile'),
             tooltip: 'Import profile',
             icon: const Icon(Icons.file_open_outlined),
@@ -103,11 +124,11 @@ class LibraryScreen extends StatelessWidget {
       ),
       body: StreamBuilder<List<ProjectRow>>(
         stream: db.watchProjects(),
-        builder: (context, projectSnap) => StreamBuilder<List<Profile>>(
+        builder: (context, projectSnap) => StreamBuilder<List<ProfileRow>>(
           stream: db.watchProfiles(),
           builder: (context, profileSnap) {
             final projects = projectSnap.data ?? const <ProjectRow>[];
-            final profiles = profileSnap.data ?? const <Profile>[];
+            final profiles = profileSnap.data ?? const <ProfileRow>[];
             if (projects.isEmpty && profiles.isEmpty) {
               return _EmptyLibrary(onImport: () => _import(context));
             }
@@ -212,7 +233,7 @@ class _EmptyLibrary extends StatelessWidget {
 class _ProfileTile extends StatelessWidget {
   const _ProfileTile({required this.profile});
 
-  final Profile profile;
+  final ProfileRow profile;
 
   @override
   Widget build(BuildContext context) {

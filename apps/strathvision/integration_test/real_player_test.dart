@@ -15,6 +15,7 @@ import 'package:analysis_engine/analysis_engine.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:strathvision/analysis/analysis_controller.dart';
 import 'package:strathvision/packs/placeholder_pack.dart';
+import 'package:strathvision/profiles/clip_probe.dart';
 import 'package:strathvision/workspace/project.dart';
 import 'package:strathvision/workspace/stage_player.dart';
 import 'package:strathvision/workspace/workspace_controller.dart';
@@ -185,5 +186,18 @@ void main() {
     c.dispose();
     await a.dispose();
     await b.dispose();
+  });
+
+  testWidgets('headless probe reads duration and frame rate', (tester) async {
+    final dir = await resolveClipDir(tester);
+    final info30 = await tester.runAsync(() => probeClip('$dir/clip30.mp4'));
+    final info25 = await tester.runAsync(() => probeClip('$dir/clip25.mp4'));
+    expect(info30!.durationMs, closeTo(10000, 100));
+    expect(info30.fps, closeTo(30, 0.01));
+    expect(info25!.durationMs, closeTo(12000, 100));
+    expect(info25.fps, closeTo(25, 0.01));
+    final missing =
+        await tester.runAsync(() => probeClip('$dir/does_not_exist.mp4'));
+    expect(missing, isNull);
   });
 }
