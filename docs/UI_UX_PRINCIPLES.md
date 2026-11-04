@@ -170,3 +170,20 @@ Stupidly easy. Start with a clip. Deepen only by invitation.
 - The only required step is adding the first clip. All further analysis is an invitation while basic review remains complete and useful.
 
 The user should feel they simply added footage and started watching. Everything else reveals itself.
+
+## Settings
+
+A calm instrument panel, not a preference list. Opening it should produce a small moment of care, then get out of the way.
+
+- Entry is a single quiet row, one level down from the library. No gear icon on review or filmstrip. Never shown during onboarding; appears only after the first clip.
+- Top of the screen is a live micro-review: a silent loop of the user’s most recent stroke (or a clean placeholder). Living underline and ghost (when available) are active. Every control below instantly affects this loop.
+- Three sections only, phrased as actions:
+  - “How marks feel” — motion toggle, mark-button position (reset glides controls in the loop), gesture mapper.
+  - “Start fresh” — soft reset and full export-and-rebuild. Each uses plain language (“Clears what the app has learned from your marks. All videos stay.”) and offers a 30-second undo via the elegant sweep.
+  - “About this copy” — version only. Long-press reveals a single diagnostics line (last fit, usable minutes, package version). Otherwise invisible.
+- No control exists unless it changes the micro-review or produces an immediate, elegant confirmation.
+- Language is observational. Never mentions models, AI, parameters, or training.
+- Absolute visual continuity: same type scale, accent, spacing, and row height as stroke segments.
+- Changes apply instantly and locally. No Save button. Back returns to the exact prior screen.
+
+Settings itself demonstrates the product’s precision and reversibility. It remains skippable and safe for any user.
