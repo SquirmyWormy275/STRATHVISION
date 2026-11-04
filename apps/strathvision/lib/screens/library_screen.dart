@@ -1,8 +1,11 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../data/database.dart';
 import '../profiles/profile_package.dart';
+import '../workspace/project.dart';
+import 'workspace_route.dart';
 import 'workspace_screen.dart';
 
 /// Picks a profile package path. Injectable so tests can bypass the platform
@@ -23,10 +26,14 @@ class LibraryScreen extends StatelessWidget {
     super.key,
     required this.db,
     this.pickPath = pickProfileFile,
+    this.pickClip = pickClipFile,
+    this.playerFactory = defaultStagePlayer,
   });
 
   final AppDatabase db;
   final ProfilePathPicker pickPath;
+  final ClipPathPicker pickClip;
+  final StagePlayerFactory playerFactory;
 
   Future<void> _import(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
@@ -49,8 +56,35 @@ class LibraryScreen extends StatelessWidget {
     }
   }
 
+  void _openProject(BuildContext context, Project project) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => WorkspaceRoute(
+        db: db,
+        project: project,
+        pickClip: pickClip,
+        playerFactory: playerFactory,
+      ),
+    ));
+  }
+
+  Future<void> _newReview(BuildContext context) async {
+    final now = DateTime.now();
+    final project = Project(
+      projectId: const Uuid().v4(),
+      name: 'Review ${_shortDate(now)}',
+    );
+    await db.saveProject(project);
+    if (context.mounted) _openProject(context, project);
+  }
+
+  Future<void> _reopen(BuildContext context, String projectId) async {
+    final project = await db.loadProject(projectId);
+    if (project != null && context.mounted) _openProject(context, project);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Library'),
@@ -63,28 +97,73 @@ class LibraryScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder<List<Profile>>(
-        stream: db.watchProfiles(),
-        builder: (context, snapshot) {
-          final profiles = snapshot.data ?? const <Profile>[];
-          if (profiles.isEmpty) return _EmptyLibrary(onImport: () => _import(context));
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            itemCount: profiles.length,
-            separatorBuilder: (_, _) => const Divider(height: 1),
-            itemBuilder: (context, i) => _ProfileTile(profile: profiles[i]),
-          );
-        },
+      body: StreamBuilder<List<ProjectRow>>(
+        stream: db.watchProjects(),
+        builder: (context, projectSnap) => StreamBuilder<List<Profile>>(
+          stream: db.watchProfiles(),
+          builder: (context, profileSnap) {
+            final projects = projectSnap.data ?? const <ProjectRow>[];
+            final profiles = profileSnap.data ?? const <Profile>[];
+            if (projects.isEmpty && profiles.isEmpty) {
+              return _EmptyLibrary(onImport: () => _import(context));
+            }
+            return ListView(
+              padding: const EdgeInsets.only(bottom: 96),
+              children: [
+                if (projects.isNotEmpty) ...[
+                  _SectionHeader('Reviews', theme: theme),
+                  for (final p in projects)
+                    ListTile(
+                      key: Key('project-${p.projectId}'),
+                      leading: const Icon(Icons.video_library_outlined),
+                      title: Text(p.name),
+                      subtitle: Text('Edited ${_shortDate(p.updatedAt)}'),
+                      onTap: () => _reopen(context, p.projectId),
+                    ),
+                ],
+                if (profiles.isNotEmpty) ...[
+                  _SectionHeader('Profiles', theme: theme),
+                  for (final p in profiles) _ProfileTile(profile: p),
+                ],
+              ],
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         key: const Key('open-workspace'),
-        icon: const Icon(Icons.video_library_outlined),
-        label: const Text('Open workspace'),
-        onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const WorkspaceScreen())),
+        icon: const Icon(Icons.add),
+        label: const Text('New review'),
+        onPressed: () => _newReview(context),
       ),
     );
   }
+}
+
+String _shortDate(DateTime t) {
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+  final l = t.toLocal();
+  final hh = l.hour.toString().padLeft(2, '0');
+  final mm = l.minute.toString().padLeft(2, '0');
+  return '${months[l.month - 1]} ${l.day}, $hh:$mm';
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader(this.text, {required this.theme});
+
+  final String text;
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+        child: Text(text,
+            style: theme.textTheme.labelLarge
+                ?.copyWith(color: theme.colorScheme.primary)),
+      );
 }
 
 class _EmptyLibrary extends StatelessWidget {
@@ -101,23 +180,23 @@ class _EmptyLibrary extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.person_search_outlined,
+            Icon(Icons.video_library_outlined,
                 size: 56, color: theme.colorScheme.outline),
             const SizedBox(height: 16),
-            Text('No profiles yet', style: theme.textTheme.titleLarge),
+            Text('Add a clip to start', style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(
-              'Import a profile package to compare against later.\n'
-              'You can review video without one.',
+              'Start a review to watch and compare clips side by side.\n'
+              'Profiles are optional.',
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),
             const SizedBox(height: 20),
-            OutlinedButton.icon(
+            TextButton.icon(
               onPressed: onImport,
               icon: const Icon(Icons.file_open_outlined),
-              label: const Text('Import profile'),
+              label: const Text('Import a profile'),
             ),
           ],
         ),

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../profiles/profile_package.dart';
+import '../workspace/project.dart';
+import '../workspace/workspace_controller.dart';
 
 part 'database.g.dart';
 
@@ -27,8 +31,20 @@ class Profiles extends Table {
   Set<Column> get primaryKey => {profileId, version};
 }
 
-@DriftDatabase(tables: [Profiles])
-class AppDatabase extends _$AppDatabase {
+/// Projects stored as the exact INTERFACES.md Project JSON.
+@DataClassName('ProjectRow')
+class ProjectRows extends Table {
+  TextColumn get projectId => text()();
+  TextColumn get name => text()();
+  TextColumn get json => text()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {projectId};
+}
+
+@DriftDatabase(tables: [Profiles, ProjectRows])
+class AppDatabase extends _$AppDatabase implements ProjectStore {
   AppDatabase([QueryExecutor? executor])
       : super(executor ??
             driftDatabase(
@@ -39,7 +55,41 @@ class AppDatabase extends _$AppDatabase {
             ));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) => m.createAll(),
+        onUpgrade: (m, from, to) async {
+          if (from < 2) await m.createTable(projectRows);
+        },
+      );
+
+  // ---- projects -----------------------------------------------------------
+
+  @override
+  Future<void> saveProject(Project project) =>
+      into(projectRows).insertOnConflictUpdate(ProjectRowsCompanion.insert(
+        projectId: project.projectId,
+        name: project.name,
+        json: jsonEncode(project.toJson()),
+        updatedAt: DateTime.now(),
+      ));
+
+  Future<Project?> loadProject(String projectId) async {
+    final row = await (select(projectRows)
+          ..where((t) => t.projectId.equals(projectId)))
+        .getSingleOrNull();
+    return row == null
+        ? null
+        : Project.fromJson(jsonDecode(row.json) as Map<String, Object?>);
+  }
+
+  Stream<List<ProjectRow>> watchProjects() => (select(projectRows)
+        ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
+      .watch();
+
+  // ---- profiles -----------------------------------------------------------
 
   Stream<List<Profile>> watchProfiles() => (select(profiles)
         ..orderBy([

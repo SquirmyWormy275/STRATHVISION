@@ -57,6 +57,14 @@ See docs/CARNE_ASADA.md for full specification.
 - Soft personal pull: athlete accepted swings can slightly shift the target inside the coach-supported region at reduced learning rate.
 - Multi-coach footage tightens shared directions and leaves style differences as higher variance.
 
+## Phase 2 Workspace Decisions
+
+- Video engine: media_kit (libmpv) on all five platforms. Seeks are exact (`hr-seek=yes`). Frame step snaps to the frame grid (`container-fps`) and exact-seeks one frame, which is deterministic forward and back. mpv `frame-step` did not advance reliably through media_kit.
+- Locked playback: stage A is the clock. Stage B is held at `A + offset_ms`. Every 250 ms during locked play: under 40 ms of drift is left alone, 40–250 ms is closed by nudging B's speed (closing the gap in about 0.5 s of wall time, capped at ±50% of the rate), and over 250 ms gets a hard seek. B is hard-aligned after every user seek, step, rate change, and pause. Hard-seeking small drift stalls the decoder and makes drift worse (measured on libmpv).
+- Until segmentation exists, "current stroke" means the current timestamp on the active stage. Marks keep `stroke_index: null` and are re-bound to strokes once segmentation lands.
+- Attribute chips come from the active pack. Before Phase 6, a neutral placeholder pack supplies the list. No domain words appear in app code.
+- Undo is one tap and covers marks, annotations, sync changes, and clip loads within the open session.
+
 ## Thresholds and Gating (timber defaults)
 
 - Usable action = confident 3D pose + confident implement + assigned phase + actual stroke.

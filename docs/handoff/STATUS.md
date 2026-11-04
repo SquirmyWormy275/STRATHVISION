@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T07:14:08Z
+heartbeat: 2026-11-04T07:54:33Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
-task: 1 — Video loading into stage A and B
-next: Phase 2 task 1: add media_kit and load clips into stage A/B in apps/strathvision/lib/screens/workspace_screen.dart
+task: Acceptance: Android real-decoder verification pending
+next: Android real-video check: kill the stuck emulator or connect a phone, then run apps/strathvision/scripts/run_android_player_test.sh. If it passes, Phase 2 is done and Phase 3 (analysis runtime skeleton) starts.
 <!-- STATE:END -->
 
 ## Phase progress
@@ -16,10 +16,12 @@ next: Phase 2 task 1: add media_kit and load clips into stage A/B in apps/strath
 |-------|-------|
 | 0 Contracts | done |
 | 1 Project Skeleton | done on Linux + Android emulator (launch, real file-picker import, persistence, navigation). **Open: Windows launch check (human, on a Windows PC)** |
-| 2 Dual-Video Workspace | not started |
+| 2 Dual-Video Workspace | tasks 1–9 implemented. 49 unit/widget tests plus a real-decoder test passing 3/3 on Linux. **Open: real video on Android** (see Blockers) |
 | 3–9 | not started |
 
 ## Blockers / questions for the human
+
+- **Phase 2 on Android is not verified.** On this machine's emulator (software GPU) mpv doesn't load or seek video: `time-pos` and `hwdec-current` stay empty. The host-GPU emulator mode hung during boot, and that qemu process (`-gpu host`) is still running, which blocks starting a new emulator. It needs `pkill qemu-system-x86_64` (the agent isn't permitted to kill it). Best fix: connect a physical Android phone with USB debugging and run `apps/strathvision/scripts/run_android_player_test.sh`.
 
 - **Phase 1 Windows acceptance is open.** On a Windows PC: `cd apps/strathvision && flutter run -d windows`, then follow the "Phase 1 manual check" in apps/strathvision/README.md. iOS/macOS builds need a Mac.
 
@@ -33,5 +35,6 @@ next: Phase 2 task 1: add media_kit and load clips into stage A/B in apps/strath
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T07:54:33Z **claude** — Phase 2 dual-video workspace implemented (all Workspace Events, persistence, undo, red/green). 49 tests + real-decoder test pass on Linux 3/3. Fixed async-seek and drift-correction bugs found on libmpv. → next: Android real-video check: kill the stuck emulator or connect a phone, then run apps/strathvision/scripts/run_android_player_test.sh. If it passes, Phase 2 is done and Phase 3 (analysis runtime skeleton) starts.
 - 2026-11-04T07:14:08Z **claude** — Phase 1 verified on Linux + Android emulator (launch, file-picker import of dummy profile, persistence across restart, Library↔Workspace) → next: Phase 2 task 1: add media_kit and load clips into stage A/B in apps/strathvision/lib/screens/workspace_screen.dart
 - 2026-11-04T06:50:51Z **claude** — Set up the handoff protocol. Phase 1 tasks 1–4 are implemented, 14 tests pass, and the Linux release build launches.

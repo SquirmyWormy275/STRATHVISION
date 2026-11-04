@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:media_kit/media_kit.dart';
 
 import 'data/database.dart';
 import 'screens/library_screen.dart';
+import 'screens/workspace_route.dart';
+import 'screens/workspace_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
   runApp(StrathvisionApp(db: AppDatabase()));
 }
 
@@ -12,10 +17,14 @@ class StrathvisionApp extends StatelessWidget {
     super.key,
     required this.db,
     this.pickPath = pickProfileFile,
+    this.pickClip = pickClipFile,
+    this.playerFactory = defaultStagePlayer,
   });
 
   final AppDatabase db;
   final ProfilePathPicker pickPath;
+  final ClipPathPicker pickClip;
+  final StagePlayerFactory playerFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +37,12 @@ class StrathvisionApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: theme(Brightness.light),
       darkTheme: theme(Brightness.dark),
-      home: LibraryScreen(db: db, pickPath: pickPath),
+      home: LibraryScreen(
+        db: db,
+        pickPath: pickPath,
+        pickClip: pickClip,
+        playerFactory: playerFactory,
+      ),
     );
   }
 }

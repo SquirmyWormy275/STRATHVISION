@@ -8,6 +8,8 @@ import 'package:strathvision/data/database.dart';
 import 'package:strathvision/main.dart';
 import 'package:strathvision/profiles/profile_package.dart';
 
+import 'support/fake_stage_player.dart';
+
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
 
@@ -19,6 +21,7 @@ void main() {
     await tester.pumpWidget(StrathvisionApp(
       db: db,
       pickPath: () async => path,
+      playerFactory: FakeStagePlayer.new,
     ));
     await tester.pumpAndSettle();
   }
@@ -33,17 +36,19 @@ void main() {
   testWidgets('Library navigates to Workspace and back', (tester) async {
     await pumpApp(tester);
     expect(find.text('Library'), findsOneWidget);
-    expect(find.text('No profiles yet'), findsOneWidget);
+    expect(find.text('Add a clip to start'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('open-workspace')));
     await tester.pumpAndSettle();
-    expect(find.text('Workspace'), findsOneWidget);
+    expect(find.textContaining('Review '), findsOneWidget);
+    expect(find.text('Single view'), findsOneWidget);
     expect(find.byKey(const Key('stage-A')), findsOneWidget);
     expect(find.byKey(const Key('stage-B')), findsOneWidget);
 
     await tester.pageBack();
     await tester.pumpAndSettle();
     expect(find.text('Library'), findsOneWidget);
+    expect(find.text('Reviews'), findsOneWidget);
     await unmountApp(tester);
   });
 

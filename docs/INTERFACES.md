@@ -141,9 +141,60 @@ Sync state, annotations, and marks must be persistable inside a Project.
   ],
   "annotations": [],
   "linked_profile_ids": [],
-  "marks": []
+  "marks": [],
+  "workspace": {
+    "stage_a_clip_id": "uuid | null",
+    "stage_b_clip_id": "uuid | null",
+    "mirror_b": false,
+    "playback_rate": 1.0,
+    "locked": false
+  }
 }
 ```
+
+### Project entries
+
+`clips[]`: video files are referenced by local path only. They never leave the device.
+
+```json
+{
+  "clip_id": "uuid",
+  "path": "string (local file path)",
+  "display_name": "string",
+  "added_at": "iso8601"
+}
+```
+
+`sync_relationships[]`: `offset_ms = position_b_ms - position_a_ms` at the moment Set Sync Point is pressed. Locked playback keeps `position_b = position_a + offset_ms`. At most one relationship exists per (clip_a_id, clip_b_id) pair. Setting it again replaces the old one, and Clear Sync removes it.
+
+`marks[]`: red/green per attribute on the current stroke. Until stroke segmentation exists (Phase 3+), a mark is anchored to the clip timestamp and `stroke_index` is null.
+
+```json
+{
+  "mark_id": "uuid",
+  "clip_id": "uuid",
+  "time_ms": 0,
+  "stroke_index": null,
+  "attribute": "string (from the active pack's attribute list)",
+  "label": "red | green",
+  "author": "athlete | coach",
+  "created_at": "iso8601"
+}
+```
+
+`annotations[]`: a note on the active stage at its current position.
+
+```json
+{
+  "annotation_id": "uuid",
+  "clip_id": "uuid",
+  "time_ms": 0,
+  "text": "string",
+  "created_at": "iso8601"
+}
+```
+
+`workspace`: which clip is on each stage, plus view state, so a reopened project restores the same pair and its sync.
 
 ## Quality Gates (profile builder)
 
