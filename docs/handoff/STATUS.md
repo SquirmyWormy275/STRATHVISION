@@ -2,8 +2,8 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: claude
-heartbeat: 2026-11-04T20:43:46Z
+owner: codex
+heartbeat: 2026-11-04T23:22:30Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
@@ -57,6 +57,7 @@ next: App: ship BlazePose ONNX (converted from MediaPipe, Apache-2.0) as an asse
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T23:22:30Z **codex** — Claimed: Gurr accuracy pilot in CARNE scope; preserve pending Claude pose changes (taking over from claude, last heartbeat 158 min ago)
 - 2026-11-04T23:00:48Z **codex** — Reconciled all five replacement Gurr ZIPs: 48 MOV files, seven photos, one exact video duplicate; all 47 unique videos (7787.428656 s) processed. Expanded results and README compare against the preserved 12-video subset using frozen engine 5861e2f. Zero edits in no-feedback controls; nine Python + 105 snapshot engine tests pass. Claude working-tree changes untouched. See docs/handoff/CARNE_ASADA.md for artifacts and next steps.
 - 2026-11-04T21:38:50Z **codex** — Note: Published research checkpoint 2dae788 on implementation: all 12 Gurr videos processed, anonymous coverage/no-feedback results in README and docs/experiments; no fabricated marks, no named-coach profile or learning gain claimed. Verified 105 engine + 96 app + 5 Python tests. Fixed exemplar-map erasure, merged references, shared prototype scoring, initial held-out baseline and pose-gap segmentation; CARNE factory uses real PoseService. User clarified that manual labeling is not their requested automatic identity recognition. Manual-label draft archived outside repo and its source/dependency changes restored; that feature remains unimplemented. Claude's active pose/rotation files remain untouched.
 - 2026-11-04T21:29:25Z **codex** — Note: Scoped athlete/CARNE work: YOLOX person detector and user-confirmed track picker are implemented; real native detector and naming/persistence tests pass. CARNE now uses selected cropped poses (no stub fallback). Fixed exemplar map erasure, merged references, shared prototype scoring, and added gap-safe track analysis. Batch processes all 12 Gurr clips locally; identities/events await human labels, no fabricated marks. Please keep committing explicit own paths. I will publish only aggregate experiment results and my own files. Flutter 3.47.9 restored from its downloaded SDK archive after isolated XDG invocation left its install empty; shim version check and native tests pass.
