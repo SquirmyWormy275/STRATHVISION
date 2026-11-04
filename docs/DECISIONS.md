@@ -59,6 +59,7 @@ See docs/CARNE_ASADA.md for full specification.
 
 ## Phase 2 Workspace Decisions
 
+- Android video output: `vo=mediacodec_embed` with `hwdec=mediacodec`, so MediaCodec decodes straight onto the surface. mpv's GPU output needs an EGL context that some Android GPUs (and the emulator) refuse (`EGL_BAD_ATTRIBUTE`). `frameRate()` polls mpv for up to 3 s, because Android reports `container-fps` late.
 - Video engine: media_kit (libmpv) on all five platforms. Seeks are exact (`hr-seek=yes`). Frame step snaps to the frame grid (`container-fps`) and exact-seeks one frame, which is deterministic forward and back. mpv `frame-step` did not advance reliably through media_kit.
 - Locked playback: stage A is the clock. Stage B is held at `A + offset_ms`. Every 250 ms during locked play: under 40 ms of drift is left alone, 40–250 ms is closed by nudging B's speed (closing the gap in about 0.5 s of wall time, capped at ±50% of the rate), and over 250 ms gets a hard seek. B is hard-aligned after every user seek, step, rate change, and pause. Hard-seeking small drift stalls the decoder and makes drift worse (measured on libmpv).
 - Until segmentation exists, "current stroke" means the current timestamp on the active stage. Marks keep `stroke_index: null` and are re-bound to strokes once segmentation lands.
@@ -153,7 +154,14 @@ See docs/CARNE_ASADA.md for full specification.
 
 - **Placement.** The playground is reached from the desktop Workbench (**CARNE ASADA** in its top bar). It is one window with one drop zone ("Feed CARNE ASADA", via `desktop_drop`), plus "or choose files". It never appears on phones.
 - **Mixture.** v1 treats the profile's per-metric center/spread/weight (each tagged with its phase) as the phase-conditioned mixture, with one diagonal component per phase.
-  - The proposals implemented are shifting a mean and tightening one spread. Weight and residual-exemplar edits are not proposed yet, because the current evaluation cannot show them improving anything.
+  - All five proposal types from CARNE_ASADA.md are implemented:
+    - shift a mean
+    - tighten one spread
+    - raise a metric weight (×1.25, capped at 3)
+    - add a residual exemplar (from the green stroke the mixture explains worst, at weight 0.5), or raise an existing one (+0.25, capped at 1)
+    - drop a low-confidence exemplar (confidence below 0.6)
+  - Exemplars are extra mixture components. A stroke's match on each metric is the better of the mean component and the best weighted exemplar.
+  - Exemplars must lie inside the coach hull. They are saved in `profile.json` `reference_clips` with `exemplar: true`, weight, confidence and source.
 - **The loop** (engine `CarneSession`):
   - **Diagnose.** Find the largest gap, in spreads, between green-marked strokes and the mixture on the priority attribute's metrics.
   - **Propose** one edit:
@@ -173,7 +181,7 @@ See docs/CARNE_ASADA.md for full specification.
   - Videos are probed, split into strokes, and analyzed per stroke. Red/green marks come from any project that has the same clip file, bound to the stroke containing each mark's time.
   - Text notes understand `priority: <attribute>` and `ignore this clip`.
   - Voice notes are saved, but spoken labels need a local transcriber. None is chosen yet (see Blockers).
-  - Dropped packages are acknowledged but not merged in v1.
+  - A dropped package for the same event merges its coach strokes into the hull and the held-out set ("Added N coach strokes from <coach> · vN to the coach hull."). Packages for another event are ignored.
 - **Undo and save.**
   - Undo removes the last accepted edit and restores its metric exactly.
   - **Save as vN+1** writes one new package version per session: the edited mixture in `profile.json`, plus `carne_asada/mixture_edits_vN.json`.

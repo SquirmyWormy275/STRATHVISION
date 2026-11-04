@@ -559,6 +559,7 @@ CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async => CarneContr
       analyze: isolateStrokeAnalyzer(pack.analysisPack),
       marks: db.marksForPath,
       phaseLabel: pack.phaseLabel,
+      metricLabel: pack.metricLabel,
       write: (Profile profile, patches, adapters, research) async {
         final support = await getApplicationSupportDirectory();
         final path = await storeProfilePackage(

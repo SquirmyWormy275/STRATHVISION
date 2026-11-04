@@ -51,6 +51,8 @@ Optional in `profile.json`:
 
 These are metric values of the clips the profile was built from, used for `nearest_reference_clip_ids`. They never contain video or file paths.
 
+A reference clip can also be a residual exemplar added by CARNE ASADA: `"exemplar": true, "weight": 0..1, "confidence": 0..1, "source": "the 14-second mark of the X clip"`. Exemplars never define the coach hull.
+
 A package written by the builder is a zip that holds `profile.json`, plus the empty directories `specialist_patches/` and `adapters/`.
 
 ## Metric Vector (per analyzed clip)

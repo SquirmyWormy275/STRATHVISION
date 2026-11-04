@@ -33,10 +33,12 @@ void main() {
   MediaKit.ensureInitialized();
 
   Future<void> waitUntil(WidgetTester tester, bool Function() ok,
-      {Duration timeout = const Duration(seconds: 10)}) async {
+      {Duration timeout = const Duration(seconds: 10), String Function()? state}) async {
     final end = DateTime.now().add(timeout);
     while (!ok()) {
-      if (DateTime.now().isAfter(end)) fail('timed out waiting for decoder');
+      if (DateTime.now().isAfter(end)) {
+        fail('timed out waiting for decoder${state == null ? '' : ': ${state()}'}');
+      }
       await tester.pump(const Duration(milliseconds: 50));
     }
   }
@@ -104,7 +106,9 @@ void main() {
     // Locked scrub of A puts B at A + offset.
     await c.scrub(Stage.a, const Duration(milliseconds: 5000));
     await waitUntil(tester,
-        () => (b.decoderPosition.inMilliseconds - (5000 + offset)).abs() < 45);
+        () => (b.decoderPosition.inMilliseconds - (5000 + offset)).abs() < 45,
+        state: () => 'A=${a.decoderPosition.inMilliseconds} B=${b.decoderPosition.inMilliseconds} '
+            'offset=$offset target=${5000 + offset}');
 
     // Frame step: A moves by one 30 fps frame, B re-aligns.
     await tester.pump(const Duration(milliseconds: 200));

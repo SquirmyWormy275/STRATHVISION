@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T16:44:23Z
+heartbeat: 2026-11-04T17:06:49Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Human items in STATUS Blockers. Agent: rerun macOS/iOS CI later (gh run rerun 41863714173 --failed) and fix anything it reports.
+next: Export choices (+ my marks, full local overlay, summary before write) and import replace/keep/merge
 <!-- STATE:END -->
 
 ## Phase progress
@@ -16,7 +16,7 @@ next: Human items in STATUS Blockers. Agent: rerun macOS/iOS CI later (gh run re
 |-------|-------|
 | 0 Contracts | done |
 | 1 Project Skeleton | done on Linux + Android emulator (launch, real file-picker import, persistence, navigation). Windows **release build succeeds in CI**. **Open: launching it on a Windows PC (human): download the `strathvision-windows-x64` artifact, unzip, run `strathvision.exe`** |
-| 2 Dual-Video Workspace | tasks 1–9 implemented. 49 unit/widget tests plus a real-decoder test passing 3/3 on Linux. **Open: real video on Android** (see Blockers) |
+| 2 Dual-Video Workspace | tasks 1–9 implemented. 49 unit/widget tests plus a real-decoder test passing 3/3 on Linux. **Android real video verified**: 3/3 real-decoder tests pass on the emulator using the NVIDIA host GPU, after two fixes (MediaCodec surface output on Android; frame-rate polling) |
 | 3 Analysis Runtime Skeleton | **done**. `packages/analysis_engine` (18 tests), Analyze button and panel (6 app tests), real-decoder Analyze test passes on Linux. Pose, implement and phase stages are stubs behind real interfaces |
 | 4 Profile Builder | **done**. The engine builder (quality, fit, leave-one-out self-consistency, gates, export) has 31 engine tests. The Build a profile screen has 4 app tests. The real-decoder probe test passes on Linux |
 | 5 Style Comparison | **done**. `compare()` and the patch loader have 47 engine tests. The panel shows score, expandable ranked deltas, warnings and the profile picker. Results are stored (DB v3). 68 app tests and 3 Linux real-decoder tests pass |
@@ -39,8 +39,6 @@ next: Human items in STATUS Blockers. Agent: rerun macOS/iOS CI later (gh run re
 
 - **Which 3D pose model?** (needed before real footage gives real metrics, not before Phase 4's synthetic-clip acceptance.) DECISIONS.md requires full-body 3D root-relative pose and a lightweight implement tracker, but doesn't name the models. The engine has `PoseEstimator` / `ImplementTracker` interfaces ready. The human must pick the models and confirm their licences.
 
-- **Phase 2 on Android is not verified.** On this machine's emulator (software GPU) mpv doesn't load or seek video: `time-pos` and `hwdec-current` stay empty. The host-GPU emulator mode hung during boot, and that qemu process (`-gpu host`) is still running, which blocks starting a new emulator. It needs `pkill qemu-system-x86_64` (the agent isn't permitted to kill it). Best fix: connect a physical Android phone with USB debugging and run `apps/strathvision/scripts/run_android_player_test.sh`.
-
 - **Phase 1 Windows acceptance is open.** On a Windows PC: `cd apps/strathvision && flutter run -d windows`, then follow the "Phase 1 manual check" in apps/strathvision/README.md. iOS/macOS builds need a Mac.
 
 ## Environment notes
@@ -53,6 +51,7 @@ next: Human items in STATUS Blockers. Agent: rerun macOS/iOS CI later (gh run re
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T17:06:49Z **claude** — Android real-video verified (3/3 real-decoder tests on emulator w/ NVIDIA host GPU) after fixing Android video output (mediacodec_embed) and frame-rate race; CARNE ASADA now has all five proposal types (weights, add/raise/drop exemplars) + package merge into the coach hull. 94 engine + 85 app tests. → next: Export choices (+ my marks, full local overlay, summary before write) and import replace/keep/merge
 - 2026-11-04T16:44:23Z **claude** — All 9 phases implemented. CI: tests + Android + Linux + Windows builds pass; macOS/iOS jobs refused by GitHub macOS runner capacity (not code). Open items are hardware/human: Android real-video run, Windows launch, macOS/iOS rerun + device installs, pose model / transcriber / API key choices, timber pack review, Gurr footage. → next: Human items in STATUS Blockers. Agent: rerun macOS/iOS CI later (gh run rerun 41863714173 --failed) and fix anything it reports.
 - 2026-11-04T16:03:09Z **claude** — Phase 9 done locally: drift view (sessions by day, trend, chart+table+sparklines), profile health on Library tiles, export (coaching profile only) + import + shared inbox folder, release APK + Linux zip built and launched, .github/workflows/builds.yml (tests → APK, Linux/Windows/macOS zips, unsigned iOS), docs/DISTRIBUTION.md, Gurr experiment steps in README. 90 engine + 85 app tests. → next: Watch the first builds.yml run on GitHub Actions (gh run list --workflow builds.yml); fix any Windows/macOS/iOS build failures it reports
 - 2026-11-04T15:53:17Z **claude** — Phase 8 done: CARNE ASADA playground (desktop, from Workbench): drop zone + choose files, feed with exact DECISIONS copy, meters, priority chips, chaos toggle, what-did-it-just-do, undo, Save as vN+1 with carne_asada/mixture_edits_vN.json; marks from projects bound to strokes; phones ignore carne_asada/ (tested). Engine stroke segmentation + CarneSession. 87 engine + 80 app + 3 Linux real-decoder tests; release build runs. → next: Phase 9: read EXECUTION_PLAN Phase 9 (drift, polish, distribution builds) and start task 1

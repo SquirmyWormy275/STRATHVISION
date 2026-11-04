@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:media_kit/media_kit.dart';
@@ -53,7 +54,14 @@ class MediaKitStagePlayer implements StagePlayer {
   }
 
   final Player _player = Player();
-  late final VideoController _video = VideoController(_player);
+  // Android: decode with MediaCodec straight onto the surface. mpv's GPU
+  // output needs an EGL context some Android GPUs (and emulators) refuse.
+  late final VideoController _video = VideoController(
+    _player,
+    configuration: Platform.isAndroid
+        ? const VideoControllerConfiguration(vo: 'mediacodec_embed', hwdec: 'mediacodec')
+        : const VideoControllerConfiguration(),
+  );
   final _changes = StreamController<void>.broadcast();
   late final List<StreamSubscription<Object?>> _subs;
   bool _hasMedia = false;
@@ -123,10 +131,16 @@ class MediaKitStagePlayer implements StagePlayer {
   Future<double> frameRate() async {
     if (_fps != null) return _fps!;
     final native = _player.platform;
-    if (native is NativePlayer) {
-      for (final prop in ['container-fps', 'estimated-vf-fps']) {
-        final v = double.tryParse(await native.getProperty(prop));
-        if (v != null && v > 1 && v < 1000) return _fps = v;
+    if (native is NativePlayer && _hasMedia) {
+      // mpv reports the rate a little after the file opens (noticeably later
+      // on Android); poll briefly before falling back.
+      final end = DateTime.now().add(const Duration(seconds: 3));
+      while (DateTime.now().isBefore(end)) {
+        for (final prop in ['container-fps', 'estimated-vf-fps']) {
+          final v = double.tryParse(await native.getProperty(prop));
+          if (v != null && v > 1 && v < 1000) return _fps = v;
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 50));
       }
     }
     return 30;

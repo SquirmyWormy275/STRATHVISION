@@ -67,6 +67,8 @@ void main() {
       CarneCopy.tally(4),
       CarneCopy.shiftWhy('Slope', '1.4°', 'steeper', 'downswing', 7, 9),
       CarneCopy.tightenWhy('Slope', 'entry', 3),
+      CarneCopy.raiseExemplarWhy(CarneCopy.where(14.2, 'Gurr')),
+      CarneCopy.dropExemplarWhy('flat'),
     ]) {
       expect(decisions, contains('“$line”'), reason: line);
     }
@@ -157,14 +159,21 @@ void main() {
       expect(accepted, isNotEmpty);
       expect(accepted.length, lessThanOrEqualTo(5)); // session limit
       expect(s.limitReached || results.last is! StepAccepted, isTrue);
-      final why = RegExp(r'^Shifted slope mean [0-9.]+° steeper on the [a-z]+ phase because \d+ of your last \d+ green marks agreed\.$');
       for (final a in accepted) {
-        expect(why.hasMatch(a.edit.explanation), isTrue, reason: a.edit.explanation);
-        expect(a.edit.status, startsWith('CARNE ASADA accepted an update. Slope mean shifted '));
+        expect(_oneSentence.any((r) => r.hasMatch(a.edit.explanation)), isTrue,
+            reason: a.edit.explanation);
+        expect(a.edit.status, startsWith('CARNE ASADA accepted an update. '));
         expect(a.edit.objectiveAfter, greaterThan(a.edit.objectiveBefore));
         final h = s.hull[a.edit.metric]!;
         expect(a.edit.after.center, inInclusiveRange(h.$1, h.$2));
         expect(pack.attributeMetrics['Slope'], contains(a.edit.metric));
+        for (final e in s.exemplars) {
+          for (final k in pack.attributeMetrics['Slope']!) {
+            if (e.metrics[k] != null) {
+              expect(e.metrics[k], inInclusiveRange(s.hull[k]!.$1, s.hull[k]!.$2));
+            }
+          }
+        }
       }
       for (final k in s.mixture.keys) {
         if (!pack.attributeMetrics['Slope']!.contains(k)) {
@@ -191,14 +200,19 @@ void main() {
         },
       });
       final s = await ready(p: onlyEntry, prof: edge);
-      final r = s.step();
-      expect(r, isA<StepRejected>());
-      expect((r as StepRejected).message, CarneCopy.leftHull);
-      expect(s.edits, isEmpty);
+      // Every candidate either fails to improve or would leave the hull.
+      final results = [for (var i = 0; i < 6; i++) s.step()];
+      expect(results.whereType<StepRejected>().map((r) => r.message), contains(CarneCopy.leftHull));
+      for (final e in s.edits) {
+        expect(e.type, isNot('shift_mean'));
+      }
+      final h2 = s.hull['entry_slope']!;
+      expect(s.mixture['entry_slope']!.center, inInclusiveRange(h2.$1, h2.$2));
 
       // The chaos toggle loosens the hull by one spread for the session.
       final loose = await ready(p: onlyEntry, prof: edge, chaos: true);
-      expect(loose.step(), isA<StepAccepted>());
+      final lr = [for (var i = 0; i < 6; i++) loose.step()].whereType<StepAccepted>();
+      expect(lr.map((a) => a.edit.type), contains('shift_mean'));
     });
 
     test('undo restores the previous mixture exactly', () async {
@@ -224,6 +238,101 @@ void main() {
     });
   });
 
+  group('weights, exemplars, packages', () {
+    Future<CarneSession> marked() async {
+      final s = CarneSession(
+          pack: pack, profile: coach, priority: 'Slope', clock: () => now, phaseLabel: phase,
+          metricLabel: (k) => timber.metricLabels[k] ?? k);
+      for (var i = 0; i < 3; i++) {
+        s.addClip('ath$i', await strokes('ath$i'), marksFor: green);
+      }
+      return s;
+    }
+
+    test('loop can add or raise exemplars and weights, each explained and undoable',
+        () async {
+      final s = await marked();
+      final seen = <String>{};
+      for (var i = 0; i < 5; i++) {
+        final r = s.step();
+        if (r is StepAccepted) seen.add(r.edit.type);
+      }
+      expect(seen, isNotEmpty);
+      final snapshot = jsonEncode(s.editedProfile.toJson());
+      final n = s.edits.length;
+      for (var i = 0; i < n; i++) {
+        s.undo();
+      }
+      expect(jsonEncode(s.editedProfile.toJson()), jsonEncode(coach.toJson()));
+      expect(snapshot, isNot(jsonEncode(coach.toJson())));
+    });
+
+    test('a low-confidence exemplar from an earlier session is dropped', () async {
+      // Strokes the coach marked red, and an old low-confidence exemplar
+      // sitting right on them: it wrongly says those swings match.
+      final reds = [for (var i = 0; i < 3; i++) await strokes('r$i')];
+      final all = reds.expand((x) => x).toList();
+      double mean(String k) =>
+          all.map((x) => x.metrics[k]!).reduce((a, b) => a + b) / all.length;
+      final bad = ReferenceClip(
+          clipId: 'old@3',
+          metrics: {for (final k in pack.attributeMetrics['Slope']!) k: mean(k)},
+          exemplar: true,
+          weight: 1,
+          confidence: 0.3,
+          source: 'the 14-second mark of the old clip');
+      final withEx = Profile.fromJson({
+        ...coach.toJson(),
+        'reference_clips': [...coach.toJson()['reference_clips'] as List, bad.toJson()],
+      });
+      final s = CarneSession(pack: pack, profile: withEx, priority: 'Slope', clock: () => now);
+      expect(s.exemplars.single.clipId, 'old@3');
+      for (var i = 0; i < 3; i++) {
+        s.addClip('r$i', reds[i], marksFor: (st) => [
+              StrokeMark(attribute: 'Slope', label: 'red', author: 'coach', createdAt: now),
+            ]);
+      }
+      final r = s.step();
+      expect(r, isA<StepAccepted>());
+      final e = (r as StepAccepted).edit;
+      expect(e.type, 'drop_exemplar');
+      expect(e.explanation,
+          matches(RegExp(r'^Dropped one low-confidence exemplar that was pulling the mean (flat|steep)\.$')));
+      expect(s.exemplars, isEmpty);
+      s.undo();
+      expect(s.exemplars.single.clipId, 'old@3');
+    });
+
+    test('dropped package of the same event widens the coach hull', () async {
+      final s = CarneSession(pack: pack, profile: coach, priority: 'Slope', clock: () => now);
+      final before = s.hull['entry_slope']!;
+      final other = Profile.fromJson({
+        ...coach.toJson(),
+        'profile_id': 'other',
+        'reference_clips': [
+          {'clip_id': 'x1', 'metrics': {'entry_slope': before.$1 - 5}},
+          {'clip_id': 'x2', 'metrics': {'entry_slope': before.$2 + 5}},
+        ],
+      });
+      expect(s.mergeCoachStrokes(other), 2);
+      expect(s.hull['entry_slope'], (before.$1 - 5, before.$2 + 5));
+      expect(s.mergeCoachStrokes(other), 0); // already merged
+      final foreign = Profile.fromJson({...other.toJson(), 'event_id': 'standing_block'});
+      expect(s.mergeCoachStrokes(foreign), 0);
+    });
+
+    test('exemplars ride in the edited profile and the record', () async {
+      final s = await marked();
+      for (var i = 0; i < 5; i++) {
+        s.step();
+      }
+      final log = s.editsLog(version: 2, sessionId: 's');
+      expect(log['exemplars'], hasLength(s.exemplars.length));
+      expect(s.editedProfile.referenceClips.where((r) => r.exemplar).length, s.exemplars.length);
+      expect(validateProfile(s.editedProfile.toJson()), isEmpty);
+    });
+  });
+
   test('coach mark overrides athlete; newest coach wins', () {
     final p = PileStroke(
       stroke: StrokeDetail(
@@ -244,6 +353,14 @@ void main() {
     expect(p.winning('Path'), isNull);
   });
 }
+
+final _oneSentence = [
+  RegExp(r'^Shifted slope mean [0-9.]+° (steeper|flatter) on the [a-z]+ phase because \d+ of your last \d+ green marks agreed\.$'),
+  RegExp(r'^Tightened slope variance in the [a-z]+ phase after \w+ consecutive red marks on the same stroke\.$'),
+  RegExp(r'^Raised the weight of [a-z ]+ within slope because \d+ of your last \d+ green marks were closest on it\.$'),
+  RegExp(r'^(Added a|Raised the weight of the) residual exemplar from the \d+-second mark of the \w+ clip; it matched the current priority better than the existing mean\.$'),
+  RegExp(r'^Dropped one low-confidence exemplar that was pulling the mean (flat|steep)\.$'),
+];
 
 Map<String, Object?> _eventJson(PackDefinition def, String eventId) {
   final raw = jsonDecode(File('../../apps/strathvision/assets/packs/timber.json').readAsStringSync())

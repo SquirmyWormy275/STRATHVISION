@@ -101,15 +101,15 @@ void main() {
     final texts = c.feed.map((l) => l.text).toList();
     expect(texts.where((t) => RegExp(r'^Found \d+ strokes\. \d+ are clean enough for slope\. Adding them\.$').hasMatch(t)),
         hasLength(3));
-    expect(texts.where((t) => t.startsWith('CARNE ASADA accepted an update. Slope mean shifted ')),
-        isNotEmpty);
+    expect(texts.where((t) => t.startsWith('CARNE ASADA accepted an update. ')), isNotEmpty);
     expect(texts.where((t) => RegExp(r'^Session tally: \d+ accepted edits?\. Undo is one click\.$').hasMatch(t)),
         isNotEmpty);
     expect(c.session.edits.length, inInclusiveRange(1, 5));
     for (final e in c.session.edits) {
-      expect(find.text(e.explanation), findsOneWidget); // "What did it just do?"
-      expect(e.explanation, startsWith('Shifted slope mean '));
-      expect(e.explanation.split('. ').length, 1); // one sentence
+      expect(find.text(e.explanation), findsWidgets); // "What did it just do?"
+      expect(e.explanation, endsWith('.'));
+      expect(e.explanation.substring(0, e.explanation.length - 1).contains('. '), isFalse,
+          reason: 'one sentence: ${e.explanation}');
       final h = c.session.hull[e.metric]!;
       expect(e.after.center, inInclusiveRange(h.$1, h.$2));
     }
@@ -130,7 +130,10 @@ void main() {
     final log = jsonDecode(w.research.values.single) as Map;
     expect(log['format'], 'carne_asada/1');
     expect((log['edits'] as List).length, c.session.edits.length);
-    expect(w.profile.metrics, isNot(equals(coach.metrics)));
+    expect(jsonEncode(w.profile.toJson()['metrics']) != jsonEncode(coach.toJson()['metrics']) ||
+            w.profile.referenceClips.any((r) => r.exemplar),
+        isTrue, reason: 'the saved version carries the edited mixture');
+    expect(w.profile.referenceClips.where((r) => r.exemplar).length, c.session.exemplars.length);
     expect(validateProfile(w.profile.toJson()), isEmpty);
     c.dispose();
   });
@@ -153,6 +156,24 @@ void main() {
     expect(c.session.usableSeconds, 0);
     expect(texts, contains('Saved the voice note. Spoken labels need a transcriber on this computer.'));
     expect(texts, contains('Can’t use readme.pdf.'));
+
+    // A coaching package for the same event widens the coach hull.
+    final other = Directory.systemTemp.createTempSync('sv_pkg');
+    addTearDown(() => other.deleteSync(recursive: true));
+    final path = await tester.runAsync(() => storeProfilePackage(
+        Profile.fromJson({
+          ...coach.toJson(),
+          'profile_id': 'other-coach',
+          'coach_name': 'Other',
+          'reference_clips': [
+            {'clip_id': 'o1', 'metrics': {'entry_slope': -20.0}},
+          ],
+        }),
+        other));
+    await tester.runAsync(() => c.drop([path!]));
+    await tester.pumpAndSettle();
+    expect(c.feed.last.text, 'Added 1 coach strokes from Other · v1 to the coach hull.');
+    expect(c.session.hull['entry_slope']!.$2, -20.0);
     c.dispose();
   });
 

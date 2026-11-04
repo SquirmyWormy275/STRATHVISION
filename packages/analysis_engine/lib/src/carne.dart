@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'engine.dart';
 import 'pack.dart';
 import 'profile.dart';
 import 'scoring.dart';
@@ -40,6 +41,28 @@ class CarneCopy {
       '${_word(reds)} consecutive red marks on the same stroke.';
   static String tightened(String attr, String phase) =>
       '$attr variance tightened in the $phase phase.';
+
+  static String raiseExemplarWhy(String where) =>
+      'Raised the weight of the residual exemplar from $where; it matched the '
+      'current priority better than the existing mean.';
+  static String addExemplarWhy(String where) =>
+      'Added a residual exemplar from $where; it matched the current priority '
+      'better than the existing mean.';
+  static String dropExemplarWhy(String plainDir) =>
+      'Dropped one low-confidence exemplar that was pulling the mean $plainDir.';
+  static String raiseWeightWhy(String attr, String metric, int close, int greens) =>
+      'Raised the weight of ${metric.toLowerCase()} within ${attr.toLowerCase()} because '
+      '$close of your last $greens green marks were closest on it.';
+  static String exemplarChange(String attr, String verb) =>
+      '${attr[0].toUpperCase()}${attr.substring(1)} exemplar $verb.';
+  static String weightChange(String attr, String metric) =>
+      '$attr now leans more on ${metric.toLowerCase()}.';
+  static String mergedCoach(int n, String who) =>
+      'Added $n coach strokes from $who to the coach hull.';
+
+  /// "the 14-second mark of the Gurr clip".
+  static String where(double seconds, String clip) =>
+      'the ${seconds.round()}-second mark of the $clip clip';
 }
 
 const _words = [
@@ -106,9 +129,13 @@ class MixtureEdit {
     required this.objectiveBefore,
     required this.objectiveAfter,
     required this.at,
+    this.exemplar,
+    this.mixtureBefore = const {},
+    this.exemplarsBefore = const [],
   });
 
-  /// `shift_mean` or `tighten_spread`.
+  /// `shift_mean`, `tighten_spread`, `raise_weight`, `add_exemplar`,
+  /// `raise_exemplar`, or `drop_exemplar`.
   final String type;
   final String metric;
   final String phase;
@@ -120,12 +147,20 @@ class MixtureEdit {
   final double objectiveBefore, objectiveAfter;
   final DateTime at;
 
+  /// The exemplar added, raised, or dropped (exemplar edits).
+  final ReferenceClip? exemplar;
+
+  /// State before the edit, for one-click undo.
+  final Map<String, ProfileMetric> mixtureBefore;
+  final List<ReferenceClip> exemplarsBefore;
+
   Map<String, Object?> toJson() => {
         'type': type,
         'metric': metric,
         'phase': phase,
         'before': before.toJson(),
         'after': after.toJson(),
+        if (exemplar != null) 'exemplar': exemplar!.toJson(),
         'explanation': explanation,
         'objective_before': objectiveBefore,
         'objective_after': objectiveAfter,
@@ -161,8 +196,8 @@ class Meters {
 }
 
 /// A CARNE ASADA session on one profile (desktop only). Edits the
-/// phase-conditioned mixture (per-metric center/spread/weight) under hard
-/// bounds; the phone never runs this.
+/// phase-conditioned mixture (per-metric center/spread/weight) and its
+/// residual exemplars under hard bounds; the phone never runs this.
 class CarneSession {
   CarneSession({
     required this.pack,
@@ -173,20 +208,15 @@ class CarneSession {
     this.meters = const Meters(),
     DateTime Function()? clock,
     this.phaseLabel,
+    this.metricLabel,
   })  : assert(limit >= 5 && limit <= 10),
         _clock = clock ?? DateTime.now,
         _profile = profile,
         _priority = priority,
-        mixture = Map.of(profile.metrics) {
-    for (final m in pack.metrics) {
-      final vals = [
-        for (final r in profile.referenceClips)
-          if (r.metrics[m.key] != null) r.metrics[m.key]!,
-      ];
-      if (vals.isNotEmpty) hull[m.key] = (vals.reduce(math.min), vals.reduce(math.max));
-    }
-    final refs = profile.referenceClips;
-    heldOut = [for (var i = 0; i < refs.length; i += 4) refs[i].metrics];
+        mixture = Map.of(profile.metrics),
+        exemplars = [for (final r in profile.referenceClips) if (r.exemplar) r],
+        coachStrokes = [for (final r in profile.referenceClips) if (!r.exemplar) r] {
+    _rebuildHull();
   }
 
   final AnalysisPack pack;
@@ -209,17 +239,71 @@ class CarneSession {
   final Meters meters;
   final DateTime Function() _clock;
   final String Function(String phase)? phaseLabel;
+  final String Function(String metric)? metricLabel;
 
   /// The mixture being edited.
   final Map<String, ProfileMetric> mixture;
 
+  /// Residual exemplars: extra mixture components from marked strokes.
+  final List<ReferenceClip> exemplars;
+
+  /// The coach's own strokes: define the hull and the held-out set.
+  final List<ReferenceClip> coachStrokes;
+
   /// Coach hull: per metric, the range of the coach's own strokes.
   final Map<String, (double, double)> hull = {};
-  late final List<Map<String, double>> heldOut;
+  List<Map<String, double>> heldOut = const [];
   final List<PileStroke> pile = [];
   final List<MixtureEdit> edits = [];
 
+  void _rebuildHull() {
+    hull.clear();
+    for (final m in pack.metrics) {
+      final vals = [
+        for (final r in coachStrokes)
+          if (r.metrics[m.key] != null) r.metrics[m.key]!,
+      ];
+      if (vals.isNotEmpty) hull[m.key] = (vals.reduce(math.min), vals.reduce(math.max));
+    }
+    heldOut = [for (var i = 0; i < coachStrokes.length; i += 4) coachStrokes[i].metrics];
+  }
+
+  /// Adds another package's coach strokes (same event) to the hull and the
+  /// held-out set. Returns how many were added.
+  int mergeCoachStrokes(Profile other) {
+    if (other.packId != pack.packId || other.eventId != pack.eventId) return 0;
+    final have = {for (final r in coachStrokes) r.clipId};
+    final add = [
+      for (final r in other.referenceClips)
+        if (!r.exemplar && !have.contains(r.clipId)) r,
+    ];
+    coachStrokes.addAll(add);
+    _rebuildHull();
+    return add.length;
+  }
+
   Profile get profile => _profile;
+
+  /// The profile as edited: mixture + coach strokes + exemplars.
+  Profile get editedProfile => Profile(
+        profileId: _profile.profileId,
+        version: _profile.version,
+        coachName: _profile.coachName,
+        packId: _profile.packId,
+        eventId: _profile.eventId,
+        metricSchemaVersion: _profile.metricSchemaVersion,
+        createdAt: _profile.createdAt,
+        sourceClipCount: _profile.sourceClipCount,
+        minClipsMet: _profile.minClipsMet,
+        selfConsistencyPassed: _profile.selfConsistencyPassed,
+        notes: _profile.notes,
+        metrics: Map.of(mixture),
+        referenceClips: [
+          for (final r in _profile.referenceClips) if (!r.exemplar) r,
+          ...exemplars,
+        ],
+      );
+
   List<String> get priorityMetrics => [
         for (final k in pack.attributeMetrics[priority] ?? const <String>[])
           if (mixture.containsKey(k)) k,
@@ -270,22 +354,37 @@ class CarneSession {
     }
   }
 
-  double _match(Map<String, double> values, Map<String, ProfileMetric> mix) {
-    final keys = priorityMetrics;
-    return styleMatchScore(
-            {for (final k in keys) if (values[k] != null) k: values[k]!},
-            {for (final k in keys) k: mix[k]!}) ??
-        0;
+  /// Match of [values] on the priority attribute: per metric, the better of
+  /// the mixture component and the best weighted exemplar; weight-averaged.
+  double _match(Map<String, double> values, Map<String, ProfileMetric> mix,
+      List<ReferenceClip> ex) {
+    var num = 0.0, den = 0.0;
+    for (final k in priorityMetrics) {
+      final v = values[k];
+      final m = mix[k]!;
+      if (v == null || m.weight <= 0) continue;
+      var best = metricMatch(v, m);
+      for (final e in ex) {
+        final x = e.metrics[k];
+        if (x == null) continue;
+        final d = (v - x) / m.spread;
+        best = math.max(best, e.weight * math.exp(-d * d / 2));
+      }
+      num += m.weight * best;
+      den += m.weight;
+    }
+    return den == 0 ? 0 : num / den;
   }
 
   /// Agreement of the mixture with the winning marks on the priority
   /// attribute: green strokes should match, red ones should not.
-  double objective(Map<String, ProfileMetric> mix) {
+  double objective(Map<String, ProfileMetric> mix, [List<ReferenceClip>? ex]) {
+    final e = ex ?? exemplars;
     var sum = 0.0, n = 0;
     for (final s in pile.where((s) => s.counts)) {
       final label = s.winning(priority);
       if (label == null) continue;
-      final m = _match(s.stroke.metrics, mix);
+      final m = _match(s.stroke.metrics, mix, e);
       sum += label == 'green' ? m : 1 - m;
       n++;
     }
@@ -298,17 +397,31 @@ class CarneSession {
     return scores.reduce((a, b) => a + b) / scores.length;
   }
 
-  bool _insideHull(String metric, ProfileMetric m) {
+  bool _insideHull(String metric, double value, double spread) {
     final h = hull[metric];
     if (h == null) return true;
-    final margin = chaos ? m.spread : 0.0;
-    return m.center >= h.$1 - margin - 1e-9 && m.center <= h.$2 + margin + 1e-9;
+    final margin = chaos ? spread : 0.0;
+    return value >= h.$1 - margin - 1e-9 && value <= h.$2 + margin + 1e-9;
   }
 
+  bool _exemplarInsideHull(ReferenceClip e) => priorityMetrics.every((k) =>
+      e.metrics[k] == null || _insideHull(k, e.metrics[k]!, mixture[k]!.spread));
+
   String _phase(String p) => (phaseLabel?.call(p) ?? p).toLowerCase();
+  String _label(String k) => metricLabel?.call(k) ?? k.replaceAll('_', ' ');
   String _amount(double v, String unit) {
     final n = v.abs() < 10 ? v.abs().toStringAsFixed(1) : v.abs().toStringAsFixed(0);
     return unit == '°' ? '$n°' : '$n $unit';
+  }
+
+  double _strokeConfidence(PileStroke s) {
+    final d = s.stroke.detail.outcome;
+    if (d is! AnalysisSuccess) return 0;
+    final cs = [
+      for (final k in priorityMetrics)
+        if (d.vector.metrics[k] != null) d.vector.metrics[k]!.confidence,
+    ];
+    return cs.isEmpty ? 0 : cs.reduce((a, b) => a + b) / cs.length;
   }
 
   /// Diagnose → propose one sparse update → evaluate → accept or reject.
@@ -326,7 +439,7 @@ class CarneSession {
 
     final obj0 = objective(mixture);
     final held0 = _heldOutScore(mixture);
-    final candidates = <(String type, String metric, ProfileMetric next, String why, String change)>[];
+    final cands = <_Candidate>[];
 
     // Diagnose: largest residual between green strokes and the mixture.
     final ranked = [
@@ -339,9 +452,11 @@ class CarneSession {
         }(),
     ]..sort((a, b) => b.$3.compareTo(a.$3));
 
+    final reds = pile.where((s) => s.counts).map((s) => s.redCount(priority)).fold(0, math.max);
     for (final (k, mean, dist, g) in ranked) {
       final m = mixture[k]!;
       final def = pack.metrics.firstWhere((d) => d.key == k);
+      // 1. Shift μ.
       if (mean != null && dist > 0.1) {
         final delta = (0.5 * (mean - m.center)).clamp(-m.spread, m.spread);
         final next = ProfileMetric(
@@ -349,68 +464,151 @@ class CarneSession {
         final up = delta > 0;
         final dir = pack.wordsFor(k, up: up)[0];
         final agree = g.where((v) => up ? v > m.center : v < m.center).length;
-        candidates.add((
-          'shift_mean',
-          k,
-          next,
-          CarneCopy.shiftWhy(priority, _amount(delta, def.unit), dir, _phase(m.phase),
-              agree, g.length),
-          CarneCopy.shifted(priority, _amount(delta, def.unit), dir, _phase(m.phase)),
+        cands.add(_Candidate(
+          type: 'shift_mean',
+          metric: k,
+          mix: {...mixture, k: next},
+          why: CarneCopy.shiftWhy(priority, _amount(delta, def.unit), dir, _phase(m.phase), agree, g.length),
+          change: CarneCopy.shifted(priority, _amount(delta, def.unit), dir, _phase(m.phase)),
+          hullOk: _insideHull(k, next.center, next.spread),
         ));
       }
-      final reds = pile
-          .where((s) => s.counts)
-          .map((s) => s.redCount(priority))
-          .fold(0, math.max);
+      // 2. Scale one covariance direction.
       if (reds >= 3) {
         final next = ProfileMetric(
             center: m.center, spread: m.spread * 0.85, weight: m.weight, unit: m.unit, phase: m.phase);
-        candidates.add((
-          'tighten_spread',
-          k,
-          next,
-          CarneCopy.tightenWhy(priority, _phase(m.phase), reds),
-          CarneCopy.tightened(priority, _phase(m.phase)),
+        cands.add(_Candidate(
+          type: 'tighten_spread',
+          metric: k,
+          mix: {...mixture, k: next},
+          why: CarneCopy.tightenWhy(priority, _phase(m.phase), reds),
+          change: CarneCopy.tightened(priority, _phase(m.phase)),
+        ));
+      }
+      // 3. Adjust w (only meaningful with more than one metric).
+      if (keys.length > 1 && g.isNotEmpty && m.weight < 3) {
+        final close = g.where((v) => (v - m.center).abs() <= m.spread).length;
+        final next = ProfileMetric(
+            center: m.center, spread: m.spread, weight: math.min(3.0, m.weight * 1.25),
+            unit: m.unit, phase: m.phase);
+        cands.add(_Candidate(
+          type: 'raise_weight',
+          metric: k,
+          mix: {...mixture, k: next},
+          why: CarneCopy.raiseWeightWhy(priority, _label(k), close, g.length),
+          change: CarneCopy.weightChange(priority, _label(k)),
         ));
       }
     }
-    if (candidates.isEmpty) return const StepIdle('nothing to change');
+
+    // 4. Add or raise one residual exemplar: the green stroke the mixture
+    //    explains worst.
+    final top = ranked.first.$1;
+    if (greens.isNotEmpty) {
+      final worst = (greens.toList()
+            ..sort((a, b) => _match(a.stroke.metrics, mixture, exemplars)
+                .compareTo(_match(b.stroke.metrics, mixture, exemplars))))
+          .first;
+      final id = '${worst.stroke.clipId}@${worst.stroke.index}';
+      final where = CarneCopy.where(worst.stroke.midSeconds, worst.clipName);
+      final existing = exemplars.indexWhere((e) => e.clipId == id);
+      if (existing < 0) {
+        final e = ReferenceClip(
+          clipId: id,
+          metrics: {for (final k in keys) if (worst.stroke.metrics[k] != null) k: worst.stroke.metrics[k]!},
+          exemplar: true,
+          weight: 0.5,
+          confidence: _strokeConfidence(worst),
+          source: where,
+        );
+        cands.add(_Candidate(
+          type: 'add_exemplar',
+          metric: top,
+          mix: mixture,
+          ex: [...exemplars, e],
+          exemplar: e,
+          why: CarneCopy.addExemplarWhy(where),
+          change: CarneCopy.exemplarChange(priority.toLowerCase(), 'added from $where'),
+          hullOk: _exemplarInsideHull(e),
+        ));
+      }
+    }
+    for (var i = 0; i < exemplars.length; i++) {
+      final e = exemplars[i];
+      if (e.weight < 1 && e.confidence >= lowExemplarConfidence) {
+        final raised = e.withWeight(math.min(1.0, e.weight + 0.25));
+        final where = e.source ?? 'a marked stroke';
+        cands.add(_Candidate(
+          type: 'raise_exemplar',
+          metric: top,
+          mix: mixture,
+          ex: [...exemplars]..[i] = raised,
+          exemplar: raised,
+          why: CarneCopy.raiseExemplarWhy(where),
+          change: CarneCopy.exemplarChange(priority.toLowerCase(), 'from $where weighted up'),
+        ));
+      }
+      // 5. Remove one low-confidence exemplar.
+      if (e.confidence < lowExemplarConfidence) {
+        final x = e.metrics[top];
+        final up = x != null && x > mixture[top]!.center;
+        cands.add(_Candidate(
+          type: 'drop_exemplar',
+          metric: top,
+          mix: mixture,
+          ex: [...exemplars]..removeAt(i),
+          exemplar: e,
+          why: CarneCopy.dropExemplarWhy(pack.wordsFor(top, up: up)[1]),
+          change: CarneCopy.exemplarChange(priority.toLowerCase(), 'dropped'),
+        ));
+      }
+    }
+    if (cands.isEmpty) return const StepIdle('nothing to change');
 
     // Evaluate on the priority attribute + held-out coach strokes.
-    (MixtureEdit, double)? best;
+    _Candidate? best;
+    double bestObj = obj0;
     var hullBlocked = false;
-    for (final (type, k, next, why, change) in candidates) {
-      final trial = {...mixture, k: next};
-      final obj1 = objective(trial);
+    for (final c in cands) {
+      final obj1 = objective(c.mix, c.ex ?? exemplars);
       if (obj1 < obj0 + 0.005) continue;
-      if (_heldOutScore(trial) < held0 * 0.95) continue;
-      if (!_insideHull(k, next)) {
+      if (_heldOutScore(c.mix) < held0 * 0.95) continue;
+      if (!c.hullOk) {
         hullBlocked = true;
         continue;
       }
-      if (best == null || obj1 > best.$2) {
-        best = (
-          MixtureEdit(
-            type: type,
-            metric: k,
-            phase: next.phase,
-            before: mixture[k]!,
-            after: next,
-            explanation: why,
-            status: CarneCopy.accepted(change),
-            objectiveBefore: obj0,
-            objectiveAfter: obj1,
-            at: _clock(),
-          ),
-          obj1
-        );
+      if (best == null || obj1 > bestObj) {
+        best = c;
+        bestObj = obj1;
       }
     }
     if (best == null) {
       return hullBlocked ? const StepRejected(CarneCopy.leftHull) : const StepIdle('no improvement');
     }
-    final edit = best.$1;
-    mixture[edit.metric] = edit.after;
+    final m0 = mixture[best.metric]!;
+    final edit = MixtureEdit(
+      type: best.type,
+      metric: best.metric,
+      phase: m0.phase,
+      before: m0,
+      after: best.mix[best.metric]!,
+      explanation: best.why,
+      status: CarneCopy.accepted(best.change),
+      objectiveBefore: obj0,
+      objectiveAfter: bestObj,
+      at: _clock(),
+      exemplar: best.exemplar,
+      mixtureBefore: Map.of(mixture),
+      exemplarsBefore: List.of(exemplars),
+    );
+    mixture
+      ..clear()
+      ..addAll(best.mix);
+    if (best.ex != null) {
+      exemplars
+        ..clear()
+        ..addAll(best.ex!);
+    }
     edits.add(edit);
     return StepAccepted(edit);
   }
@@ -419,7 +617,12 @@ class CarneSession {
   MixtureEdit? undo() {
     if (edits.isEmpty) return null;
     final e = edits.removeLast();
-    mixture[e.metric] = e.before;
+    mixture
+      ..clear()
+      ..addAll(e.mixtureBefore);
+    exemplars
+      ..clear()
+      ..addAll(e.exemplarsBefore);
     return e;
   }
 
@@ -435,7 +638,33 @@ class CarneSession {
         'limit': limit,
         'chaos': chaos,
         'usable_minutes': double.parse(usableMinutes.toStringAsFixed(2)),
+        'coach_strokes': coachStrokes.length,
         'hull': {for (final e in hull.entries) e.key: [e.value.$1, e.value.$2]},
+        'exemplars': [for (final e in exemplars) e.toJson()],
         'edits': [for (final e in edits) e.toJson()],
       };
+}
+
+/// Exemplars below this measurement confidence may be dropped, never raised.
+const lowExemplarConfidence = 0.6;
+
+class _Candidate {
+  _Candidate({
+    required this.type,
+    required this.metric,
+    required this.mix,
+    required this.why,
+    required this.change,
+    this.ex,
+    this.exemplar,
+    this.hullOk = true,
+  });
+  final String type;
+  final String metric;
+  final Map<String, ProfileMetric> mix;
+  final List<ReferenceClip>? ex;
+  final ReferenceClip? exemplar;
+  final String why;
+  final String change;
+  final bool hullOk;
 }

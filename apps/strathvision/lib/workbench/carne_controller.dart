@@ -46,6 +46,7 @@ class CarneController extends ChangeNotifier {
     required this.marks,
     required this.write,
     this.phaseLabel,
+    this.metricLabel,
     DateTime Function()? clock,
   }) : _clock = clock ?? DateTime.now {
     session = CarneSession(
@@ -54,6 +55,7 @@ class CarneController extends ChangeNotifier {
       priority: _defaultPriority(),
       clock: _clock,
       phaseLabel: phaseLabel,
+      metricLabel: metricLabel,
     );
     feed.add(FeedLine(CarneCopy.priority(session.priority)));
   }
@@ -68,6 +70,7 @@ class CarneController extends ChangeNotifier {
   final MarksLookup marks;
   final ResearchWriter write;
   final String Function(String phase)? phaseLabel;
+  final String Function(String metric)? metricLabel;
   final DateTime Function() _clock;
   static const _uuid = Uuid();
 
@@ -158,11 +161,15 @@ class CarneController extends ChangeNotifier {
     } else if (ext == '.zip' || ext == '.json') {
       try {
         final other = await readProfileBundle(path);
-        feed.add(FeedLine(other.profile.packId == pack.packId &&
-                other.profile.eventId == pack.eventId
-            ? 'Package ${other.profile.coachName} · v${other.profile.version} noted. '
-                'Its coach strokes are not merged in this session.'
-            : 'That package is for another event. Ignoring it.'));
+        final o = other.profile;
+        if (o.packId != pack.packId || o.eventId != pack.eventId) {
+          feed.add(const FeedLine('That package is for another event. Ignoring it.'));
+        } else {
+          final n = session.mergeCoachStrokes(o);
+          feed.add(FeedLine(n == 0
+              ? '${o.coachName} · v${o.version} adds no new coach strokes.'
+              : CarneCopy.mergedCoach(n, '${o.coachName} · v${o.version}')));
+        }
       } on AnalysisError catch (e) {
         feed.add(FeedLine(e.message));
       }
@@ -233,7 +240,7 @@ class CarneController extends ChangeNotifier {
   /// and the session record in `carne_asada/mixture_edits_vN.json`.
   Future<void> save() async {
     if (session.edits.isEmpty) return;
-    final p0 = bundle.profile;
+    final p0 = session.editedProfile;
     final version = p0.version + 1;
     final next = Profile(
       profileId: p0.profileId,
@@ -247,7 +254,7 @@ class CarneController extends ChangeNotifier {
       minClipsMet: p0.minClipsMet,
       selfConsistencyPassed: p0.selfConsistencyPassed,
       notes: '${p0.notes} CARNE ASADA: ${session.edits.length} edits on ${session.priority}.'.trim(),
-      metrics: Map.of(session.mixture),
+      metrics: p0.metrics,
       referenceClips: p0.referenceClips,
     );
     savedPath = await write(next, bundle.patchFiles, bundle.adapterFiles, {

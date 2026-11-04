@@ -36,12 +36,49 @@ class ProfileMetric {
 /// A reference clip kept in the package for nearest-reference lookup.
 /// Holds metric values only, never video or file paths.
 class ReferenceClip {
-  const ReferenceClip({required this.clipId, required this.metrics});
+  const ReferenceClip({
+    required this.clipId,
+    required this.metrics,
+    this.exemplar = false,
+    this.weight = 1.0,
+    this.confidence = 1.0,
+    this.source,
+  });
 
   final String clipId;
   final Map<String, double> metrics;
 
-  Map<String, Object?> toJson() => {'clip_id': clipId, 'metrics': metrics};
+  /// A residual exemplar (added by CARNE ASADA from a marked stroke) rather
+  /// than one of the coach's own reference strokes.
+  final bool exemplar;
+
+  /// Exemplar weight, 0..1 (how strongly it acts as a mixture component).
+  final double weight;
+
+  /// Measurement confidence of the stroke it came from, 0..1.
+  final double confidence;
+
+  /// Where it came from, for explanations ("the 14-second mark of the X clip").
+  final String? source;
+
+  ReferenceClip withWeight(double w) => ReferenceClip(
+      clipId: clipId,
+      metrics: metrics,
+      exemplar: exemplar,
+      weight: w,
+      confidence: confidence,
+      source: source);
+
+  Map<String, Object?> toJson() => {
+        'clip_id': clipId,
+        'metrics': metrics,
+        if (exemplar) ...{
+          'exemplar': true,
+          'weight': weight,
+          'confidence': confidence,
+          'source': source,
+        },
+      };
 
   factory ReferenceClip.fromJson(Map<String, Object?> j) => ReferenceClip(
         clipId: j['clip_id'] as String,
@@ -49,6 +86,10 @@ class ReferenceClip {
           for (final e in (j['metrics'] as Map).entries)
             e.key as String: (e.value as num).toDouble(),
         },
+        exemplar: j['exemplar'] == true,
+        weight: (j['weight'] as num?)?.toDouble() ?? 1.0,
+        confidence: (j['confidence'] as num?)?.toDouble() ?? 1.0,
+        source: j['source'] as String?,
       );
 }
 
