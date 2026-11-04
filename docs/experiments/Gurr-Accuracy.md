@@ -17,7 +17,7 @@ This pilot tests whether the system follows a spatially selected competitor with
 
 A genuine-feedback experiment requires actual coach red/green judgments or reviewed spoken comments bound to strokes and attributes. Timing references are not coach judgments. Keep source recordings grouped between fitting and held-out evaluation, retain the default readiness gates, and publish accepted edits, objective changes and hull checks only when measured.
 
-Status: source-frame annotation in progress; no pilot accuracy result has been claimed.
+Status: references, development results and the revised pipeline are frozen before test inference. Test results are pending.
 
 ## Frozen references
 
@@ -28,3 +28,15 @@ The pilot has ten eight-second windows from ten distinct source recordings: five
 Frozen reference SHA-256: `fbd2205f6983fdbd15743a7a441df005ebdd51caa36ab124554783de975f3712`.
 
 Frozen inference-input SHA-256: `6108021c5e7aa685628c3ea94e2d005bc7cb70dd3910e033e67004f786d9476b`.
+
+## Development findings and frozen revision
+
+The 5 fps baseline retains the initial anonymous IoU track ID. The revision samples at 15 fps, compares person confidence at the selected initial point under four quarter-turns, and follows box geometry within the shot. Loss of continuity or a camera cut requires explicit reselection; it never silently binds a returning detection to the previous competitor. This prevents the development failure where a bystander occupied the original selection position after the operator moved out of view.
+
+Development target containment improved from 16/24 to 22/24 checkpoints. The remaining two checkpoints are missing selections; neither is counted as a success. The revision corrected both sideways development windows. The committed engine still produced no contacts matching the seven reviewed development strikes, even with improved pose input.
+
+A separate experimental wrist-extension proxy matched four of seven development contacts, with no extra predictions in the scored intervals. It uses image-space wrists relative to hips, normalized by person-box height, a 0.12 extension prominence, 0.6 s candidate separation and a three-second prominence search. Arrival at 85% of extension estimates contact. Standing-block direction comes only from initial wrists relative to hips; underhand uses downward extension. This is a motion proxy: it neither detects the axe head nor proves wood contact. It remains research-only and does not manufacture engine phases or mark its candidates usable for coaching.
+
+[Pipeline freeze](evaluation/gurr-pipeline-freeze.json) records inference, scoring, replay, model, input, reference and committed-engine hashes. Development results: [baseline](evaluation/gurr-development-baseline.json), [revised input through the same engine](evaluation/gurr-development-revised.json), and [experimental wrist proxy](evaluation/gurr-development-proxy.json). No source or parameter changes are permitted after opening this pilot's test scores.
+
+Verification before test: 22 Python research tests pass, including duplicate-proof one-to-one contact matching, source-disjoint splitting, stale-result rejection, rotation transforms, ambiguity/loss handling and a test-inference freeze guard. The Dart replay tool passes analysis and runs on the saved engine snapshot.

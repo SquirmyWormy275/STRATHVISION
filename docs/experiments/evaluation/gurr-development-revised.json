@@ -1,0 +1,175 @@
+{
+  "format": "gurr-accuracy-result/1",
+  "partition": "development",
+  "reference_sha256": "fbd2205f6983fdbd15743a7a441df005ebdd51caa36ab124554783de975f3712",
+  "inference": {
+    "variant": "revised",
+    "sample_rate": 15,
+    "sources_sha256": {
+      "footage.py": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8",
+      "target.py": "60e7a3ad171c1a6179750827a2b8d7d8321ee6fa123278810f5f380f1738a6f8",
+      "predict_accuracy.py": "966fdacfa10ac7212905b29c79df3fd3f76101dd26a81c00b3207514e51fe0ce",
+      "motion_contacts.py": "898d11eb18b44237a1c7ccca50423f1e57676021827f50802b6702d99a8ff6bb"
+    },
+    "inputs_sha256": "6108021c5e7aa685628c3ea94e2d005bc7cb70dd3910e033e67004f786d9476b",
+    "detector_sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
+    "pose_sha256": "f6dfd4312367811d8775f7141de3aacbf1de08b5208eb425d2cc1e9640b10793"
+  },
+  "contact_method": "committed engine entry-phase boundary",
+  "contact_source_sha256": null,
+  "scorer_sha256": "acd3b15f8f99636bf1db879d8684db33e1acf026d2268e1d7cb1829bffae5cca",
+  "aggregate": {
+    "windows": 5,
+    "target_checkpoints": 24,
+    "target_hits": 22,
+    "target_coverage": 0.9166666666666666,
+    "target_missing": 2,
+    "target_point_misses": 0,
+    "correct_orientation_windows": 5,
+    "contacts": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 7,
+      "precision": null,
+      "recall": 0.0,
+      "f1": 0.0,
+      "mean_midpoint_error_s": null,
+      "rated_windows": 4,
+      "scored_seconds": 26.1,
+      "idle_false_positives": 0
+    }
+  },
+  "windows": [
+    {
+      "window_id": "dev-standing",
+      "split": "development",
+      "target_checkpoints": 5,
+      "target_hits": 4,
+      "target_missing": 1,
+      "target_point_misses": 0,
+      "selected_segments": 1,
+      "orientation_correct": true,
+      "candidate_strokes": 0,
+      "usable_strokes": 0,
+      "engine_failures": {},
+      "contacts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "timing_errors_s": [],
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "reference_count": 3,
+        "predicted_count": 0,
+        "idle_window": false,
+        "scored_seconds": 7.4
+      }
+    },
+    {
+      "window_id": "dev-training",
+      "split": "development",
+      "target_checkpoints": 5,
+      "target_hits": 5,
+      "target_missing": 0,
+      "target_point_misses": 0,
+      "selected_segments": 1,
+      "orientation_correct": true,
+      "candidate_strokes": 1,
+      "usable_strokes": 0,
+      "engine_failures": {
+        "PHASE_DETECTION_FAILED": 1
+      },
+      "contacts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "timing_errors_s": [],
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "reference_count": 0,
+        "predicted_count": 0,
+        "idle_window": true,
+        "scored_seconds": 7.4
+      }
+    },
+    {
+      "window_id": "dev-crowded",
+      "split": "development",
+      "target_checkpoints": 5,
+      "target_hits": 5,
+      "target_missing": 0,
+      "target_point_misses": 0,
+      "selected_segments": 1,
+      "orientation_correct": true,
+      "candidate_strokes": 5,
+      "usable_strokes": 1,
+      "engine_failures": {
+        "PHASE_DETECTION_FAILED": 4
+      },
+      "contacts": null
+    },
+    {
+      "window_id": "dev-sideways",
+      "split": "development",
+      "target_checkpoints": 5,
+      "target_hits": 5,
+      "target_missing": 0,
+      "target_point_misses": 0,
+      "selected_segments": 1,
+      "orientation_correct": true,
+      "candidate_strokes": 1,
+      "usable_strokes": 0,
+      "engine_failures": {
+        "PHASE_DETECTION_FAILED": 1
+      },
+      "contacts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "timing_errors_s": [],
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "reference_count": 1,
+        "predicted_count": 0,
+        "idle_window": false,
+        "scored_seconds": 7.4
+      }
+    },
+    {
+      "window_id": "dev-competition",
+      "split": "development",
+      "target_checkpoints": 4,
+      "target_hits": 3,
+      "target_missing": 1,
+      "target_point_misses": 0,
+      "selected_segments": 1,
+      "orientation_correct": true,
+      "candidate_strokes": 0,
+      "usable_strokes": 0,
+      "engine_failures": {},
+      "contacts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "timing_errors_s": [],
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "reference_count": 3,
+        "predicted_count": 0,
+        "idle_window": false,
+        "scored_seconds": 3.9000000000000004
+      }
+    }
+  ],
+  "limitations": [
+    "Single Codex visual reviewer; no independent coach signoff.",
+    "Sparse torso-point containment is not full multi-object tracking accuracy.",
+    "Source-disjoint within this corpus; not a session- or athlete-independent trial.",
+    "Contact intervals are timing references, not technique feedback.",
+    "Rear-view crowded windows are tracking-only; underhand has one test source."
+  ]
+}
