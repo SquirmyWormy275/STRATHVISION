@@ -69,6 +69,12 @@ Both event configurations were stress-tested on every recording, so candidate co
 
 Read the [method, limitations and reproduction commands](docs/experiments/Gurr-Academy.md), inspect the [expanded results and source hashes](docs/experiments/gurr-20261104-five-part-results.json), or compare the [original subset results](docs/experiments/gurr-20261104-results.json). Raw footage, contact sheets and per-frame poses stay local. The research work fixes destructive exemplar edits, retains merged coach evidence, shares prototype scoring between research and inference, and splits missing-pose gaps before stroke detection.
 
+### Checked tracking and timing pilot
+
+A separate 80-second pilot uses ten source recordings, frozen visual references and five reserved test windows. On those test windows, the revised research pipeline improved sparse target coverage from **20/25 to 24/25 checkpoints** and orientation from **4/5 to 5/5 windows**. The committed engine still matched **0/15** annotated contacts. An experimental wrist-motion proxy matched only **3/15**, added five false detections and remains research-only.
+
+Read the [evaluation protocol, frozen sources, test results and failures](docs/experiments/Gurr-Accuracy.md). These single-reviewer results measure a small tracking/timing pilot; they do not establish coaching accuracy or learning gains.
+
 The following protocol remains the planned coach-specific learning experiment once identity/event ground truth and genuine feedback are available.
 
 ### How to run it

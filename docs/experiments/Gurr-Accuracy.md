@@ -17,7 +17,7 @@ This pilot tests whether the system follows a spatially selected competitor with
 
 A genuine-feedback experiment requires actual coach red/green judgments or reviewed spoken comments bound to strokes and attributes. Timing references are not coach judgments. Keep source recordings grouped between fitting and held-out evaluation, retain the default readiness gates, and publish accepted edits, objective changes and hull checks only when measured.
 
-Status: references, development results and the revised pipeline are frozen before test inference. Test results are pending.
+Status: the first pilot is complete. The revised inference was committed as `1dba7b9` before test inference; references and code were not changed after opening test scores.
 
 ## Frozen references
 
@@ -40,3 +40,26 @@ A separate experimental wrist-extension proxy matched four of seven development 
 [Pipeline freeze](evaluation/gurr-pipeline-freeze.json) records inference, scoring, replay, model, input, reference and committed-engine hashes. Development results: [baseline](evaluation/gurr-development-baseline.json), [revised input through the same engine](evaluation/gurr-development-revised.json), and [experimental wrist proxy](evaluation/gurr-development-proxy.json). No source or parameter changes are permitted after opening this pilot's test scores.
 
 Verification before test: 22 Python research tests pass, including duplicate-proof one-to-one contact matching, source-disjoint splitting, stale-result rejection, rotation transforms, ambiguity/loss handling and a test-inference freeze guard. The Dart replay tool passes analysis and runs on the saved engine snapshot.
+
+## First pilot test results
+
+The five source-disjoint test windows contain 25 visible target checkpoints and 15 annotated contacts. This is a small within-corpus pilot with one visual reviewer.
+
+| Measurement | Baseline, 5 fps | Revised selection/orientation, 15 fps |
+|---|---:|---:|
+| Target checkpoints containing the reference torso point | 20/25 | 24/25 |
+| Missing target selections at checkpoints | 5 | 1 |
+| Selected boxes missing the reference point | 0 | 0 |
+| Correct orientation | 4/5 windows | 5/5 windows |
+| Committed-engine contact matches | 0/15 | 0/15 |
+| Extra committed-engine contact predictions | 0 | 1 |
+
+The tracking/orientation revision improves this sparse target test; it does not establish full tracking accuracy, named identity recognition, pose-angle accuracy or coaching correctness. Its one missed checkpoint remains a failure.
+
+The wrist-extension proxy matched **3 of 15** contacts, produced **5 false predictions**, and missed **12 contacts**: precision 37.5%, recall 20%, F1 0.261. Two false predictions occurred in handling/pause windows. Its mean midpoint error on the three matched contacts was 0.078 s; that number excludes missed and false predictions and is not overall timing accuracy. **The proxy fails this pilot and remains research-only.** No parameters were changed after this result.
+
+Test evidence: [baseline](evaluation/gurr-test-baseline.json), [revised input through the committed engine](evaluation/gurr-test-revised.json), and [wrist proxy](evaluation/gurr-test-proxy.json). These failures are published alongside the tracking improvement. No coach judgments or learning gains were generated.
+
+## Existing phase-code follow-up
+
+A separately captured copy of the pre-existing, uncommitted engine changes replaces standing-block height events with reach/stop/release and segments at speed stops. It passes 108 engine tests and matches 3/7 contacts on the original development set, versus zero for the committed engine. This is development evidence only. Fresh source clips are being reserved for a separate check; the first pilot's test scores are not used to tune that candidate.
