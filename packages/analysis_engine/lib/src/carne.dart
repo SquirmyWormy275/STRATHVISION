@@ -167,7 +167,7 @@ class CarneSession {
   CarneSession({
     required this.pack,
     required Profile profile,
-    required this.priority,
+    required String priority,
     this.limit = 5,
     this.chaos = false,
     this.meters = const Meters(),
@@ -176,6 +176,7 @@ class CarneSession {
   })  : assert(limit >= 5 && limit <= 10),
         _clock = clock ?? DateTime.now,
         _profile = profile,
+        _priority = priority,
         mixture = Map.of(profile.metrics) {
     for (final m in pack.metrics) {
       final vals = [
@@ -191,14 +192,20 @@ class CarneSession {
   final AnalysisPack pack;
   final Profile _profile;
 
-  /// The priority attribute (one per session).
-  final String priority;
+  /// The priority attribute (one per session). Can change only before the
+  /// first accepted edit.
+  String _priority;
+  String get priority => _priority;
+  set priority(String v) {
+    if (edits.isNotEmpty) throw StateError('Priority is fixed once an edit is accepted.');
+    _priority = v;
+  }
 
   /// Max accepted edits this session (5–10).
   final int limit;
 
-  /// Loosens the hull by one spread for this session only.
-  final bool chaos;
+  /// Loosens the hull by one spread for this session only. Off by default.
+  bool chaos;
   final Meters meters;
   final DateTime Function() _clock;
   final String Function(String phase)? phaseLabel;

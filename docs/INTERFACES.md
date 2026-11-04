@@ -203,6 +203,36 @@ At inference:
 - When `usable_footage` says no, the comparison carries the warning "This clip is below the usable threshold."
 - `priority_scorer`'s winner is shown as the suggested focus.
 
+**Stroke and attribute fields** (optional per event):
+
+```json
+"max_implement_dropout_s": 0.3,
+"attribute_metrics": { "Slope": ["entry_slope", "downswing_slope"] },
+"direction_words": { "entry_slope": { "higher": ["flatter", "flat"], "lower": ["steeper", "steep"] } }
+```
+
+- Strokes come from implement-speed peaks, one peak per stroke, with boundaries midway between peaks. Edge partials and strokes outside 0.5–1.5× the median length are dropped.
+- A stroke is usable action when phases are assigned, critical-phase pose confidence meets `min_critical_pose_confidence`, and no implement dropout (confidence below 0.5) lasts longer than `max_implement_dropout_s`.
+- `attribute_metrics` says which metrics a mark attribute speaks to. CARNE ASADA edits only the priority attribute's metrics.
+- `direction_words` give the words used in status copy, as [comparative, plain].
+
+## CARNE ASADA Record (`carne_asada/mixture_edits_vN.json`)
+
+Desktop research record. It is never read for inference: phones and the importer ignore `carne_asada/` entirely. The edited mixture itself ships in `profile.json` (`metrics` center/spread/weight) of version N.
+
+```json
+{
+  "format": "carne_asada/1", "version": 2, "session_id": "uuid",
+  "pack_id": "string", "event_id": "string", "priority": "Slope",
+  "limit": 5, "chaos": false, "usable_minutes": 2.9,
+  "hull": { "entry_slope": [-81.5, -55.5] },
+  "edits": [ { "type": "shift_mean | tighten_spread", "metric": "entry_slope", "phase": "downswing",
+               "before": {"center": 0, "spread": 0, "weight": 1, "unit": "°", "phase": "downswing"},
+               "after": {"…": "…"}, "explanation": "one sentence",
+               "objective_before": 0.4, "objective_after": 0.6, "accepted_at": "iso8601" } ]
+}
+```
+
 ## Pack File
 
 A pack ships as one JSON file. The app loads every bundled pack file at startup, and swapping a pack needs no change to the engine.

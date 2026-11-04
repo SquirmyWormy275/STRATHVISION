@@ -13,11 +13,15 @@ class WorkbenchScreen extends StatelessWidget {
     required this.controller,
     required this.title,
     this.pickClips = pickReferenceClips,
+    this.onCarne,
   });
 
   final WorkbenchController controller;
   final String title;
   final ClipsPicker pickClips;
+
+  /// Opens the CARNE ASADA playground for this profile.
+  final VoidCallback? onCarne;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,15 @@ class WorkbenchScreen extends StatelessWidget {
       builder: (context, _) {
         final c = controller;
         return Scaffold(
-          appBar: AppBar(title: Text('Workbench · $title')),
+          appBar: AppBar(title: Text('Workbench · $title'), actions: [
+            if (onCarne != null)
+              TextButton.icon(
+                key: const Key('open-carne'),
+                onPressed: onCarne,
+                icon: const Icon(Icons.local_fire_department_outlined),
+                label: const Text('CARNE ASADA'),
+              ),
+          ]),
           body: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 820),

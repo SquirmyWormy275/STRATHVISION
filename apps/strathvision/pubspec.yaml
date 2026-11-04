@@ -46,6 +46,7 @@ dependencies:
   media_kit_libs_video: ^1.0.7
   analysis_engine:
     path: ../../packages/analysis_engine
+  desktop_drop: ^0.8.0
 
 dev_dependencies:
   flutter_test:

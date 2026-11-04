@@ -20,6 +20,8 @@ import '../profiles/profile_export.dart';
 import '../workbench/claude_compiler.dart';
 import '../workbench/workbench_controller.dart';
 import 'profile_builder_screen.dart';
+import '../workbench/carne_controller.dart';
+import 'carne_screen.dart';
 import 'workbench_screen.dart';
 import 'workspace_route.dart';
 import 'workspace_screen.dart';
@@ -49,6 +51,7 @@ class LibraryScreen extends StatelessWidget {
     this.pickClips = pickReferenceClips,
     this.packs = const [],
     this.workbench,
+    this.carne,
   });
 
   final AppDatabase db;
@@ -66,6 +69,22 @@ class LibraryScreen extends StatelessWidget {
   /// Builds the workbench for a profile. Null: the default on desktop,
   /// hidden on phones (phones load patches and adapters, never edit).
   final WorkbenchFactory? workbench;
+
+  /// Builds the CARNE ASADA playground (desktop default when null).
+  final CarneFactory? carne;
+
+  CarneFactory get _carne => carne ?? defaultCarne(db);
+
+  Future<void> _openCarne(BuildContext context, ProfileRow row, PackInfo pack,
+      WorkbenchController wb) async {
+    final controller = await _carne(row, pack, wb);
+    if (!context.mounted) return;
+    await Navigator.of(context).push(MaterialPageRoute<void>(
+      builder: (_) =>
+          CarneScreen(controller: controller, title: '${row.coachName} · v${row.version}'),
+    ));
+    controller.dispose();
+  }
 
   WorkbenchFactory? get _workbench =>
       workbench ??
@@ -85,10 +104,11 @@ class LibraryScreen extends StatelessWidget {
       return;
     }
     await navigator.push(MaterialPageRoute<void>(
-      builder: (_) => WorkbenchScreen(
+      builder: (ctx) => WorkbenchScreen(
           controller: controller,
           title: '${row.coachName} · v${row.version}',
-          pickClips: pickClips),
+          pickClips: pickClips,
+          onCarne: () => _openCarne(ctx, row, pack, controller)),
     ));
     controller.dispose();
   }
@@ -390,3 +410,26 @@ WorkbenchFactory defaultWorkbench(AppDatabase db) => (row, pack) async {
         },
       );
     };
+
+typedef CarneFactory = Future<CarneController> Function(
+    ProfileRow row, PackInfo pack, WorkbenchController workbench);
+
+/// Production playground: strokes analyzed off the UI isolate, marks from
+/// every project on the same clip file, versions stored under app support.
+CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async => CarneController(
+      pack: pack.analysisPack,
+      attributes: [...pack.topAttributes, ...pack.moreAttributes],
+      bundle: wb.bundle,
+      probe: probeClip,
+      analyze: isolateStrokeAnalyzer(pack.analysisPack),
+      marks: db.marksForPath,
+      phaseLabel: pack.phaseLabel,
+      write: (Profile profile, patches, adapters, research) async {
+        final support = await getApplicationSupportDirectory();
+        final path = await storeProfilePackage(
+            profile, Directory(p.join(support.path, 'profiles')),
+            patches: patches, adapters: adapters, research: research);
+        await db.saveProfile(await readProfilePackage(path), path);
+        return path;
+      },
+    );

@@ -149,6 +149,35 @@ See docs/CARNE_ASADA.md for full specification.
   - `priority_scorer` shows "Focus next: <attribute>".
   - Stale or foreign adapters are skipped and named in the warnings.
 
+## Phase 8 CARNE ASADA Decisions
+
+- **Placement.** The playground is reached from the desktop Workbench (**CARNE ASADA** in its top bar). It is one window with one drop zone ("Feed CARNE ASADA", via `desktop_drop`), plus "or choose files". It never appears on phones.
+- **Mixture.** v1 treats the profile's per-metric center/spread/weight (each tagged with its phase) as the phase-conditioned mixture, with one diagonal component per phase.
+  - The proposals implemented are shifting a mean and tightening one spread. Weight and residual-exemplar edits are not proposed yet, because the current evaluation cannot show them improving anything.
+- **The loop** (engine `CarneSession`):
+  - **Diagnose.** Find the largest gap, in spreads, between green-marked strokes and the mixture on the priority attribute's metrics.
+  - **Propose** one edit:
+    - shift that mean halfway toward the greens, capped at one spread; or
+    - tighten a spread ×0.85 when one stroke carries three or more red marks.
+  - **Evaluate** only on the priority attribute. The objective is agreement with the winning marks: green strokes should match, red ones should not. A small held-out set (every 4th coach reference stroke) must keep at least 95% of its style score.
+  - **Accept** only if the objective improves by at least 0.005 and the new mean stays inside the coach hull. The hull is the range of the coach's reference strokes; chaos widens it by one spread for the session.
+- **Bounds.**
+  - The session limit is 5 accepted edits by default (configurable 5–10).
+  - No edits happen until usable footage reaches Good (2 min).
+  - Winning marks: coach overrides athlete, and the newest coach mark wins.
+  - Only the priority attribute's metrics are touched.
+  - Priority and chaos can change only before the first accepted edit.
+- **Status copy** is exactly the DECISIONS.md lines, templated from pack words (attribute, phase label, units, "steeper"/"flatter"). A test checks every template against this file verbatim.
+  - Lines with no exact copy are written in the same style: priority changes from notes, "Ignoring <clip>.", voice notes without a transcriber, package drops, chaos on/off, and files that can't be used.
+- **Ingestion.**
+  - Videos are probed, split into strokes, and analyzed per stroke. Red/green marks come from any project that has the same clip file, bound to the stroke containing each mark's time.
+  - Text notes understand `priority: <attribute>` and `ignore this clip`.
+  - Voice notes are saved, but spoken labels need a local transcriber. None is chosen yet (see Blockers).
+  - Dropped packages are acknowledged but not merged in v1.
+- **Undo and save.**
+  - Undo removes the last accepted edit and restores its metric exactly.
+  - **Save as vN+1** writes one new package version per session: the edited mixture in `profile.json`, plus `carne_asada/mixture_edits_vN.json`.
+
 ## Thresholds and Gating (timber defaults)
 
 - Usable action = confident 3D pose + confident implement + assigned phase + actual stroke.

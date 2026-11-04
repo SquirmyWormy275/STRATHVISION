@@ -57,6 +57,14 @@ scripts/run_android_player_test.sh [device-id]
 
 Flutter only builds Windows apps on Windows, and only builds iOS and macOS apps on macOS.
 
+## Phase 8 manual check (desktop)
+
+1. Open the Workbench for a ready Underhand profile and tap **CARNE ASADA**. The feed opens with "Priority is slope. Only slope updates will be considered this session."
+2. Drag clips onto **Feed CARNE ASADA**, or use **or choose files**. Each clip reports "Found N strokes. K are clean enough for slope. Adding them.", the implement-dropout line, or the below-threshold line with **Use anyway**.
+3. Once usable footage reaches Good (2 min), and the clips carry green/red Slope marks from reviews, accepted updates appear as "CARNE ASADA accepted an update. Slope mean shifted 1.1° steeper on the downswing.", followed by the session tally. **What did it just do?** lists each one-sentence explanation.
+4. **Undo** reverts the last edit. **Save as vN+1** writes the new version with `carne_asada/mixture_edits_vN.json`. Phones ignore that folder.
+5. A text note containing `priority: hinge` switches the priority (before any edit). `ignore this clip` drops the last clip.
+
 ## Phase 7 manual check (desktop)
 
 1. Build or import a ready profile for **Underhand**. In the Library, tap its tune icon (**Workbench**).

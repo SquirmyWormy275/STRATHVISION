@@ -121,6 +121,17 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
         ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
       .watch();
 
+  /// Every red/green mark, across projects, on clips at [path].
+  Future<List<Mark>> marksForPath(String path) async {
+    final out = <Mark>[];
+    for (final row in await select(projectRows).get()) {
+      final project = Project.fromJson(jsonDecode(row.json) as Map<String, Object?>);
+      final ids = {for (final c in project.clips) if (c.path == path) c.clipId};
+      out.addAll(project.marks.where((m) => ids.contains(m.clipId)));
+    }
+    return out;
+  }
+
   // ---- settings -----------------------------------------------------------
 
   static const activeEventKey = 'active_event';
