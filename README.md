@@ -49,25 +49,25 @@ Status messages and edit explanations are specified in docs/DECISIONS.md.
 
 ## Experiment: CARNE ASADA on the Gurr Footage
 
-**All five downloaded ZIPs are now verified and extracted.** The `20261104T223331Z` export contains **48 video files and seven photos**. One video is an exact duplicate, leaving **47 unique videos, 2 h 9 min 47.4 s**, including recordings lasting 28:39, 17:55, 15:10 and 12:06. The [five-part inventory](docs/experiments/gurr-20261104-five-part-inventory.json) records archive hashes, folder coverage and the excluded duplicate. The expanded experiment is running against the same committed engine as the first run.
+**All five downloaded ZIPs are verified, extracted and processed.** The `20261104T223331Z` export contains **48 video files and seven photos**. One video is an exact duplicate, leaving **47 unique videos, 2 h 9 min 47.4 s**, including recordings lasting 28:39, 17:55, 15:10 and 12:06. The [five-part inventory](docs/experiments/gurr-20261104-five-part-inventory.json) records archive hashes, folder coverage and the excluded duplicate.
 
-The first recorded experiment below covered **one earlier archive part**, `Gurr Academy -20261104T203933Z-1-001.zip`: **12 videos, 29 min 3.6 s**. It measures anonymous multi-person ingestion plus a no-feedback control; it does not claim improved technique analysis or named-athlete recognition.
+### Recorded results on November 4 2026
 
-### Recorded results from archive part 001 on November 4 2026
+Both runs use the same committed analysis engine. The earlier 12-video archive part remains a historical subset; the expanded run processes all 47 unique recordings from the five-part download.
 
-| Measurement | Result |
-|---|---:|
-| Sampled frames at 5 fps | 8,718 |
-| Person detections | 10,364 |
-| Pose samples passing model presence gate | 7,541 |
-| Frames with multiple detected people | 1,608 |
-| Underhand candidate pass: strokes passing current pack gates | 26 of 151 |
-| Standing-block candidate pass: strokes passing current pack gates | 9 of 159 |
-| Accepted edits with no supplied coach marks | **0** |
+| Measurement | Earlier 12-video subset | Five-part export: 47 unique videos |
+|---|---:|---:|
+| Sampled frames at 5 fps | 8,718 | 38,941 |
+| Person detections | 10,364 | 63,317 |
+| Pose samples passing model presence gate | 7,541 | 50,637 |
+| Frames with multiple detected people | 1,608 | 15,337 |
+| Underhand candidate pass: strokes passing current pack gates | 26 of 151 | 260 of 1,165 |
+| Standing-block candidate pass: strokes passing current pack gates | 9 of 159 | 65 of 991 |
+| Accepted edits with no supplied coach marks | **0** | **0** |
 
-Both event packs were stress-tested on every clip, so candidate counts are not human-validated event counts. Spectators, rotated video, fragmented tracks and a grip-based implement proxy limit interpretation. Underhand met Good but correctly stopped at “no marks”; standing block remained below Good. No marks were fabricated, no coach-specific profile was declared ready, and no improvement is claimed.
+Both event configurations were stress-tested on every recording, so candidate counts are not human-validated event counts. Spectators, rotated video, fragmented tracks and a grip-based implement proxy limit interpretation. Expanded controls: underhand **Good threshold met; no marks; zero edits**; standing block **Good threshold met; no marks; zero edits**. No coach-specific profile was declared ready and no improvement is claimed.
 
-Read the [method, limitations and reproduction commands](docs/experiments/Gurr-Academy.md), or inspect the [full recorded results and source hashes](docs/experiments/gurr-20261104-results.json). Raw footage and contact sheets stay local. The same work fixes destructive exemplar edits, retains merged coach evidence, shares prototype scoring between research and inference, and splits missing-pose gaps before stroke detection.
+Read the [method, limitations and reproduction commands](docs/experiments/Gurr-Academy.md), inspect the [expanded results and source hashes](docs/experiments/gurr-20261104-five-part-results.json), or compare the [original subset results](docs/experiments/gurr-20261104-results.json). Raw footage, contact sheets and per-frame poses stay local. The research work fixes destructive exemplar edits, retains merged coach evidence, shares prototype scoring between research and inference, and splits missing-pose gaps before stroke detection.
 
 The following protocol remains the planned coach-specific learning experiment once identity/event ground truth and genuine feedback are available.
 

@@ -1,6 +1,6 @@
 # Gurr Academy real footage experiments
 
-The recorded runs measure anonymous multi-person ingestion and the CARNE ASADA no-feedback control. The first run covered one archive part. All five parts of the replacement download have now been verified and extracted, and the expanded experiment is running against the same committed engine. These experiments do not establish athlete identity, event ground truth, or improved coaching accuracy.
+The recorded runs measure anonymous multi-person ingestion and the CARNE ASADA no-feedback control. The first run covered one archive part. All five parts of the replacement download have been verified, extracted and processed against the same committed engine. These experiments do not establish athlete identity, event ground truth, or improved coaching accuracy.
 
 ## Five-part export inventory
 
@@ -15,7 +15,20 @@ The Google Drive export `20261104T223331Z` consists of parts `001` through `005`
 
 The longest recordings are `IMG_3747.MOV` (28:38.9), `IMG_3698.MOV` (17:54.9), `IMG_3746.MOV` (15:10.1), and `Gurr 30DEC25.mov` (12:05.6). The [public export inventory](gurr-20261104-five-part-inventory.json) contains exact durations, archive hashes and duplicate provenance. It describes the five downloaded parts; a separate remote folder listing has not been compared.
 
-## Recorded subset run on November 4 2026
+## Expanded five-part run on November 4 2026
+
+All **47 unique videos** were decoded at five sampled frames per second. The run produced **38,941 sampled frames**, **63,317 person detections** and **50,637 pose samples** passing model presence 0.5. A person was detected in 34,319 sampled frames; 15,337 contained multiple detections. The largest observed count was 12 simultaneous detections, including spectators. Photos and the duplicate video were excluded from motion analysis.
+
+| Candidate pack pass | Candidate strokes | Passing current pack gates | Passing track seconds | Source recordings with passing strokes | Whole corpus control |
+|---|---:|---:|---:|---:|---|
+| Underhand | 1,165 | 260 | 2439.75 | 36 | Good threshold met; no marks; zero edits |
+| Standing block | 991 | 65 | 480.04 | 18 | Good threshold met; no marks; zero edits |
+
+Both configurations are candidate stress tests on every recording, including 3-board footage. These are not verified event counts or technique accuracy measurements. The no-feedback controls accepted zero edits; before/after learning gains and accepted-edit explanations are unavailable because no coach marks were supplied to these controls. Diagnostic profiles remain non-ready and are not exported as coaching packages.
+
+[Expanded results](gurr-20261104-five-part-results.json) preserve all 47 per-recording summaries, controls and engine/model hashes. The engine and inference pipeline were frozen at commit `5861e2f6835863a6dbf7e05b0d26f614d345a491`; the content-deduplication helper is recorded from `1d65770`. Twelve pose caches were reused from the earlier run and 35 new recordings were analyzed, using three workers after initial sequential processing. `pipeline_elapsed_s` sums per-recording inference times, including the reused caches; it is not the wall-clock duration of this expansion and is not a portable speed benchmark.
+
+## Earlier subset run on November 4 2026
 
 That archive part contains 12 MOV videos (1,743.553568 seconds; 29 minutes 3.6 seconds) and three HEIC photos. All 12 videos were processed at five sampled frames per second. Photos are excluded from motion analysis. The decoded pipeline produced 8,718 sampled frames, 10,364 person detections and 7,541 pose samples passing model presence 0.5. A person was detected in 6,209 sampled frames; 1,608 contained multiple detections. Competition footage reached eight simultaneous detections, including spectators.
 
@@ -48,30 +61,32 @@ The five-part inventory distinguishes `downloaded_export_complete: true` from un
 
 ## Local artifacts and public results
 
-[Recorded results](gurr-20261104-results.json) contain aggregate counts, per-clip hashes, candidate gate failures, track coverage and pipeline provenance. Raw videos, pixel crops, pose coordinates, local contact sheets and draft naming UI stay outside Git. The raw files remain in the user's `CARNE ASADA` directory.
+[Expanded results](gurr-20261104-five-part-results.json) and the unchanged [earlier subset results](gurr-20261104-results.json) contain aggregate counts, per-clip hashes, candidate gate failures, track coverage and pipeline provenance. Raw videos, pixel crops, pose coordinates, local contact sheets and draft naming UI stay outside Git. The raw files remain in the user's `CARNE ASADA` directory.
 
 Local `athlete_tracks/1` analysis files hold `clip_sha256`, duration/fps/dimensions, sampling rate, detector/pose/pipeline hashes, observations (`time_s`, numeric `track_id`, normalized box, confidence), anonymous `pose_samples` and explicit optional assignments from metadata. A regenerated pipeline invalidates its cache. The engine never obtains coach names from those observations.
 
 ## Reproduce the run
 
-From the repository root, with the downloaded archive extracted locally:
+From the current repository root, with all five archives extracted locally. For the recorded numbers, point `SV_ENGINE_ROOT` at a separate checkout of engine commit `5861e2f`; the current repository supplies the deduplication helper:
 
 ```sh
+SV_ENGINE_ROOT='/path/to/checkout-at-5861e2f'
 SV_FOOTAGE_ROOT='/path/to/Gurr Academy '
 SV_RESULTS='/path/to/private-analysis'
 uv venv --python 3.12 "$SV_RESULTS/venv"
 uv pip install --python "$SV_RESULTS/venv/bin/python" -r tools/carne_asada/requirements.txt
 curl -L --fail -o "$SV_RESULTS/yolox_nano.onnx" \
   https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_nano.onnx
-"$SV_RESULTS/venv/bin/python" tools/carne_asada/footage.py inventory \
+"$SV_RESULTS/venv/bin/python" "$SV_ENGINE_ROOT/tools/carne_asada/footage.py" inventory \
   --root "$SV_FOOTAGE_ROOT" --output "$SV_RESULTS/source-inventory"
 "$SV_RESULTS/venv/bin/python" tools/carne_asada/deduplicate.py \
   "$SV_RESULTS/source-inventory/manifest.json" "$SV_RESULTS/manifest.json"
-"$SV_RESULTS/venv/bin/python" tools/carne_asada/footage.py analyze \
+"$SV_RESULTS/venv/bin/python" "$SV_ENGINE_ROOT/tools/carne_asada/footage.py" analyze \
   --root "$SV_FOOTAGE_ROOT" --output "$SV_RESULTS" \
   --detector "$SV_RESULTS/yolox_nano.onnx" \
-  --pose apps/strathvision/assets/models/pose_landmark_full.onnx --rate 5
-cd packages/analysis_engine
+  --pose "$SV_ENGINE_ROOT/apps/strathvision/assets/models/pose_landmark_full.onnx" --rate 5
+cd "$SV_ENGINE_ROOT/packages/analysis_engine"
+dart pub get
 dart run tool/gurr_experiment.dart "$SV_RESULTS/manifest.json" \
   "$SV_RESULTS/tracks" "$SV_RESULTS/experiment.json"
 ```
