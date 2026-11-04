@@ -1,0 +1,439 @@
+diff --git c/apps/strathvision/assets/packs/timber.json w/apps/strathvision/assets/packs/timber.json
+index 4a40c75..a2d9c78 100644
+--- c/apps/strathvision/assets/packs/timber.json
++++ w/apps/strathvision/assets/packs/timber.json
+@@ -748,12 +748,12 @@
+         }
+       },
+       "phase_events": [
+-        "low_before_top",
+-        "top",
+-        "low",
+-        "settle"
++        "rise",
++        "reach",
++        "stop",
++        "release"
+       ],
+-      "stroke_signal": "speed_peaks"
++      "stroke_signal": "stops"
+     }
+   ]
+ }
+diff --git c/docs/INTERFACES.md w/docs/INTERFACES.md
+index a645f0a..e873a22 100644
+--- c/docs/INTERFACES.md
++++ w/docs/INTERFACES.md
+@@ -221,13 +221,20 @@ At inference:
+ 
+ - How strokes are found depends on `stroke_signal`:
+   - `speed_peaks` (default): one implement-speed peak per stroke, with boundaries midway between peaks. Edge partials and strokes outside 0.5–1.5× the median length are dropped.
+-  - `tops`: one backswing top per stroke, from the rise before it through contact, split in the pause after contact.
++  - `tops`: one backswing top per stroke, from the rise before it through contact. The cut after contact sits where the tip has risen 15% of the way back to the next top (at most halfway), so the pause and settle stay with the stroke.
++  - `stops`: one contact per stroke, where a fast swing (a speed peak of at least 40% of the clip's fastest and 4 m/s) stops sharply (below 30% of the peak within 0.4 s). Cuts sit midway between contacts. This works for high and flat swings alike.
+ - `phase_events` gives one motion event per phase boundary, in order, on the implement tip:
+   - `low_before_top` (rise)
+   - `top`
+   - `fastest`
+   - `low` (contact: the descent slows to 20% of its peak)
+   - `settle` (speed below 25% of peak)
++  - `rise` (start of the backswing: the slowest moment before the reach)
++  - `reach` (end of the backswing: the turnaround, the speed minimum just before the fastest point; high or flat)
++  - `stop` (contact by speed: after the fastest point, the first sample below 30% of it)
++  - `release` (pulled free: back above 30% of the stroke's peak speed)
++
++  Speeds for `stop`, `release` and `stops` use the tip with single-sample pose glitches removed, lightly smoothed.
+   
+   Without `phase_events`, phases split evenly at confidence 0.5. The first and last phases may be shorter than `min_phase_frames` (cut by the recording), at half confidence.
+ - A stroke is usable action when phases are assigned, critical-phase pose confidence meets `min_critical_pose_confidence`, and no implement dropout (confidence below 0.5) lasts longer than `max_implement_dropout_s`.
+diff --git c/packages/analysis_engine/lib/src/engine.dart w/packages/analysis_engine/lib/src/engine.dart
+index e1591fa..adf0485 100644
+--- c/packages/analysis_engine/lib/src/engine.dart
++++ w/packages/analysis_engine/lib/src/engine.dart
+@@ -89,6 +89,22 @@ class AnalysisEngine {
+         for (final s in strokes)
+           if (s.usable && s.detail.outcome is AnalysisSuccess) s,
+       ];
++      if (good.isEmpty) {
++        // Real pose, but no usable stroke: say so rather than measuring the
++        // whole clip as one movement.
++        return AnalysisDetail(
++            AnalysisFailure(AnalysisError(
++              ErrorCode.phaseDetectionFailed,
++              strokes.isEmpty
++                  ? 'No complete strokes were found in this clip.'
++                  : 'None of the strokes in this clip could be measured cleanly.',
++              {
++                'strokes': strokes.length,
++                'issues': [for (final s in strokes) [for (final i in s.issues) i.name]],
++              },
++            )),
++            const {});
++      }
+       if (good.isNotEmpty) {
+         final vectors = [for (final s in good) (s.detail.outcome as AnalysisSuccess).vector];
+         final summary = summarizeStrokes(vectors);
+@@ -144,9 +160,11 @@ class AnalysisEngine {
+     if (clip.durationMs <= 0 || clip.fps <= 0) return const [];
+     final track = await pose.estimate(clip);
+     final imp = await implement.track(clip, track);
+-    final spans = pack.strokeSignal == 'tops'
+-        ? segmentStrokesByTops(imp, clip.fps)
+-        : segmentStrokes(imp, clip.fps);
++    final spans = switch (pack.strokeSignal) {
++      'tops' => segmentStrokesByTops(imp, clip.fps),
++      'stops' => segmentStrokesByStops(imp, clip.fps),
++      _ => segmentStrokes(imp, clip.fps),
++    };
+     final clipDropout = longestDropout(imp, clip.fps, 0, clip.frameCount - 1);
+     final out = <StrokeDetail>[];
+     for (var i = 0; i < spans.length; i++) {
+diff --git c/packages/analysis_engine/lib/src/pack.dart w/packages/analysis_engine/lib/src/pack.dart
+index 024176f..bcd24e6 100644
+--- c/packages/analysis_engine/lib/src/pack.dart
++++ w/packages/analysis_engine/lib/src/pack.dart
+@@ -551,7 +551,7 @@ class AnalysisPack {
+ 
+     final events = <String>[];
+     final rawEvents = json['phase_events'] ?? const [];
+-    const kinds = ['low_before_top', 'top', 'fastest', 'low', 'settle'];
++    const kinds = ['low_before_top', 'top', 'fastest', 'low', 'settle', 'stop', 'release', 'rise', 'reach'];
+     if (rawEvents is! List || rawEvents.any((e) => !kinds.contains(e))) {
+       problems.add('phase_events must list ${kinds.join(' | ')}');
+     } else if (rawEvents.isNotEmpty && rawEvents.length != phases.length - 1) {
+@@ -562,8 +562,8 @@ class AnalysisPack {
+     }
+ 
+     final strokeSignal = json['stroke_signal'] ?? 'speed_peaks';
+-    if (strokeSignal != 'speed_peaks' && strokeSignal != 'tops') {
+-      problems.add('stroke_signal must be speed_peaks | tops');
++    if (!const ['speed_peaks', 'tops', 'stops'].contains(strokeSignal)) {
++      problems.add('stroke_signal must be speed_peaks | tops | stops');
+     }
+ 
+     final minCritical = unit('min_critical_pose_confidence', 0.6);
+diff --git c/packages/analysis_engine/lib/src/strokes.dart w/packages/analysis_engine/lib/src/strokes.dart
+index 5a10ecd..4e20907 100644
+--- c/packages/analysis_engine/lib/src/strokes.dart
++++ w/packages/analysis_engine/lib/src/strokes.dart
+@@ -4,6 +4,96 @@ import 'body.dart';
+ import 'engine.dart';
+ import 'pack.dart';
+ 
++/// Implement tip positions with single-sample glitches removed: a sample
++/// far from both neighbours while they agree with each other (the pose
++/// model briefly flipping a forearm) is replaced by their midpoint.
++List<Vec3> despikedTips(ImplementTrack imp) {
++  final t = [for (final f in imp.frames) f.tip];
++  final out = [...t];
++  for (var i = 1; i < t.length - 1; i++) {
++    final mid = (t[i - 1] + t[i + 1]).scale(0.5);
++    final gap = (t[i + 1] - t[i - 1]).length;
++    if ((t[i] - mid).length > 2 * gap + 0.2) out[i] = mid;
++  }
++  return out;
++}
++
++/// Tip speed per sample (m/s) from [tips], averaged over [r] samples
++/// either side.
++List<double> tipSpeed(ImplementTrack imp, List<Vec3> tips, double fps, {int r = 1}) {
++  final raw = <double>[0];
++  for (var i = 1; i < tips.length; i++) {
++    final df = math.max(1, imp.frames[i].frame - imp.frames[i - 1].frame);
++    raw.add((tips[i] - tips[i - 1]).length / df * fps);
++  }
++  return [
++    for (var i = 0; i < raw.length; i++)
++      () {
++        final a = math.max(0, i - r), b = math.min(raw.length - 1, i + r);
++        var sum = 0.0;
++        for (var j = a; j <= b; j++) {
++          sum += raw[j];
++        }
++        return sum / (b - a + 1);
++      }(),
++  ];
++}
++
++/// Contacts: fast swings that stop sharply. A sample is a contact when the
++/// tip speed peaks (at least 40% of the clip's fastest and 4 m/s) and then
++/// falls below 30% of that peak within 0.4 s. Returns the stop indices,
++/// at least 0.6 s apart.
++List<int> findStops(ImplementTrack imp, double fps) {
++  final v = tipSpeed(imp, despikedTips(imp), fps);
++  if (v.length < 5) return const [];
++  final top = v.reduce(math.max);
++  final stops = <int>[];
++  final peaks = <int>[];
++  for (var i = 1; i < v.length - 1; i++) {
++    if (!(v[i] >= v[i - 1] && v[i] > v[i + 1])) continue;
++    if (v[i] < 0.4 * top || v[i] < 4) continue;
++    final f0 = imp.frames[i].frame;
++    for (var j = i + 1; j < v.length && (imp.frames[j].frame - f0) / fps <= 0.4; j++) {
++      if (v[j] < 0.3 * v[i]) {
++        final f = imp.frames[j].frame;
++        if (stops.isNotEmpty && (f - imp.frames[stops.last].frame) / fps < 0.6) {
++          // Same swing: keep the faster.
++          if (v[i] > v[peaks.last]) {
++            stops[stops.length - 1] = j;
++            peaks[peaks.length - 1] = i;
++          }
++        } else {
++          stops.add(j);
++          peaks.add(i);
++        }
++        break;
++      }
++    }
++  }
++  return stops;
++}
++
++/// Stroke spans from contacts ([findStops]): each contact is one stroke;
++/// cuts sit midway between contacts, so a stroke holds its own backswing,
++/// swing, contact and the time in the material after it. Edge strokes
++/// extend half the typical stroke length past their contact.
++List<(int, int)> segmentStrokesByStops(ImplementTrack imp, double fps) {
++  final f = imp.frames;
++  final stops = findStops(imp, fps);
++  if (stops.isEmpty) return const [];
++  final gaps = [for (var k = 1; k < stops.length; k++) stops[k] - stops[k - 1]]..sort();
++  final half = gaps.isEmpty
++      ? (1.5 * fps / math.max(1, f.length > 1 ? f[1].frame - f[0].frame : 1)).round()
++      : gaps[gaps.length ~/ 2] ~/ 2;
++  final spans = <(int, int)>[];
++  for (var k = 0; k < stops.length; k++) {
++    final a = k == 0 ? math.max(0, stops[k] - half) : (stops[k - 1] + stops[k]) ~/ 2 + 1;
++    final b = k == stops.length - 1 ? math.min(f.length - 1, stops[k] + half) : (stops[k] + stops[k + 1]) ~/ 2;
++    if (b > a) spans.add((f[a].frame, f[b].frame));
++  }
++  return spans;
++}
++
+ /// Stroke spans from backswing tops: each top is one stroke, running from
+ /// the low point before it (rise) through the low after it (contact); the
+ /// cut between strokes sits midway through the pause between contact and
+@@ -50,6 +140,19 @@ List<(int, int)> segmentStrokesByTops(ImplementTrack imp, double fps) {
+     return best;
+   }
+ 
++  // Boundary between stroke k and k+1: after contact, where the tip has
++  // risen 15% of the way back to the next top (pause and settle stay with
++  // stroke k; continuous motion gets part of the lift as its recovery).
++  int boundary(int k) {
++    final contact = argMin(tops[k], tops[k + 1]);
++    final rise = 0.15 * (h[tops[k + 1]] - h[contact]);
++    final cap = contact + (tops[k + 1] - contact) ~/ 2;
++    for (var i = contact; i < cap; i++) {
++      if (h[i] - h[contact] >= rise) return i;
++    }
++    return cap;
++  }
++
+   final spans = <(int, int)>[];
+   for (var k = 0; k < tops.length; k++) {
+     final prevTop = k == 0 ? 0 : tops[k - 1];
+@@ -58,13 +161,11 @@ List<(int, int)> segmentStrokesByTops(ImplementTrack imp, double fps) {
+     final contact = argMin(tops[k], nextTop);
+     // Need a real downswing after the top.
+     if (h[tops[k]] - h[contact] < prominence) continue;
+-    // Pause after contact: until the next stroke's rise (or clip end).
+-    final nextRise = k == tops.length - 1 ? h.length - 1 : argMin(contact, tops[k + 1]);
+-    final prevContact = k == 0 ? 0 : argMin(tops[k - 1], tops[k]);
+-    final startIdx = k == 0 ? math.max(0, rise - (contact - rise) ~/ 3) : (prevContact + rise) ~/ 2;
++    final startIdx =
++        k == 0 ? math.max(0, rise - (contact - rise) ~/ 3) : boundary(k - 1) + 1;
+     final endIdx = k == tops.length - 1
+         ? math.min(h.length - 1, contact + (contact - rise) ~/ 3)
+-        : (contact + math.max(contact, nextRise)) ~/ 2;
++        : boundary(k);
+     if (endIdx <= startIdx) continue;
+     spans.add((f[startIdx].frame, f[endIdx].frame));
+   }
+diff --git c/packages/analysis_engine/lib/src/vision_stages.dart w/packages/analysis_engine/lib/src/vision_stages.dart
+index 0da0d69..92797c7 100644
+--- c/packages/analysis_engine/lib/src/vision_stages.dart
++++ w/packages/analysis_engine/lib/src/vision_stages.dart
+@@ -5,6 +5,7 @@ import 'contracts.dart';
+ import 'errors.dart';
+ import 'pack.dart';
+ import 'stages.dart';
++import 'strokes.dart';
+ 
+ /// A pose track computed elsewhere (on device, by the app's pose model) and
+ /// handed to the engine. Lets the engine run in an isolate while the model
+@@ -68,6 +69,13 @@ List<double> _smooth(List<double> xs, int r) => [
+ ///   descent has slowed to 20% (the head stopped)
+ /// * `settle` – first point where tip speed falls below 25% of the peak
+ ///   after the previous boundary
++/// * `reach` – end of the backswing: the turnaround (speed minimum) just
++///   before the fastest point, high or flat
++/// * `rise` – start of the backswing: the slowest moment before the reach
++/// * `stop` – contact by speed: after the fastest point, the first point
++///   below 30% of that speed (the head stopped, in any direction)
++/// * `release` – after the previous boundary, the first point back above
++///   30% of the stroke's peak speed (the implement pulled free)
+ ///
+ /// Each event is searched after the previous boundary. Without declared
+ /// events the clip is split evenly at confidence 0.5.
+@@ -110,11 +118,45 @@ class EventPhaseDetector implements PhaseDetector {
+     }
+ 
+     final last = imp.length - 1;
++    // Lightly smoothed speed on de-glitched tips: a stop in the material
++    // is sharp (one or two samples) and heavier smoothing hides it.
++    final tips = despikedTips(ImplementTrack(frames: imp));
++    final v1 = tipSpeed(ImplementTrack(frames: imp), tips, clip.fps);
++    // Contact by speed.
++    int stopAfter(int from) {
++      final peak = argBy(from, last, (i) => v1[i]);
++      for (var i = peak + 1; i <= last; i++) {
++        if (v1[i] < 0.3 * v1[peak]) return i;
++      }
++      return argBy(peak, last, (i) => v1[i], max: false);
++    }
++
++    // End of the backswing: the turnaround before the fastest point, where
++    // the tip is slowest just before it accelerates into the swing (high or
++    // flat swings alike).
++    int reachFrom(int from) {
++      final peak = argBy(from, last, (i) => v1[i]);
++      var j = peak;
++      while (j - 1 >= from && v1[j - 1] <= v1[j]) {
++        j--;
++      }
++      return j;
++    }
++
+     final cuts = <int>[];
+     var cursor = 0;
+-    for (final e in events) {
++    for (var ei = 0; ei < events.length; ei++) {
++      final e = events[ei];
+       final from = cursor + 1;
+-      if (from >= last) throw fail('ran out of movement before "$e"');
++      if (from >= last) {
++        // Only the final boundary may be cut off by the end of the stroke:
++        // the last phase then runs to the end (counted as cut short).
++        if (ei == events.length - 1 && cursor < last) {
++          cuts.add(last);
++          break;
++        }
++        throw fail('ran out of movement before "$e"');
++      }
+       final idx = switch (e) {
+         'top' => argBy(from, last, (i) => h[i]),
+         'fastest' => argBy(from, last, (i) => v[i]),
+@@ -135,6 +177,23 @@ class EventPhaseDetector implements PhaseDetector {
+             }
+             return last;
+           }(),
++        'stop' => stopAfter(from),
++        'reach' => reachFrom(from),
++        'rise' => () {
++            // Start of the backswing: the slowest moment between the stroke
++            // start and the reach (at least two samples before it).
++            final r = reachFrom(from);
++            return r - 2 <= from ? from : argBy(from, r - 2, (i) => v[i], max: false);
++          }(),
++        'release' => () {
++            // Pulled free: after the stop, the first moment the tip moves
++            // at 30% of the stroke's peak speed again.
++            final peak = v1.reduce(math.max);
++            for (var i = from; i <= last; i++) {
++              if (v1[i] > 0.3 * peak) return i;
++            }
++            return last;
++          }(),
+         'low_before_top' => () {
+             final top = argBy(from, last, (i) => h[i]);
+             return top <= from ? from : argBy(from, top - 1, (i) => h[i], max: false);
+@@ -144,6 +203,7 @@ class EventPhaseDetector implements PhaseDetector {
+       cuts.add(idx);
+       cursor = idx;
+     }
++    if (cuts.length < events.length) throw fail('not every boundary was found');
+     // Sample indices → clip frames; phases must have room.
+     final bounds = [
+       start,
+diff --git a/packages/analysis_engine/test/stops_test.dart b/packages/analysis_engine/test/stops_test.dart
+new file mode 100644
+--- /dev/null
++++ b/packages/analysis_engine/test/stops_test.dart
+@@ -0,0 +1,76 @@
++import 'dart:math' as math;
++
++import 'package:analysis_engine/analysis_engine.dart';
++import 'package:test/test.dart';
++
++/// A flat swing (the tip never rises): rest at contact, slow move out to
++/// the reach, fast swing back, stop. Sampled every 2 frames at 30 fps.
++ImplementTrack flatSwings(int strokes, {bool glitch = false}) {
++  final tips = <Vec3>[];
++  for (var k = 0; k < strokes; k++) {
++    for (var i = 0; i < 8; i++) {
++      tips.add(const Vec3(1, 0, 0)); // in the material
++    }
++    for (var i = 1; i <= 10; i++) {
++      // Out to the reach at x = -1, slowing into the turnaround.
++      tips.add(Vec3(1 - 2 * math.sin(math.pi / 2 * i / 10), 0, 0));
++    }
++    for (var i = 1; i <= 3; i++) {
++      tips.add(Vec3(-1 + 2 * i / 3, 0, 0)); // fast swing back
++    }
++  }
++  for (var i = 0; i < 8; i++) {
++    tips.add(const Vec3(1, 0, 0));
++  }
++  if (glitch) tips[4] = const Vec3(1, 2, 0); // one flipped forearm
++  return ImplementTrack(frames: [
++    for (var i = 0; i < tips.length; i++)
++      ImplementFrame(frame: i * 2, grip: const Vec3(0, 0, 0), tip: tips[i], confidence: 1),
++  ]);
++}
++
++void main() {
++  test('contacts are found in flat swings that never rise', () {
++    final imp = flatSwings(3);
++    final stops = findStops(imp, 30);
++    expect(stops.length, 3);
++    // Each stop is just after a fast swing ends at x = 1.
++    for (final s in stops) {
++      expect(imp.frames[s].tip.x, closeTo(1, 1e-9));
++    }
++    final spans = segmentStrokesByStops(imp, 30);
++    expect(spans.length, 3);
++    for (var k = 1; k < spans.length; k++) {
++      expect(spans[k].$1, greaterThan(spans[k - 1].$2));
++    }
++  });
++
++  test('a single-sample glitch is removed and is not a contact', () {
++    final imp = flatSwings(2, glitch: true);
++    expect(despikedTips(imp)[4].y, closeTo(0, 1e-9));
++    expect(findStops(imp, 30).length, 2);
++  });
++
++  test('reach and stop phases on a flat swing', () async {
++    final imp = flatSwings(1);
++    final n = imp.frames.length;
++    final pack = AnalysisPack(
++      packId: 't',
++      eventId: 'e',
++      metricSchemaVersion: '1',
++      phases: const ['setup', 'backswing', 'downswing', 'entry', 'recovery'],
++      criticalPhases: const ['downswing'],
++      metrics: const [],
++      phaseEvents: const ['rise', 'reach', 'stop', 'release'],
++      minPhaseFrames: 2,
++    );
++    final clip = ClipSource(clipId: 'c', path: '/x', durationMs: (n * 2 / 30 * 1000).round(), fps: 30);
++    final phases = const EventPhaseDetector()
++        .detect(clip, const PoseTrack(fps: 30, frames: []), imp, pack);
++    // Reach: the turnaround at x = -1 (sample 17, frame 34); contact after
++    // the swing back (sample 21+, frame >= 42).
++    expect(phases['downswing']!.startFrame, inInclusiveRange(32, 36));
++    expect(phases['entry']!.startFrame, greaterThanOrEqualTo(42));
++    expect(phases['backswing']!.startFrame, lessThanOrEqualTo(18));
++  });
++}

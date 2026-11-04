@@ -73,7 +73,7 @@ Read the [method, limitations and reproduction commands](docs/experiments/Gurr-A
 
 A separate 80-second pilot uses ten source recordings, frozen visual references and five reserved test windows. On those test windows, the revised research pipeline improved sparse target coverage from **20/25 to 24/25 checkpoints** and orientation from **4/5 to 5/5 windows**. The committed engine still matched **0/15** annotated contacts. An experimental wrist-motion proxy matched only **3/15**, added five false detections and remains research-only.
 
-Read the [evaluation protocol, frozen sources, test results and failures](docs/experiments/Gurr-Accuracy.md). These single-reviewer results measure a small tracking/timing pilot; they do not establish coaching accuracy or learning gains.
+Read the [evaluation protocol, frozen sources, test results and failures](docs/experiments/Gurr-Accuracy.md). These single-reviewer results measure a small tracking/timing pilot; they do not establish coaching accuracy or learning gains. A separate check of the existing standing-block phase candidate matched three contacts on fresh training footage, with one extra detection and about 0.2 s delay. Its tested patch and the limited follow-up evidence are included in the report; it remains experimental.
 
 The following protocol remains the planned coach-specific learning experiment once identity/event ground truth and genuine feedback are available.
 

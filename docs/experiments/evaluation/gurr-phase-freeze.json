@@ -1,6 +1,6 @@
 {
   "format": "gurr-accuracy-freeze/1",
-  "frozen_at_utc": "2026-11-04T23:34:00.742706+00:00",
+  "frozen_at_utc": "2026-11-04T15:41:42-08:00",
   "inference": {
     "sources_sha256": {
       "footage.py": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8",
@@ -82,5 +82,10 @@
     "packages/analysis_engine/lib/src/vision_stages.dart": "dd5ec92de47d7e92f93be962d0062f5a9da444acb25d58c4f933214581c3e83a",
     "apps/strathvision/assets/packs/timber.json": "201babde9d28101e5ae923341365c99009069a12a443285867a2c6fd756edb13"
   },
-  "candidate_is_committed": false
+  "candidate_is_committed": false,
+  "derived_from_original_freeze_sha256": "72e27dbbd6d549844564e778b5f164d914a202ec1d143eaf34d0f0d9ef27a796",
+  "original_pipeline_frozen_at_utc": "2026-11-04T23:34:00.742706+00:00",
+  "references_and_configuration_committed_before_inference": "1d8058e",
+  "candidate_patch_sha256": "1a77109503b838b13f2a54003ed4a4537ad7b508717755866b4c20e59268bf7c",
+  "candidate_delivery": "Versioned experimental patch; existing engine/app working-tree files preserved."
 }

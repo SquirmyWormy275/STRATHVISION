@@ -62,4 +62,69 @@ Test evidence: [baseline](evaluation/gurr-test-baseline.json), [revised input th
 
 ## Existing phase-code follow-up
 
-A separately captured copy of the pre-existing, uncommitted engine changes replaces standing-block height events with reach/stop/release and segments at speed stops. It passes 108 engine tests and matches 3/7 contacts on the original development set, versus zero for the committed engine. This is development evidence only. Fresh source clips are being reserved for a separate check; the first pilot's test scores are not used to tune that candidate.
+A separately captured copy of Claude's pre-existing, uncommitted engine changes replaces standing-block height events with reach/stop/release and segments at speed stops. It passes 108 engine tests and matches 3/7 contacts on the original development set, versus zero for the committed engine. Its code and parameters were not changed during this study.
+
+The follow-up uses three additional source recordings, excluded from both partitions of the first pilot. Its inputs, references and candidate source hashes were committed in `1d8058e` before follow-up inference. The 24-second set contains three annotated contacts in one clear training window, one pause window with zero contacts, and one rear-view tracking-only window with unknown contact timing. This is a narrow standing-block check, not broad validation on competition contacts.
+
+| Fresh follow-up, identical revised pose inputs | Committed engine | Existing phase candidate |
+|---|---:|---:|
+| Contact matches | 0/3 | 3/3 |
+| False contact predictions | 1 | 1 |
+| False predictions in the scored pause | 0 | 0 |
+| Sparse target checkpoints covered | 14/15 | 14/15 |
+| Mean midpoint error on matched contacts | unavailable | 0.206 s |
+
+The candidate helps this small training example, but it has one extra contact and a roughly 0.2-second delay on the matches. It remains a candidate; no coaching accuracy or learning gain is established. The proxy rejected by the first pilot is not silently substituted for the engine.
+
+Follow-up evidence: [inputs](evaluation/gurr-phase-inputs.json), [visual references](evaluation/gurr-phase-reference.json), [source freeze](evaluation/gurr-phase-freeze.json), [committed-engine results](evaluation/gurr-phase-baseline-results.json), and [candidate results](evaluation/gurr-phase-candidate-results.json).
+
+The [experimental candidate patch](evaluation/standing-block-phase-candidate.patch) preserves the existing engine changes and their tests without staging or overwriting the shared engine/app files. Applying it to an isolated checkout of `5861e2f` was checked to reproduce every recorded candidate library/pack hash. The follow-up freeze records the original pipeline freeze time separately from the follow-up commit time; inference configuration and references were fixed before scoring.
+
+
+## Reproduce and review
+
+Use the pinned Python environment and model hashes from [the corpus setup](Gurr-Academy.md#reproduce-the-run). Use an isolated checkout of engine commit `5861e2f`; copy the current repository's `packages/analysis_engine/tool/accuracy_contacts.dart` into that checkout's `packages/analysis_engine/tool/` directory. Do not replace its engine library or timber pack for the baseline.
+
+From the current repository root, set the local paths and generate predictions:
+
+```sh
+SV_REPO="$PWD"
+SV_ENGINE_ROOT='/path/to/isolated-checkout-at-5861e2f'
+SV_DATA='/path/to/private-analysis'
+SV_FOOTAGE_ROOT='/path/to/Gurr Academy '
+SV_PY="$SV_DATA/venv/bin/python"
+for SV_VARIANT in baseline revised; do
+  for SV_PARTITION in development test; do
+    "$SV_PY" tools/carne_asada/predict_accuracy.py \
+      --inputs docs/experiments/evaluation/gurr-inputs.json \
+      --root "$SV_FOOTAGE_ROOT" --output "$SV_DATA/predictions/$SV_VARIANT" \
+      --detector "$SV_DATA/yolox_nano.onnx" \
+      --pose "$SV_ENGINE_ROOT/apps/strathvision/assets/models/pose_landmark_full.onnx" \
+      --variant "$SV_VARIANT" --partition "$SV_PARTITION" \
+      --freeze docs/experiments/evaluation/gurr-pipeline-freeze.json
+  done
+done
+```
+
+From the isolated engine's `packages/analysis_engine` directory, replay each prediction directory:
+
+```sh
+dart pub get
+dart run tool/accuracy_contacts.dart "$SV_DATA/predictions/baseline" "$SV_DATA/baseline-contacts.json"
+dart run tool/accuracy_contacts.dart "$SV_DATA/predictions/revised" "$SV_DATA/revised-contacts.json"
+```
+
+Return to the current repository root to score a partition and run the experimental proxy:
+
+```sh
+"$SV_PY" tools/carne_asada/score_accuracy.py \
+  --reference docs/experiments/evaluation/gurr-reference.json \
+  --predictions "$SV_DATA/predictions/revised" --contacts "$SV_DATA/revised-contacts.json" \
+  --partition test --output "$SV_DATA/revised-test-results.json"
+"$SV_PY" tools/carne_asada/motion_contacts.py \
+  "$SV_DATA/predictions/revised" "$SV_DATA/proxy-contacts.json"
+```
+
+Score the proxy with the same scorer and its contact file. For the fresh phase follow-up, substitute `gurr-phase-inputs.json`, `gurr-phase-reference.json`, and `gurr-phase-freeze.json`, use a separate prediction directory, and replay against both the unchanged baseline and a separate engine checkout with the recorded candidate patch applied. Keep baseline and candidate replay files separate.
+
+The next evidence needed is coach review of these timing references, broader fresh source clips, and actual implement/contact validation. Genuine attribute-specific coach marks are required for CARNE ASADA learning. All timing references remain distinct from red/green technique judgments. This work adds research commands and measured evidence; it does not complete app integration or known-athlete recognition.
