@@ -114,3 +114,16 @@ Drawn from the YC Design Review critiques of AI-generated interfaces. These patt
 - Progress or status that feels like a chore. Quiet living underlines and brief sweeps only.
 
 Positive patterns to keep: motion that reinforces a real change, generous spacing, immediate obvious actions, and visual calm that still signals intelligence.
+
+## Attribute and Priority Chips
+
+The control that selects what is being graded. It must feel like part of video review.
+
+- Thin horizontal chip row. Appears in marking mode, or remains quietly present once the Good threshold is reached.
+- Last-used priorities are pre-loaded. The most recent or most-greened attribute is visually current.
+- Tap a chip to make it active; red/green then apply only to that attribute on the current stroke. Long-press or a small “+” adds another attribute from the pack’s short predefined list. No free-text entry on the phone.
+- Switching chips does not move the playhead or change the current stroke.
+- Active chip uses the same restrained accent as the living underlines. Inactive chips stay low-contrast.
+- On first use or when empty, the row simply offers the pack’s top 3–4 attributes. No tutorial modal or explanation.
+
+The user grades the movement. They never configure a model.
