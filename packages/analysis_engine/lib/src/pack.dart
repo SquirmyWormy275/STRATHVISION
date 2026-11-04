@@ -35,6 +35,8 @@ class MetricDef {
     required this.phase,
     required this.unit,
     this.joints = const [],
+    this.weight = 1.0,
+    this.minSpread = 0.0,
   });
 
   final String key;
@@ -42,6 +44,13 @@ class MetricDef {
   final String phase;
   final String unit;
   final List<Joint> joints;
+
+  /// Pack default weight for style matching (Packs.md).
+  final double weight;
+
+  /// Floor for the fitted spread, in [unit]. Keeps a near-constant metric
+  /// from dominating the score.
+  final double minSpread;
 }
 
 /// The part of a pack the analysis runtime reads: phase order, metric
@@ -55,7 +64,11 @@ class AnalysisPack {
     required this.metrics,
     this.minPhaseFrames = 3,
     this.minPoseConfidence = 0.5,
-  });
+    this.minClips = 15,
+    List<String>? criticalPhases,
+    this.minCriticalPoseConfidence = 0.6,
+    this.selfConsistencyThreshold = 0.5,
+  }) : criticalPhases = criticalPhases ?? phases;
 
   final String packId;
   final String eventId;
@@ -70,6 +83,20 @@ class AnalysisPack {
 
   /// Clip-level pose confidence below this → LOW_POSE_CONFIDENCE.
   final double minPoseConfidence;
+
+  /// Profile builder: usable clips needed for a ready profile.
+  final int minClips;
+
+  /// Phases whose pose confidence gates profile building (default: all).
+  final List<String> criticalPhases;
+
+  /// Profile builder: minimum average pose confidence on critical phases,
+  /// per clip and across the profile.
+  final double minCriticalPoseConfidence;
+
+  /// Profile builder: held-out clips must average at least this style-match
+  /// score against the profile fitted from the rest.
+  final double selfConsistencyThreshold;
 
   /// Reads an event's analysis section from pack JSON, or throws
   /// [AnalysisError] with SCHEMA_MISMATCH listing every problem.
@@ -156,6 +183,16 @@ class AnalysisPack {
               'for ${kind.wire}');
           ok.add(false);
         }
+        final weight = m['weight'] ?? 1.0;
+        if (weight is! num || weight < 0) {
+          problems.add('$path.weight must be a number >= 0');
+          ok.add(false);
+        }
+        final minSpread = m['min_spread'] ?? 0.0;
+        if (minSpread is! num || minSpread < 0) {
+          problems.add('$path.min_spread must be a number >= 0');
+          ok.add(false);
+        }
         if (ok.isEmpty) {
           metrics.add(MetricDef(
             key: key as String,
@@ -163,6 +200,8 @@ class AnalysisPack {
             phase: phase as String,
             unit: unit as String,
             joints: joints,
+            weight: (weight as num).toDouble(),
+            minSpread: (minSpread as num).toDouble(),
           ));
         }
       }
@@ -177,6 +216,31 @@ class AnalysisPack {
       problems.add('min_pose_confidence must be a number in 0..1');
     }
 
+    final minClips = json['min_clips'] ?? 15;
+    if (minClips is! int || minClips < 2) {
+      problems.add('min_clips must be an integer >= 2');
+    }
+    List<String>? critical;
+    final rawCritical = json['critical_phases'];
+    if (rawCritical != null) {
+      if (rawCritical is List &&
+          rawCritical.isNotEmpty &&
+          rawCritical.every((p) => p is String && phases.contains(p))) {
+        critical = rawCritical.cast<String>();
+      } else {
+        problems.add('critical_phases must be a non-empty list of pack phases');
+      }
+    }
+    double unit(String key, double dflt) {
+      final v = json[key] ?? dflt;
+      if (v is num && v >= 0 && v <= 1) return v.toDouble();
+      problems.add('$key must be a number in 0..1');
+      return dflt;
+    }
+
+    final minCritical = unit('min_critical_pose_confidence', 0.6);
+    final selfConsistency = unit('self_consistency_threshold', 0.5);
+
     if (problems.isNotEmpty) {
       throw AnalysisError(ErrorCode.schemaMismatch,
           'Pack analysis section does not match the schema.',
@@ -190,6 +254,10 @@ class AnalysisPack {
       metrics: metrics,
       minPhaseFrames: minFrames as int,
       minPoseConfidence: (minConf as num).toDouble(),
+      minClips: minClips as int,
+      criticalPhases: critical,
+      minCriticalPoseConfidence: minCritical,
+      selfConsistencyThreshold: selfConsistency,
     );
   }
 }

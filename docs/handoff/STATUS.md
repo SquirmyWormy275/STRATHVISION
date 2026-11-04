@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T14:27:43Z
+heartbeat: 2026-11-04T14:31:24Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Phase 4 task 1: clip import + quality evaluation for the profile builder (workbench). Start in packages/analysis_engine/lib/src/builder/ with quality evaluation over Metric Vectors; acceptance uses 15+ synthetic clips.
+next: Phase 4 app side: ProfileMetadata.fromJson → engine validateProfile; media_kit clip probe; Build profile screen from Library (pick 15+ clips, quality list, Build, Export zip with profile.json + specialist_patches/ + adapters/, add to Library)
 <!-- STATE:END -->
 
 ## Phase progress
@@ -38,6 +38,7 @@ next: Phase 4 task 1: clip import + quality evaluation for the profile builder (
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T14:31:24Z **claude** — Phase 4 tasks 1-3 (engine): clip quality evaluation, profile fitting (mean/SD floored by pack min_spread, confidence-scaled weights), leave-one-out self-consistency, gates → ready Profile or Error-Contract rejection; validateProfile + Profile model in engine; style-seeded synthetic stub pose. 31 engine tests pass. → next: Phase 4 app side: ProfileMetadata.fromJson → engine validateProfile; media_kit clip probe; Build profile screen from Library (pick 15+ clips, quality list, Build, Export zip with profile.json + specialist_patches/ + adapters/, add to Library)
 - 2026-11-04T14:27:43Z **claude** — Phase 3 done: Analyze button + raw-metrics panel (wide: side, narrow: below video), engine on background isolate, Error Contract shown on failure. Pack analysis section + error mapping added to INTERFACES.md, Phase 3 decisions in DECISIONS.md. 55 app tests + 18 engine tests + 2 real-decoder tests (Linux) pass. Linux release builds. → next: Phase 4 task 1: clip import + quality evaluation for the profile builder (workbench). Start in packages/analysis_engine/lib/src/builder/ with quality evaluation over Metric Vectors; acceptance uses 15+ synthetic clips.
 - 2026-11-04T14:21:30Z **claude** — Phase 3 tasks 1,2,4: packages/analysis_engine (pure Dart) with INTERFACES.md contracts + validators, stub pose/implement/phase pipeline, generic pack-driven metrics, stub slope_residual head (64→32 MLP, 2113 params). 18 tests pass. → next: Phase 3 task 3: add analysis_engine path dep to apps/strathvision, Analyze button in workspace top bar, raw-metrics panel
 - 2026-11-04T14:18:24Z **claude** — Claimed: Phase 3 — Analysis Runtime Skeleton

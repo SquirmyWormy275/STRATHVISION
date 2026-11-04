@@ -97,20 +97,33 @@ const maxPoseSamples = 1800;
 /// Stub pose model (Phase 3). Produces a plausible, deterministic moving
 /// skeleton seeded by the clip id. Does not read video. Replaced by a real
 /// 3D pose model in Phase 4.
+///
+/// With [styleSeed], every clip shares one movement style (a synthetic
+/// "coach") and varies from it by up to ±[jitter] (fraction) per clip.
+/// Synthetic clips are allowed by the Phase 4 acceptance.
 class StubPoseEstimator implements PoseEstimator {
-  const StubPoseEstimator({this.confidence = 0.85});
+  const StubPoseEstimator({
+    this.confidence = 0.85,
+    this.styleSeed,
+    this.jitter = 0.03,
+  });
 
   /// Mean joint confidence the stub reports.
   final double confidence;
+  final int? styleSeed;
+  final double jitter;
 
   @override
   Future<PoseTrack> estimate(ClipSource clip) async {
     final n = clip.frameCount;
     final stride = math.max(1, (n / maxPoseSamples).ceil());
-    final rnd = SeededRandom(fnv1a(clip.clipId));
-    final phase = rnd.next() * 2 * math.pi;
-    final amp = 0.08 + rnd.next() * 0.08;
-    final period = clip.fps * (1.2 + rnd.next()); // frames per cycle
+    final clipRnd = SeededRandom(fnv1a(clip.clipId));
+    final style = styleSeed == null ? clipRnd : SeededRandom(styleSeed!);
+    double vary() =>
+        styleSeed == null ? 1 : 1 + (clipRnd.next() * 2 - 1) * jitter;
+    final phase = style.next() * 2 * math.pi * vary();
+    final amp = (0.08 + style.next() * 0.08) * vary();
+    final period = clip.fps * (1.2 + style.next()) * vary(); // frames per cycle
     final frames = <PoseFrame>[];
     for (var f = 0; f < n; f += stride) {
       final t = 2 * math.pi * f / period + phase;

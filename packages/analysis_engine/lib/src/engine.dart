@@ -3,6 +3,7 @@ import 'errors.dart';
 import 'features.dart';
 import 'heads.dart';
 import 'pack.dart';
+import 'body.dart';
 import 'stages.dart';
 
 /// Success payload or Error Contract, never both.
@@ -27,6 +28,14 @@ class AnalysisFailure extends AnalysisOutcome {
   Map<String, Object?> toJson() => error.toJson();
 }
 
+class AnalysisDetail {
+  const AnalysisDetail(this.outcome, this.phasePoseConfidence);
+  final AnalysisOutcome outcome;
+
+  /// Mean joint confidence inside each phase. Empty on failure.
+  final Map<String, double> phasePoseConfidence;
+}
+
 /// Clip → Metric Vector, following the pipeline in ARCHITECTURE.md:
 /// pose + implement → phases → metrics → feature vector → specialist heads.
 class AnalysisEngine {
@@ -44,7 +53,12 @@ class AnalysisEngine {
   final PhaseDetector phases;
   final List<SpecialistHead> heads;
 
-  Future<AnalysisOutcome> analyze(ClipSource clip) async {
+  Future<AnalysisOutcome> analyze(ClipSource clip) async =>
+      (await analyzeDetailed(clip)).outcome;
+
+  /// [analyze] plus internals the profile builder needs (per-phase pose
+  /// confidence). The Metric Vector contract is unchanged.
+  Future<AnalysisDetail> analyzeDetailed(ClipSource clip) async {
     try {
       if (clip.durationMs <= 0 || clip.fps <= 0) {
         throw AnalysisError(
@@ -99,10 +113,25 @@ class AnalysisEngine {
         throw AnalysisError(ErrorCode.schemaMismatch,
             'Analysis produced an invalid Metric Vector.', {'problems': problems});
       }
-      return AnalysisSuccess(vector);
+      return AnalysisDetail(AnalysisSuccess(vector), {
+        for (final e in spans.entries)
+          e.key: _r(_phasePoseConfidence(track, e.value)),
+      });
     } on AnalysisError catch (e) {
-      return AnalysisFailure(e);
+      return AnalysisDetail(AnalysisFailure(e), const {});
     }
+  }
+
+  static double _phasePoseConfidence(PoseTrack track, PhaseSpan span) {
+    var sum = 0.0, n = 0;
+    for (final f in track.frames) {
+      if (f.frame < span.startFrame || f.frame > span.endFrame) continue;
+      for (final c in f.confidence.values) {
+        sum += c;
+        n++;
+      }
+    }
+    return n == 0 ? 0 : sum / n;
   }
 
   static double _r(double v) => (v * 1e4).roundToDouble() / 1e4;

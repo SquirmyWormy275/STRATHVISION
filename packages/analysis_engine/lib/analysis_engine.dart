@@ -11,3 +11,6 @@ export 'src/features.dart';
 export 'src/heads.dart';
 export 'src/pack.dart';
 export 'src/stages.dart';
+export 'src/builder.dart';
+export 'src/profile.dart';
+export 'src/scoring.dart';
