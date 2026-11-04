@@ -41,8 +41,13 @@ dart pub get && dart analyze && dart test
 ```sh
 # Linux desktop
 flutter test integration_test -d linux --dart-define=CLIP_DIR=$PWD/integration_test/assets
-# Android device (pushes clips once the app has created its files folder)
+# Android device or emulator (pushes clips once the app has created its files folder)
 scripts/run_android_player_test.sh [device-id]
+# A laptop-built package imports and runs on the phone
+scripts/run_android_player_test.sh "" integration_test/phone_package_test.dart
+# (regenerate that package: flutter test tool/make_phone_fixture.dart)
+# Emulator note: start it with the discrete GPU, e.g.
+#   __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia emulator -avd sv_phone -gpu host
 ```
 
 ## Run and build per platform

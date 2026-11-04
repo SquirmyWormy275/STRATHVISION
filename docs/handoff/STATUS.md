@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T17:06:49Z
+heartbeat: 2026-11-04T17:13:07Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Export choices (+ my marks, full local overlay, summary before write) and import replace/keep/merge
+next: Watch builds.yml run for macOS/iOS on macos-15-intel
 <!-- STATE:END -->
 
 ## Phase progress
@@ -23,7 +23,7 @@ next: Export choices (+ my marks, full local overlay, summary before write) and 
 | 6 Timber Pack + Specialist Net | **done**. Timber pack (underhand and standing block) as JSON, loaded at runtime. Heads and probes are pack-declared, and the residual head is real (measured error + MLP correction). Engine: 56 tests, including a no-domain-strings scan. App: 71 tests. 3 Linux real-decoder tests pass |
 | 7 Workbench Harness + Adapters | **done**. Harness (probe-only search, pack-declared accept rules, cumulative patches), adapters (`.paw` local logistic models, example-validated compile through Claude over raw HTTP), and a workbench screen that saves vN+1. Inference applies the patch and adapters. Engine: 75 tests. App: 77 tests. 3 Linux real-decoder tests pass. A live Claude compile has not been run: there is no API key on this machine |
 | 8 CARNE ASADA Playground | **done**. Engine: stroke segmentation and `CarneSession` (exact copy, bounded loop, hull, limit, baseline gate, undo, record). App: playground with drop zone, feed, meters, what-did-it-do and undo, saving vN+1 with `carne_asada/`. Phones ignore `carne_asada/` (tested). Engine: 87 tests. App: 80 tests. 3 Linux real-decoder tests pass |
-| 9 Drift, Polish, Distribution | **done** locally: drift view, health indicators, export/import plus inbox folder, a release APK and a Linux zip built and launched here, and the CI workflow for every target. App: 85 tests. Engine: 90. CI run 41863714173: tests (90 engine + 85 app), Android APK, Linux zip and **Windows zip** all succeed. **Open:** the macOS and iOS jobs were refused twice by GitHub's hosted macOS arm64 capacity ("job was not acquired by Runner"). This is not a code failure. Rerun with `gh run rerun 41863714173 --failed`, then install the builds via the locked methods on real devices |
+| 9 Drift, Polish, Distribution | **done** locally: drift view, health indicators, export/import plus inbox folder, a release APK and a Linux zip built and launched here, and the CI workflow for every target. App: 85 tests. Engine: 90. CI run 41863714173: tests, Android APK, Linux zip and **Windows zip** all succeed. **Android verified on the emulator:** the release APK sideloads and launches, and `integration_test/phone_package_test.dart` shows a laptop-built package (patch, adapters, carne_asada/) importing cleanly and driving inference on the device. **Open:** the macOS and iOS jobs were refused twice by GitHub's hosted macOS arm64 capacity ("job was not acquired by Runner"). This is not a code failure. Rerun with `gh run rerun 41863714173 --failed`, then install the builds via the locked methods on real devices |
 
 ## Blockers / questions for the human
 
@@ -31,7 +31,6 @@ next: Export choices (+ my marks, full local overlay, summary before write) and 
 - **The Gurr experiment** (CARNE_ASADA.md "Experiment Integration") needs the Matthew and Daniel Gurr race and training footage, plus a real 3D pose model and implement tracker. The stand-in pose makes any results meaningless.
 
 - **The adapter compiler needs an Anthropic API key on the workbench.** Set `ANTHROPIC_API_KEY`. The default model is `claude-opus-5-5`. The provider and model are a human decision the docs don't make, so confirm or change them. The compile path is unit-tested against the Messages API request and response shape but has not been run live here.
-- **"Import cleanly on phone" is verified only through the shared Dart import path on Linux.** It needs the Android device run (same blocker as Phase 2).
 
 - **Review the timber pack v1** (`apps/strathvision/assets/packs/timber.json`): phases, metrics, weights, attribute names. It is an initial catalog written without a coach. Also review the probe interpretations in DECISIONS.md Phase 6.
 
@@ -51,6 +50,7 @@ next: Export choices (+ my marks, full local overlay, summary before write) and 
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T17:13:07Z **claude** — Export choices (profile only / + my marks / full overlay, summary before write) and import replace/keep/merge; phone import verified on Android emulator (phone_package_test) and release APK sideload+launch verified; CI macOS/iOS moved to macos-15-intel after arm64 capacity refusals. 92 app + 94 engine tests. → next: Watch builds.yml run for macOS/iOS on macos-15-intel
 - 2026-11-04T17:06:49Z **claude** — Android real-video verified (3/3 real-decoder tests on emulator w/ NVIDIA host GPU) after fixing Android video output (mediacodec_embed) and frame-rate race; CARNE ASADA now has all five proposal types (weights, add/raise/drop exemplars) + package merge into the coach hull. 94 engine + 85 app tests. → next: Export choices (+ my marks, full local overlay, summary before write) and import replace/keep/merge
 - 2026-11-04T16:44:23Z **claude** — All 9 phases implemented. CI: tests + Android + Linux + Windows builds pass; macOS/iOS jobs refused by GitHub macOS runner capacity (not code). Open items are hardware/human: Android real-video run, Windows launch, macOS/iOS rerun + device installs, pose model / transcriber / API key choices, timber pack review, Gurr footage. → next: Human items in STATUS Blockers. Agent: rerun macOS/iOS CI later (gh run rerun 41863714173 --failed) and fix anything it reports.
 - 2026-11-04T16:03:09Z **claude** — Phase 9 done locally: drift view (sessions by day, trend, chart+table+sparklines), profile health on Library tiles, export (coaching profile only) + import + shared inbox folder, release APK + Linux zip built and launched, .github/workflows/builds.yml (tests → APK, Linux/Windows/macOS zips, unsigned iOS), docs/DISTRIBUTION.md, Gurr experiment steps in README. 90 engine + 85 app tests. → next: Watch the first builds.yml run on GitHub Actions (gh run list --workflow builds.yml); fix any Windows/macOS/iOS build failures it reports

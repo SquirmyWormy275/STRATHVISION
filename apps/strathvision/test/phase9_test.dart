@@ -169,6 +169,14 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.byKey(const Key('export-prof-1-1')));
+      await tester.pump();
+      // Summary before write (default: coaching profile only).
+      for (var i = 0; i < 20 && find.byKey(const Key('export-summary')).evaluate().isEmpty; i++) {
+        await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 20)));
+        await tester.pump();
+      }
+      expect(find.text('· 1 specialist patch(es)'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('export-save')));
       for (var i = 0; i < 20 && saved.isEmpty; i++) {
         await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 20)));
         await tester.pump();
@@ -185,6 +193,7 @@ void main() {
       final meta = await tester.runAsync(() => readProfilePackage(phone.path));
       expect(meta!.profileId, 'prof-1');
 
+      await tester.pumpAndSettle(); // export dialog fully closed
       await tester.tap(find.byKey(const Key('trend-prof-1-1')));
       for (var i = 0; i < 20 && find.byType(DriftScreen).evaluate().isEmpty; i++) {
         await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 20)));

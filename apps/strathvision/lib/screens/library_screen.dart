@@ -24,6 +24,7 @@ import '../workbench/claude_compiler.dart';
 import '../workbench/workbench_controller.dart';
 import 'profile_builder_screen.dart';
 import '../profiles/inbox.dart';
+import '../profiles/package_exchange.dart';
 import '../profiles/profile_health.dart';
 import '../workbench/carne_controller.dart';
 import 'drift_screen.dart';
@@ -95,17 +96,25 @@ class LibraryScreen extends StatelessWidget {
       ? profileStore!()
       : Directory(p.join((await getApplicationSupportDirectory()).path, 'profiles'));
 
-  /// Coaching profile only (the default export choice): profile, patches,
-  /// adapters. Research records (`carne_asada/`) stay on this computer.
+  /// Export with an explicit choice and a summary before writing
+  /// (DECISIONS.md). Default: coaching profile only.
   Future<void> _export(BuildContext context, ProfileRow row) async {
     final messenger = ScaffoldMessenger.of(context);
+    final event = _workbenchFor(row);
+    final attributes = event == null
+        ? const <String>[]
+        : [...event.topAttributes, ...event.moreAttributes];
     try {
-      final b = await readProfileBundle(row.sourcePath);
-      final where = await saveFile(packageFileName(b.profile),
-          zipProfilePackage(b.profile, patches: b.patchFiles, adapters: b.adapterFiles));
+      final plan = await showDialog<ExportPlan>(
+        context: context,
+        builder: (_) => _ExportDialog(
+            plan: (choice) => planExport(db, row, choice, attributes: attributes)),
+      );
+      if (plan == null) return;
+      final where = await saveFile(plan.fileName, plan.zip());
       if (where != null) {
         messenger.showSnackBar(SnackBar(
-            content: Text('Saved ${packageFileName(b.profile)}. Send it like any file.')));
+            content: Text('Saved ${plan.fileName}. Send it like any file.')));
       }
     } on AnalysisError catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(e.message)));
@@ -202,9 +211,20 @@ class LibraryScreen extends StatelessWidget {
     if (path == null) return;
     try {
       final meta = await readProfilePackage(path);
-      await db.saveProfile(meta, path);
-      messenger.showSnackBar(SnackBar(
-          content: Text('Imported ${meta.coachName} · v${meta.version}')));
+      final installed = (await db.allProfiles()).where((r) => r.profileId == meta.profileId);
+      ImportChoice? choice;
+      if (installed.isNotEmpty) {
+        if (!context.mounted) return;
+        choice = await showDialog<ImportChoice>(
+          context: context,
+          builder: (_) => _ImportDialog(
+              name: '${meta.coachName} · v${meta.version}',
+              have: [for (final r in installed) 'v${r.version}']),
+        );
+        if (choice == null) return;
+      }
+      final msg = await applyImport(db, path, meta, choice, _store);
+      messenger.showSnackBar(SnackBar(content: Text(msg)));
     } on AnalysisError catch (e) {
       final problems = (e.details['problems'] as List?)?.cast<String>();
       messenger.showSnackBar(SnackBar(
@@ -572,3 +592,95 @@ CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async => CarneContr
 
 Future<String?> pickInboxFolder() =>
     FilePicker.getDirectoryPath(dialogTitle: 'Choose a shared inbox folder');
+
+class _ExportDialog extends StatefulWidget {
+  const _ExportDialog({required this.plan});
+  final Future<ExportPlan> Function(ExportChoice choice) plan;
+
+  @override
+  State<_ExportDialog> createState() => _ExportDialogState();
+}
+
+class _ExportDialogState extends State<_ExportDialog> {
+  ExportChoice _choice = ExportChoice.profileOnly;
+  late Future<ExportPlan> _plan = widget.plan(_choice);
+
+  void _pick(ExportChoice? c) {
+    if (c == null) return;
+    setState(() {
+      _choice = c;
+      _plan = widget.plan(c);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AlertDialog(
+      title: const Text('Export package'),
+      content: SizedBox(
+        width: 420,
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          RadioGroup<ExportChoice>(
+            groupValue: _choice,
+            onChanged: _pick,
+            child: Column(children: [
+              for (final c in ExportChoice.values)
+                RadioListTile<ExportChoice>(
+                  key: Key('export-choice-${c.name}'),
+                  contentPadding: EdgeInsets.zero,
+                  value: c,
+                  title: Text(c.label),
+                ),
+            ]),
+          ),
+          const SizedBox(height: 8),
+          Text('This will write:', style: theme.textTheme.labelLarge),
+          FutureBuilder<ExportPlan>(
+            future: _plan,
+            builder: (context, snap) => snap.data == null
+                ? const Padding(padding: EdgeInsets.all(8), child: LinearProgressIndicator())
+                : Column(
+                    key: const Key('export-summary'),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [for (final l in snap.data!.summary) Text('· $l')],
+                  ),
+          ),
+        ]),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        FutureBuilder<ExportPlan>(
+          future: _plan,
+          builder: (context, snap) => FilledButton(
+            key: const Key('export-save'),
+            onPressed: snap.data == null ? null : () => Navigator.pop(context, snap.data),
+            child: const Text('Save'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ImportDialog extends StatelessWidget {
+  const _ImportDialog({required this.name, required this.have});
+  final String name;
+  final List<String> have;
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+        title: Text('$name is already here'),
+        content: Text('You have ${have.join(', ')}. Replace removes those; Keep both '
+            'installs it alongside; Merge also brings in its marks and match history.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          for (final c in ImportChoice.values)
+            TextButton(
+              key: Key('import-${c.name}'),
+              onPressed: () => Navigator.pop(context, c),
+              child: Text(c.label),
+            ),
+        ],
+      );
+}
