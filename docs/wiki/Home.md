@@ -1,6 +1,8 @@
 # STRATHVISION Wiki
 
-STRATHVISION is a local-first athletic video analysis tool. It combines a serious dual-video review workstation with a pack-driven, inspectable style-matching engine.
+STRATHVISION is a local-first athletic video analysis tool. It combines a serious dual-video review workstation with a pack-driven, inspectable style-matching engine and local weight-space programming.
+
+The repository answers the research question: Can a local, evidence-bounded weight-space programming loop improve a sports technique model over time without full retraining, cloud infrastructure, or drifting outside coach-derived bounds?
 
 ## Pages
 
@@ -14,4 +16,6 @@ STRATHVISION is a local-first athletic video analysis tool. It combines a seriou
 
 ## Intent
 
-This wiki exists so the design and architectural choices are readable without diving into source. The goal is a system whose AI use in the visual domain is demonstrable, constrained, and defensible.
+This wiki exists so the design and architectural choices are readable without diving into source. The goal is a system whose AI use in the visual domain is demonstrable, constrained, and defensible. CARNE ASADA (the desktop-only recursive mixture editor) is a nested research project that does not block the athlete-facing product.
+
+See the root README for the full research question, the Gurr footage experiment, and distribution notes.
