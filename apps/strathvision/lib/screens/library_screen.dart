@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import '../analysis/analysis_controller.dart';
 import '../data/database.dart';
 import '../profiles/profile_package.dart';
 import '../workspace/project.dart';
@@ -28,12 +29,14 @@ class LibraryScreen extends StatelessWidget {
     this.pickPath = pickProfileFile,
     this.pickClip = pickClipFile,
     this.playerFactory = defaultStagePlayer,
+    this.analysisRunner,
   });
 
   final AppDatabase db;
   final ProfilePathPicker pickPath;
   final ClipPathPicker pickClip;
   final StagePlayerFactory playerFactory;
+  final AnalysisRunner? analysisRunner;
 
   Future<void> _import(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
@@ -63,6 +66,7 @@ class LibraryScreen extends StatelessWidget {
         project: project,
         pickClip: pickClip,
         playerFactory: playerFactory,
+        analysisRunner: analysisRunner,
       ),
     ));
   }

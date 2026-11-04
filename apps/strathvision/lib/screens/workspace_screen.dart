@@ -2,9 +2,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../analysis/analysis_controller.dart';
 import '../packs/placeholder_pack.dart';
 import '../workspace/project.dart';
 import '../workspace/workspace_controller.dart';
+import 'analysis_panel.dart';
 import 'workspace_widgets.dart';
 
 typedef ClipPathPicker = Future<String?> Function();
@@ -25,9 +27,13 @@ class WorkspaceScreen extends StatefulWidget {
     required this.controller,
     this.pickClip = pickClipFile,
     this.pack = placeholderPack,
+    this.analysis,
   });
 
   final WorkspaceController controller;
+
+  /// Analyze state; null hides analysis entirely (review-only workspace).
+  final AnalysisController? analysis;
   final ClipPathPicker pickClip;
   final PackInfo pack;
 
@@ -37,6 +43,7 @@ class WorkspaceScreen extends StatefulWidget {
 
 class _WorkspaceScreenState extends State<WorkspaceScreen> {
   WorkspaceController get c => widget.controller;
+  AnalysisController? get a => widget.analysis;
   final _focus = FocusNode(debugLabel: 'workspace');
 
   @override
@@ -80,6 +87,10 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
             c.mark(MarkLabel.red),
         const SingleActivator(LogicalKeyboardKey.keyZ, control: true): c.undo,
         const SingleActivator(LogicalKeyboardKey.keyZ, meta: true): c.undo,
+        if (a != null)
+          const SingleActivator(LogicalKeyboardKey.keyA): () {
+            if (c.clipOn(c.activeStage) != null) a!.analyze();
+          },
       };
 
   @override
@@ -90,13 +101,18 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         focusNode: _focus,
         autofocus: true,
         child: ListenableBuilder(
-          listenable: c,
+          listenable: Listenable.merge([c, ?a]),
           builder: (context, _) => Scaffold(
             body: SafeArea(
               child: Column(
                 children: [
-                  WorkspaceTopBar(controller: c),
-                  Expanded(child: _stages()),
+                  WorkspaceTopBar(
+                    controller: c,
+                    action: a != null && c.clipOn(c.activeStage) != null
+                        ? AnalyzeButton(analysis: a!)
+                        : null,
+                  ),
+                  Expanded(child: _body()),
                   TransportBar(
                     controller: c,
                     onAnnotate: _annotate,
@@ -110,6 +126,33 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         ),
       ),
     );
+  }
+
+  /// Stages, plus the analysis panel when open: beside the video on wide
+  /// screens, under it on narrow ones.
+  Widget _body() {
+    final analysis = a;
+    if (analysis == null || !analysis.panelOpen) return _stages();
+    final panel = AnalysisPanel(analysis: analysis, pack: widget.pack);
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth >= 900) {
+        return Row(children: [
+          Expanded(child: _stages()),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 8, 4),
+            child: SizedBox(width: 340, child: panel),
+          ),
+        ]);
+      }
+      return Column(children: [
+        Expanded(flex: 3, child: _stages()),
+        Expanded(
+          flex: 2,
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 4), child: panel),
+        ),
+      ]);
+    });
   }
 
   Widget _stages() {

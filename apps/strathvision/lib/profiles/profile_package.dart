@@ -4,20 +4,9 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:path/path.dart' as p;
 
-/// Error codes from docs/INTERFACES.md "Error Contract".
-class AnalysisError implements Exception {
-  AnalysisError(this.errorCode, this.message, [this.details = const {}]);
+import 'package:analysis_engine/analysis_engine.dart';
 
-  final String errorCode;
-  final String message;
-  final Map<String, Object?> details;
-
-  Map<String, Object?> toJson() =>
-      {'error_code': errorCode, 'message': message, 'details': details};
-
-  @override
-  String toString() => '$errorCode: $message';
-}
+export 'package:analysis_engine/analysis_engine.dart' show AnalysisError, ErrorCode;
 
 /// Metadata read from the minimum Profile Package contract
 /// (docs/INTERFACES.md "Profile Package").
@@ -56,7 +45,7 @@ class ProfileMetadata {
   factory ProfileMetadata.fromJson(Object? json) {
     final problems = <String>[];
     if (json is! Map<String, Object?>) {
-      throw AnalysisError('SCHEMA_MISMATCH', 'Profile must be a JSON object.');
+      throw AnalysisError(ErrorCode.schemaMismatch, 'Profile must be a JSON object.');
     }
 
     T? field<T>(Map<String, Object?> m, String key, String path) {
@@ -126,7 +115,7 @@ class ProfileMetadata {
     }
 
     if (problems.isNotEmpty) {
-      throw AnalysisError('SCHEMA_MISMATCH',
+      throw AnalysisError(ErrorCode.schemaMismatch,
           'This file is not a valid profile package.', {'problems': problems});
     }
 
@@ -161,7 +150,7 @@ Future<ProfileMetadata> readProfilePackage(String path) async {
       final entry = archive.files.where((f) =>
           f.isFile && p.basename(f.name) == profileManifestName).firstOrNull;
       if (entry == null) {
-        throw AnalysisError('SCHEMA_MISMATCH',
+        throw AnalysisError(ErrorCode.schemaMismatch,
             'The package has no $profileManifestName inside it.');
       }
       text = utf8.decode(entry.content as List<int>);
@@ -171,7 +160,7 @@ Future<ProfileMetadata> readProfilePackage(String path) async {
   } on AnalysisError {
     rethrow;
   } on Object catch (e) {
-    throw AnalysisError('SCHEMA_MISMATCH', 'The file could not be read.',
+    throw AnalysisError(ErrorCode.schemaMismatch, 'The file could not be read.',
         {'cause': e.toString()});
   }
 
@@ -180,7 +169,7 @@ Future<ProfileMetadata> readProfilePackage(String path) async {
     json = jsonDecode(text);
   } on FormatException catch (e) {
     throw AnalysisError(
-        'SCHEMA_MISMATCH', 'The file is not valid JSON.', {'cause': e.message});
+        ErrorCode.schemaMismatch, 'The file is not valid JSON.', {'cause': e.message});
   }
   return ProfileMetadata.fromJson(json);
 }

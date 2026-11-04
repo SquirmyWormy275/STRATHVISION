@@ -25,9 +25,12 @@ String formatOffset(int ms) {
 // ---- top bar --------------------------------------------------------------
 
 class WorkspaceTopBar extends StatelessWidget {
-  const WorkspaceTopBar({super.key, required this.controller});
+  const WorkspaceTopBar({super.key, required this.controller, this.action});
 
   final WorkspaceController controller;
+
+  /// The screen's primary action (Analyze), when available.
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +48,7 @@ class WorkspaceTopBar extends StatelessWidget {
           ),
           SyncStatusPill(controller: c),
           const SizedBox(width: 8),
+          if (action != null) ...[action!, const SizedBox(width: 4)],
           IconButton(
             key: const Key('undo'),
             tooltip: 'Undo (Ctrl+Z)',

@@ -91,6 +91,9 @@ class FakeStagePlayer implements StagePlayer {
   }
 
   @override
+  Future<double> frameRate() async => 30;
+
+  @override
   Future<void> stepFrame({required bool forward}) async {
     _playing = false;
     _position = _clamp(forward ? _position + frame : _position - frame);

@@ -24,6 +24,10 @@ abstract class StagePlayer {
   Future<void> seek(Duration position);
   Future<void> setRate(double rate);
 
+  /// Frames per second of the open clip (container rate, else decoder
+  /// estimate, else 30).
+  Future<double> frameRate();
+
   /// Steps exactly one decoded frame. Pauses playback.
   Future<void> stepFrame({required bool forward});
 
@@ -86,6 +90,7 @@ class MediaKitStagePlayer implements StagePlayer {
 
   @override
   Future<void> open(String path) async {
+    _fps = null;
     await _player.open(Media(path), play: false);
     _hasMedia = true;
     _changes.add(null);
@@ -114,8 +119,8 @@ class MediaKitStagePlayer implements StagePlayer {
 
   double? _fps;
 
-  /// Frame rate from the container, falling back to the decoder estimate.
-  Future<double> _frameRate() async {
+  @override
+  Future<double> frameRate() async {
     if (_fps != null) return _fps!;
     final native = _player.platform;
     if (native is NativePlayer) {
@@ -132,7 +137,7 @@ class MediaKitStagePlayer implements StagePlayer {
   @override
   Future<void> stepFrame({required bool forward}) async {
     if (_player.state.playing) await _player.pause();
-    final fps = await _frameRate();
+    final fps = await frameRate();
     final frameUs = 1e6 / fps;
     final current = (position.inMicroseconds / frameUs).round();
     final target = (current + (forward ? 1 : -1)).clamp(0, 1 << 31);

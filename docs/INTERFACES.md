@@ -70,6 +70,50 @@ The JSON above is the minimum required contract for inference.
 }
 ```
 
+### Metric Vector rules
+
+- `specialist_residuals` always contains `slope_residual` (the day-one head in DECISIONS.md). Other heads add keys.
+- Every `metrics.<key>.phase` names a key in `phases`. Frames are 0-based clip frame indices; `end_frame >= start_frame`. Confidences are 0..1.
+- The engine validates its own output. An output that fails validation is returned as `SCHEMA_MISMATCH`, never as a payload.
+
+## Pack Analysis Section
+
+The part of a pack the analysis runtime reads (one per event). Labels and domain words stay in the pack. The engine has no sport-specific logic.
+
+```json
+{
+  "pack_id": "string",
+  "event_id": "string",
+  "metric_schema_version": "string",
+  "phases": ["phase_id", "..."],
+  "metrics": [
+    {
+      "key": "metric_key",
+      "kind": "joint_angle | joint_range | implement_inclination | phase_duration",
+      "phase": "phase_id",
+      "unit": "string",
+      "joints": ["joint", "joint", "joint"]
+    }
+  ],
+  "min_phase_frames": 3,
+  "min_pose_confidence": 0.5
+}
+```
+
+- `phases` are in movement order.
+- `joints` names exactly 3 joints for `joint_angle` and `joint_range` (the angle sits at the middle joint), and none for the other kinds. Joint names come from the generic body set: `pelvis, spine, neck, head, left_/right_shoulder, left_/right_elbow, left_/right_wrist, left_/right_hip, left_/right_knee, left_/right_ankle`.
+- `joint_angle`: the mean angle over the phase, in degrees. `joint_range`: max minus min of that angle over the phase, in degrees. `implement_inclination`: the mean angle of the implement's grip-to-tip segment above horizontal, in degrees. `phase_duration`: seconds.
+- An invalid section is rejected with `SCHEMA_MISMATCH`, and `details.problems` lists every problem.
+
+## Analysis Errors
+
+| Situation | error_code |
+|-----------|------------|
+| Clip has no frames, or is too short to give each phase `min_phase_frames` frames | `PHASE_DETECTION_FAILED` |
+| Detector did not return every pack phase | `PHASE_DETECTION_FAILED` (`details.missing_phases`) |
+| Mean pose confidence below `min_pose_confidence` | `LOW_POSE_CONFIDENCE` |
+| Invalid pack section, or the engine produced an invalid Metric Vector | `SCHEMA_MISMATCH` |
+
 ## Comparison Result
 
 ```json

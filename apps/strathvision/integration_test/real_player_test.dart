@@ -11,7 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:analysis_engine/analysis_engine.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:strathvision/analysis/analysis_controller.dart';
+import 'package:strathvision/packs/placeholder_pack.dart';
 import 'package:strathvision/workspace/project.dart';
 import 'package:strathvision/workspace/stage_player.dart';
 import 'package:strathvision/workspace/workspace_controller.dart';
@@ -37,8 +40,7 @@ void main() {
     }
   }
 
-  testWidgets('real decoder: sync, locked scrub, frame step, 0.25x, mirror',
-      (tester) async {
+  Future<String> resolveClipDir(WidgetTester tester) async {
     expect(clipDir, isNotEmpty, reason: 'pass --dart-define=CLIP_DIR=...');
     var dir = clipDir;
     if (clipDir == 'android') {
@@ -55,6 +57,12 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 500));
       });
     }
+    return dir;
+  }
+
+  testWidgets('real decoder: sync, locked scrub, frame step, 0.25x, mirror',
+      (tester) async {
+    final dir = await resolveClipDir(tester);
     final clip30 = '$dir/clip30.mp4', clip25 = '$dir/clip25.mp4';
     expect(File(clip30).existsSync(), isTrue, reason: clip30);
 
@@ -138,6 +146,42 @@ void main() {
     await waitUntil(tester,
         () => ((b.decoderPosition - a.decoderPosition).inMilliseconds - offset).abs() < 45);
 
+    c.dispose();
+    await a.dispose();
+    await b.dispose();
+  });
+
+  testWidgets('Analyze on a real clip returns a valid Metric Vector',
+      (tester) async {
+    final dir = await resolveClipDir(tester);
+    final a = MediaKitStagePlayer(), b = MediaKitStagePlayer();
+    final c = WorkspaceController(
+      project: const Project(projectId: 'it2', name: 'Analyze'),
+      store: _Store(),
+      playerA: a,
+      playerB: b,
+      attributes: const ['Timing'],
+    );
+    final analysis = AnalysisController(
+        workspace: c, run: isolateRunner(placeholderPack.analysisPack));
+    await tester.pumpWidget(MaterialApp(home: a.view(mirror: false)));
+    await c.loadClip(Stage.a, '$dir/clip25.mp4');
+    await waitUntil(tester, () => a.duration > Duration.zero);
+
+    await tester.runAsync(analysis.analyze);
+    final out = analysis.result;
+    expect(out, isA<AnalysisSuccess>(), reason: '${out?.toJson()}');
+    final json = out!.toJson();
+    expect(validateMetricVector(json), isEmpty);
+    expect(analysis.fps, closeTo(25, 0.01), reason: 'container-fps');
+    final v = (out as AnalysisSuccess).vector;
+    expect(v.phases.values.last.endFrame, closeTo(12 * 25 - 1, 3));
+    expect(v.specialistResiduals['slope_residual']!.isFinite, isTrue);
+    // ignore: avoid_print
+    print('analyze: fps=${analysis.fps} phases=${v.phases.length} '
+        'metrics=${v.metrics.length} residuals=${v.specialistResiduals}');
+
+    analysis.dispose();
     c.dispose();
     await a.dispose();
     await b.dispose();

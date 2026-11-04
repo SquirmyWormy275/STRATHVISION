@@ -65,6 +65,19 @@ See docs/CARNE_ASADA.md for full specification.
 - Attribute chips come from the active pack. Before Phase 6, a neutral placeholder pack supplies the list. No domain words appear in app code.
 - Undo is one tap and covers marks, annotations, sync changes, and clip loads within the open session.
 
+## Phase 3 Analysis Runtime Decisions
+
+- The analysis runtime is a pure-Dart package, `packages/analysis_engine`, shared by the phone and the workbench. It holds the INTERFACES.md contracts and validators, the pipeline stage interfaces (pose estimator, implement tracker, phase detector), generic metric extraction, the 64-wide feature vector, and specialist heads.
+- The app runs the engine on a background isolate, so the UI keeps rendering during analysis. The workspace stays fully usable when analysis fails or is never run.
+- Phase 3 stages are stubs, marked as stubs in code and in the UI:
+  - The pose stub makes a deterministic skeleton seeded by `clip_id` and does not read video.
+  - The implement stub follows the wrists.
+  - The phase stub splits the clip evenly across the pack's phases at confidence 0.5.
+  - Real models replace these behind the same interfaces from Phase 4 on.
+- The `slope_residual` stub has the binding shape: a 64→32 ReLU MLP with 1 output and 2,113 parameters. Its weights are fixed and seeded, so its output is a number but not yet a meaningful residual. Real weights and patches arrive in Phase 6.
+- Long clips are pose-sampled at a stride, up to 1,800 samples per clip. Phase frames still refer to the clip's own frame indices.
+- Analyze works on the clip on the active stage. Results are kept per clip for the open session only. Storing results for drift starts in Phase 5.
+
 ## Thresholds and Gating (timber defaults)
 
 - Usable action = confident 3D pose + confident implement + assigned phase + actual stroke.

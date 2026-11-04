@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 
+import 'analysis/analysis_controller.dart';
 import 'data/database.dart';
 import 'screens/library_screen.dart';
 import 'screens/workspace_route.dart';
@@ -19,12 +20,14 @@ class StrathvisionApp extends StatelessWidget {
     this.pickPath = pickProfileFile,
     this.pickClip = pickClipFile,
     this.playerFactory = defaultStagePlayer,
+    this.analysisRunner,
   });
 
   final AppDatabase db;
   final ProfilePathPicker pickPath;
   final ClipPathPicker pickClip;
   final StagePlayerFactory playerFactory;
+  final AnalysisRunner? analysisRunner;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +45,7 @@ class StrathvisionApp extends StatelessWidget {
         pickPath: pickPath,
         pickClip: pickClip,
         playerFactory: playerFactory,
+        analysisRunner: analysisRunner,
       ),
     );
   }

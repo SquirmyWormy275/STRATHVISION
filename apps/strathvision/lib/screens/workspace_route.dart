@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../analysis/analysis_controller.dart';
 import '../data/database.dart';
 import '../packs/placeholder_pack.dart';
 import '../workspace/project.dart';
@@ -19,12 +20,16 @@ class WorkspaceRoute extends StatefulWidget {
     required this.project,
     this.playerFactory = defaultStagePlayer,
     this.pickClip = pickClipFile,
+    this.analysisRunner,
   });
 
   final AppDatabase db;
   final Project project;
   final StagePlayerFactory playerFactory;
   final ClipPathPicker pickClip;
+
+  /// Runs analysis; defaults to the engine on a background isolate.
+  final AnalysisRunner? analysisRunner;
 
   @override
   State<WorkspaceRoute> createState() => _WorkspaceRouteState();
@@ -40,6 +45,10 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
     playerB: _b,
     attributes: placeholderPack.topAttributes,
   );
+  late final AnalysisController _analysis = AnalysisController(
+    workspace: _controller,
+    run: widget.analysisRunner ?? isolateRunner(placeholderPack.analysisPack),
+  );
 
   @override
   void initState() {
@@ -49,6 +58,7 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
 
   @override
   void dispose() {
+    _analysis.dispose();
     _controller.pause();
     _controller.dispose();
     _a.dispose();
@@ -58,5 +68,9 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
 
   @override
   Widget build(BuildContext context) =>
-      WorkspaceScreen(controller: _controller, pickClip: widget.pickClip);
+      WorkspaceScreen(
+        controller: _controller,
+        pickClip: widget.pickClip,
+        analysis: _analysis,
+      );
 }

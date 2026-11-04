@@ -27,6 +27,13 @@ flutter test
 
 `test/fixtures/dummy_profile.json` is the dummy profile used to check the Phase 1 import.
 
+The analysis engine is a pure-Dart package with its own tests:
+
+```sh
+cd ../../packages/analysis_engine
+dart pub get && dart analyze && dart test
+```
+
 ### Real-decoder test (Phase 2)
 
 `integration_test/real_player_test.dart` drives media_kit/libmpv on a device with two generated clips (`integration_test/assets/clip30.mp4`, 30 fps; `clip25.mp4`, 25 fps). It checks positions as mpv reports them.
@@ -50,6 +57,16 @@ scripts/run_android_player_test.sh [device-id]
 
 Flutter only builds Windows apps on Windows, and only builds iOS and macOS apps on macOS.
 
+## Phase 3 manual check
+
+1. Open a review and add a clip on A.
+2. Tap **Analyze** in the top bar, or press A. On phones the button shows only its icon.
+3. The Analysis panel opens: beside the video on wide screens, under it on narrow ones. It lists body-tracking confidence, the three placeholder phases (times and frames), four metrics with units and confidence, and `slope_residual`.
+4. Add a clip on B. B becomes the active stage and the panel reads "Not analyzed yet". Analyze it.
+5. Scrub, step and play while the panel is open. Review controls are unaffected.
+
+In this build the pose model is a stand-in, so the values are placeholders.
+
 ## Phase 2 manual check
 
 1. Tap **New review**, then **Add a clip** on A and **Add a clip to compare** on B.
@@ -60,7 +77,7 @@ Flutter only builds Windows apps on Windows, and only builds iOS and macOS apps 
 6. Choose an attribute chip and tap green or red. A tick appears on the timeline. Undo (Ctrl+Z) removes it.
 7. Go back, then reopen the review from **Reviews**. Both clips, the sync, the rate, mirror, and marks come back.
 
-Desktop keys: Space play/pause · ←/→ frame step · S sync here · L lock/unlock · M mirror B · G/R mark · Ctrl+Z undo.
+Desktop keys: A analyze · Space play/pause · ←/→ frame step · S sync here · L lock/unlock · M mirror B · G/R mark · Ctrl+Z undo.
 
 ## Phase 1 manual check
 
