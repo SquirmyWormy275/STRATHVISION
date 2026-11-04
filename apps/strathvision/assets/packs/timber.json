@@ -58,7 +58,11 @@
       ],
       "heads": [
         {"name": "slope_residual", "kind": "mlp_residual", "base": "slope_residual/timber-underhand/v1",
-         "target_metric": "entry_slope"}
+         "target_metric": "entry_slope",
+         "acceptance": {"primary_probe": "slope_bias", "min_improvement": 0.8,
+                        "no_regress": ["slope_error_deg"],
+                        "within_fraction": {"phase_stability": 0.05, "track_confidence_correlation": 0.05},
+                        "max_weight_fraction": 0.02}}
       ],
       "probes": [
         {"name": "slope_error_deg", "head": "slope_residual", "kind": "mean_abs_residual"},
@@ -98,7 +102,11 @@
       ],
       "heads": [
         {"name": "slope_residual", "kind": "mlp_residual", "base": "slope_residual/timber-standing-block/v1",
-         "target_metric": "entry_slope"}
+         "target_metric": "entry_slope",
+         "acceptance": {"primary_probe": "slope_bias", "min_improvement": 0.8,
+                        "no_regress": ["slope_error_deg"],
+                        "within_fraction": {"phase_stability": 0.05, "track_confidence_correlation": 0.05},
+                        "max_weight_fraction": 0.02}}
       ],
       "probes": [
         {"name": "slope_error_deg", "head": "slope_residual", "kind": "mean_abs_residual"},

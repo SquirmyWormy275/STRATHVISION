@@ -55,7 +55,30 @@ void main() {
 
   test('packs swap without changing the engine', () async {
     const clip = ClipSource(clipId: 'c', path: '/c', durationMs: 8000, fps: 30);
-    for (final def in [load('placeholder'), timber]) {
+    final generic = PackDefinition.fromJson({
+      'format_version': 1,
+      'pack_id': 'generic',
+      'name': 'Generic',
+      'attributes': {'top': ['A'], 'more': []},
+      'events': [
+        {
+          'event_id': 'e',
+          'label': 'E',
+          'metric_schema_version': 'g-1',
+          'phases': ['p1', 'p2'],
+          'metrics': [
+            {'key': 'knee', 'kind': 'joint_angle', 'phase': 'p1', 'unit': '°',
+             'joints': ['left_hip', 'left_knee', 'left_ankle']},
+            {'key': 'p2_time', 'kind': 'phase_duration', 'phase': 'p2', 'unit': 's'},
+          ],
+          'heads': [
+            {'name': 'knee_residual', 'kind': 'mlp_residual', 'base': 'k/v1',
+             'target_metric': 'knee'},
+          ],
+        },
+      ],
+    });
+    for (final def in [generic, timber]) {
       for (final e in def.events) {
         final out = await AnalysisEngine(pack: e.analysis).analyze(clip);
         final json = jsonDecode(jsonEncode(out.toJson()));

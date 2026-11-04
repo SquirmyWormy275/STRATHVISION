@@ -18,3 +18,4 @@ export 'src/compare.dart';
 export 'src/patch.dart';
 export 'src/probes.dart';
 export 'src/pack_file.dart';
+export 'src/harness.dart';

@@ -30,8 +30,16 @@ class AnalysisFailure extends AnalysisOutcome {
 
 class AnalysisDetail {
   const AnalysisDetail(this.outcome, this.phasePoseConfidence,
-      {this.implementConfidence = 0});
+      {this.implementConfidence = 0,
+      this.features = const [],
+      this.headBases = const {}});
   final AnalysisOutcome outcome;
+
+  /// The feature vector given to the heads (harness input).
+  final List<double> features;
+
+  /// Per head: the measured error it started from (target − reference).
+  final Map<String, double> headBases;
 
   /// Mean implement-track confidence over the clip (probe input).
   final double implementConfidence;
@@ -104,11 +112,13 @@ class AnalysisEngine {
           metrics: metrics);
       final targets = {for (final d in pack.heads) d.name: d.targetMetric};
       final residuals = <String, double>{};
+      final bases = <String, double>{};
       for (final h in heads) {
         final target = targets[h.name];
         final measured = target == null ? null : metrics[target]?.value;
         final ref = target == null ? null : reference[target];
         final base = measured == null || ref == null ? 0.0 : measured - ref;
+        bases[h.name] = base;
         residuals[h.name] = _r(h.evaluate(features, base: base));
       }
       final vector = MetricVector(
@@ -135,7 +145,10 @@ class AnalysisEngine {
       return AnalysisDetail(AnalysisSuccess(vector), {
         for (final e in spans.entries)
           e.key: _r(_phasePoseConfidence(track, e.value)),
-      }, implementConfidence: _r(trackConf));
+      },
+          implementConfidence: _r(trackConf),
+          features: features,
+          headBases: bases);
     } on AnalysisError catch (e) {
       return AnalysisDetail(AnalysisFailure(e), const {});
     }

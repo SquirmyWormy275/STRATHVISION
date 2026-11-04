@@ -42,12 +42,41 @@ enum Aggregate {
 
 /// A specialist residual head the pack declares. The engine knows the
 /// generic kind; name, base weights, and target metric are pack data.
+/// Patch acceptance rules for a head (DECISIONS.md "Specialist Net
+/// Harness"), stated in the pack because they name its probes.
+class AcceptanceRules {
+  const AcceptanceRules({
+    required this.primaryProbe,
+    required this.minImprovement,
+    this.noRegress = const [],
+    this.withinFraction = const {},
+    this.maxWeightFraction = 0.02,
+  });
+
+  /// Probe whose magnitude must shrink by at least [minImprovement].
+  final String primaryProbe;
+  final double minImprovement;
+
+  /// Probes whose magnitude must not grow.
+  final List<String> noRegress;
+
+  /// Probes that must stay within this relative change.
+  final Map<String, double> withinFraction;
+
+  /// Edits must touch fewer than this fraction of the head's weights.
+  final double maxWeightFraction;
+}
+
 class HeadDef {
   const HeadDef({
     required this.name,
     required this.base,
     required this.targetMetric,
+    this.acceptance,
   });
+
+  /// Null: the head cannot be patched on the workbench.
+  final AcceptanceRules? acceptance;
 
   /// Key in `specialist_residuals`.
   final String name;
@@ -358,7 +387,41 @@ class AnalysisPack {
         } else if (target is! String || !keys.contains(target)) {
           problems.add('$path.target_metric must be one of the pack metrics');
         } else if (h['kind'] == 'mlp_residual') {
-          heads.add(HeadDef(name: name, base: base, targetMetric: target));
+          AcceptanceRules? rules;
+          final a = h['acceptance'];
+          if (a != null) {
+            final primary = a is Map ? a['primary_probe'] : null;
+            final minImp = a is Map ? a['min_improvement'] : null;
+            final noReg = a is Map ? (a['no_regress'] ?? const []) : null;
+            final within = a is Map ? (a['within_fraction'] ?? const {}) : null;
+            final maxFrac = a is Map ? (a['max_weight_fraction'] ?? 0.02) : null;
+            if (primary is! String ||
+                minImp is! num ||
+                minImp <= 0 ||
+                noReg is! List ||
+                noReg.any((x) => x is! String) ||
+                within is! Map ||
+                within.values.any((x) => x is! num || x < 0) ||
+                maxFrac is! num ||
+                maxFrac <= 0 ||
+                maxFrac > 1) {
+              problems.add('$path.acceptance needs primary_probe, '
+                  'min_improvement > 0, no_regress (list), within_fraction '
+                  '(map of fractions), max_weight_fraction in (0, 1]');
+            } else {
+              rules = AcceptanceRules(
+                primaryProbe: primary,
+                minImprovement: minImp.toDouble(),
+                noRegress: noReg.cast<String>(),
+                withinFraction: {
+                  for (final e in within.entries) '${e.key}': (e.value as num).toDouble(),
+                },
+                maxWeightFraction: maxFrac.toDouble(),
+              );
+            }
+          }
+          heads.add(HeadDef(
+              name: name, base: base, targetMetric: target, acceptance: rules));
         }
       }
     }
@@ -396,6 +459,17 @@ class AnalysisPack {
             attribute: pr['attribute'] as String?,
             tolerance: tol is num ? tol.toDouble() : 0,
           ));
+        }
+      }
+    }
+
+    for (final h in heads) {
+      final a = h.acceptance;
+      if (a == null) continue;
+      final names = {for (final p in probes.where((p) => p.head == h.name)) p.name};
+      for (final n in [a.primaryProbe, ...a.noRegress, ...a.withinFraction.keys]) {
+        if (!names.contains(n)) {
+          problems.add('heads ${h.name}: acceptance names unknown probe "$n"');
         }
       }
     }
