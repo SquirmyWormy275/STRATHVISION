@@ -139,3 +139,18 @@ Optional surface for parameter history. Must not appear on primary paths.
 - Dismiss returns the user to the exact stroke and playhead they left.
 
 This is the only place the evolving model becomes quietly visible. Daily use never requires it.
+
+## Package Export Sheet
+
+Plain-language sharing surface. Must make the contents obvious before anything leaves the device.
+
+- Reached from secondary actions (one level down) or by long-press on an overlay name.
+- Displays the coach and event name large, followed by three explicit choices:
+  1. Coaching profile only (default) — “Just the model. No notes or marks.”
+  2. Coaching profile + my marks — “Includes the grades you gave.”
+  3. Full local overlay — “Everything for this coach and event.”
+- A single sentence states exactly what is included and what is stripped before the package is written.
+- One large export button. The resulting package is handed to the existing code / QR, system share sheet, or folder paths.
+- Version identifiers, hashes, and internal IDs remain hidden unless the user expands a “Details” disclosure.
+
+Sharing feels like choosing what to hand someone, not like managing a model file.
