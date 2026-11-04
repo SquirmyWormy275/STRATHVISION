@@ -57,6 +57,14 @@ scripts/run_android_player_test.sh [device-id]
 
 Flutter only builds Windows apps on Windows, and only builds iOS and macOS apps on macOS.
 
+## Phase 6 manual check
+
+1. Launch. The Library's top bar shows **Underhand ▾**, the first event of the bundled Timber pack.
+2. Tap it and choose **Standing block**. The choice is kept after a restart.
+3. Open a review and add a clip. The mark chips are Slope, Spacing, Hinge and Path. **Analyze** lists timber metrics such as Entry slope and Hinge at entry.
+4. Build a profile for the event, then compare a clip with it. `slope_residual` is the entry-slope error against that coach.
+5. To add or swap a pack, drop a pack file (INTERFACES.md "Pack File") into `assets/packs/` and rebuild the app. The engine doesn't change.
+
 ## Phase 5 manual check
 
 1. Build a profile (Phase 4 check) or import one for the same pack/event.

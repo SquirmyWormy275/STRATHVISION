@@ -16,3 +16,5 @@ export 'src/profile.dart';
 export 'src/scoring.dart';
 export 'src/compare.dart';
 export 'src/patch.dart';
+export 'src/probes.dart';
+export 'src/pack_file.dart';

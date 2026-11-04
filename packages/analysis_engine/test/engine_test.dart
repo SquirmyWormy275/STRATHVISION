@@ -36,7 +36,18 @@ const packJson = {
       'unit': 's',
     },
   ],
+  'heads': [
+    {
+      'name': 'slope_residual',
+      'kind': 'mlp_residual',
+      'base': 'slope_residual/test/v1',
+      'target_metric': 'example_inclination',
+    },
+  ],
 };
+
+const testBase = 'slope_residual/test/v1';
+MlpHead testHead() => MlpHead.base('slope_residual', testBase);
 
 const clip = ClipSource(
     clipId: '0b7e7c1e-0000-4000-8000-000000000001',
@@ -179,19 +190,19 @@ void main() {
     });
   });
 
-  group('slope_residual stub head', () {
-    test('has the DECISIONS.md shape and returns a number', () {
-      final h = stubSlopeResidualHead();
+  group('residual head', () {
+    test('has the DECISIONS.md shape; unpatched it returns the measured error',
+        () {
+      final h = testHead();
       expect(h.name, 'slope_residual');
       expect(h.parameterCount, 2113);
       expect(h.parameterCount, lessThan(10000));
-      final y = h.evaluate(List.filled(featureWidth, 0.3));
-      expect(y.isFinite, isTrue);
-      expect(y, isNot(0));
+      expect(h.evaluate(List.filled(featureWidth, 0.3)), 0);
+      expect(h.evaluate(List.filled(featureWidth, 0.3), base: 2.5), 2.5);
     });
 
     test('rejects a feature vector of the wrong width', () {
-      expect(() => stubSlopeResidualHead().evaluate([1, 2, 3]),
+      expect(() => testHead().evaluate([1, 2, 3]),
           throwsArgumentError);
     });
   });
@@ -206,7 +217,7 @@ void main() {
 
     test('missing specialist_residuals.slope_residual is invalid', () {
       good['specialist_residuals'] = <String, Object?>{};
-      expect(validateMetricVector(good),
+      expect(validateMetricVector(good, requiredResiduals: ['slope_residual']),
           contains('specialist_residuals.slope_residual is required'));
     });
 

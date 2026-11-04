@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T15:14:43Z
+heartbeat: 2026-11-04T15:25:19Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Phase 6: read EXECUTION_PLAN Phase 6 (timber pack + slope_residual net) and start task 1
+next: Phase 7: read EXECUTION_PLAN Phase 7 (workbench harness + compile-once adapters) and DECISIONS weight-space layers 1-2; start task 1
 <!-- STATE:END -->
 
 ## Phase progress
@@ -20,9 +20,12 @@ next: Phase 6: read EXECUTION_PLAN Phase 6 (timber pack + slope_residual net) an
 | 3 Analysis Runtime Skeleton | **done**. `packages/analysis_engine` (18 tests), Analyze button and panel (6 app tests), real-decoder Analyze test passes on Linux. Pose, implement and phase stages are stubs behind real interfaces |
 | 4 Profile Builder | **done**. The engine builder (quality, fit, leave-one-out self-consistency, gates, export) has 31 engine tests. The Build a profile screen has 4 app tests. The real-decoder probe test passes on Linux |
 | 5 Style Comparison | **done**. `compare()` and the patch loader have 47 engine tests. The panel shows score, expandable ranked deltas, warnings and the profile picker. Results are stored (DB v3). 68 app tests and 3 Linux real-decoder tests pass |
-| 6–9 | not started |
+| 6 Timber Pack + Specialist Net | **done**. Timber pack (underhand and standing block) as JSON, loaded at runtime. Heads and probes are pack-declared, and the residual head is real (measured error + MLP correction). Engine: 56 tests, including a no-domain-strings scan. App: 71 tests. 3 Linux real-decoder tests pass |
+| 7–9 | not started |
 
 ## Blockers / questions for the human
+
+- **Review the timber pack v1** (`apps/strathvision/assets/packs/timber.json`): phases, metrics, weights, attribute names. It is an initial catalog written without a coach. Also review the probe interpretations in DECISIONS.md Phase 6.
 
 - **Confirm the profile-gate defaults** (not blocking; they are pack-overridable): `min_critical_pose_confidence` 0.6 and `self_consistency_threshold` 0.5. Without a per-metric `min_spread`, leave-one-out scores sit around 0.6–0.7 for most footage (DECISIONS.md, Phase 4). Real packs should set `min_spread` per metric.
 
@@ -42,6 +45,7 @@ next: Phase 6: read EXECUTION_PLAN Phase 6 (timber pack + slope_residual net) an
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T15:25:19Z **claude** — Phase 6 done: timber pack (underhand, standing block) as runtime-loaded JSON; event picker in Library (settings table, DB v4); heads + five probes declared by the pack; real slope_residual = measured entry-slope error vs coach + MLP correction (patchable); generic aggregates; PackDefinition parser; engine has no timber strings (test-enforced). 56 engine + 71 app + 3 Linux real-decoder tests; release build runs. → next: Phase 7: read EXECUTION_PLAN Phase 7 (workbench harness + compile-once adapters) and DECISIONS weight-space layers 1-2; start task 1
 - 2026-11-04T15:14:43Z **claude** — Phase 5 done: compare-with-profile in the Analysis panel (score, expandable ranked deltas with definition/values/phase, warnings, patches line), patches loaded from package and applied in the isolate, comparison results stored (DB schema v3 comparison_rows). INTERFACES: Comparison rules + Specialist Patch format. 47 engine + 68 app + 3 Linux real-decoder tests pass. → next: Phase 6: read EXECUTION_PLAN Phase 6 (timber pack + slope_residual net) and start task 1
 - 2026-11-04T15:10:11Z **claude** — Phase 5 tasks 1+5 (engine): compare() MetricVector+Profile → ComparisonResult per new INTERFACES 'Comparison rules' (contribution ranking, coverage, warnings, nearest refs); specialist patch format in INTERFACES + loader (PATCH_REJECTED, ≤2% weights, highest valid version) + applyPatches; describeMetric. 47 engine tests pass. → next: Phase 5 app: readProfileBundle (profile + patches from zip/dir), DB table for comparison results (schema v3), AnalysisController compare-with-profile, score + expandable ranked deltas + warnings in the Analysis panel
 - 2026-11-04T15:07:33Z **claude** — Phase 4 done: Build a profile screen (Library → person-plus): clip import with per-clip quality, Build → ready profile stored as zip (profile.json + specialist_patches/ + adapters/) and listed in Library, or Error-Contract rejection; Save a copy. Headless media_kit probe (vid=auto fix). Drift row class renamed ProfileRow. 59 app + 31 engine + 3 Linux real-decoder tests pass. Docs: INTERFACES gates/pack fields, DECISIONS Phase 4. → next: Phase 5 task 1: comparison engine in packages/analysis_engine/lib/src/compare.dart: MetricVector + Profile → ComparisonResult (ranked deltas by contribution, coverage, nearest reference clips, applied_patches), schema checks per INTERFACES Versioning Rules

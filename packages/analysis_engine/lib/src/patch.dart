@@ -31,7 +31,7 @@ class SpecialistPatch {
   final List<PatchEdit> edits;
   final String notes;
 
-  /// Name used in `applied_patches`, e.g. `slope_residual_v3`.
+  /// Name used in `applied_patches`: `<head>_v<version>`.
   String get name => '${head}_v$version';
   String get fileName => '$name.patch';
 
@@ -195,6 +195,3 @@ List<SpecialistHead> applyPatches(
       }(),
   ];
 }
-
-/// The specialist heads every engine starts from.
-List<SpecialistHead> defaultHeads() => [stubSlopeResidualHead()];

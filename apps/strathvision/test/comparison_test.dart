@@ -52,7 +52,7 @@ void main() {
   String patchV2() => jsonEncode({
         'head': 'slope_residual',
         'version': 2,
-        'base': 'slope_residual/stub/v0',
+        'base': 'slope_residual/placeholder/v1',
         'edits': [
           {'tensor': 'b2', 'index': [], 'delta': 0.25},
         ],
@@ -83,14 +83,15 @@ void main() {
       );
       analysis = AnalysisController(
         workspace: ws,
-        run: (clip, p) {
+        pack: pack,
+        run: (clip, p, reference) {
           patchesSeen.add(p);
           return AnalysisEngine(
                   pack: pack,
                   // The athlete: a different style from the coach.
                   pose: const StubPoseEstimator(styleSeed: 7),
-                  heads: applyPatches(defaultHeads(), p))
-              .analyze(clip);
+                  heads: applyPatches(headsFor(pack), p))
+              .analyze(clip, reference: reference);
         },
         listProfiles: () async => choices ??
             const [

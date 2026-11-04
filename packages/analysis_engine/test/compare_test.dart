@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:analysis_engine/analysis_engine.dart';
 import 'package:test/test.dart';
 
-import 'engine_test.dart' show packJson;
+import 'engine_test.dart' show packJson, testBase, testHead;
 
 /// Phase 5 acceptance: deterministic scoring, top deltas = largest measured
 /// differences, low confidence → warnings, applied patches in the result.
@@ -171,9 +171,9 @@ void main() {
   });
 
   group('specialist patches', () {
-    final heads = defaultHeads();
+    final heads = <SpecialistHead>[testHead()];
     String patch(int version, List<Map<String, Object?>> edits,
-            {String base = 'slope_residual/stub/v0', String head = 'slope_residual'}) =>
+            {String base = testBase, String head = 'slope_residual'}) =>
         jsonEncode({'head': head, 'version': version, 'base': base, 'edits': edits});
 
     test('valid patch is applied and changes the residual', () async {
@@ -197,7 +197,8 @@ void main() {
           .analyze(clip)) as AnalysisSuccess;
       final d = patched.vector.specialistResiduals['slope_residual']! -
           base.vector.specialistResiduals['slope_residual']!;
-      expect(d, greaterThan(0.9)); // b2 + 1.0 (plus a tiny w1 effect)
+      // b2 + 1.0; the w1 edit has no effect while w2 is still zero.
+      expect(d, closeTo(1.0, 1e-3));
       // Metrics are untouched by head patches.
       expect(jsonEncode(patched.vector.metrics), jsonEncode(base.vector.metrics));
     });

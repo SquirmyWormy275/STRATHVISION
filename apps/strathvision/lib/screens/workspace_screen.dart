@@ -22,13 +22,15 @@ Future<String?> pickClipFile() async {
 /// Dual-video workspace. Video takes most of the screen; the stepper sits
 /// under the video and the mark controls bottom-right (UI_UX_PRINCIPLES.md).
 class WorkspaceScreen extends StatefulWidget {
-  const WorkspaceScreen({
+  WorkspaceScreen({
     super.key,
     required this.controller,
     this.pickClip = pickClipFile,
-    this.pack = placeholderPack,
+    PackInfo? pack,
     this.analysis,
-  });
+  }) : pack = pack ?? _defaultPack;
+
+  static PackInfo get _defaultPack => placeholderPack;
 
   final WorkspaceController controller;
 

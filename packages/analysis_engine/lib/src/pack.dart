@@ -28,6 +28,78 @@ enum MetricKind {
   }
 }
 
+/// How per-frame values inside the phase reduce to one number.
+enum Aggregate {
+  mean, start, end, min, max;
+
+  static Aggregate? fromWire(Object? s) {
+    for (final a in values) {
+      if (a.name == s) return a;
+    }
+    return null;
+  }
+}
+
+/// A specialist residual head the pack declares. The engine knows the
+/// generic kind; name, base weights, and target metric are pack data.
+class HeadDef {
+  const HeadDef({
+    required this.name,
+    required this.base,
+    required this.targetMetric,
+  });
+
+  /// Key in `specialist_residuals`.
+  final String name;
+
+  /// Base-weights id; patches must name it.
+  final String base;
+
+  /// Metric whose error versus the coach reference the head refines.
+  final String targetMetric;
+}
+
+/// Generic probe kinds over per-clip head residuals (DECISIONS.md probes).
+enum ProbeKind {
+  meanAbsResidual('mean_abs_residual'),
+  signedMeanResidual('signed_mean_residual'),
+  markAgreement('mark_agreement'),
+  residualVariance('residual_variance'),
+  confidenceCorrelation('confidence_correlation');
+
+  const ProbeKind(this.wire);
+  final String wire;
+
+  static ProbeKind? fromWire(Object? s) {
+    for (final k in values) {
+      if (k.wire == s) return k;
+    }
+    return null;
+  }
+}
+
+/// A probe registered by the pack on one of its heads.
+class ProbeDef {
+  const ProbeDef({
+    required this.name,
+    required this.head,
+    required this.kind,
+    this.attribute,
+    this.tolerance = 0,
+  });
+
+  final String name;
+  final String head;
+  final ProbeKind kind;
+
+  /// mark_agreement: the attribute whose red/green marks are compared.
+  final String? attribute;
+
+  /// mark_agreement: |residual| below this agrees with green, at or above
+  /// with red (metric units).
+  final double tolerance;
+}
+
 class MetricDef {
   const MetricDef({
     required this.key,
@@ -37,6 +109,7 @@ class MetricDef {
     this.joints = const [],
     this.weight = 1.0,
     this.minSpread = 0.0,
+    this.aggregate = Aggregate.mean,
   });
 
   final String key;
@@ -51,6 +124,9 @@ class MetricDef {
   /// Floor for the fitted spread, in [unit]. Keeps a near-constant metric
   /// from dominating the score.
   final double minSpread;
+
+  /// joint_angle and implement_inclination: how frames in the phase reduce.
+  final Aggregate aggregate;
 }
 
 /// The part of a pack the analysis runtime reads: phase order, metric
@@ -68,6 +144,8 @@ class AnalysisPack {
     List<String>? criticalPhases,
     this.minCriticalPoseConfidence = 0.6,
     this.selfConsistencyThreshold = 0.5,
+    this.heads = const [],
+    this.probes = const [],
   }) : criticalPhases = criticalPhases ?? phases;
 
   final String packId;
@@ -97,6 +175,12 @@ class AnalysisPack {
   /// Profile builder: held-out clips must average at least this style-match
   /// score against the profile fitted from the rest.
   final double selfConsistencyThreshold;
+
+  /// Specialist residual heads, each reported in `specialist_residuals`.
+  final List<HeadDef> heads;
+
+  /// Probes registered on those heads.
+  final List<ProbeDef> probes;
 
   /// Reads an event's analysis section from pack JSON, or throws
   /// [AnalysisError] with SCHEMA_MISMATCH listing every problem.
@@ -188,6 +272,18 @@ class AnalysisPack {
           problems.add('$path.weight must be a number >= 0');
           ok.add(false);
         }
+        final aggregate = Aggregate.fromWire(m['aggregate'] ?? 'mean');
+        if (aggregate == null) {
+          problems.add('$path.aggregate must be one of '
+              '${Aggregate.values.map((a) => a.name).join(' | ')}');
+          ok.add(false);
+        } else if (aggregate != Aggregate.mean &&
+            kind != MetricKind.jointAngle &&
+            kind != MetricKind.implementInclination) {
+          problems.add('$path.aggregate applies only to joint_angle and '
+              'implement_inclination');
+          ok.add(false);
+        }
         final minSpread = m['min_spread'] ?? 0.0;
         if (minSpread is! num || minSpread < 0) {
           problems.add('$path.min_spread must be a number >= 0');
@@ -202,6 +298,7 @@ class AnalysisPack {
             joints: joints,
             weight: (weight as num).toDouble(),
             minSpread: (minSpread as num).toDouble(),
+            aggregate: aggregate!,
           ));
         }
       }
@@ -238,6 +335,71 @@ class AnalysisPack {
       return dflt;
     }
 
+    final heads = <HeadDef>[];
+    final rawHeads = json['heads'] ?? const [];
+    if (rawHeads is! List) {
+      problems.add('heads must be a list');
+    } else {
+      for (var i = 0; i < rawHeads.length; i++) {
+        final h = rawHeads[i];
+        final path = 'heads[$i]';
+        if (h is! Map) {
+          problems.add('$path must be an object');
+          continue;
+        }
+        final name = h['name'], base = h['base'], target = h['target_metric'];
+        if (h['kind'] != 'mlp_residual') {
+          problems.add('$path.kind must be mlp_residual');
+        }
+        if (name is! String || name.isEmpty || heads.any((x) => x.name == name)) {
+          problems.add('$path.name must be a unique non-empty string');
+        } else if (base is! String || base.isEmpty) {
+          problems.add('$path.base must be a non-empty string');
+        } else if (target is! String || !keys.contains(target)) {
+          problems.add('$path.target_metric must be one of the pack metrics');
+        } else if (h['kind'] == 'mlp_residual') {
+          heads.add(HeadDef(name: name, base: base, targetMetric: target));
+        }
+      }
+    }
+
+    final probes = <ProbeDef>[];
+    final rawProbes = json['probes'] ?? const [];
+    if (rawProbes is! List) {
+      problems.add('probes must be a list');
+    } else {
+      for (var i = 0; i < rawProbes.length; i++) {
+        final pr = rawProbes[i];
+        final path = 'probes[$i]';
+        if (pr is! Map) {
+          problems.add('$path must be an object');
+          continue;
+        }
+        final name = pr['name'], head = pr['head'];
+        final kind = ProbeKind.fromWire(pr['kind']);
+        final tol = pr['tolerance'] ?? 0;
+        if (name is! String || name.isEmpty || probes.any((x) => x.name == name)) {
+          problems.add('$path.name must be a unique non-empty string');
+        } else if (head is! String || !heads.any((h) => h.name == head)) {
+          problems.add('$path.head must name a pack head');
+        } else if (kind == null) {
+          problems.add('$path.kind must be one of '
+              '${ProbeKind.values.map((k) => k.wire).join(' | ')}');
+        } else if (kind == ProbeKind.markAgreement &&
+            (pr['attribute'] is! String || tol is! num || tol <= 0)) {
+          problems.add('$path: mark_agreement needs attribute and tolerance > 0');
+        } else {
+          probes.add(ProbeDef(
+            name: name,
+            head: head,
+            kind: kind,
+            attribute: pr['attribute'] as String?,
+            tolerance: tol is num ? tol.toDouble() : 0,
+          ));
+        }
+      }
+    }
+
     final minCritical = unit('min_critical_pose_confidence', 0.6);
     final selfConsistency = unit('self_consistency_threshold', 0.5);
 
@@ -258,6 +420,8 @@ class AnalysisPack {
       criticalPhases: critical,
       minCriticalPoseConfidence: minCritical,
       selfConsistencyThreshold: selfConsistency,
+      heads: heads,
+      probes: probes,
     );
   }
 }
@@ -270,12 +434,22 @@ String describeMetric(MetricDef m, {String Function(String phase)? phaseLabel}) 
   final phase = phaseLabel?.call(m.phase) ?? m.phase;
   final joints = m.joints.map(_jointLabel).join(' · ');
   return switch (m.kind) {
-    MetricKind.jointAngle =>
-      'Average angle at the ${_jointLabel(m.joints[1])} ($joints) during $phase.',
+    MetricKind.jointAngle => switch (m.aggregate) {
+        Aggregate.start => 'Angle at the ${_jointLabel(m.joints[1])} ($joints) as $phase begins.',
+        Aggregate.end => 'Angle at the ${_jointLabel(m.joints[1])} ($joints) as $phase ends.',
+        Aggregate.min => 'Smallest angle at the ${_jointLabel(m.joints[1])} ($joints) during $phase.',
+        Aggregate.max => 'Largest angle at the ${_jointLabel(m.joints[1])} ($joints) during $phase.',
+        Aggregate.mean => 'Average angle at the ${_jointLabel(m.joints[1])} ($joints) during $phase.',
+      },
     MetricKind.jointRange =>
       'How far the angle at the ${_jointLabel(m.joints[1])} ($joints) opens and closes during $phase.',
-    MetricKind.implementInclination =>
-      'Average angle of the implement above horizontal during $phase.',
+    MetricKind.implementInclination => switch (m.aggregate) {
+        Aggregate.start => 'Angle of the implement above horizontal as $phase begins.',
+        Aggregate.end => 'Angle of the implement above horizontal as $phase ends.',
+        Aggregate.min => 'Lowest angle of the implement above horizontal during $phase.',
+        Aggregate.max => 'Highest angle of the implement above horizontal during $phase.',
+        Aggregate.mean => 'Average angle of the implement above horizontal during $phase.',
+      },
     MetricKind.phaseDuration => 'How long $phase lasts.',
   };
 }

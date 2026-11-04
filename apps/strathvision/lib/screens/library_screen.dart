@@ -2,8 +2,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import 'package:analysis_engine/analysis_engine.dart' show PackDefinition;
+
 import '../analysis/analysis_controller.dart';
 import '../data/database.dart';
+import '../packs/pack_registry.dart';
+import '../packs/placeholder_pack.dart';
 import '../profiles/builder_controller.dart';
 import '../profiles/profile_package.dart';
 import '../workspace/project.dart';
@@ -34,6 +38,7 @@ class LibraryScreen extends StatelessWidget {
     this.analysisRunner,
     this.profileBuilder = defaultProfileBuilder,
     this.pickClips = pickReferenceClips,
+    this.packs = const [],
   });
 
   final AppDatabase db;
@@ -41,11 +46,17 @@ class LibraryScreen extends StatelessWidget {
   final ClipPathPicker pickClip;
   final StagePlayerFactory playerFactory;
   final AnalysisRunner? analysisRunner;
-  final ProfileBuilderController Function(AppDatabase db) profileBuilder;
+  final ProfileBuilderController Function(AppDatabase db, PackInfo pack)
+      profileBuilder;
   final ClipsPicker pickClips;
 
-  Future<void> _buildProfile(BuildContext context) async {
-    final controller = profileBuilder(db);
+  /// Installed packs (empty = built-in placeholder only).
+  final List<PackDefinition> packs;
+
+  List<PackDefinition> get _packs => packs.isEmpty ? [placeholderDefinition] : packs;
+
+  Future<void> _buildProfile(BuildContext context, PackInfo pack) async {
+    final controller = profileBuilder(db, pack);
     await Navigator.of(context).push(MaterialPageRoute<void>(
       builder: (_) =>
           ProfileBuilderScreen(controller: controller, pickClips: pickClips),
@@ -74,11 +85,12 @@ class LibraryScreen extends StatelessWidget {
     }
   }
 
-  void _openProject(BuildContext context, Project project) {
+  void _openProject(BuildContext context, Project project, PackInfo pack) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (_) => WorkspaceRoute(
         db: db,
         project: project,
+        pack: pack,
         pickClip: pickClip,
         playerFactory: playerFactory,
         analysisRunner: analysisRunner,
@@ -86,33 +98,66 @@ class LibraryScreen extends StatelessWidget {
     ));
   }
 
-  Future<void> _newReview(BuildContext context) async {
+  Future<void> _newReview(BuildContext context, PackInfo pack) async {
     final now = DateTime.now();
     final project = Project(
       projectId: const Uuid().v4(),
       name: 'Review ${_shortDate(now)}',
     );
     await db.saveProject(project);
-    if (context.mounted) _openProject(context, project);
+    if (context.mounted) _openProject(context, project, pack);
   }
 
-  Future<void> _reopen(BuildContext context, String projectId) async {
+  Future<void> _reopen(
+      BuildContext context, String projectId, PackInfo pack) async {
     final project = await db.loadProject(projectId);
-    if (project != null && context.mounted) _openProject(context, project);
+    if (project != null && context.mounted) {
+      _openProject(context, project, pack);
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => StreamBuilder<String?>(
+        stream: db.watchSetting(AppDatabase.activeEventKey),
+        builder: (context, snap) =>
+            _build(context, activePack(_packs, snap.data)),
+      );
+
+  Widget _eventPicker(BuildContext context, PackInfo pack) {
+    final all = PackInfo.all(_packs);
+    if (all.length < 2) return const SizedBox.shrink();
+    return PopupMenuButton<String>(
+      key: const Key('event-picker'),
+      tooltip: 'Choose the event',
+      initialValue: pack.key,
+      onSelected: (k) => db.setSetting(AppDatabase.activeEventKey, k),
+      itemBuilder: (_) => [
+        for (final p in all)
+          PopupMenuItem(
+              key: Key('event-${p.key}'), value: p.key, child: Text(p.label)),
+      ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          Text(pack.event.label, key: const Key('active-event')),
+          const Icon(Icons.arrow_drop_down),
+        ]),
+      ),
+    );
+  }
+
+  Widget _build(BuildContext context, PackInfo pack) {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Library'),
         actions: [
+          _eventPicker(context, pack),
           IconButton(
             key: const Key('build-profile'),
             tooltip: 'Build a profile',
             icon: const Icon(Icons.person_add_alt),
-            onPressed: () => _buildProfile(context),
+            onPressed: () => _buildProfile(context, pack),
           ),
           IconButton(
             key: const Key('import-profile'),
@@ -143,7 +188,7 @@ class LibraryScreen extends StatelessWidget {
                       leading: const Icon(Icons.video_library_outlined),
                       title: Text(p.name),
                       subtitle: Text('Edited ${_shortDate(p.updatedAt)}'),
-                      onTap: () => _reopen(context, p.projectId),
+                      onTap: () => _reopen(context, p.projectId, pack),
                     ),
                 ],
                 if (profiles.isNotEmpty) ...[
@@ -159,7 +204,7 @@ class LibraryScreen extends StatelessWidget {
         key: const Key('open-workspace'),
         icon: const Icon(Icons.add),
         label: const Text('New review'),
-        onPressed: () => _newReview(context),
+        onPressed: () => _newReview(context, pack),
       ),
     );
   }

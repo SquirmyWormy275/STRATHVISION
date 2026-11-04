@@ -243,12 +243,11 @@ class _Check {
   }
 }
 
-/// Specialist residual heads that every Metric Vector must report
-/// (INTERFACES.md lists `slope_residual`; DECISIONS.md makes it the day-one net).
-const requiredSpecialistResiduals = ['slope_residual'];
-
 /// Validates a Metric Vector JSON object against INTERFACES.md.
-List<String> validateMetricVector(Object? json) {
+/// [requiredResiduals] are the heads the pack declares; each must appear in
+/// `specialist_residuals`.
+List<String> validateMetricVector(Object? json,
+    {List<String> requiredResiduals = const []}) {
   final c = _Check();
   final j = c.obj(json, 'metric_vector');
   if (j == null) return c.problems;
@@ -295,7 +294,7 @@ List<String> validateMetricVector(Object? json) {
 
   final residuals = c.obj(j['specialist_residuals'], 'specialist_residuals');
   if (residuals != null) {
-    for (final k in requiredSpecialistResiduals) {
+    for (final k in requiredResiduals) {
       if (!residuals.containsKey(k)) {
         c.problems.add('specialist_residuals.$k is required');
       }

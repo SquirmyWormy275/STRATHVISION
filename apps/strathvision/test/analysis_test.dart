@@ -33,7 +33,7 @@ void main() {
   });
   tearDown(() => db.close());
 
-  AnalysisRunner recording(AnalysisEngine engine) => (clip, patches) async {
+  AnalysisRunner recording(AnalysisEngine engine) => (clip, patches, reference) async {
         requests.add(clip);
         final out = await engine.analyze(clip);
         outputs.add(
@@ -158,7 +158,7 @@ void main() {
 
   test('isolate runner returns a valid Metric Vector', () async {
     final out = await isolateRunner(pack)(const ClipSource(
-        clipId: 'c1', path: '/clips/a.mp4', durationMs: 8000, fps: 25), const []);
+        clipId: 'c1', path: '/clips/a.mp4', durationMs: 8000, fps: 25), const [], const {});
     expect(out, isA<AnalysisSuccess>());
     expect(validateMetricVector(out.toJson()), isEmpty);
   });

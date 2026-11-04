@@ -63,7 +63,17 @@ class ComparisonRows extends Table {
   Set<Column> get primaryKey => {resultId};
 }
 
-@DriftDatabase(tables: [Profiles, ProjectRows, ComparisonRows])
+/// Small app settings (for example the active pack/event).
+@DataClassName('SettingRow')
+class Settings extends Table {
+  TextColumn get key => text()();
+  TextColumn get value => text()();
+
+  @override
+  Set<Column> get primaryKey => {key};
+}
+
+@DriftDatabase(tables: [Profiles, ProjectRows, ComparisonRows, Settings])
 class AppDatabase extends _$AppDatabase implements ProjectStore {
   AppDatabase([QueryExecutor? executor])
       : super(executor ??
@@ -75,7 +85,7 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
             ));
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -83,6 +93,7 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
         onUpgrade: (m, from, to) async {
           if (from < 2) await m.createTable(projectRows);
           if (from < 3) await m.createTable(comparisonRows);
+          if (from < 4) await m.createTable(settings);
         },
       );
 
@@ -109,6 +120,18 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
   Stream<List<ProjectRow>> watchProjects() => (select(projectRows)
         ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
       .watch();
+
+  // ---- settings -----------------------------------------------------------
+
+  static const activeEventKey = 'active_event';
+
+  Future<void> setSetting(String key, String value) => into(settings)
+      .insertOnConflictUpdate(SettingsCompanion.insert(key: key, value: value));
+
+  Stream<String?> watchSetting(String key) =>
+      (select(settings)..where((t) => t.key.equals(key)))
+          .watchSingleOrNull()
+          .map((r) => r?.value);
 
   // ---- comparison results -------------------------------------------------
 

@@ -28,7 +28,7 @@ Map<String, MetricValue> extractMetrics({
         if (angles.isEmpty) {
           value = 0;
         } else if (m.kind == MetricKind.jointAngle) {
-          value = angles.reduce((x, y) => x + y) / angles.length;
+          value = _aggregate(angles, m.aggregate);
         } else {
           value = angles.reduce(math.max) - angles.reduce(math.min);
         }
@@ -37,7 +37,7 @@ Map<String, MetricValue> extractMetrics({
         final imp = implement.frames.where((i) => inSpan(i.frame)).toList();
         value = imp.isEmpty
             ? 0
-            : imp.map((i) => i.inclinationDeg).reduce((x, y) => x + y) / imp.length;
+            : _aggregate([for (final i in imp) i.inclinationDeg], m.aggregate);
         conf = imp.isEmpty
             ? 0
             : imp.map((i) => i.confidence).reduce((x, y) => x + y) / imp.length;
@@ -53,6 +53,14 @@ Map<String, MetricValue> extractMetrics({
   }
   return out;
 }
+
+double _aggregate(List<double> xs, Aggregate a) => switch (a) {
+      Aggregate.mean => xs.reduce((x, y) => x + y) / xs.length,
+      Aggregate.start => xs.first,
+      Aggregate.end => xs.last,
+      Aggregate.min => xs.reduce(math.min),
+      Aggregate.max => xs.reduce(math.max),
+    };
 
 /// Mean over frames of the weakest joint confidence among [joints].
 double _meanMin(List<PoseFrame> frames, List<Joint> joints) {

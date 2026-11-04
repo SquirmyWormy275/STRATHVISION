@@ -1,16 +1,20 @@
+import 'package:analysis_engine/analysis_engine.dart' show PackDefinition;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 
 import 'analysis/analysis_controller.dart';
 import 'data/database.dart';
+import 'packs/pack_registry.dart';
 import 'screens/library_screen.dart';
 import 'screens/workspace_route.dart';
 import 'screens/workspace_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  runApp(StrathvisionApp(db: AppDatabase()));
+  final packs = await loadPacks(rootBundle);
+  runApp(StrathvisionApp(db: AppDatabase(), packs: packs));
 }
 
 class StrathvisionApp extends StatelessWidget {
@@ -21,6 +25,7 @@ class StrathvisionApp extends StatelessWidget {
     this.pickClip = pickClipFile,
     this.playerFactory = defaultStagePlayer,
     this.analysisRunner,
+    this.packs = const [],
   });
 
   final AppDatabase db;
@@ -28,6 +33,7 @@ class StrathvisionApp extends StatelessWidget {
   final ClipPathPicker pickClip;
   final StagePlayerFactory playerFactory;
   final AnalysisRunner? analysisRunner;
+  final List<PackDefinition> packs;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +52,7 @@ class StrathvisionApp extends StatelessWidget {
         pickClip: pickClip,
         playerFactory: playerFactory,
         analysisRunner: analysisRunner,
+        packs: packs,
       ),
     );
   }

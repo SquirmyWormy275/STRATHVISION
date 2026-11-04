@@ -37,6 +37,7 @@ class WorkspaceRoute extends StatefulWidget {
     super.key,
     required this.db,
     required this.project,
+    required this.pack,
     this.playerFactory = defaultStagePlayer,
     this.pickClip = pickClipFile,
     this.analysisRunner,
@@ -44,6 +45,9 @@ class WorkspaceRoute extends StatefulWidget {
 
   final AppDatabase db;
   final Project project;
+
+  /// Active pack/event: attribute chips, analysis, compatible profiles.
+  final PackInfo pack;
   final StagePlayerFactory playerFactory;
   final ClipPathPicker pickClip;
 
@@ -62,12 +66,13 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
     store: widget.db,
     playerA: _a,
     playerB: _b,
-    attributes: placeholderPack.topAttributes,
+    attributes: widget.pack.topAttributes,
   );
   late final AnalysisController _analysis = AnalysisController(
     workspace: _controller,
-    run: widget.analysisRunner ?? isolateRunner(placeholderPack.analysisPack),
-    listProfiles: () => compatibleProfiles(widget.db, placeholderPack),
+    pack: widget.pack.analysisPack,
+    run: widget.analysisRunner ?? isolateRunner(widget.pack.analysisPack),
+    listProfiles: () => compatibleProfiles(widget.db, widget.pack),
     saveResult: (r) =>
         widget.db.saveComparison(projectId: widget.project.projectId, result: r),
   );
@@ -94,5 +99,6 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
         controller: _controller,
         pickClip: widget.pickClip,
         analysis: _analysis,
+        pack: widget.pack,
       );
 }

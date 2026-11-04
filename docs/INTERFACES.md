@@ -84,7 +84,7 @@ A package written by the builder is a zip that holds `profile.json`, plus the em
 
 ### Metric Vector rules
 
-- `specialist_residuals` always contains `slope_residual` (the day-one head in DECISIONS.md). Other heads add keys.
+- `specialist_residuals` has one key per head the pack declares (Pack Analysis Section, `heads`). Every shipped pack declares `slope_residual`, the day-one head in DECISIONS.md. The engine itself has no head names.
 - Every `metrics.<key>.phase` names a key in `phases`. Frames are 0-based clip frame indices; `end_frame >= start_frame`. Confidences are 0..1.
 - The engine validates its own output. An output that fails validation is returned as `SCHEMA_MISMATCH`, never as a payload.
 
@@ -112,9 +112,52 @@ The part of a pack the analysis runtime reads (one per event). Labels and domain
   "min_clips": 15,
   "critical_phases": ["phase_id"],
   "min_critical_pose_confidence": 0.6,
-  "self_consistency_threshold": 0.5
+  "self_consistency_threshold": 0.5,
+  "heads": [
+    { "name": "slope_residual", "kind": "mlp_residual",
+      "base": "slope_residual/<pack>-<event>/v1", "target_metric": "metric_key" }
+  ],
+  "probes": [
+    { "name": "string", "head": "slope_residual",
+      "kind": "mean_abs_residual | signed_mean_residual | mark_agreement | residual_variance | confidence_correlation",
+      "attribute": "string (mark_agreement only)", "tolerance": 2.0 }
+  ]
 }
 ```
+
+Per metric (optional): `"aggregate": "mean | start | end | min | max"` (default `mean`). It applies to `joint_angle` and `implement_inclination` and says how the phase's frames reduce to one value. For example, `end` of the downswing gives the value at the moment of entry.
+
+**Heads.** `mlp_residual` = measured error + MLP(features).
+- The measured error is the target metric minus the coach's center from the selected profile. It is 0 when no profile is selected.
+- The MLP is the DECISIONS.md shape: 64→32 ReLU→1, 2,113 parameters.
+- The base weights are seeded from `base`, with a zero output layer. An unpatched head therefore returns exactly the measured error, and accepted patches teach the correction.
+
+**Probes** are evaluated over a set of clips, giving one sample per clip: the head residual, the mean implement-track confidence and the winning red/green mark on `attribute`. Probe values:
+- `mean_abs_residual` = mean |r|.
+- `signed_mean_residual` = mean r.
+- `mark_agreement` = the fraction of marked clips where green ↔ |r| < tolerance and red ↔ |r| ≥ tolerance.
+- `residual_variance` = the variance of r.
+- `confidence_correlation` = Pearson correlation of |r| with track confidence.
+
+A probe that is undefined for its samples (no marks, or no variation) is null.
+
+## Pack File
+
+A pack ships as one JSON file. The app loads every bundled pack file at startup, and swapping a pack needs no change to the engine.
+
+```json
+{
+  "format_version": 1,
+  "pack_id": "string",
+  "name": "string",
+  "attributes": { "top": ["string"], "more": ["string"] },
+  "phase_labels": { "phase_id": "Label" },
+  "metric_labels": { "metric_key": "Label" },
+  "events": [ { "event_id": "string", "label": "string", "...": "Pack Analysis Section without pack_id" } ]
+}
+```
+
+An invalid pack file is rejected with `SCHEMA_MISMATCH` (`details.problems`) and skipped.
 
 Per metric (optional): `"weight": 1.0` is the pack default weight for style matching. `"min_spread": 0.0` is a floor on the fitted spread, in the metric's unit.
 

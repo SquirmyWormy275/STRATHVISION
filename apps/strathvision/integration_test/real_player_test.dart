@@ -164,7 +164,9 @@ void main() {
       attributes: const ['Timing'],
     );
     final analysis = AnalysisController(
-        workspace: c, run: isolateRunner(placeholderPack.analysisPack));
+        workspace: c,
+        pack: placeholderPack.analysisPack,
+        run: isolateRunner(placeholderPack.analysisPack));
     await tester.pumpWidget(MaterialApp(home: a.view(mirror: false)));
     await c.loadClip(Stage.a, '$dir/clip25.mp4');
     await waitUntil(tester, () => a.duration > Duration.zero);

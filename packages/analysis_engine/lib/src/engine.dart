@@ -2,7 +2,6 @@ import 'contracts.dart';
 import 'errors.dart';
 import 'features.dart';
 import 'heads.dart';
-import 'patch.dart';
 import 'pack.dart';
 import 'body.dart';
 import 'stages.dart';
@@ -30,8 +29,12 @@ class AnalysisFailure extends AnalysisOutcome {
 }
 
 class AnalysisDetail {
-  const AnalysisDetail(this.outcome, this.phasePoseConfidence);
+  const AnalysisDetail(this.outcome, this.phasePoseConfidence,
+      {this.implementConfidence = 0});
   final AnalysisOutcome outcome;
+
+  /// Mean implement-track confidence over the clip (probe input).
+  final double implementConfidence;
 
   /// Mean joint confidence inside each phase. Empty on failure.
   final Map<String, double> phasePoseConfidence;
@@ -46,7 +49,7 @@ class AnalysisEngine {
     this.implement = const StubImplementTracker(),
     this.phases = const StubPhaseDetector(),
     List<SpecialistHead>? heads,
-  }) : heads = heads ?? defaultHeads();
+  }) : heads = heads ?? headsFor(pack);
 
   final AnalysisPack pack;
   final PoseEstimator pose;
@@ -54,12 +57,16 @@ class AnalysisEngine {
   final PhaseDetector phases;
   final List<SpecialistHead> heads;
 
-  Future<AnalysisOutcome> analyze(ClipSource clip) async =>
-      (await analyzeDetailed(clip)).outcome;
+  /// [reference] holds the coach's metric centers when comparing with a
+  /// profile; heads measure their target's error against it.
+  Future<AnalysisOutcome> analyze(ClipSource clip,
+          {Map<String, double> reference = const {}}) async =>
+      (await analyzeDetailed(clip, reference: reference)).outcome;
 
   /// [analyze] plus internals the profile builder needs (per-phase pose
   /// confidence). The Metric Vector contract is unchanged.
-  Future<AnalysisDetail> analyzeDetailed(ClipSource clip) async {
+  Future<AnalysisDetail> analyzeDetailed(ClipSource clip,
+      {Map<String, double> reference = const {}}) async {
     try {
       if (clip.durationMs <= 0 || clip.fps <= 0) {
         throw AnalysisError(
@@ -95,9 +102,15 @@ class AnalysisEngine {
           implement: imp,
           phases: spans,
           metrics: metrics);
-      final residuals = {
-        for (final h in heads) h.name: _r(h.evaluate(features)),
-      };
+      final targets = {for (final d in pack.heads) d.name: d.targetMetric};
+      final residuals = <String, double>{};
+      for (final h in heads) {
+        final target = targets[h.name];
+        final measured = target == null ? null : metrics[target]?.value;
+        final ref = target == null ? null : reference[target];
+        final base = measured == null || ref == null ? 0.0 : measured - ref;
+        residuals[h.name] = _r(h.evaluate(features, base: base));
+      }
       final vector = MetricVector(
         clipId: clip.clipId,
         packId: pack.packId,
@@ -109,15 +122,20 @@ class AnalysisEngine {
         specialistResiduals: residuals,
       );
       // The engine never hands out a payload that breaks the contract.
-      final problems = validateMetricVector(vector.toJson());
+      final problems = validateMetricVector(vector.toJson(),
+          requiredResiduals: [for (final h in pack.heads) h.name]);
       if (problems.isNotEmpty) {
         throw AnalysisError(ErrorCode.schemaMismatch,
             'Analysis produced an invalid Metric Vector.', {'problems': problems});
       }
+      final trackConf = imp.frames.isEmpty
+          ? 0.0
+          : imp.frames.map((f) => f.confidence).reduce((a, b) => a + b) /
+              imp.frames.length;
       return AnalysisDetail(AnalysisSuccess(vector), {
         for (final e in spans.entries)
           e.key: _r(_phasePoseConfidence(track, e.value)),
-      });
+      }, implementConfidence: _r(trackConf));
     } on AnalysisError catch (e) {
       return AnalysisDetail(AnalysisFailure(e), const {});
     }

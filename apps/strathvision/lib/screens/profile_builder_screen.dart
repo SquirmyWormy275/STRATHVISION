@@ -35,11 +35,11 @@ Future<String?> savePackageCopy(String fileName, List<int> bytes) async {
 
 /// The production builder: probes and analyzes off the UI isolate, stores
 /// packages under app support, and lists them in the Library.
-ProfileBuilderController defaultProfileBuilder(AppDatabase db) =>
+ProfileBuilderController defaultProfileBuilder(AppDatabase db, PackInfo pack) =>
     ProfileBuilderController(
-      pack: placeholderPack.analysisPack,
+      pack: pack.analysisPack,
       probe: probeClip,
-      evaluate: isolateEvaluator(placeholderPack.analysisPack),
+      evaluate: isolateEvaluator(pack.analysisPack),
       store: (profile) async {
         final support = await getApplicationSupportDirectory();
         return storeProfilePackage(

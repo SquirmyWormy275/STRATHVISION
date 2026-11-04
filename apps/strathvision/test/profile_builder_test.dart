@@ -43,7 +43,7 @@ void main() {
       pack: pack, pose: const StubPoseEstimator(styleSeed: 42));
 
   late ProfileBuilderController ctl;
-  ProfileBuilderController controller(AppDatabase db) => ctl = ProfileBuilderController(
+  ProfileBuilderController controller(AppDatabase db, PackInfo active) => ctl = ProfileBuilderController(
         pack: pack,
         probe: (path) async => path.contains('broken')
             ? null

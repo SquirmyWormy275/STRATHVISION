@@ -104,6 +104,27 @@ See docs/CARNE_ASADA.md for full specification.
 - Every successful comparison is stored in the `comparison_rows` table (exact Comparison Result JSON, plus project id and time) for drift tracking in Phase 9. Measurement-only runs are not stored.
 - Expanded deltas show the metric definition, generated generically from the pack entry (kind, joints, phase label), plus this clip's value, the coach's center ± spread, and the phase. Wording is a direct translation of the measured delta ("Higher than coach · 1.8 spreads") and never invents coaching cues (Style-Matching.md).
 
+## Phase 6 Pack and Specialist Net Decisions
+
+- **Packs are data.** `apps/strathvision/assets/packs/*.json` files are loaded at startup through the asset manifest. The neutral placeholder pack is built in, as the fallback. The active event is picked in the Library (top bar) and saved in the `settings` table. The default is the first event of the first domain pack.
+- **No domain words in the engine.**
+  - The engine has no head names, sport terms or event logic. A test scans `packages/analysis_engine/lib` for timber words.
+  - Heads, their targets and probes are declared per event in the pack.
+  - App code has no domain words either. The timber vocabulary lives only in `timber.json`.
+- **Timber pack v1** (initial catalog, for coach review):
+  - Events: underhand and standing block.
+  - Phases: setup → backswing → downswing → entry → recovery. The critical phases are downswing and entry.
+  - Metrics are implement slope at entry (the end of the downswing), mean downswing slope, slope at the top of the backswing, hinge at entry (neck–pelvis–knee), knee and elbow angles, shoulder lift range, and phase times.
+  - `entry_slope` carries weight 2 and is the `slope_residual` target.
+  - Attributes: Slope, Spacing, Hinge, Path, plus Footwork, Rhythm, Balance and Recovery.
+- **The real `slope_residual`** is measured error plus a learned MLP correction. The measured error is entry slope minus the coach's center. A fresh head reports exactly the measured error, and harness patches (Phase 7) learn the correction. When no profile is selected the residual is 0, because there is no reference.
+- **Probes** (DECISIONS.md "Specialist Net Harness"). Interpretation, for human review:
+  - `slope_error_deg` and `slope_bias` are the mean |r| and the mean r over the probe clip set. On the coach's own reference clips both should be near 0.
+  - `priority_agreement` uses red/green marks on "Slope": green should mean |r| < 2°, red should mean |r| ≥ 2°.
+  - `phase_stability` is the variance of r.
+  - `track_confidence_correlation` is the correlation of |r| with implement-track confidence.
+  - The stub tracker reports constant confidence, so that correlation stays null until a real tracker exists.
+
 ## Thresholds and Gating (timber defaults)
 
 - Usable action = confident 3D pose + confident implement + assigned phase + actual stroke.

@@ -8,14 +8,15 @@ import '../profiles/profile_package.dart';
 import '../workspace/workspace_controller.dart';
 
 /// Runs the engine for one clip with the given specialist patches applied.
-typedef AnalysisRunner = Future<AnalysisOutcome> Function(
-    ClipSource clip, List<SpecialistPatch> patches);
+/// [reference] holds the coach's metric centers (empty without a profile).
+typedef AnalysisRunner = Future<AnalysisOutcome> Function(ClipSource clip,
+    List<SpecialistPatch> patches, Map<String, double> reference);
 
 /// Runs the engine off the UI isolate so scrubbing stays at 60 fps.
-AnalysisRunner isolateRunner(AnalysisPack pack) => (clip, patches) =>
-    Isolate.run(() => AnalysisEngine(
-            pack: pack, heads: applyPatches(defaultHeads(), patches))
-        .analyze(clip));
+AnalysisRunner isolateRunner(AnalysisPack pack) =>
+    (clip, patches, reference) => Isolate.run(() => AnalysisEngine(
+            pack: pack, heads: applyPatches(headsFor(pack), patches))
+        .analyze(clip, reference: reference));
 
 /// An installed profile the user can compare against.
 class ProfileChoice {
@@ -52,6 +53,7 @@ class ClipAnalysis {
 class AnalysisController extends ChangeNotifier {
   AnalysisController({
     required this.workspace,
+    required this.pack,
     required this.run,
     this.listProfiles,
     this.loadBundle = readProfileBundle,
@@ -59,6 +61,9 @@ class AnalysisController extends ChangeNotifier {
   });
 
   final WorkspaceController workspace;
+
+  /// The active event's analysis section (heads for patches).
+  final AnalysisPack pack;
   final AnalysisRunner run;
   final ProfileChoices? listProfiles;
   final BundleLoader loadBundle;
@@ -139,7 +144,7 @@ class AnalysisController extends ChangeNotifier {
       if (choice != null) {
         try {
           bundle = _bundles[choice.key] ??= await loadBundle(choice.path);
-          patches = loadPatches(bundle.patchFiles, defaultHeads());
+          patches = loadPatches(bundle.patchFiles, headsFor(pack));
         } on AnalysisError catch (e) {
           _profileError = e;
         }
@@ -152,7 +157,13 @@ class AnalysisController extends ChangeNotifier {
         durationMs: player.duration.inMilliseconds,
         fps: fps,
       );
-      final outcome = await run(source, patches.applied);
+      final reference = bundle == null
+          ? const <String, double>{}
+          : {
+              for (final e in bundle.profile.metrics.entries)
+                e.key: e.value.center,
+            };
+      final outcome = await run(source, patches.applied, reference);
       ComparisonOutcome? comparison;
       if (outcome is AnalysisSuccess && bundle != null) {
         comparison = compare(

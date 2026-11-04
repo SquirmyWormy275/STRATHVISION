@@ -1,10 +1,11 @@
 import 'dart:math' as math;
 
 import 'features.dart';
+import 'pack.dart';
 import 'stages.dart';
 
 /// A specialist residual head on the feature vector (ARCHITECTURE.md).
-/// Patches from the workbench harness load onto heads (Phase 6).
+/// Patches from the workbench harness load onto heads.
 abstract class SpecialistHead {
   /// Key in `specialist_residuals`.
   String get name;
@@ -12,10 +13,15 @@ abstract class SpecialistHead {
   /// Id of the base weights; patches must name it.
   String get baseId;
   int get parameterCount;
-  double evaluate(List<double> features);
+
+  /// [base] is the measured error of the head's target metric versus the
+  /// coach reference (0 without a reference). The head adds its learned
+  /// correction to it.
+  double evaluate(List<double> features, {double base = 0});
 }
 
-/// Two-layer MLP: [featureWidth] → 32 (ReLU) → 1.
+/// Residual head: base + MLP(features), MLP = [featureWidth] → 32 (ReLU) → 1
+/// (DECISIONS.md: 2-layer MLP, 64→32, under 10k parameters).
 class MlpHead implements SpecialistHead {
   MlpHead({
     required this.name,
@@ -36,8 +42,10 @@ class MlpHead implements SpecialistHead {
   final List<double> w2; // [32]
   final double b2;
 
-  /// Deterministic small random weights (used by the Phase 3 stub).
-  factory MlpHead.seeded(String name, String baseId, {double scale = 0.1}) {
+  /// Base weights for [baseId]: a deterministic random hidden layer and a
+  /// zero output layer, so an unpatched head returns exactly the measured
+  /// error. Accepted patches (sparse edits) teach the correction.
+  factory MlpHead.base(String name, String baseId, {double scale = 0.1}) {
     final r = SeededRandom(fnv1a(baseId));
     double w() => (r.next() * 2 - 1) * scale;
     return MlpHead(
@@ -45,7 +53,7 @@ class MlpHead implements SpecialistHead {
       baseId: baseId,
       w1: [for (var i = 0; i < 32; i++) [for (var j = 0; j < featureWidth; j++) w()]],
       b1: [for (var i = 0; i < 32; i++) w()],
-      w2: [for (var i = 0; i < 32; i++) w()],
+      w2: List.filled(32, 0.0),
       b2: 0,
     );
   }
@@ -54,11 +62,11 @@ class MlpHead implements SpecialistHead {
   int get parameterCount => 32 * featureWidth + 32 + 32 + 1;
 
   @override
-  double evaluate(List<double> features) {
+  double evaluate(List<double> features, {double base = 0}) {
     if (features.length != featureWidth) {
       throw ArgumentError('expected $featureWidth features, got ${features.length}');
     }
-    var out = b2;
+    var out = base + b2;
     for (var i = 0; i < 32; i++) {
       var h = b1[i];
       final row = w1[i];
@@ -71,11 +79,9 @@ class MlpHead implements SpecialistHead {
   }
 }
 
-/// Stub `slope_residual` head (Phase 3): the DECISIONS.md shape
-/// (64→32 MLP, 2,113 params) with fixed seeded weights. Output is a number,
-/// not yet a meaningful residual. Real weights and patches arrive in Phase 6.
-MlpHead stubSlopeResidualHead() =>
-    MlpHead.seeded('slope_residual', 'slope_residual/stub/v0');
+/// The heads a pack declares, at their base weights.
+List<MlpHead> headsFor(AnalysisPack pack) =>
+    [for (final h in pack.heads) MlpHead.base(h.name, h.base)];
 
 /// A copy of [h] with [edits] added (tensor, index, delta).
 MlpHead patchedMlpHead(

@@ -1,0 +1,113 @@
+{
+  "format_version": 1,
+  "pack_id": "timber",
+  "name": "Timber",
+  "attributes": {
+    "top": ["Slope", "Spacing", "Hinge", "Path"],
+    "more": ["Footwork", "Rhythm", "Balance", "Recovery"]
+  },
+  "phase_labels": {
+    "setup": "Setup",
+    "backswing": "Backswing",
+    "downswing": "Downswing",
+    "entry": "Entry",
+    "recovery": "Recovery"
+  },
+  "metric_labels": {
+    "entry_slope": "Entry slope",
+    "downswing_slope": "Downswing slope",
+    "backswing_top_slope": "Slope at the top",
+    "hinge_at_entry": "Hinge at entry",
+    "lead_knee_at_entry": "Lead knee at entry",
+    "trail_knee_at_entry": "Trail knee at entry",
+    "trail_elbow_downswing": "Trail elbow in the downswing",
+    "lead_elbow_at_entry": "Lead elbow at entry",
+    "shoulder_lift_backswing": "Shoulder lift in the backswing",
+    "backswing_time": "Backswing time",
+    "downswing_time": "Downswing time",
+    "recovery_time": "Recovery time"
+  },
+  "events": [
+    {
+      "event_id": "underhand",
+      "label": "Underhand",
+      "metric_schema_version": "timber-underhand-1",
+      "phases": ["setup", "backswing", "downswing", "entry", "recovery"],
+      "critical_phases": ["downswing", "entry"],
+      "min_clips": 15,
+      "metrics": [
+        {"key": "entry_slope", "kind": "implement_inclination", "phase": "downswing", "aggregate": "end",
+         "unit": "°", "weight": 2.0, "min_spread": 1.0},
+        {"key": "downswing_slope", "kind": "implement_inclination", "phase": "downswing", "unit": "°",
+         "min_spread": 1.0},
+        {"key": "backswing_top_slope", "kind": "implement_inclination", "phase": "backswing", "aggregate": "end",
+         "unit": "°", "min_spread": 2.0},
+        {"key": "hinge_at_entry", "kind": "joint_angle", "phase": "entry", "aggregate": "start", "unit": "°",
+         "joints": ["neck", "pelvis", "left_knee"], "weight": 1.5, "min_spread": 2.0},
+        {"key": "lead_knee_at_entry", "kind": "joint_angle", "phase": "entry", "aggregate": "start", "unit": "°",
+         "joints": ["left_hip", "left_knee", "left_ankle"], "min_spread": 2.0},
+        {"key": "trail_knee_at_entry", "kind": "joint_angle", "phase": "entry", "aggregate": "start", "unit": "°",
+         "joints": ["right_hip", "right_knee", "right_ankle"], "min_spread": 2.0},
+        {"key": "trail_elbow_downswing", "kind": "joint_angle", "phase": "downswing", "unit": "°",
+         "joints": ["right_shoulder", "right_elbow", "right_wrist"], "min_spread": 2.0},
+        {"key": "shoulder_lift_backswing", "kind": "joint_range", "phase": "backswing", "unit": "°",
+         "joints": ["right_hip", "right_shoulder", "right_elbow"], "min_spread": 2.0},
+        {"key": "backswing_time", "kind": "phase_duration", "phase": "backswing", "unit": "s", "min_spread": 0.03},
+        {"key": "downswing_time", "kind": "phase_duration", "phase": "downswing", "unit": "s", "weight": 1.5,
+         "min_spread": 0.02}
+      ],
+      "heads": [
+        {"name": "slope_residual", "kind": "mlp_residual", "base": "slope_residual/timber-underhand/v1",
+         "target_metric": "entry_slope"}
+      ],
+      "probes": [
+        {"name": "slope_error_deg", "head": "slope_residual", "kind": "mean_abs_residual"},
+        {"name": "slope_bias", "head": "slope_residual", "kind": "signed_mean_residual"},
+        {"name": "priority_agreement", "head": "slope_residual", "kind": "mark_agreement",
+         "attribute": "Slope", "tolerance": 2.0},
+        {"name": "phase_stability", "head": "slope_residual", "kind": "residual_variance"},
+        {"name": "track_confidence_correlation", "head": "slope_residual", "kind": "confidence_correlation"}
+      ]
+    },
+    {
+      "event_id": "standing_block",
+      "label": "Standing block",
+      "metric_schema_version": "timber-standing-block-1",
+      "phases": ["setup", "backswing", "downswing", "entry", "recovery"],
+      "critical_phases": ["downswing", "entry"],
+      "min_clips": 15,
+      "metrics": [
+        {"key": "entry_slope", "kind": "implement_inclination", "phase": "downswing", "aggregate": "end",
+         "unit": "°", "weight": 2.0, "min_spread": 1.0},
+        {"key": "downswing_slope", "kind": "implement_inclination", "phase": "downswing", "unit": "°",
+         "min_spread": 1.0},
+        {"key": "backswing_top_slope", "kind": "implement_inclination", "phase": "backswing", "aggregate": "end",
+         "unit": "°", "min_spread": 2.0},
+        {"key": "hinge_at_entry", "kind": "joint_angle", "phase": "entry", "aggregate": "start", "unit": "°",
+         "joints": ["neck", "pelvis", "left_knee"], "min_spread": 2.0},
+        {"key": "lead_elbow_at_entry", "kind": "joint_angle", "phase": "entry", "aggregate": "start", "unit": "°",
+         "joints": ["left_shoulder", "left_elbow", "left_wrist"], "weight": 1.5, "min_spread": 2.0},
+        {"key": "trail_elbow_downswing", "kind": "joint_angle", "phase": "downswing", "unit": "°",
+         "joints": ["right_shoulder", "right_elbow", "right_wrist"], "min_spread": 2.0},
+        {"key": "shoulder_lift_backswing", "kind": "joint_range", "phase": "backswing", "unit": "°",
+         "joints": ["right_hip", "right_shoulder", "right_elbow"], "min_spread": 2.0},
+        {"key": "backswing_time", "kind": "phase_duration", "phase": "backswing", "unit": "s", "min_spread": 0.03},
+        {"key": "downswing_time", "kind": "phase_duration", "phase": "downswing", "unit": "s", "weight": 1.5,
+         "min_spread": 0.02},
+        {"key": "recovery_time", "kind": "phase_duration", "phase": "recovery", "unit": "s", "min_spread": 0.05}
+      ],
+      "heads": [
+        {"name": "slope_residual", "kind": "mlp_residual", "base": "slope_residual/timber-standing-block/v1",
+         "target_metric": "entry_slope"}
+      ],
+      "probes": [
+        {"name": "slope_error_deg", "head": "slope_residual", "kind": "mean_abs_residual"},
+        {"name": "slope_bias", "head": "slope_residual", "kind": "signed_mean_residual"},
+        {"name": "priority_agreement", "head": "slope_residual", "kind": "mark_agreement",
+         "attribute": "Slope", "tolerance": 2.0},
+        {"name": "phase_stability", "head": "slope_residual", "kind": "residual_variance"},
+        {"name": "track_confidence_correlation", "head": "slope_residual", "kind": "confidence_correlation"}
+      ]
+    }
+  ]
+}
