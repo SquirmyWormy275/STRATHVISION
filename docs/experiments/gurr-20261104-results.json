@@ -396,5 +396,16 @@
   },
   "detector_sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
   "pose_sha256": "f6dfd4312367811d8775f7141de3aacbf1de08b5208eb425d2cc1e9640b10793",
-  "pipeline_sha256": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8"
+  "pipeline_sha256": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8",
+  "corpus_scope": {
+    "collection": "Gurr Academy",
+    "collection_complete": false,
+    "scope": "one locally available archive part; not the full collection",
+    "archive_name": "Gurr Academy -20261104T203933Z-1-001.zip",
+    "archive_bytes": 1937869862,
+    "archive_sha256": "b32a71f0a4712373b69ec311a6a9f655ef7f25b29c66dd5c9326f752b2cdaef7",
+    "archive_entries": 15,
+    "archive_video_entries": 12,
+    "remaining_source": "User reports substantially more footage; full source location requested."
+  }
 }

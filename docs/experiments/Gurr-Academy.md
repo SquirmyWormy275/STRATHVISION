@@ -1,10 +1,10 @@
 # Gurr Academy real footage experiments
 
-The first recorded run measures anonymous multi-person ingestion and the CARNE ASADA no-feedback control. It processes every video in the downloaded archive, including difficult and unsupported footage. It does not establish athlete identity, event ground truth, or improved coaching accuracy.
+The first recorded run measures anonymous multi-person ingestion and the CARNE ASADA no-feedback control. Its scope is one locally available archive part, `Gurr Academy -20261104T203933Z-1-001.zip`, including the difficult and unsupported footage inside that part. **It does not cover the full Gurr Academy collection.** The user reports substantially more footage; locating and reconciling the remaining source is open. It does not establish athlete identity, event ground truth, or improved coaching accuracy.
 
-## Recorded run on November 4 2026
+## Recorded subset run on November 4 2026
 
-The archive contains 12 MOV videos (1,743.553568 seconds; 29 minutes 3.6 seconds) and three HEIC photos. All 12 videos were processed at five sampled frames per second. Photos are excluded from motion analysis. The decoded pipeline produced 8,718 sampled frames, 10,364 person detections and 7,541 pose samples passing model presence 0.5. A person was detected in 6,209 sampled frames; 1,608 contained multiple detections. Competition footage reached eight simultaneous detections, including spectators.
+That archive part contains 12 MOV videos (1,743.553568 seconds; 29 minutes 3.6 seconds) and three HEIC photos. All 12 videos were processed at five sampled frames per second. Photos are excluded from motion analysis. The decoded pipeline produced 8,718 sampled frames, 10,364 person detections and 7,541 pose samples passing model presence 0.5. A person was detected in 6,209 sampled frames; 1,608 contained multiple detections. Competition footage reached eight simultaneous detections, including spectators.
 
 | Candidate pack pass | Candidate strokes | Passing current pack gates | Passing track seconds | Whole corpus control |
 |---|---:|---:|---:|---|
@@ -26,6 +26,12 @@ The measured person-detection/pose pass took about 402 seconds on this workstati
 - `analyzeContinuousTrack` splits gaps before segmentation and keeps stroke indices unique across the resulting fragments.
 
 The geometric tracker does not use face recognition, appearance embeddings, tattoos, or body shape to infer identity. Tracks expire after missing observations, restart at scene cuts, and avoid ambiguous overlap assignments. A person track is an observation link within a shot, not a named athlete or proof that the person is competing.
+
+## Dataset completeness
+
+Only archive part `001` is present in the local CARNE ASADA folder as of this scope check. Its zip directory has 15 entries: 12 MOV videos and three HEIC photos. A search of the local Downloads, Projects, Desktop, home media locations and currently mounted media did not locate more Gurr-named archive parts. This is a local-availability statement, not a count of everything in the remote collection.
+
+The recorded JSON now explicitly sets `corpus_scope.collection_complete` to `false` and records the archive name, size and SHA-256. Counts and conclusions apply only to that archive part. The complete collection cannot be claimed processed until its full source listing and all downloaded parts are reconciled.
 
 ## Local artifacts and public results
 
@@ -68,6 +74,6 @@ dart test
 
 ## Further evidence required for coach learning claims
 
-Athlete and event assignments, genuine coach feedback, and a true implement track are needed before reporting coach-specific accuracy or accepted learning improvements. Whole source clips must remain the grouping boundary for train/test splits; adjacent strokes from the same source must not leak across folds. The default minimum of 15 reference clips remains in effect. This archive has only 12 source videos before any athlete/event subdivision, so the recorded run does not manufacture a ready coach profile by duplicating clips or weakening gates.
+Athlete and event assignments, genuine coach feedback, and a true implement track are needed before reporting coach-specific accuracy or accepted learning improvements. Whole source clips must remain the grouping boundary for train/test splits; adjacent strokes from the same source must not leak across folds. The default minimum of 15 reference clips remains in effect. This processed archive part has only 12 source videos before any athlete/event subdivision; the size of the full collection is not yet established, so the recorded run does not manufacture a ready coach profile by duplicating clips or weakening gates.
 
 Automatic recognition of named athletes across new footage is not implemented. A manual-label draft was preserved locally and is not delivered as fulfillment of that requirement.

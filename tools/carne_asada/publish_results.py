@@ -9,6 +9,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('input', type=Path)
     parser.add_argument('output', type=Path)
+    parser.add_argument('--scope', type=Path,
+                        help='Explicit archive/source inventory; never infer collection completeness from clip counts.')
     args = parser.parse_args()
     result = json.loads(args.input.read_text())
     assert result['format'] == 'gurr-experiment/1'
@@ -23,6 +25,10 @@ def main():
                      'confirmed_coach_marks', 'claimed_technique_improvement',
                      'events_are_candidate_passes', 'caveats', 'aggregate', 'clips')
     result = {key: result[key] for key in public_fields}
+    result['corpus_scope'] = (json.loads(args.scope.read_text()) if args.scope else {
+        'collection_complete': False,
+        'scope': 'selected local inputs only; completeness of the source collection is unverified',
+    })
     assert isinstance(result['pose_samples'], int)
     root = Path(__file__).resolve().parents[2]
     sources = ['tools/carne_asada/footage.py',

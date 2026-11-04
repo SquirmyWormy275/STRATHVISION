@@ -49,9 +49,9 @@ Status messages and edit explanations are specified in docs/DECISIONS.md.
 
 ## Experiment: CARNE ASADA on the Gurr Footage
 
-The downloaded Gurr Academy archive has now been processed locally: **12 videos, 29 min 3.6 s**, including every competition and training video in this download. The first recorded experiment is anonymous multi-person ingestion plus a no-feedback control; it does not claim improved technique analysis or named-athlete recognition.
+**Partial dataset only.** The first run processed **one local archive part**, `Gurr Academy -20261104T203933Z-1-001.zip`: **12 videos, 29 min 3.6 s**. This is not the full Gurr Academy collection; the user reports substantially more footage, and the remaining source has not yet been located. The first recorded experiment is anonymous multi-person ingestion plus a no-feedback control; it does not claim improved technique analysis or named-athlete recognition.
 
-### Recorded results on November 4 2026
+### Recorded results from archive part 001 on November 4 2026
 
 | Measurement | Result |
 |---|---:|
