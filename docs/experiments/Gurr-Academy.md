@@ -1,6 +1,19 @@
 # Gurr Academy real footage experiments
 
-The first recorded run measures anonymous multi-person ingestion and the CARNE ASADA no-feedback control. Its scope is one locally available archive part, `Gurr Academy -20261104T203933Z-1-001.zip`, including the difficult and unsupported footage inside that part. **It does not cover the full Gurr Academy collection.** The user reports substantially more footage; locating and reconciling the remaining source is open. It does not establish athlete identity, event ground truth, or improved coaching accuracy.
+The recorded runs measure anonymous multi-person ingestion and the CARNE ASADA no-feedback control. The first run covered one archive part. All five parts of the replacement download have now been verified and extracted, and the expanded experiment is running against the same committed engine. These experiments do not establish athlete identity, event ground truth, or improved coaching accuracy.
+
+## Five-part export inventory
+
+The Google Drive export `20261104T223331Z` consists of parts `001` through `005`, totaling 8,446,295,283 archive bytes. All 55 entries passed ZIP CRC validation during extraction; archive and extracted-file SHA-256 values are recorded locally. There are 48 MOV video files and seven HEIC photos. `Competition/IMG_8055(1).MOV` and `Competition/IMG_8055.MOV` have identical SHA-256, so analysis includes that recording once: **47 unique videos, 7,787.428656 seconds (2 h 9 min 47.4 s)**. Raw files are preserved.
+
+| Source folder | Video files | Unique videos | Unique recording time |
+|---|---:|---:|---:|
+| `24-25` | 20 | 20 | 1:27:19.5 |
+| `Competition` | 23 | 22 | 17:23.2 |
+| `Competition/3-Board` | 4 | 4 | 12:59.2 |
+| `Training/25-26` | 1 | 1 | 12:05.6 |
+
+The longest recordings are `IMG_3747.MOV` (28:38.9), `IMG_3698.MOV` (17:54.9), `IMG_3746.MOV` (15:10.1), and `Gurr 30DEC25.mov` (12:05.6). The [public export inventory](gurr-20261104-five-part-inventory.json) contains exact durations, archive hashes and duplicate provenance. It describes the five downloaded parts; a separate remote folder listing has not been compared.
 
 ## Recorded subset run on November 4 2026
 
@@ -29,9 +42,9 @@ The geometric tracker does not use face recognition, appearance embeddings, tatt
 
 ## Dataset completeness
 
-Only archive part `001` is present in the local CARNE ASADA folder as of this scope check. Its zip directory has 15 entries: 12 MOV videos and three HEIC photos. A search of the local Downloads, Projects, Desktop, home media locations and currently mounted media did not locate more Gurr-named archive parts. This is a local-availability statement, not a count of everything in the remote collection.
+The earlier `203933Z` download had one part, containing 12 videos and three photos. It was replaced locally by the complete five-part `223331Z` download described above. All 12 previously processed video hashes occur in the expanded export. The earlier result remains a historical subset and has not been relabeled as a full-export run.
 
-The recorded JSON now explicitly sets `corpus_scope.collection_complete` to `false` and records the archive name, size and SHA-256. Counts and conclusions apply only to that archive part. The complete collection cannot be claimed processed until its full source listing and all downloaded parts are reconciled.
+The five-part inventory distinguishes `downloaded_export_complete: true` from unverified remote-collection completeness. Analysis deduplicates by video content hash before counting frames or aggregating controls. The expanded run uses committed engine snapshot `5861e2f6835863a6dbf7e05b0d26f614d345a491`, excluding concurrent changes in the shared worktree.
 
 ## Local artifacts and public results
 
@@ -51,7 +64,9 @@ uv pip install --python "$SV_RESULTS/venv/bin/python" -r tools/carne_asada/requi
 curl -L --fail -o "$SV_RESULTS/yolox_nano.onnx" \
   https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_nano.onnx
 "$SV_RESULTS/venv/bin/python" tools/carne_asada/footage.py inventory \
-  --root "$SV_FOOTAGE_ROOT" --output "$SV_RESULTS"
+  --root "$SV_FOOTAGE_ROOT" --output "$SV_RESULTS/source-inventory"
+"$SV_RESULTS/venv/bin/python" tools/carne_asada/deduplicate.py \
+  "$SV_RESULTS/source-inventory/manifest.json" "$SV_RESULTS/manifest.json"
 "$SV_RESULTS/venv/bin/python" tools/carne_asada/footage.py analyze \
   --root "$SV_FOOTAGE_ROOT" --output "$SV_RESULTS" \
   --detector "$SV_RESULTS/yolox_nano.onnx" \
@@ -66,7 +81,7 @@ The detector is [YOLOX Nano from Megvii's official release](https://github.com/M
 Tests:
 
 ```sh
-"$SV_RESULTS/venv/bin/python" -m pytest tools/carne_asada/test_footage.py -q
+"$SV_RESULTS/venv/bin/python" -m pytest tools/carne_asada -q
 cd packages/analysis_engine
 dart analyze
 dart test
@@ -74,6 +89,6 @@ dart test
 
 ## Further evidence required for coach learning claims
 
-Athlete and event assignments, genuine coach feedback, and a true implement track are needed before reporting coach-specific accuracy or accepted learning improvements. Whole source clips must remain the grouping boundary for train/test splits; adjacent strokes from the same source must not leak across folds. The default minimum of 15 reference clips remains in effect. This processed archive part has only 12 source videos before any athlete/event subdivision; the size of the full collection is not yet established, so the recorded run does not manufacture a ready coach profile by duplicating clips or weakening gates.
+Athlete and event assignments, genuine coach feedback, and a true implement track are needed before reporting coach-specific accuracy or accepted learning improvements. Whole source recordings must remain the grouping boundary for train/test splits; duplicate downloads and adjacent strokes from the same source must not leak across folds. The default minimum of 15 reference clips remains in effect. The expanded export has 47 unique source videos before athlete/event subdivision; that total alone does not establish 15 clean references for any particular coach and event. No ready coach profile is manufactured by duplicating clips or weakening gates.
 
 Automatic recognition of named athletes across new footage is not implemented. A manual-label draft was preserved locally and is not delivered as fulfillment of that requirement.

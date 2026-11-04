@@ -49,7 +49,9 @@ Status messages and edit explanations are specified in docs/DECISIONS.md.
 
 ## Experiment: CARNE ASADA on the Gurr Footage
 
-**Partial dataset only.** The first run processed **one local archive part**, `Gurr Academy -20261104T203933Z-1-001.zip`: **12 videos, 29 min 3.6 s**. This is not the full Gurr Academy collection; the user reports substantially more footage, and the remaining source has not yet been located. The first recorded experiment is anonymous multi-person ingestion plus a no-feedback control; it does not claim improved technique analysis or named-athlete recognition.
+**All five downloaded ZIPs are now verified and extracted.** The `20261104T223331Z` export contains **48 video files and seven photos**. One video is an exact duplicate, leaving **47 unique videos, 2 h 9 min 47.4 s**, including recordings lasting 28:39, 17:55, 15:10 and 12:06. The [five-part inventory](docs/experiments/gurr-20261104-five-part-inventory.json) records archive hashes, folder coverage and the excluded duplicate. The expanded experiment is running against the same committed engine as the first run.
+
+The first recorded experiment below covered **one earlier archive part**, `Gurr Academy -20261104T203933Z-1-001.zip`: **12 videos, 29 min 3.6 s**. It measures anonymous multi-person ingestion plus a no-feedback control; it does not claim improved technique analysis or named-athlete recognition.
 
 ### Recorded results from archive part 001 on November 4 2026
 
