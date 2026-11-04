@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T14:18:24Z
+heartbeat: 2026-11-04T14:21:30Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Android real-video check: kill the stuck emulator or connect a phone, then run apps/strathvision/scripts/run_android_player_test.sh. If it passes, Phase 2 is done and Phase 3 (analysis runtime skeleton) starts.
+next: Phase 3 task 3: add analysis_engine path dep to apps/strathvision, Analyze button in workspace top bar, raw-metrics panel
 <!-- STATE:END -->
 
 ## Phase progress
@@ -35,6 +35,7 @@ next: Android real-video check: kill the stuck emulator or connect a phone, then
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T14:21:30Z **claude** — Phase 3 tasks 1,2,4: packages/analysis_engine (pure Dart) with INTERFACES.md contracts + validators, stub pose/implement/phase pipeline, generic pack-driven metrics, stub slope_residual head (64→32 MLP, 2113 params). 18 tests pass. → next: Phase 3 task 3: add analysis_engine path dep to apps/strathvision, Analyze button in workspace top bar, raw-metrics panel
 - 2026-11-04T14:18:24Z **claude** — Claimed: Phase 3 — Analysis Runtime Skeleton
 - 2026-11-04T07:54:45Z **claude** — Note: README Phase 1 steps updated for the New review flow.
 - 2026-11-04T07:54:33Z **claude** — Phase 2 dual-video workspace implemented (all Workspace Events, persistence, undo, red/green). 49 tests + real-decoder test pass on Linux 3/3. Fixed async-seek and drift-correction bugs found on libmpv. → next: Android real-video check: kill the stuck emulator or connect a phone, then run apps/strathvision/scripts/run_android_player_test.sh. If it passes, Phase 2 is done and Phase 3 (analysis runtime skeleton) starts.

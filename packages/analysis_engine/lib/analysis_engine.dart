@@ -1,0 +1,13 @@
+/// STRATHVISION analysis runtime: contracts from docs/INTERFACES.md and the
+/// pose → phase → metric → specialist-head pipeline. Pack-driven; contains no
+/// sport-specific logic.
+library;
+
+export 'src/body.dart';
+export 'src/contracts.dart';
+export 'src/engine.dart';
+export 'src/errors.dart';
+export 'src/features.dart';
+export 'src/heads.dart';
+export 'src/pack.dart';
+export 'src/stages.dart';
