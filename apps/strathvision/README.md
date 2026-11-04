@@ -43,6 +43,9 @@ dart pub get && dart analyze && dart test
 flutter test integration_test -d linux --dart-define=CLIP_DIR=$PWD/integration_test/assets
 # Android device or emulator (pushes clips once the app has created its files folder)
 scripts/run_android_player_test.sh [device-id]
+# Every screen, end to end, on the desktop (real video; optional screenshots)
+flutter test integration_test/app_e2e_test.dart -d linux \
+  --dart-define=CLIP_DIR=$PWD/integration_test/assets --dart-define=SHOTS=/tmp/sv_shots
 # A laptop-built package imports and runs on the phone
 scripts/run_android_player_test.sh "" integration_test/phone_package_test.dart
 # (regenerate that package: flutter test tool/make_phone_fixture.dart)

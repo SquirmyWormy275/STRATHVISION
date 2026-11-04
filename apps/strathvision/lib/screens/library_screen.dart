@@ -60,6 +60,7 @@ class LibraryScreen extends StatelessWidget {
     this.workbench,
     this.carne,
     this.saveFile = savePackageCopy,
+    this.pickFiles = pickAnyFiles,
     this.pickFolder = pickInboxFolder,
     this.profileStore,
   });
@@ -85,6 +86,9 @@ class LibraryScreen extends StatelessWidget {
 
   /// Saves an exported package wherever the user chooses.
   final Future<String?> Function(String fileName, List<int> bytes) saveFile;
+
+  /// Picks files for the CARNE ASADA playground.
+  final Future<List<String>> Function() pickFiles;
 
   /// Picks the shared inbox folder.
   final Future<String?> Function() pickFolder;
@@ -162,7 +166,10 @@ class LibraryScreen extends StatelessWidget {
     if (!context.mounted) return;
     await Navigator.of(context).push(MaterialPageRoute<void>(
       builder: (_) =>
-          CarneScreen(controller: controller, title: '${row.coachName} · v${row.version}'),
+          CarneScreen(
+              controller: controller,
+              title: '${row.coachName} · v${row.version}',
+              pickFiles: pickFiles),
     ));
     controller.dispose();
   }

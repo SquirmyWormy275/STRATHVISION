@@ -5,6 +5,7 @@
 //   Android: scripts/run_android_player_test.sh
 //            (CLIP_DIR=android: the test creates the app's external files dir,
 //             prints "CLIPS_DIR <path>", and waits for the clips to be pushed.)
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -205,5 +206,25 @@ void main() {
     final missing =
         await tester.runAsync(() => probeClip('$dir/does_not_exist.mp4'));
     expect(missing, isNull);
+  });
+
+  testWidgets('a clip opened before its video view exists still plays',
+      (tester) async {
+    // Regression: the app builds the Video widget only after a clip loads.
+    // media_kit disables the video track for files opened with no controller.
+    final dir = await resolveClipDir(tester);
+    final p = MediaKitStagePlayer();
+    // Keep frames coming while it opens (as the running app always does).
+    var opened = false;
+    unawaited(p.open('$dir/clip30.mp4').then((_) => opened = true));
+    await waitUntil(tester, () => opened && p.duration > Duration.zero);
+    await tester.pumpWidget(MaterialApp(home: p.view(mirror: false)));
+    await p.play();
+    await waitUntil(tester, () => p.decoderPosition > const Duration(milliseconds: 300),
+        state: () => 'pos=${p.decoderPosition} playing=${p.playing}');
+    await p.pause();
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump();
+    await tester.runAsync(p.dispose);
   });
 }

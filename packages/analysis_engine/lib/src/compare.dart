@@ -41,7 +41,11 @@ ComparisonOutcome compare({
   List<String> appliedPatches = const [],
   List<String> rejectedPatches = const [],
   List<String> extraWarnings = const [],
+  String Function(String metricKey)? metricLabel,
+  String Function(String phaseId)? phaseLabel,
 }) {
+  String m(String k) => metricLabel?.call(k) ?? k;
+  String ph(String k) => phaseLabel?.call(k) ?? k;
   if (profile.packId != vector.packId || profile.eventId != vector.eventId) {
     return ComparisonFailure(AnalysisError(ErrorCode.schemaMismatch,
         'This profile is for a different event.', {
@@ -112,17 +116,17 @@ ComparisonOutcome compare({
         '(${(vector.poseConfidenceSummary * 100).round()}%).');
   }
   if (lowPhases.isNotEmpty) {
-    warnings.add('Phase timing is uncertain for ${lowPhases.join(', ')}.');
+    warnings.add('Phase timing is uncertain for ${lowPhases.map(ph).join(', ')}.');
   }
   final lowMetrics = [
     for (final k in used)
       if (vector.metrics[k]!.confidence < lowConfidence) k,
   ];
   if (lowMetrics.isNotEmpty) {
-    warnings.add('Low-confidence measurements: ${lowMetrics.join(', ')}.');
+    warnings.add('Low-confidence measurements: ${lowMetrics.map(m).join(', ')}.');
   }
   if (missing.isNotEmpty) {
-    warnings.add('Not measured in this clip: ${missing.join(', ')}.');
+    warnings.add('Not measured in this clip: ${missing.map(m).join(', ')}.');
   }
   for (final p in rejectedPatches) {
     warnings.add('Specialist patch $p was rejected and not applied.');

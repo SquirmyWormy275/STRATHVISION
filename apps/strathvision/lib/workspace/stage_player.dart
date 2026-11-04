@@ -51,6 +51,10 @@ class MediaKitStagePlayer implements StagePlayer {
       unawaited(native.setProperty('hr-seek', 'yes'));
       unawaited(native.setProperty('keep-open', 'yes'));
     }
+    // Create the video output now. media_kit turns the video track off
+    // (vid=no) for files opened with no controller attached, and the stage's
+    // Video widget is only built after the first clip loads.
+    _video;
   }
 
   final Player _player = Player();
@@ -100,6 +104,11 @@ class MediaKitStagePlayer implements StagePlayer {
   Future<void> open(String path) async {
     _fps = null;
     await _player.open(Media(path), play: false);
+    final native = _player.platform;
+    if (native is NativePlayer) {
+      // Belt and braces: make sure the video track is selected.
+      await native.setProperty('vid', 'auto');
+    }
     _hasMedia = true;
     _changes.add(null);
   }

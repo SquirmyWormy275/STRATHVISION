@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T17:45:10Z
+heartbeat: 2026-11-04T19:33:41Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Human-only items in STATUS Blockers: Windows/macOS/iPhone/physical-Android installs, ad-hoc iOS signing, pose model + transcriber + API key choices, timber pack review, Gurr footage.
+next: Wait for builds.yml; human items in Blockers
 <!-- STATE:END -->
 
 ## Phase progress
@@ -24,6 +24,13 @@ next: Human-only items in STATUS Blockers: Windows/macOS/iPhone/physical-Android
 | 7 Workbench Harness + Adapters | **done**. Harness (probe-only search, pack-declared accept rules, cumulative patches), adapters (`.paw` local logistic models, example-validated compile through Claude over raw HTTP), and a workbench screen that saves vN+1. Inference applies the patch and adapters. Engine: 75 tests. App: 77 tests. 3 Linux real-decoder tests pass. A live Claude compile has not been run: there is no API key on this machine |
 | 8 CARNE ASADA Playground | **done**. Engine: stroke segmentation and `CarneSession` (exact copy, bounded loop, hull, limit, baseline gate, undo, record). App: playground with drop zone, feed, meters, what-did-it-do and undo, saving vN+1 with `carne_asada/`. Phones ignore `carne_asada/` (tested). Engine: 87 tests. App: 80 tests. 3 Linux real-decoder tests pass |
 | 9 Drift, Polish, Distribution | **done** locally: drift view, health indicators, export/import plus inbox folder, a release APK and a Linux zip built and launched here, and the CI workflow for every target. App: 85 tests. Engine: 90. CI run 41863714173: tests, Android APK, Linux zip and **Windows zip** all succeed. **Android verified on the emulator:** the release APK sideloads and launches, and `integration_test/phone_package_test.dart` shows a laptop-built package (patch, adapters, carne_asada/) importing cleanly and driving inference on the device. **CI run 41875423119: all six jobs pass**: tests, Android APK, and the Linux, Windows and macOS zips, plus the unsigned iOS app (built on `macos-15-intel`; the arm64 runners had no capacity). **Open (human):** launch the Windows zip on a Windows PC, open the macOS zip on a Mac, sign the iOS build ad hoc and install it on an iPhone, and install the APK on a physical phone |
+
+## Desktop end-to-end
+
+`integration_test/app_e2e_test.dart` drives the real app on Linux through every screen: review with real video, sync, 0.25×, step, mirror, marks, undo, Analyze, reopen, Build a profile from 15 clips, compare, trend, export, workbench harness, and CARNE ASADA. It captures real screen grabs and passes. Running it found and fixed three bugs:
+- clips playing with no picture (lazy video controller)
+- the frame-rate race
+- raw metric keys in warnings
 
 ## Blockers / questions for the human
 
@@ -50,6 +57,7 @@ next: Human-only items in STATUS Blockers: Windows/macOS/iPhone/physical-Android
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T19:33:41Z **claude** — Desktop end-to-end test of the real app (every screen, real video) added and passing on Linux; it found and fixed: clips playing with no picture in the app (video controller created lazily → media_kit disabled the video track), frame-rate race, raw keys in warnings. Regression test proven to fail without the fix. Linux 4/4 + Android 4/4 real-player, e2e, 92 app + 95 engine tests pass. → next: Wait for builds.yml; human items in Blockers
 - 2026-11-04T17:45:10Z **claude** — CI run 41875423119 green on all six jobs: tests, Android APK, Linux/Windows/macOS zips, unsigned iOS (macos-15-intel). Everything that can be verified without a human or hardware is verified. → next: Human-only items in STATUS Blockers: Windows/macOS/iPhone/physical-Android installs, ad-hoc iOS signing, pose model + transcriber + API key choices, timber pack review, Gurr footage.
 - 2026-11-04T17:13:07Z **claude** — Export choices (profile only / + my marks / full overlay, summary before write) and import replace/keep/merge; phone import verified on Android emulator (phone_package_test) and release APK sideload+launch verified; CI macOS/iOS moved to macos-15-intel after arm64 capacity refusals. 92 app + 94 engine tests. → next: Watch builds.yml run for macOS/iOS on macos-15-intel
 - 2026-11-04T17:06:49Z **claude** — Android real-video verified (3/3 real-decoder tests on emulator w/ NVIDIA host GPU) after fixing Android video output (mediacodec_embed) and frame-rate race; CARNE ASADA now has all five proposal types (weights, add/raise/drop exemplars) + package merge into the coach hull. 94 engine + 85 app tests. → next: Export choices (+ my marks, full local overlay, summary before write) and import replace/keep/merge

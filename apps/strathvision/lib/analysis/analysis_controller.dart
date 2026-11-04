@@ -74,6 +74,8 @@ class AnalysisController extends ChangeNotifier {
     this.listProfiles,
     this.loadBundle = readProfileBundle,
     this.saveResult,
+    this.metricLabel,
+    this.phaseLabel,
   });
 
   final WorkspaceController workspace;
@@ -84,6 +86,10 @@ class AnalysisController extends ChangeNotifier {
   final ProfileChoices? listProfiles;
   final BundleLoader loadBundle;
   final ResultSaver? saveResult;
+
+  /// Pack labels for plain-language warnings.
+  final String Function(String key)? metricLabel;
+  final String Function(String id)? phaseLabel;
   static const _uuid = Uuid();
 
   final Map<String, ClipAnalysis> _results = {};
@@ -203,6 +209,8 @@ class AnalysisController extends ChangeNotifier {
           rejectedPatches: [
             for (final e in patches.rejected) '${e.details['file']}',
           ],
+          metricLabel: metricLabel,
+          phaseLabel: phaseLabel,
           extraWarnings: [
             if (usable == false) 'This clip is below the usable threshold.',
             ...adapters.rejected,

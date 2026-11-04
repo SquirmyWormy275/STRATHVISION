@@ -130,6 +130,18 @@ void main() {
     expect(r.warnings.join(' '), contains('Low-confidence measurements: a, b, c'));
   });
 
+  test('warnings use pack labels when given', () {
+    final r = ok(compare(
+        vector: vector({'a': 100}, conf: 0.3, phaseConf: 0.4),
+        profile: profile(),
+        resultId: 'r',
+        metricLabel: (k) => 'Metric ${k.toUpperCase()}',
+        phaseLabel: (p) => p == 'p1' ? 'downswing' : p));
+    expect(r.warnings, contains('Phase timing is uncertain for downswing.'));
+    expect(r.warnings, contains('Low-confidence measurements: Metric A.'));
+    expect(r.warnings, contains('Not measured in this clip: Metric B, Metric C.'));
+  });
+
   test('missing metrics are reported in coverage and warnings', () {
     final r = ok(compare(
         vector: vector({'a': 100}), profile: profile(), resultId: 'r'));

@@ -73,6 +73,8 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
     pack: widget.pack.analysisPack,
     run: widget.analysisRunner ?? isolateRunner(widget.pack.analysisPack),
     listProfiles: () => compatibleProfiles(widget.db, widget.pack),
+    metricLabel: widget.pack.metricLabel,
+    phaseLabel: (id) => widget.pack.phaseLabel(id).toLowerCase(),
     saveResult: (r) =>
         widget.db.saveComparison(projectId: widget.project.projectId, result: r),
   );

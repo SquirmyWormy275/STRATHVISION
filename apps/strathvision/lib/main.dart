@@ -11,7 +11,9 @@ import 'analysis/analysis_controller.dart';
 import 'data/database.dart';
 import 'packs/pack_registry.dart';
 import 'profiles/inbox.dart';
+import 'screens/carne_screen.dart';
 import 'screens/library_screen.dart';
+import 'screens/profile_builder_screen.dart';
 import 'screens/workspace_route.dart';
 import 'screens/workspace_screen.dart';
 
@@ -38,6 +40,9 @@ class StrathvisionApp extends StatelessWidget {
     this.playerFactory = defaultStagePlayer,
     this.analysisRunner,
     this.packs = const [],
+    this.pickClips,
+    this.pickFiles,
+    this.saveFile,
   });
 
   final AppDatabase db;
@@ -46,6 +51,11 @@ class StrathvisionApp extends StatelessWidget {
   final StagePlayerFactory playerFactory;
   final AnalysisRunner? analysisRunner;
   final List<PackDefinition> packs;
+
+  /// Test hooks for the platform file dialogs (null = real dialogs).
+  final ClipsPicker? pickClips;
+  final AnyFilesPicker? pickFiles;
+  final Future<String?> Function(String fileName, List<int> bytes)? saveFile;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +75,9 @@ class StrathvisionApp extends StatelessWidget {
         playerFactory: playerFactory,
         analysisRunner: analysisRunner,
         packs: packs,
+        pickClips: pickClips ?? pickReferenceClips,
+        pickFiles: pickFiles ?? pickAnyFiles,
+        saveFile: saveFile ?? savePackageCopy,
       ),
     );
   }
