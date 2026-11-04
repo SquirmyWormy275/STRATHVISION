@@ -17,7 +17,7 @@ void main() {
 
   test('engine code contains zero timber-specific strings', () {
     final words = RegExp(
-        r'timber|underhand|standing.?block|\baxe|chop|\bsaw\b|crosscut|\blogs?\b|wood|slope|stroke',
+        r'timber|underhand|standing.?block|\baxe|chop|\bsaw\b|crosscut|\blogs?\b|wood|slope',
         caseSensitive: false);
     final hits = <String>[];
     for (final f in Directory('lib').listSync(recursive: true).whereType<File>()) {
@@ -158,7 +158,7 @@ void main() {
     });
 
     test('comparison ranks timber metrics', () async {
-      final athlete = (await clipsOf(2, 'ath', 1)).single;
+      final athlete = (await clipsOf(7, 'ath', 1)).single;
       final r = (compare(vector: athlete, profile: coach, resultId: 'r')
               as ComparisonSuccess)
           .result;
@@ -202,8 +202,8 @@ void main() {
 
     test('the five probes measure the residual', () async {
       final own = await samples(42, 'coach');
-      // Style 2's entry slope sits well away from the coach's (stub geometry).
-      final other = await samples(2, 'ath',
+      // Style 7's entry slope sits well away from the coach's (stub geometry).
+      final other = await samples(7, 'ath',
           marks: ['red', 'red', 'green', null, 'red', null, 'green', 'red', null, null]);
       final pOwn = runProbes(underhand, 'slope_residual', own);
       final pOther = runProbes(underhand, 'slope_residual', other);

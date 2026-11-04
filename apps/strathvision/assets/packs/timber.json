@@ -342,7 +342,58 @@
             }
           ]
         }
-      ]
+      ],
+      "max_implement_dropout_s": 0.3,
+      "attribute_metrics": {
+        "Slope": [
+          "entry_slope",
+          "downswing_slope",
+          "backswing_top_slope"
+        ],
+        "Spacing": [
+          "lead_knee_at_entry",
+          "trail_knee_at_entry"
+        ],
+        "Hinge": [
+          "hinge_at_entry"
+        ],
+        "Path": [
+          "trail_elbow_downswing",
+          "shoulder_lift_backswing"
+        ]
+      },
+      "direction_words": {
+        "entry_slope": {
+          "higher": [
+            "flatter",
+            "flat"
+          ],
+          "lower": [
+            "steeper",
+            "steep"
+          ]
+        },
+        "downswing_slope": {
+          "higher": [
+            "flatter",
+            "flat"
+          ],
+          "lower": [
+            "steeper",
+            "steep"
+          ]
+        },
+        "backswing_top_slope": {
+          "higher": [
+            "flatter",
+            "flat"
+          ],
+          "lower": [
+            "steeper",
+            "steep"
+          ]
+        }
+      }
     },
     {
       "event_id": "standing_block",
@@ -638,7 +689,57 @@
             }
           ]
         }
-      ]
+      ],
+      "max_implement_dropout_s": 0.3,
+      "attribute_metrics": {
+        "Slope": [
+          "entry_slope",
+          "downswing_slope",
+          "backswing_top_slope"
+        ],
+        "Spacing": [
+          "lead_elbow_at_entry"
+        ],
+        "Hinge": [
+          "hinge_at_entry"
+        ],
+        "Path": [
+          "trail_elbow_downswing",
+          "shoulder_lift_backswing"
+        ]
+      },
+      "direction_words": {
+        "entry_slope": {
+          "higher": [
+            "flatter",
+            "flat"
+          ],
+          "lower": [
+            "steeper",
+            "steep"
+          ]
+        },
+        "downswing_slope": {
+          "higher": [
+            "flatter",
+            "flat"
+          ],
+          "lower": [
+            "steeper",
+            "steep"
+          ]
+        },
+        "backswing_top_slope": {
+          "higher": [
+            "flatter",
+            "flat"
+          ],
+          "lower": [
+            "steeper",
+            "steep"
+          ]
+        }
+      }
     }
   ]
 }

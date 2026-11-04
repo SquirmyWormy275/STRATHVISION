@@ -5,6 +5,7 @@ import 'heads.dart';
 import 'pack.dart';
 import 'body.dart';
 import 'stages.dart';
+import 'strokes.dart';
 
 /// Success payload or Error Contract, never both.
 sealed class AnalysisOutcome {
@@ -96,6 +97,57 @@ class AnalysisEngine {
         );
       }
       final imp = await implement.track(clip, track);
+      return _spanDetail(clip, track, imp, reference, poseConf);
+    } on AnalysisError catch (e) {
+      return AnalysisDetail(AnalysisFailure(e), const {});
+    }
+  }
+
+
+  /// Splits [clip] into strokes (implement-speed peaks) and analyzes each.
+  /// Pose and implement are estimated once. A clip whose body cannot be
+  /// tracked at all returns an empty list.
+  Future<List<StrokeDetail>> analyzeStrokes(ClipSource clip,
+      {Map<String, double> reference = const {}}) async {
+    if (clip.durationMs <= 0 || clip.fps <= 0) return const [];
+    final track = await pose.estimate(clip);
+    final imp = await implement.track(clip, track);
+    final spans = segmentStrokes(imp, clip.fps);
+    final clipDropout = longestDropout(imp, clip.fps, 0, clip.frameCount - 1);
+    final out = <StrokeDetail>[];
+    for (var i = 0; i < spans.length; i++) {
+      final (start, end) = spans[i];
+      final span = clip.withSpan(start, end);
+      final frames = track.frames.where((f) => f.frame >= start && f.frame <= end);
+      final poseConf = frames.isEmpty
+          ? 0.0
+          : PoseTrack(fps: track.fps, frames: frames.toList()).meanConfidence;
+      final dropout = longestDropout(imp, clip.fps, start, end);
+      AnalysisDetail detail;
+      try {
+        detail = _spanDetail(span, track, imp, reference, poseConf);
+      } on AnalysisError catch (e) {
+        detail = AnalysisDetail(AnalysisFailure(e), const {});
+      }
+      out.add(StrokeDetail(
+        clipId: clip.clipId,
+        index: i,
+        startFrame: start,
+        endFrame: end,
+        fps: clip.fps,
+        detail: detail,
+        dropoutSeconds: dropout,
+        clipDropoutSeconds: clipDropout,
+        pack: pack,
+      ));
+    }
+    return out;
+  }
+
+  /// Phases → metrics → features → heads for [clip]'s span, given the
+  /// tracks. Throws [AnalysisError].
+  AnalysisDetail _spanDetail(ClipSource clip, PoseTrack track, ImplementTrack imp,
+      Map<String, double> reference, double poseConf) {
       final spans = phases.detect(clip, track, imp, pack);
       final missing = pack.phases.where((p) => !spans.containsKey(p)).toList();
       if (missing.isNotEmpty) {
@@ -149,9 +201,6 @@ class AnalysisEngine {
           implementConfidence: _r(trackConf),
           features: features,
           headBases: bases);
-    } on AnalysisError catch (e) {
-      return AnalysisDetail(AnalysisFailure(e), const {});
-    }
   }
 
   static double _phasePoseConfidence(PoseTrack track, PhaseSpan span) {

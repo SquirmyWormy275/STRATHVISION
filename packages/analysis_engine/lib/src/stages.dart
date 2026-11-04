@@ -12,6 +12,8 @@ class ClipSource {
     required this.path,
     required this.durationMs,
     required this.fps,
+    this.startFrame = 0,
+    this.endFrame,
   });
 
   final String clipId;
@@ -19,7 +21,21 @@ class ClipSource {
   final int durationMs;
   final double fps;
 
+  /// Optional span inside the clip (one stroke); defaults to the whole clip.
+  final int startFrame;
+  final int? endFrame;
+
   int get frameCount => (durationMs * fps / 1000).floor();
+  int get spanEnd => endFrame ?? frameCount - 1;
+  int get spanFrames => spanEnd - startFrame + 1;
+
+  ClipSource withSpan(int start, int end) => ClipSource(
+      clipId: clipId,
+      path: path,
+      durationMs: durationMs,
+      fps: fps,
+      startFrame: start,
+      endFrame: end);
 }
 
 // ------------------------------------------------------------ stage interfaces
@@ -126,7 +142,10 @@ class StubPoseEstimator implements PoseEstimator {
     final period = clip.fps * (1.2 + style.next()) * vary(); // frames per cycle
     final frames = <PoseFrame>[];
     for (var f = 0; f < n; f += stride) {
-      final t = 2 * math.pi * f / period + phase;
+      // Uneven speed through the cycle (slow back, fast down), like a real
+      // swing: gives one speed peak per stroke.
+      final u = 2 * math.pi * f / period;
+      final t = u + 0.6 * math.sin(u) + phase;
       final s = math.sin(t), c = math.cos(t);
       final joints = <Joint, Vec3>{};
       _rest.forEach((j, p) {
@@ -189,7 +208,8 @@ class StubPhaseDetector implements PhaseDetector {
   @override
   Map<String, PhaseSpan> detect(ClipSource clip, PoseTrack pose,
       ImplementTrack implement, AnalysisPack pack) {
-    final n = clip.frameCount;
+    final n = clip.spanFrames;
+    final start = clip.startFrame;
     final per = n ~/ pack.phases.length;
     if (n <= 0 || per < pack.minPhaseFrames || pose.frames.isEmpty) {
       throw AnalysisError(
@@ -205,8 +225,8 @@ class StubPhaseDetector implements PhaseDetector {
     return {
       for (var i = 0; i < pack.phases.length; i++)
         pack.phases[i]: PhaseSpan(
-          startFrame: i * per,
-          endFrame: i == pack.phases.length - 1 ? n - 1 : (i + 1) * per - 1,
+          startFrame: start + i * per,
+          endFrame: start + (i == pack.phases.length - 1 ? n - 1 : (i + 1) * per - 1),
           confidence: confidence,
         ),
     };

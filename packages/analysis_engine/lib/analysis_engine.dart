@@ -20,3 +20,5 @@ export 'src/probes.dart';
 export 'src/pack_file.dart';
 export 'src/harness.dart';
 export 'src/adapters.dart';
+export 'src/strokes.dart';
+export 'src/carne.dart';

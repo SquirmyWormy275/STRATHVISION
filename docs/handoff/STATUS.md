@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T15:39:38Z
+heartbeat: 2026-11-04T15:46:49Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Phase 8: read EXECUTION_PLAN Phase 8 and docs/CARNE_ASADA.md fully; start task 1
+next: Phase 8 app: CARNE ASADA playground screen (desktop, drop zone via desktop_drop), feed routing (video/package/text/voice), marks from projects bound to strokes, auto loop step, what-did-it-do + undo, save vN+1 with carne_asada/mixture_edits_vN.json; phone ignores carne_asada/
 <!-- STATE:END -->
 
 ## Phase progress
@@ -49,6 +49,7 @@ next: Phase 8: read EXECUTION_PLAN Phase 8 and docs/CARNE_ASADA.md fully; start 
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T15:46:49Z **claude** — Phase 8 engine: stroke segmentation from implement-speed peaks + per-stroke analysis (usable action: phases, critical pose, implement dropout), CarneSession (exact DECISIONS copy templated from pack words, diagnose→propose→evaluate→accept loop on priority attribute, coach hull + held-out check, 5–10 limit, Good baseline gate, chaos, undo, carne_asada edits record), timber attribute_metrics + direction words. 87 engine tests. → next: Phase 8 app: CARNE ASADA playground screen (desktop, drop zone via desktop_drop), feed routing (video/package/text/voice), marks from projects bound to strokes, auto loop step, what-did-it-do + undo, save vN+1 with carne_asada/mixture_edits_vN.json; phone ignores carne_asada/
 - 2026-11-04T15:39:38Z **claude** — Phase 7 done: workbench screen (desktop) — harness on coach clips with probe table + rule-by-rule decision, adapter compile via Claude Messages API (raw HTTP, claude-opus-5-5, json_schema, fallbacks default, key from ANTHROPIC_API_KEY), Save as vN+1 with patch + .paw adapters; inference loads patches/adapters (usable warning, Focus next). INTERFACES: acceptance rules, adapter specs, .paw format. 75 engine + 77 app + 3 Linux real-decoder tests; release build OK. → next: Phase 8: read EXECUTION_PLAN Phase 8 and docs/CARNE_ASADA.md fully; start task 1
 - 2026-11-04T15:31:41Z **claude** — Phase 7 task 4 (engine): compile-once adapters — AdapterSpec in pack (timber: usable_footage, priority_scorer with examples), .paw logistic format, local runtime, example validation with feedback retries, ADAPTER_COMPILE_FAILED, stale/foreign detection by spec hash, generic adapter inputs. 75 engine tests. → next: Phase 7 app: bundle reads adapters/*.paw, store packages with patches+adapters as new versions, adapters applied at inference (usable warning + focus), Claude Messages API compiler (raw HTTP, claude-opus-5-5, json_schema), workbench screen (harness + compile) on desktop
 - 2026-11-04T15:28:41Z **claude** — Phase 7 tasks 1-3 (engine): SpecialistHarness — probe-only black-box coordinate search over the head output layer, DECISIONS.md accept rules declared per head in the pack (timber.json acceptance), typed rule checks, cumulative versioned patches that the phone loader accepts. 66 engine tests. → next: Phase 7 task 4-5: compile-once adapters (spec in pack → .paw adapter JSON, local runtime, example validation, ADAPTER_COMPILE_FAILED), then workbench UI (tune + compile, write patch/adapters into a new package version) and adapter loading in inference

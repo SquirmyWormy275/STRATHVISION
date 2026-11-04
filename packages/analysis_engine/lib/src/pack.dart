@@ -177,6 +177,9 @@ class AnalysisPack {
     this.heads = const [],
     this.probes = const [],
     this.adapters = const [],
+    this.maxImplementDropoutS = 0.3,
+    this.attributeMetrics = const {},
+    this.directionWords = const {},
   }) : criticalPhases = criticalPhases ?? phases;
 
   final String packId;
@@ -215,6 +218,23 @@ class AnalysisPack {
 
   /// Compile-once adapter specs (English) for this event.
   final List<AdapterSpec> adapters;
+
+  /// A stroke whose implement track drops out longer than this is not
+  /// usable action (DECISIONS.md "Thresholds and Gating").
+  final double maxImplementDropoutS;
+
+  /// Which metrics each mark attribute speaks to (attribute isolation).
+  final Map<String, List<String>> attributeMetrics;
+
+  /// Words for a metric moving up or down, as [comparative, plain]
+  /// (for example "steeper", "steep"). Default: higher/high, lower/low.
+  final Map<String, ({List<String> higher, List<String> lower})> directionWords;
+
+  List<String> wordsFor(String metric, {required bool up}) {
+    final w = directionWords[metric];
+    if (w == null) return up ? const ['higher', 'high'] : const ['lower', 'low'];
+    return up ? w.higher : w.lower;
+  }
 
   /// Reads an event's analysis section from pack JSON, or throws
   /// [AnalysisError] with SCHEMA_MISMATCH listing every problem.
@@ -481,6 +501,44 @@ class AnalysisPack {
 
     final adapters = AdapterSpec.listFromJson(json['adapters'], problems);
 
+    final dropout = json['max_implement_dropout_s'] ?? 0.3;
+    if (dropout is! num || dropout < 0) {
+      problems.add('max_implement_dropout_s must be a number >= 0');
+    }
+    final attrMetrics = <String, List<String>>{};
+    final rawAttr = json['attribute_metrics'] ?? const {};
+    if (rawAttr is! Map) {
+      problems.add('attribute_metrics must map attributes to metric keys');
+    } else {
+      for (final e in rawAttr.entries) {
+        final v = e.value;
+        if (v is! List || v.isEmpty || v.any((k) => k is! String || !keys.contains(k))) {
+          problems.add('attribute_metrics.${e.key} must list pack metrics');
+        } else {
+          attrMetrics['${e.key}'] = v.cast<String>();
+        }
+      }
+    }
+    final words = <String, ({List<String> higher, List<String> lower})>{};
+    final rawWords = json['direction_words'] ?? const {};
+    if (rawWords is! Map) {
+      problems.add('direction_words must be an object');
+    } else {
+      for (final e in rawWords.entries) {
+        final v = e.value;
+        List<String>? pair(Object? x) =>
+            x is List && x.length == 2 && x.every((w) => w is String) ? x.cast<String>() : null;
+        final hi = v is Map ? pair(v['higher']) : null;
+        final lo = v is Map ? pair(v['lower']) : null;
+        if (!keys.contains(e.key) || hi == null || lo == null) {
+          problems.add('direction_words.${e.key} needs higher and lower as '
+              '[comparative, plain] for a pack metric');
+        } else {
+          words['${e.key}'] = (higher: hi, lower: lo);
+        }
+      }
+    }
+
     final minCritical = unit('min_critical_pose_confidence', 0.6);
     final selfConsistency = unit('self_consistency_threshold', 0.5);
 
@@ -504,6 +562,9 @@ class AnalysisPack {
       heads: heads,
       probes: probes,
       adapters: adapters,
+      maxImplementDropoutS: dropout is num ? dropout.toDouble() : 0.3,
+      attributeMetrics: attrMetrics,
+      directionWords: words,
     );
   }
 }
