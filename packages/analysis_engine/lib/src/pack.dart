@@ -261,3 +261,21 @@ class AnalysisPack {
     );
   }
 }
+
+String _jointLabel(Joint j) => j.wire.replaceAll('_', ' ');
+
+/// Plain definition of a metric from its pack entry, for the expandable
+/// delta view. Generic: built only from kind, joints, and phase label.
+String describeMetric(MetricDef m, {String Function(String phase)? phaseLabel}) {
+  final phase = phaseLabel?.call(m.phase) ?? m.phase;
+  final joints = m.joints.map(_jointLabel).join(' · ');
+  return switch (m.kind) {
+    MetricKind.jointAngle =>
+      'Average angle at the ${_jointLabel(m.joints[1])} ($joints) during $phase.',
+    MetricKind.jointRange =>
+      'How far the angle at the ${_jointLabel(m.joints[1])} ($joints) opens and closes during $phase.',
+    MetricKind.implementInclination =>
+      'Average angle of the implement above horizontal during $phase.',
+    MetricKind.phaseDuration => 'How long $phase lasts.',
+  };
+}

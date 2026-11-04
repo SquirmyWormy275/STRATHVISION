@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T15:07:33Z
+heartbeat: 2026-11-04T15:10:11Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Phase 5 task 1: comparison engine in packages/analysis_engine/lib/src/compare.dart: MetricVector + Profile → ComparisonResult (ranked deltas by contribution, coverage, nearest reference clips, applied_patches), schema checks per INTERFACES Versioning Rules
+next: Phase 5 app: readProfileBundle (profile + patches from zip/dir), DB table for comparison results (schema v3), AnalysisController compare-with-profile, score + expandable ranked deltas + warnings in the Analysis panel
 <!-- STATE:END -->
 
 ## Phase progress
@@ -41,6 +41,7 @@ next: Phase 5 task 1: comparison engine in packages/analysis_engine/lib/src/comp
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T15:10:11Z **claude** — Phase 5 tasks 1+5 (engine): compare() MetricVector+Profile → ComparisonResult per new INTERFACES 'Comparison rules' (contribution ranking, coverage, warnings, nearest refs); specialist patch format in INTERFACES + loader (PATCH_REJECTED, ≤2% weights, highest valid version) + applyPatches; describeMetric. 47 engine tests pass. → next: Phase 5 app: readProfileBundle (profile + patches from zip/dir), DB table for comparison results (schema v3), AnalysisController compare-with-profile, score + expandable ranked deltas + warnings in the Analysis panel
 - 2026-11-04T15:07:33Z **claude** — Phase 4 done: Build a profile screen (Library → person-plus): clip import with per-clip quality, Build → ready profile stored as zip (profile.json + specialist_patches/ + adapters/) and listed in Library, or Error-Contract rejection; Save a copy. Headless media_kit probe (vid=auto fix). Drift row class renamed ProfileRow. 59 app + 31 engine + 3 Linux real-decoder tests pass. Docs: INTERFACES gates/pack fields, DECISIONS Phase 4. → next: Phase 5 task 1: comparison engine in packages/analysis_engine/lib/src/compare.dart: MetricVector + Profile → ComparisonResult (ranked deltas by contribution, coverage, nearest reference clips, applied_patches), schema checks per INTERFACES Versioning Rules
 - 2026-11-04T14:31:24Z **claude** — Phase 4 tasks 1-3 (engine): clip quality evaluation, profile fitting (mean/SD floored by pack min_spread, confidence-scaled weights), leave-one-out self-consistency, gates → ready Profile or Error-Contract rejection; validateProfile + Profile model in engine; style-seeded synthetic stub pose. 31 engine tests pass. → next: Phase 4 app side: ProfileMetadata.fromJson → engine validateProfile; media_kit clip probe; Build profile screen from Library (pick 15+ clips, quality list, Build, Export zip with profile.json + specialist_patches/ + adapters/, add to Library)
 - 2026-11-04T14:27:43Z **claude** — Phase 3 done: Analyze button + raw-metrics panel (wide: side, narrow: below video), engine on background isolate, Error Contract shown on failure. Pack analysis section + error mapping added to INTERFACES.md, Phase 3 decisions in DECISIONS.md. 55 app tests + 18 engine tests + 2 real-decoder tests (Linux) pass. Linux release builds. → next: Phase 4 task 1: clip import + quality evaluation for the profile builder (workbench). Start in packages/analysis_engine/lib/src/builder/ with quality evaluation over Metric Vectors; acceptance uses 15+ synthetic clips.

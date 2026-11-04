@@ -2,6 +2,7 @@ import 'contracts.dart';
 import 'errors.dart';
 import 'features.dart';
 import 'heads.dart';
+import 'patch.dart';
 import 'pack.dart';
 import 'body.dart';
 import 'stages.dart';
@@ -45,7 +46,7 @@ class AnalysisEngine {
     this.implement = const StubImplementTracker(),
     this.phases = const StubPhaseDetector(),
     List<SpecialistHead>? heads,
-  }) : heads = heads ?? [stubSlopeResidualHead()];
+  }) : heads = heads ?? defaultHeads();
 
   final AnalysisPack pack;
   final PoseEstimator pose;

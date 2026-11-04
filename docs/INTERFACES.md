@@ -169,6 +169,64 @@ Per metric (optional): `"weight": 1.0` is the pack default weight for style matc
 
 `overall_score` is a style-match score against the selected profile, not a universal quality score.
 
+### Comparison rules
+
+- **Preconditions.**
+  - The profile's `pack_id` and `event_id` must match the Metric Vector's, and `metric_schema_version` must be equal. There is no migration step yet. Otherwise → `SCHEMA_MISMATCH`.
+  - A profile whose quality gates did not pass → `PROFILE_NOT_READY`.
+  - No profile metric present in the vector → `SCHEMA_MISMATCH`.
+- **Per metric** present in both:
+  - `distance_spreads = |user_value - coach_center| / coach_spread`.
+  - `contribution = weight * (1 - exp(-d²/2)) / Σweight`. This is the share of the score lost to this metric, so `overall_score + Σcontribution = 1` over the metrics used.
+  - `direction` is `neutral` when d < 0.5. Otherwise it is `higher` or `lower`, according to the sign of `user_value - coach_center`.
+- **Ranking.** `ranked_deltas` are sorted by `contribution`, descending. Ties are broken by `metric_key`.
+- **Overall score.** `overall_score` is the style-match score (Quality Gates) over the metrics used.
+- **Coverage.**
+  - `metrics_missing` lists profile metrics absent from the vector.
+  - `low_confidence_phases` lists phases with confidence below 0.6.
+- **Warnings.** These are plain sentences, issued for:
+  - low-confidence phases
+  - any metric used with confidence below 0.6
+  - `pose_confidence_summary` below 0.6
+  - missing metrics
+  - rejected patches
+  
+  Low confidence never raises the score. It is always surfaced as a warning.
+- **Nearest references.** `nearest_reference_clip_ids` holds up to 3 profile `reference_clips`, nearest first, by weighted RMS distance in spreads over the metrics used.
+- **Patches.** `applied_patches` names each patch applied to the specialist heads for this analysis, such as `slope_residual_v3`.
+- **Determinism.** The same Metric Vector, profile and patches always give the same result, apart from `result_id`.
+
+## Specialist Patch (`specialist_patches/<head>_v<N>.patch`)
+
+A sparse additive edit to one specialist head's weights. It is JSON despite the extension.
+
+```json
+{
+  "head": "slope_residual",
+  "version": 3,
+  "base": "slope_residual/stub/v0",
+  "edits": [
+    { "tensor": "w1", "index": [4, 17], "delta": 0.012 },
+    { "tensor": "b2", "index": [], "delta": -0.003 }
+  ],
+  "notes": "string"
+}
+```
+
+- `tensor` is one of `w1 [32][64]`, `b1 [32]`, `w2 [32]` or `b2 []`. `index` must be in range for that shape.
+- `base` must equal the head's base-weights id. A patch made for other base weights is rejected.
+- Patches are cumulative: version N includes every earlier edit. Only the highest valid version per head is applied.
+- A patch is rejected (`PATCH_REJECTED`, `details.problems`) if any of these hold:
+  - the head is unknown
+  - the base differs
+  - an index is out of range
+  - the patch has duplicate edits
+  - a delta is not finite
+  - it touches 2% or more of the head's weights (the DECISIONS.md bound)
+  - the file name doesn't match `head`/`version`
+  
+  A rejected patch is never applied. Analysis and comparison continue without it, and the result carries a warning.
+
 ## Workspace Events (internal, for dual-video)
 
 The dual-video workspace must support these operations as first-class:

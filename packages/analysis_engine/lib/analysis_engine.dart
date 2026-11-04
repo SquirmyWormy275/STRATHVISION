@@ -14,3 +14,5 @@ export 'src/stages.dart';
 export 'src/builder.dart';
 export 'src/profile.dart';
 export 'src/scoring.dart';
+export 'src/compare.dart';
+export 'src/patch.dart';
