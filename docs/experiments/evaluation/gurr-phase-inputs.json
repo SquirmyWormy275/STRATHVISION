@@ -1,0 +1,44 @@
+{
+  "format": "gurr-accuracy-inputs/1",
+  "windows": [
+    {
+      "window_id": "test-new-training",
+      "source_name": "24-25/IMG_3711.MOV",
+      "clip_sha256": "19adfeb1e2b4a08e5744c98cacb1b809e19658f011411b84058cafbfe8e46c2e",
+      "start_s": 12,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.993324027432177,
+      "seed_raw": [
+        0.49,
+        0.48
+      ]
+    },
+    {
+      "window_id": "test-new-competition-a",
+      "source_name": "Competition/IMG_7985.MOV",
+      "clip_sha256": "6a631435a4a970bc2a673ef9753a86ce5c29d8a1028c8ca42f6877500a862158",
+      "start_s": 10,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.997307243514946,
+      "seed_raw": [
+        0.265,
+        0.48
+      ]
+    },
+    {
+      "window_id": "test-new-competition-b",
+      "source_name": "Competition/IMG_7987.MOV",
+      "clip_sha256": "1cd3b407053cdea552ffb433c1be762d7f0495c80a6b88c2a02ae6c6f09d5113",
+      "start_s": 20,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.996985227615315,
+      "seed_raw": [
+        0.32,
+        0.5
+      ]
+    }
+  ]
+}

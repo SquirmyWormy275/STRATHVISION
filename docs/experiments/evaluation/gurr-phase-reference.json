@@ -1,0 +1,191 @@
+{
+  "format": "gurr-accuracy-reference/1",
+  "date": "2026-11-04",
+  "reviewer": "Codex visual review; single reviewer; not coach validated",
+  "review_sample_rate": 10,
+  "time_origin": "seconds from evaluation window start",
+  "split_unit": "source video SHA-256",
+  "contact_tolerance_s": 0.2,
+  "prior_exposure": "Included only in the unlabelled corpus ingestion run, excluded from the first accuracy pilot. Candidate source and inference parameters are already frozen.",
+  "coach_marks": 0,
+  "windows": [
+    {
+      "window_id": "test-new-training",
+      "clip_sha256": "19adfeb1e2b4a08e5744c98cacb1b809e19658f011411b84058cafbfe8e46c2e",
+      "split": "test",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [
+        [
+          0.3,
+          0.5
+        ],
+        [
+          4.95,
+          5.15
+        ],
+        [
+          6.3,
+          6.5
+        ]
+      ],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.49,
+            0.48
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.5,
+            0.5
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.53,
+            0.49
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.52,
+            0.48
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.53,
+            0.51
+          ]
+        }
+      ],
+      "notes": "Visible implement contacts in clear training view; reviewed at 10 fps."
+    },
+    {
+      "window_id": "test-new-competition-a",
+      "clip_sha256": "6a631435a4a970bc2a673ef9753a86ce5c29d8a1028c8ca42f6877500a862158",
+      "split": "test",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": null,
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.265,
+            0.48
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.25,
+            0.49
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.265,
+            0.49
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.28,
+            0.49
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.25,
+            0.49
+          ]
+        }
+      ],
+      "notes": "Tracking-only: rear-view competitor hides the contact point; contact list unknown."
+    },
+    {
+      "window_id": "test-new-competition-b",
+      "clip_sha256": "1cd3b407053cdea552ffb433c1be762d7f0495c80a6b88c2a02ae6c6f09d5113",
+      "split": "test",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.32,
+            0.5
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.32,
+            0.5
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.32,
+            0.5
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.33,
+            0.51
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.32,
+            0.5
+          ]
+        }
+      ],
+      "notes": "Setup/holding and repositioning; no visible cutting contact during scored interval."
+    }
+  ]
+}
