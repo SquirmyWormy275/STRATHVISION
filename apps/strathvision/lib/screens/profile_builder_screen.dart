@@ -39,7 +39,7 @@ ProfileBuilderController defaultProfileBuilder(AppDatabase db, PackInfo pack) =>
     ProfileBuilderController(
       pack: pack.analysisPack,
       probe: probeClip,
-      evaluate: isolateEvaluator(pack.analysisPack),
+      evaluate: visionEvaluator(pack.analysisPack),
       store: (profile) async {
         final support = await getApplicationSupportDirectory();
         return storeProfilePackage(

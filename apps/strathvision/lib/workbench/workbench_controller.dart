@@ -8,10 +8,30 @@ import 'package:uuid/uuid.dart';
 
 import '../profiles/clip_probe.dart';
 import '../profiles/profile_package.dart';
+import '../vision/pose_service.dart';
 
 /// Analyzes one probe clip against the coach reference with patches applied.
 typedef ProbeAnalyzer = Future<AnalysisDetail> Function(ClipSource clip,
     Map<String, double> reference, List<SpecialistPatch> patches);
+
+/// Production probe analyzer: real pose on device, per stroke.
+ProbeAnalyzer visionProbeAnalyzer(AnalysisPack pack) => (clip, reference, patches) async {
+      final track = await PoseService.instance.track(clip);
+      if (track.frames.isEmpty) {
+        return AnalysisDetail(
+            AnalysisFailure(AnalysisError(ErrorCode.lowPoseConfidence,
+                'No person could be found in this clip.')),
+            const {});
+      }
+      return Isolate.run(() => AnalysisEngine(
+              pack: pack,
+              pose: PrecomputedPoseEstimator(track),
+              implement: const GripImplementTracker(),
+              phases: const EventPhaseDetector(),
+              heads: applyPatches(headsFor(pack), patches),
+              perStroke: true)
+          .analyzeDetailed(clip, reference: reference));
+    };
 
 ProbeAnalyzer isolateProbeAnalyzer(AnalysisPack pack) =>
     (clip, reference, patches) => Isolate.run(() => AnalysisEngine(

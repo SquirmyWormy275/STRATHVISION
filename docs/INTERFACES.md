@@ -208,12 +208,24 @@ At inference:
 **Stroke and attribute fields** (optional per event):
 
 ```json
+"stroke_signal": "tops | speed_peaks",
+"phase_events": ["low_before_top", "top", "low", "settle"],
 "max_implement_dropout_s": 0.3,
 "attribute_metrics": { "Slope": ["entry_slope", "downswing_slope"] },
 "direction_words": { "entry_slope": { "higher": ["flatter", "flat"], "lower": ["steeper", "steep"] } }
 ```
 
-- Strokes come from implement-speed peaks, one peak per stroke, with boundaries midway between peaks. Edge partials and strokes outside 0.5–1.5× the median length are dropped.
+- How strokes are found depends on `stroke_signal`:
+  - `speed_peaks` (default): one implement-speed peak per stroke, with boundaries midway between peaks. Edge partials and strokes outside 0.5–1.5× the median length are dropped.
+  - `tops`: one backswing top per stroke, from the rise before it through contact, split in the pause after contact.
+- `phase_events` gives one motion event per phase boundary, in order, on the implement tip:
+  - `low_before_top` (rise)
+  - `top`
+  - `fastest`
+  - `low` (contact: the descent slows to 20% of its peak)
+  - `settle` (speed below 25% of peak)
+  
+  Without `phase_events`, phases split evenly at confidence 0.5. The first and last phases may be shorter than `min_phase_frames` (cut by the recording), at half confidence.
 - A stroke is usable action when phases are assigned, critical-phase pose confidence meets `min_critical_pose_confidence`, and no implement dropout (confidence below 0.5) lasts longer than `max_implement_dropout_s`.
 - `attribute_metrics` says which metrics a mark attribute speaks to. CARNE ASADA edits only the priority attribute's metrics.
 - `direction_words` give the words used in status copy, as [comparative, plain].

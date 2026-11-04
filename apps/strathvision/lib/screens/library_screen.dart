@@ -560,7 +560,7 @@ WorkbenchFactory defaultWorkbench(AppDatabase db) => (row, pack) async {
         pack: pack.analysisPack,
         bundle: bundle,
         probe: probeClip,
-        analyze: isolateProbeAnalyzer(pack.analysisPack),
+        analyze: visionProbeAnalyzer(pack.analysisPack),
         compiler: ClaudeAdapterCompiler.fromEnvironment(),
         write: (Profile profile, patches, adapters) async {
           final support = await getApplicationSupportDirectory();

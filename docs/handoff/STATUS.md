@@ -43,7 +43,7 @@ next: App: ship BlazePose ONNX (converted from MediaPipe, Apache-2.0) as an asse
 
 - **Confirm the profile-gate defaults** (not blocking; they are pack-overridable): `min_critical_pose_confidence` 0.6 and `self_consistency_threshold` 0.5. Without a per-metric `min_spread`, leave-one-out scores sit around 0.6–0.7 for most footage (DECISIONS.md, Phase 4). Real packs should set `min_spread` per metric.
 
-- **Which 3D pose model?** (needed before real footage gives real metrics, not before Phase 4's synthetic-clip acceptance.) DECISIONS.md requires full-body 3D root-relative pose and a lightweight implement tracker, but doesn't name the models. The engine has `PoseEstimator` / `ImplementTracker` interfaces ready. The human must pick the models and confirm their licences.
+- **Confirm the pose model choice** (made by Claude when told not to stop): MediaPipe BlazePose GHUM 3D (Apache-2.0), on ONNX Runtime, on every platform (DECISIONS.md "Real Pose Decisions"). The implement is still inferred from the grip, not detected; a trained implement detector is the next accuracy step. Standing block (horizontal swing) still needs clean footage to validate. The Gurr Academy zip in `~/Projects/CARNE ASADA/` was still downloading.
 
 - **Phase 1 Windows acceptance is open.** On a Windows PC: `cd apps/strathvision && flutter run -d windows`, then follow the "Phase 1 manual check" in apps/strathvision/README.md. iOS/macOS builds need a Mac.
 

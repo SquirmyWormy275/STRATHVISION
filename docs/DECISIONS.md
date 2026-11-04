@@ -202,6 +202,31 @@ See docs/CARNE_ASADA.md for full specification.
   - `.github/workflows/builds.yml` (public repo) builds the APK, the Linux, Windows and macOS zips, and an unsigned iOS app on every app change, after the tests pass.
   - `docs/DISTRIBUTION.md` covers sideloading, ad-hoc IPA signing, and running the zips.
 
+## Real Pose Decisions (replacing the Phase 3 stand-ins)
+
+- **Pose model:** MediaPipe BlazePose GHUM 3D, the "full" landmark model, Apache-2.0.
+  - It gives full-body metric 3D world landmarks centred on the hips, which is what "Core Engine" requires: root-relative and camera-agnostic.
+  - It is converted to ONNX (`assets/models/pose_landmark_full.onnx`, 12.8 MB) and runs through the `onnxruntime` Flutter plugin, which bundles the native runtime for Android, iOS, macOS, Windows and Linux.
+  - The conversion matches the original within 1e-3 on landmarks.
+  - Chosen by the agent when the human said to proceed without stopping. Listed for confirmation in STATUS.
+- **Person finding:** there is no separate detector, because the detector model didn't convert cleanly. The tracker starts on the whole frame and then follows the body from the previous frame's hip-centre and scale landmarks (MediaPipe's own tracking rule). If presence drops below 0.5, it searches the whole frame again. This suits clips where one athlete fills a good part of the shot. Crowded wide shots may lock onto the wrong person.
+- **Frames:** a headless media_kit player (no window, no sound) decodes exact frames as raw BGRA. Clips are sampled at up to 15 fps, at most 1,800 samples per clip. On this laptop that runs at about 39 ms per frame.
+- **Joint confidence:** presence × (0.4 + 0.6 × visibility), so a joint that is hidden but in frame still counts at 0.4. BlazePose infers hidden joints well, and visibility alone made every far-side wrist look missing.
+- **Implement:** `GripImplementTracker` infers the implement from the grip: a 0.75 m segment from between the hands along the forearms, with the better-seen wrist's confidence. This is not a vision detector for the implement itself; one can replace it behind `ImplementTracker` once a trained detector exists.
+- **Phases:** `EventPhaseDetector` places boundaries from pack-declared events on the implement tip:
+  - `low_before_top` (rise)
+  - `top`
+  - `low` (contact, where the descent slows to 20% of its peak)
+  - `settle` (speed below 25% of peak)
+  - `fastest`
+  
+  The first and last phases may be cut short by the recording; they are allowed at half confidence.
+- **Strokes:** with pack `stroke_signal: tops` (timber underhand), there is one stroke per backswing top, split in the pause after contact. With `speed_peaks` (the default, and standing block for now), there is one stroke per speed peak.
+- **Clip measurements:** a clip's Metric Vector is the median over its usable strokes; phases come from the stroke nearest the median.
+- **Validation** on openly licensed real footage:
+  - Wood cleaving: two overhead strokes found, contact within the hand-checked range, plausible angles. Dart and Python runs agree to a 3.7 cm median.
+  - A standing-block competition clip shot through a fence was not usable: arms are lost to the fence and motion blur. Standing block (horizontal swing) is not yet validated on clean footage.
+
 ## Thresholds and Gating (timber defaults)
 
 - Usable action = confident 3D pose + confident implement + assigned phase + actual stroke.

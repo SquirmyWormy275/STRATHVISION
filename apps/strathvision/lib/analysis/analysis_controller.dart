@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../profiles/profile_package.dart';
+import '../vision/pose_service.dart';
 import '../workspace/workspace_controller.dart';
 
 /// Runs the engine for one clip with the given specialist patches applied.
@@ -12,7 +13,34 @@ import '../workspace/workspace_controller.dart';
 typedef AnalysisRunner = Future<AnalysisDetail> Function(ClipSource clip,
     List<SpecialistPatch> patches, Map<String, double> reference);
 
-/// Runs the engine off the UI isolate so scrubbing stays at 60 fps.
+/// The production runner: real 3D pose (BlazePose) on this device, then the
+/// engine on a background isolate (per-stroke, pack phase events).
+AnalysisRunner visionRunner(AnalysisPack pack, {PoseService? poses}) =>
+    (clip, patches, reference) async {
+      final track = await (poses ?? PoseService.instance).track(clip);
+      return analyzeWithTrack(pack, clip, track, patches: patches, reference: reference);
+    };
+
+/// The engine on a precomputed real pose track, off the UI isolate.
+Future<AnalysisDetail> analyzeWithTrack(AnalysisPack pack, ClipSource clip, PoseTrack track,
+    {List<SpecialistPatch> patches = const [], Map<String, double> reference = const {}}) {
+  if (track.frames.isEmpty) {
+    return Future.value(AnalysisDetail(
+        AnalysisFailure(AnalysisError(ErrorCode.lowPoseConfidence,
+            'No person could be found in this clip.', {'pose_frames': 0})),
+        const {}));
+  }
+  return Isolate.run(() => AnalysisEngine(
+          pack: pack,
+          pose: PrecomputedPoseEstimator(track),
+          implement: const GripImplementTracker(),
+          phases: const EventPhaseDetector(),
+          heads: applyPatches(headsFor(pack), patches),
+          perStroke: true)
+      .analyzeDetailed(clip, reference: reference));
+}
+
+/// The engine with the stand-in pose (tests, and clips without video).
 AnalysisRunner isolateRunner(AnalysisPack pack) =>
     (clip, patches, reference) => Isolate.run(() => AnalysisEngine(
             pack: pack, heads: applyPatches(headsFor(pack), patches))

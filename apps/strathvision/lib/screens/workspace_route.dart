@@ -71,7 +71,7 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
   late final AnalysisController _analysis = AnalysisController(
     workspace: _controller,
     pack: widget.pack.analysisPack,
-    run: widget.analysisRunner ?? isolateRunner(widget.pack.analysisPack),
+    run: widget.analysisRunner ?? visionRunner(widget.pack.analysisPack),
     listProfiles: () => compatibleProfiles(widget.db, widget.pack),
     metricLabel: widget.pack.metricLabel,
     phaseLabel: (id) => widget.pack.phaseLabel(id).toLowerCase(),

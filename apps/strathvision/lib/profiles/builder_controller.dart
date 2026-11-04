@@ -8,11 +8,32 @@ import 'package:uuid/uuid.dart';
 import 'clip_probe.dart';
 import 'profile_export.dart';
 import 'profile_package.dart';
+import '../vision/pose_service.dart';
 
 typedef ClipEvaluator = Future<ClipQuality> Function(
     ClipSource clip, String displayName);
 
-/// Evaluates a reference clip on a background isolate.
+/// Production evaluator: real pose on device, then quality evaluation.
+ClipEvaluator visionEvaluator(AnalysisPack pack) => (clip, name) async {
+      final track = await PoseService.instance.track(clip);
+      if (track.frames.isEmpty) {
+        return ClipQuality(
+            clipId: clip.clipId,
+            displayName: name,
+            usable: false,
+            reasons: const ['No person could be found in this clip.']);
+      }
+      return Isolate.run(() => ProfileBuilder(
+              engine: AnalysisEngine(
+                  pack: pack,
+                  pose: PrecomputedPoseEstimator(track),
+                  implement: const GripImplementTracker(),
+                  phases: const EventPhaseDetector(),
+                  perStroke: true))
+          .evaluate(clip, displayName: name));
+    };
+
+/// Evaluates a reference clip on a background isolate (stand-in pose).
 ClipEvaluator isolateEvaluator(AnalysisPack pack) => (clip, name) => Isolate.run(
     () => ProfileBuilder(engine: AnalysisEngine(pack: pack))
         .evaluate(clip, displayName: name));

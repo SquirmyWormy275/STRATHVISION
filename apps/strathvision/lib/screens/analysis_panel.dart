@@ -2,6 +2,7 @@ import 'package:analysis_engine/analysis_engine.dart';
 import 'package:flutter/material.dart';
 
 import '../analysis/analysis_controller.dart';
+import '../vision/pose_service.dart';
 import '../packs/placeholder_pack.dart';
 import '../workspace/workspace_controller.dart';
 
@@ -193,17 +194,20 @@ class _Running extends StatelessWidget {
   const _Running();
 
   @override
-  Widget build(BuildContext context) => Column(
-        key: const Key('analysis-running'),
-        children: [
-          const LinearProgressIndicator(),
-          Expanded(
-            child: Center(
-              child: Text('Analyzing…',
-                  style: Theme.of(context).textTheme.bodyMedium),
+  Widget build(BuildContext context) => ValueListenableBuilder<double?>(
+        valueListenable: PoseService.instance.progress,
+        builder: (context, p, _) => Column(
+          key: const Key('analysis-running'),
+          children: [
+            LinearProgressIndicator(value: p),
+            Expanded(
+              child: Center(
+                child: Text(p == null ? 'Analyzing…' : 'Tracking the body… ${(p * 100).round()}%',
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
 }
 
@@ -335,18 +339,6 @@ class _Metrics extends StatelessWidget {
                 ]),
               ),
           },
-        Container(
-          margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-              color: scheme.tertiaryContainer,
-              borderRadius: BorderRadius.circular(8)),
-          child: Text(
-            'Body tracking is a stand-in in this build. Values are placeholders.',
-            style: theme.textTheme.bodySmall
-                ?.copyWith(color: scheme.onTertiaryContainer),
-          ),
-        ),
         section('Measurements'),
         section('Body tracking'),
         _Row(

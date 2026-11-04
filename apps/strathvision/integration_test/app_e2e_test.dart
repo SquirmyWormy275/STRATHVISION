@@ -36,10 +36,11 @@ void main() {
       final d = Directory('${support!.path}/profiles');
       return d.existsSync() ? d.listSync().map((f) => f.path).toSet() : <String>{};
     });
-    // 15 reference clips of one "coach" (copies; each gets its own id).
+    // 15 reference clips of one "coach": copies of a real swing clip
+    // (each gets its own id; real pose runs on every one).
     final refs = await tester.runAsync(() async => [
           for (var i = 1; i <= 15; i++)
-            (await File('$clipDir/clip30.mp4').copy('${work!.path}/swing_${i.toString().padLeft(2, '0')}.mp4')).path,
+            (await File('$clipDir/cleave.webm').copy('${work!.path}/swing_${i.toString().padLeft(2, '0')}.webm')).path,
         ]);
     final db = AppDatabase(NativeDatabase(File('${work!.path}/e2e.sqlite')));
     final packs = await tester.runAsync(() => loadPacks(rootBundle));
@@ -82,7 +83,11 @@ void main() {
     Future<void> wait(WidgetTester t, Finder f, {int seconds = 30}) async {
       final end = DateTime.now().add(Duration(seconds: seconds));
       while (f.evaluate().isEmpty) {
-        if (DateTime.now().isAfter(end)) fail('timed out waiting for $f');
+        if (DateTime.now().isAfter(end)) {
+          await snap('FAILED_waiting');
+          final texts = find.byType(Text).evaluate().map((e) => (e.widget as Text).data).whereType<String>().take(40).toList();
+          fail('timed out waiting for $f; visible text: $texts');
+        }
         await t.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 100)));
         await t.pump(const Duration(milliseconds: 50));
       }
@@ -150,20 +155,24 @@ void main() {
     await tap('undo', after: 400);
     await tap('mark-green', after: 400);
 
-    // ---- Analyze (no profile yet) --------------------------------------
+    // ---- Analyze (no profile yet): real pose on a real swing ---------------
+    await back();
+    await tap('open-workspace', after: 1000);
+    clipQueue.add('$clipDir/cleave.webm');
+    await tap('load-A', after: 2000);
     await tap('analyze', after: 500);
-    await wait(tester, find.byKey(const Key('analysis-metrics')), seconds: 60);
-    await tester.scrollUntilVisible(find.text('Entry slope'), 120,
-        scrollable: find.descendant(
-            of: find.byKey(const Key('analysis-metrics')), matching: find.byType(Scrollable)));
+    await wait(tester, find.byKey(const Key('analysis-metrics')), seconds: 120);
+    await tester.dragUntilVisible(
+        find.text('Entry slope'), find.byKey(const Key('analysis-metrics')), const Offset(0, -150));
+    await idle(tester, 300);
     expect(find.text('Entry slope'), findsOneWidget);
     await snap('analyze_measurements');
     await tap('analysis-close');
     await back();
 
-    // Reopen: sync, rate, mirror, marks restored.
+    // Reopen the first review: sync, rate, mirror, marks restored.
     await wait(tester, find.textContaining('Review '));
-    await tester.tap(find.textContaining('Review ').first);
+    await tester.tap(find.textContaining('Review ').last);
     await idle(tester, 2500);
     expect(find.textContaining('Locked ·'), findsOneWidget);
     await snap('reopened_review');
@@ -174,7 +183,7 @@ void main() {
     await tester.enterText(find.byKey(const Key('coach-name')), 'Desktop Coach');
     await idle(tester, 200);
     await tap('add-clips', after: 500);
-    await wait(tester, find.text('15 clean clips · enough to build'), seconds: 180);
+    await wait(tester, find.text('15 clean clips · enough to build'), seconds: 600);
     await snap('builder_clips_checked');
     await tap('build', after: 500);
     await wait(tester, find.byKey(const Key('build-ready')), seconds: 120);
@@ -186,10 +195,10 @@ void main() {
 
     // ---- Compare a clip with the profile --------------------------------
     await tap('open-workspace', after: 1000);
-    clipQueue.add('$clipDir/clip25.mp4');
+    clipQueue.add('$clipDir/cleave.webm');
     await tap('load-A', after: 1500);
     await tap('analyze', after: 500);
-    await wait(tester, find.byKey(const Key('comparison')), seconds: 60);
+    await wait(tester, find.byKey(const Key('comparison')), seconds: 120);
     expect(find.text('style match with Desktop Coach · v1'), findsOneWidget);
     await snap('comparison');
     final firstDelta = find.byWidgetPredicate(
@@ -202,6 +211,8 @@ void main() {
     // ---- Trend, export --------------------------------------------------
     final row = (await tester.runAsync(db.allProfiles))!.single;
     final id = '${row.profileId}-${row.version}';
+    await wait(tester, find.text('Desktop Coach · v1')); // back in the Library
+    await idle(tester, 800);
     await tap('trend-$id', after: 1500);
     await wait(tester, find.text('Style match by session'));
     await snap('trend');
@@ -217,7 +228,7 @@ void main() {
     // ---- Workbench: harness on coach clips ------------------------------
     await tap('workbench-$id', after: 1500);
     await tap('add-probe-clips', after: 500);
-    await wait(tester, find.text('15 clips'), seconds: 180);
+    await wait(tester, find.text('15 clips'), seconds: 600);
     await tap('run-harness', after: 1000);
     await wait(tester, find.byWidgetPredicate((w) =>
         w.key == const Key('patch-accepted') || w.key == const Key('patch-rejected')));
@@ -243,5 +254,5 @@ void main() {
       }
       await work.delete(recursive: true);
     });
-  }, timeout: const Timeout(Duration(minutes: 20)));
+  }, timeout: const Timeout(Duration(minutes: 40)));
 }
