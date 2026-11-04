@@ -393,7 +393,14 @@
             "steep"
           ]
         }
-      }
+      },
+      "phase_events": [
+        "low_before_top",
+        "top",
+        "low",
+        "settle"
+      ],
+      "stroke_signal": "tops"
     },
     {
       "event_id": "standing_block",
@@ -739,7 +746,14 @@
             "steep"
           ]
         }
-      }
+      },
+      "phase_events": [
+        "low_before_top",
+        "top",
+        "low",
+        "settle"
+      ],
+      "stroke_signal": "speed_peaks"
     }
   ]
 }

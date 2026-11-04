@@ -23,3 +23,5 @@ export 'src/adapters.dart';
 export 'src/strokes.dart';
 export 'src/carne.dart';
 export 'src/drift.dart';
+export 'src/vision_stages.dart';
+export 'src/blazepose_map.dart';

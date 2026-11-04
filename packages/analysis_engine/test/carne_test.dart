@@ -74,9 +74,9 @@ void main() {
     }
   });
 
-  test('strokes are segmented from implement-speed peaks', () async {
+  test('strokes are segmented (underhand: one per backswing top)', () async {
     final s = await strokes('a', seconds: 20);
-    expect(s.length, greaterThanOrEqualTo(10));
+    expect(s.length, greaterThanOrEqualTo(5));
     for (var i = 1; i < s.length; i++) {
       expect(s[i].startFrame, greaterThan(s[i - 1].endFrame));
     }

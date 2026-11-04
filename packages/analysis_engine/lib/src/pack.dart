@@ -180,6 +180,8 @@ class AnalysisPack {
     this.maxImplementDropoutS = 0.3,
     this.attributeMetrics = const {},
     this.directionWords = const {},
+    this.phaseEvents = const [],
+    this.strokeSignal = 'speed_peaks',
   }) : criticalPhases = criticalPhases ?? phases;
 
   final String packId;
@@ -229,6 +231,14 @@ class AnalysisPack {
   /// Words for a metric moving up or down, as [comparative, plain]
   /// (for example "steeper", "steep"). Default: higher/high, lower/low.
   final Map<String, ({List<String> higher, List<String> lower})> directionWords;
+
+  /// How strokes are found: `speed_peaks` (one implement-speed peak per
+  /// stroke) or `tops` (one backswing top per stroke).
+  final String strokeSignal;
+
+  /// Motion events that mark each phase boundary (one per boundary), used
+  /// by the event phase detector. Empty: phases split evenly.
+  final List<String> phaseEvents;
 
   List<String> wordsFor(String metric, {required bool up}) {
     final w = directionWords[metric];
@@ -539,6 +549,23 @@ class AnalysisPack {
       }
     }
 
+    final events = <String>[];
+    final rawEvents = json['phase_events'] ?? const [];
+    const kinds = ['low_before_top', 'top', 'fastest', 'low', 'settle'];
+    if (rawEvents is! List || rawEvents.any((e) => !kinds.contains(e))) {
+      problems.add('phase_events must list ${kinds.join(' | ')}');
+    } else if (rawEvents.isNotEmpty && rawEvents.length != phases.length - 1) {
+      problems.add('phase_events needs one event per phase boundary '
+          '(${phases.length - 1})');
+    } else {
+      events.addAll(rawEvents.cast<String>());
+    }
+
+    final strokeSignal = json['stroke_signal'] ?? 'speed_peaks';
+    if (strokeSignal != 'speed_peaks' && strokeSignal != 'tops') {
+      problems.add('stroke_signal must be speed_peaks | tops');
+    }
+
     final minCritical = unit('min_critical_pose_confidence', 0.6);
     final selfConsistency = unit('self_consistency_threshold', 0.5);
 
@@ -565,6 +592,8 @@ class AnalysisPack {
       maxImplementDropoutS: dropout is num ? dropout.toDouble() : 0.3,
       attributeMetrics: attrMetrics,
       directionWords: words,
+      phaseEvents: events,
+      strokeSignal: strokeSignal is String ? strokeSignal : 'speed_peaks',
     );
   }
 }

@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T19:33:41Z
+heartbeat: 2026-11-04T20:43:46Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Wait for builds.yml; human items in Blockers
+next: App: ship BlazePose ONNX (converted from MediaPipe, Apache-2.0) as an asset, onnxruntime inference, media_kit frame grabber, vision runners for Analyze/builder/workbench; verify Dart pose vs Python fixture on the cleave clip
 <!-- STATE:END -->
 
 ## Phase progress
@@ -57,6 +57,7 @@ next: Wait for builds.yml; human items in Blockers
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T20:43:46Z **claude** — Real-pose engine support: BlazePose→joint mapping (presence-aware confidence), PrecomputedPoseEstimator, GripImplementTracker, EventPhaseDetector (rise/top/contact/settle from pack phase_events), backswing-top stroke segmentation (pack stroke_signal), per-stroke median summary. Validated on real-pose fixtures recorded from CC-licensed footage (cleave: 2 strokes, contact frame ~77). 101 engine tests. → next: App: ship BlazePose ONNX (converted from MediaPipe, Apache-2.0) as an asset, onnxruntime inference, media_kit frame grabber, vision runners for Analyze/builder/workbench; verify Dart pose vs Python fixture on the cleave clip
 - 2026-11-04T20:43:43Z **claude** — Note: CARNE ASADA is now owned by Codex (per the human). Claude will not change CARNE ASADA logic (packages/analysis_engine/lib/src/carne.dart, apps/strathvision/lib/workbench/carne_controller.dart, lib/screens/carne_screen.dart). One exception just made: test/carne_test.dart stroke-count expectation lowered from >=10 to >=5 because underhand stroke segmentation now uses backswing tops (pack stroke_signal: tops). Gurr Academy footage is expected at ~/Projects/CARNE ASADA/ (zip still downloading). Claude is integrating the real pose model (BlazePose GHUM 3D via onnxruntime) behind PoseEstimator; CARNE's stroke analyzer will need the vision runner once that lands.
 - 2026-11-04T19:33:41Z **claude** — Desktop end-to-end test of the real app (every screen, real video) added and passing on Linux; it found and fixed: clips playing with no picture in the app (video controller created lazily → media_kit disabled the video track), frame-rate race, raw keys in warnings. Regression test proven to fail without the fix. Linux 4/4 + Android 4/4 real-player, e2e, 92 app + 95 engine tests pass. → next: Wait for builds.yml; human items in Blockers
 - 2026-11-04T17:45:10Z **claude** — CI run 41875423119 green on all six jobs: tests, Android APK, Linux/Windows/macOS zips, unsigned iOS (macos-15-intel). Everything that can be verified without a human or hardware is verified. → next: Human-only items in STATUS Blockers: Windows/macOS/iPhone/physical-Android installs, ad-hoc iOS signing, pose model + transcriber + API key choices, timber pack review, Gurr footage.

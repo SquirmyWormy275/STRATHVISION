@@ -4,6 +4,82 @@ import 'body.dart';
 import 'engine.dart';
 import 'pack.dart';
 
+/// Stroke spans from backswing tops: each top is one stroke, running from
+/// the low point before it (rise) through the low after it (contact); the
+/// cut between strokes sits midway through the pause between contact and
+/// the next rise. Tops must stand out by 30% of the clip's height range and
+/// be at least 0.5 s apart.
+List<(int, int)> segmentStrokesByTops(ImplementTrack imp, double fps) {
+  final f = imp.frames;
+  if (f.length < 8) return const [];
+  final raw = [for (final x in f) x.tip.y];
+  final h = [
+    for (var i = 0; i < raw.length; i++)
+      [for (var j = math.max(0, i - 2); j <= math.min(raw.length - 1, i + 2); j++) raw[j]]
+              .reduce((a, b) => a + b) /
+          (math.min(raw.length - 1, i + 2) - math.max(0, i - 2) + 1),
+  ];
+  final lo = h.reduce(math.min), hi = h.reduce(math.max);
+  if (hi - lo < 0.2) return const [];
+  final prominence = 0.3 * (hi - lo);
+  // Local maxima that rise `prominence` above the lows on both sides.
+  final tops = <int>[];
+  for (var i = 1; i < h.length - 1; i++) {
+    if (!(h[i] >= h[i - 1] && h[i] > h[i + 1])) continue;
+    var leftLow = h[i], rightLow = h[i];
+    for (var j = i - 1; j >= 0 && h[j] <= h[i]; j--) {
+      leftLow = math.min(leftLow, h[j]);
+    }
+    for (var j = i + 1; j < h.length && h[j] <= h[i]; j++) {
+      rightLow = math.min(rightLow, h[j]);
+    }
+    if (h[i] - leftLow < prominence && i > 0) continue;
+    if (h[i] - rightLow < prominence) continue;
+    if (tops.isNotEmpty && (f[i].frame - f[tops.last].frame) / fps < 0.5) {
+      if (h[i] > h[tops.last]) tops[tops.length - 1] = i;
+      continue;
+    }
+    tops.add(i);
+  }
+  if (tops.isEmpty) return const [];
+  int argMin(int a, int b) {
+    var best = a;
+    for (var i = a; i <= b; i++) {
+      if (h[i] < h[best]) best = i;
+    }
+    return best;
+  }
+
+  final spans = <(int, int)>[];
+  for (var k = 0; k < tops.length; k++) {
+    final prevTop = k == 0 ? 0 : tops[k - 1];
+    final nextTop = k == tops.length - 1 ? h.length - 1 : tops[k + 1];
+    final rise = argMin(prevTop, tops[k]);
+    final contact = argMin(tops[k], nextTop);
+    // Need a real downswing after the top.
+    if (h[tops[k]] - h[contact] < prominence) continue;
+    // Pause after contact: until the next stroke's rise (or clip end).
+    final nextRise = k == tops.length - 1 ? h.length - 1 : argMin(contact, tops[k + 1]);
+    final prevContact = k == 0 ? 0 : argMin(tops[k - 1], tops[k]);
+    final startIdx = k == 0 ? math.max(0, rise - (contact - rise) ~/ 3) : (prevContact + rise) ~/ 2;
+    final endIdx = k == tops.length - 1
+        ? math.min(h.length - 1, contact + (contact - rise) ~/ 3)
+        : (contact + math.max(contact, nextRise)) ~/ 2;
+    if (endIdx <= startIdx) continue;
+    spans.add((f[startIdx].frame, f[endIdx].frame));
+  }
+  // Keep spans disjoint.
+  final out = <(int, int)>[];
+  for (final s in spans) {
+    if (out.isNotEmpty && s.$1 <= out.last.$2) {
+      out.add((out.last.$2 + 1, s.$2));
+    } else {
+      out.add(s);
+    }
+  }
+  return [for (final s in out) if (s.$2 > s.$1) s];
+}
+
 /// Stroke spans from implement-speed peaks (DECISIONS.md: stroke boundaries
 /// from implement-speed peaks + phase transitions). Each peak is one stroke;
 /// boundaries sit midway between peaks. Partial strokes at the clip edges

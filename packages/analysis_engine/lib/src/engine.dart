@@ -5,6 +5,7 @@ import 'heads.dart';
 import 'pack.dart';
 import 'body.dart';
 import 'stages.dart';
+import 'vision_stages.dart';
 import 'strokes.dart';
 
 /// Success payload or Error Contract, never both.
@@ -58,7 +59,13 @@ class AnalysisEngine {
     this.implement = const StubImplementTracker(),
     this.phases = const StubPhaseDetector(),
     List<SpecialistHead>? heads,
+    this.perStroke = false,
   }) : heads = heads ?? headsFor(pack);
+
+  /// Analyze each stroke and summarize (median of strokes), instead of the
+  /// whole clip as one movement. Used with real pose; falls back to the
+  /// whole clip when no strokes are found.
+  final bool perStroke;
 
   final AnalysisPack pack;
   final PoseEstimator pose;
@@ -76,6 +83,31 @@ class AnalysisEngine {
   /// confidence). The Metric Vector contract is unchanged.
   Future<AnalysisDetail> analyzeDetailed(ClipSource clip,
       {Map<String, double> reference = const {}}) async {
+    if (perStroke) {
+      final strokes = await analyzeStrokes(clip, reference: reference);
+      final good = [
+        for (final s in strokes)
+          if (s.usable && s.detail.outcome is AnalysisSuccess) s,
+      ];
+      if (good.isNotEmpty) {
+        final vectors = [for (final s in good) (s.detail.outcome as AnalysisSuccess).vector];
+        final summary = summarizeStrokes(vectors);
+        final problems = validateMetricVector(summary.toJson(),
+            requiredResiduals: [for (final h in pack.heads) h.name]);
+        if (problems.isEmpty) {
+          final first = good.first.detail;
+          return AnalysisDetail(AnalysisSuccess(summary), {
+            for (final p in pack.phases)
+              p: _r(good.map((s) => s.detail.phasePoseConfidence[p] ?? 0).reduce((a, b) => a + b) /
+                  good.length),
+          },
+              implementConfidence: _r(
+                  good.map((s) => s.detail.implementConfidence).reduce((a, b) => a + b) / good.length),
+              features: first.features,
+              headBases: first.headBases);
+        }
+      }
+    }
     try {
       if (clip.durationMs <= 0 || clip.fps <= 0) {
         throw AnalysisError(
@@ -112,7 +144,9 @@ class AnalysisEngine {
     if (clip.durationMs <= 0 || clip.fps <= 0) return const [];
     final track = await pose.estimate(clip);
     final imp = await implement.track(clip, track);
-    final spans = segmentStrokes(imp, clip.fps);
+    final spans = pack.strokeSignal == 'tops'
+        ? segmentStrokesByTops(imp, clip.fps)
+        : segmentStrokes(imp, clip.fps);
     final clipDropout = longestDropout(imp, clip.fps, 0, clip.frameCount - 1);
     final out = <StrokeDetail>[];
     for (var i = 0; i < spans.length; i++) {
