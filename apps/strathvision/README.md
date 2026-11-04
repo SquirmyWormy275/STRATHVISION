@@ -64,9 +64,9 @@ Desktop keys: Space play/pause · ←/→ frame step · S sync here · L lock/un
 
 ## Phase 1 manual check
 
-1. Launch the app. It opens on **Library**, which says "No profiles yet".
-2. Tap **Open workspace**. You get two empty stages, A and B. Go back.
-3. Tap the import icon and pick `test/fixtures/dummy_profile.json`.
+1. Launch the app. It opens on **Library**, which says "Add a clip to start".
+2. Tap **New review**. You get two empty stages, A and B. Go back.
+3. Tap the import icon (top right) and pick `test/fixtures/dummy_profile.json`.
 4. The list now shows **Dummy Coach · v1**, `example_pack / example_event`, 15 clips · 1 metrics, Ready.
 5. Close and reopen the app. The profile is still listed.
 
