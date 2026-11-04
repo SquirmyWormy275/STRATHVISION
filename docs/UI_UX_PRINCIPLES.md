@@ -154,3 +154,19 @@ Plain-language sharing surface. Must make the contents obvious before anything l
 - Version identifiers, hashes, and internal IDs remain hidden unless the user expands a “Details” disclosure.
 
 Sharing feels like choosing what to hand someone, not like managing a model file.
+
+## Onboarding
+
+Stupidly easy. Start with a clip. Deepen only by invitation.
+
+- First launch lands on the empty library filmstrip. Single line: “Add a clip to start.” No carousel, no account, no feature tour.
+- First clip opens immediately into review. Base playback, slow-mo, stepper, and mirror are live. The living underline and usable-time mark begin as soon as strokes are detected. No modal about thresholds or models.
+- Deepening is contextual and fully optional:
+  - Attribute chips appear quietly once strokes exist.
+  - Optional implement photo card surfaces after a few strokes or on first share; skip is equally prominent.
+  - When the Good threshold is crossed, red/green controls and ghost appear with the brief elegant sweep. No “unlocked” screen.
+  - Coach or overlay naming occurs only when the user marks or exports, via a single field if the name cannot be inferred.
+- Every prompt is one action with a clear skip or back. The path works offline and is identical for coaches and athletes.
+- The only required step is adding the first clip. All further analysis is an invitation while basic review remains complete and useful.
+
+The user should feel they simply added footage and started watching. Everything else reveals itself.
