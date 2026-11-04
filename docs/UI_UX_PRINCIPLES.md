@@ -127,3 +127,15 @@ The control that selects what is being graded. It must feel like part of video r
 - On first use or when empty, the row simply offers the pack’s top 3–4 attributes. No tutorial modal or explanation.
 
 The user grades the movement. They never configure a model.
+
+## Progress / Trend View
+
+Optional surface for parameter history. Must not appear on primary paths.
+
+- Reached only by long-press on an attribute chip or via a secondary “Progress” entry one level down from library or review. Never present on the main review screen or filmstrip.
+- Displays a single calm sparkline or simple residual comparison for the selected attribute across recent prioritized sessions.
+- Generated exclusively from the already-stored per-attribute parameter history (μ and residuals). No video is re-processed.
+- Language is strictly observational: “Closer on the last four sessions you marked.” No advice, no coaching voice, no percentages unless the user explicitly expands.
+- Dismiss returns the user to the exact stroke and playhead they left.
+
+This is the only place the evolving model becomes quietly visible. Daily use never requires it.
