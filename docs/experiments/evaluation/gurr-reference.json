@@ -1,0 +1,653 @@
+{
+  "format": "gurr-accuracy-reference/1",
+  "date": "2026-11-04",
+  "reviewer": "Codex visual review; single reviewer; not coach validated",
+  "review_sample_rate": 10,
+  "time_origin": "seconds from evaluation window start",
+  "split_unit": "source video SHA-256",
+  "contact_tolerance_s": 0.2,
+  "prior_exposure": "All sources were included in the earlier unlabelled ingestion run. Pilot timing/target scores have not been inspected or used to tune a revision.",
+  "coach_marks": 0,
+  "windows": [
+    {
+      "window_id": "dev-standing",
+      "clip_sha256": "8a68ad811b7dc2fa195b36bd7d493ba1e1ca5d9249047f15fe02f8d1592a5d2b",
+      "split": "development",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [
+        [
+          1.45,
+          1.65
+        ],
+        [
+          3.2,
+          3.4
+        ],
+        [
+          6.05,
+          6.25
+        ]
+      ],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.42,
+            0.47
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.42,
+            0.5
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.43,
+            0.5
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.42,
+            0.52
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.42,
+            0.53
+          ]
+        }
+      ],
+      "notes": "Visible cutting contacts, reviewed at 10 fps; intervals reflect frame uncertainty."
+    },
+    {
+      "window_id": "dev-training",
+      "clip_sha256": "d9f2a45e65fec1bfbbdc898ea0afd53802d6d23da52881b1fd78551532cc4683",
+      "split": "development",
+      "reference_rotation_cw": 270,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.66,
+            0.52
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.65,
+            0.51
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.66,
+            0.52
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.66,
+            0.52
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.67,
+            0.53
+          ]
+        }
+      ],
+      "notes": "Holds implement against wood and discusses/adjusts; no cutting strike visible."
+    },
+    {
+      "window_id": "dev-crowded",
+      "clip_sha256": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+      "split": "development",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": null,
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.555,
+            0.55
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.55,
+            0.54
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.545,
+            0.55
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.56,
+            0.57
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.565,
+            0.55
+          ]
+        }
+      ],
+      "notes": "Track-only: contact point hidden by body/rear view; contact reference is unknown, not zero."
+    },
+    {
+      "window_id": "dev-sideways",
+      "clip_sha256": "a2b67f2ea38f2bb03decdd9485cf6c5344a174e12043e051f860b1c14113e665",
+      "split": "development",
+      "reference_rotation_cw": 90,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [
+        [
+          4.45,
+          4.65
+        ]
+      ],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.35,
+            0.55
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.32,
+            0.55
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.35,
+            0.6
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.37,
+            0.57
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.39,
+            0.54
+          ]
+        }
+      ],
+      "notes": "Visible cutting contacts, reviewed at 10 fps; intervals reflect frame uncertainty."
+    },
+    {
+      "window_id": "test-idle",
+      "clip_sha256": "e4faf999f11510287fce02dfd9cc5d004c9ca85794e5b2c4ddc2dbdf2f348cdb",
+      "split": "test",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.28,
+            0.55
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.3,
+            0.55
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.3,
+            0.55
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.3,
+            0.55
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.3,
+            0.53
+          ]
+        }
+      ],
+      "notes": "Setup and repositioning; no cutting contact inside scored interval."
+    },
+    {
+      "window_id": "test-underhand",
+      "clip_sha256": "a2321359094f94acd4ab0ba93562e923f01283e0691d468a08d79f3f0810af0f",
+      "split": "test",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [
+        [
+          0.6,
+          0.8
+        ],
+        [
+          1.5,
+          1.7
+        ],
+        [
+          2.7,
+          2.9
+        ],
+        [
+          3.8,
+          4.0
+        ],
+        [
+          4.85,
+          5.05
+        ],
+        [
+          5.9,
+          6.1
+        ],
+        [
+          7.1,
+          7.3
+        ]
+      ],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.589,
+            0.46
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.59,
+            0.49
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.595,
+            0.5
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.595,
+            0.49
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.585,
+            0.47
+          ]
+        }
+      ],
+      "notes": "Visible cutting contacts, reviewed at 10 fps; intervals reflect frame uncertainty."
+    },
+    {
+      "window_id": "test-crowded",
+      "clip_sha256": "72a809451b1ad03f9ab9db6b6b8fb4f0d35cb4b0c1806003a16429670bf4f80e",
+      "split": "test",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": null,
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.56,
+            0.49
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.58,
+            0.5
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.56,
+            0.52
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.55,
+            0.5
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.55,
+            0.48
+          ]
+        }
+      ],
+      "notes": "Track-only: contact point hidden by body/rear view; contact reference is unknown, not zero."
+    },
+    {
+      "window_id": "test-sideways",
+      "clip_sha256": "fd0d4b120a1a7fe9a4727a6d6998a740e33885d7a569ce86d77d94febb73e3b0",
+      "split": "test",
+      "reference_rotation_cw": 270,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.4,
+            0.53
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.38,
+            0.53
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.42,
+            0.49
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.48,
+            0.5
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.59,
+            0.54
+          ]
+        }
+      ],
+      "notes": "Sideways capture of tool handling/demonstration; no visible cutting contacts."
+    },
+    {
+      "window_id": "dev-competition",
+      "clip_sha256": "9b5e4498bb0900e99d5fbc3d792aa7ad046e5211d12cd7434acce3ee4bf64e29",
+      "split": "development",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        4.2
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [
+        [
+          1.15,
+          1.35
+        ],
+        [
+          2.6,
+          2.8
+        ],
+        [
+          3.8,
+          4.0
+        ]
+      ],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.34,
+            0.52
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.35,
+            0.54
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.36,
+            0.54
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": false,
+          "point": null
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.27,
+            0.58
+          ]
+        }
+      ],
+      "notes": "Operator moves around log; hidden/off-screen at +6 s. Contact scoring stops at +4.2 s."
+    },
+    {
+      "window_id": "test-standing",
+      "clip_sha256": "3f2cc6fd695b1683bc3e8e73abec20da270069cec16b1f0cdf29447554d4fa08",
+      "split": "test",
+      "reference_rotation_cw": 0,
+      "score_interval_s": [
+        0.3,
+        7.7
+      ],
+      "ignored_intervals_s": [],
+      "contact_intervals_s": [
+        [
+          0.3,
+          0.5
+        ],
+        [
+          1.3,
+          1.5
+        ],
+        [
+          2.3,
+          2.5
+        ],
+        [
+          3.3,
+          3.5
+        ],
+        [
+          4.5,
+          4.7
+        ],
+        [
+          5.5,
+          5.7
+        ],
+        [
+          6.5,
+          6.7
+        ],
+        [
+          7.5,
+          7.7
+        ]
+      ],
+      "target_anchors": [
+        {
+          "time_s": 0,
+          "visible": true,
+          "point": [
+            0.705,
+            0.43
+          ]
+        },
+        {
+          "time_s": 2,
+          "visible": true,
+          "point": [
+            0.71,
+            0.42
+          ]
+        },
+        {
+          "time_s": 4,
+          "visible": true,
+          "point": [
+            0.715,
+            0.42
+          ]
+        },
+        {
+          "time_s": 6,
+          "visible": true,
+          "point": [
+            0.7,
+            0.43
+          ]
+        },
+        {
+          "time_s": 7.8,
+          "visible": true,
+          "point": [
+            0.66,
+            0.44
+          ]
+        }
+      ],
+      "notes": "Visible cutting contacts, reviewed at 10 fps; intervals reflect frame uncertainty."
+    }
+  ]
+}

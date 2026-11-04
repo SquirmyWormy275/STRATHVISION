@@ -1,0 +1,135 @@
+{
+  "format": "gurr-accuracy-inputs/1",
+  "windows": [
+    {
+      "window_id": "dev-standing",
+      "source_name": "24-25/IMG_3690.MOV",
+      "clip_sha256": "8a68ad811b7dc2fa195b36bd7d493ba1e1ca5d9249047f15fe02f8d1592a5d2b",
+      "start_s": 4,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.98440117857762,
+      "seed_raw": [
+        0.42,
+        0.47
+      ]
+    },
+    {
+      "window_id": "dev-training",
+      "source_name": "Training/25-26/Gurr 30DEC25.mov",
+      "clip_sha256": "d9f2a45e65fec1bfbbdc898ea0afd53802d6d23da52881b1fd78551532cc4683",
+      "start_s": 120,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.997174888201368,
+      "seed_raw": [
+        0.48,
+        0.66
+      ]
+    },
+    {
+      "window_id": "dev-crowded",
+      "source_name": "Competition/IMG_8055.MOV",
+      "clip_sha256": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+      "start_s": 8,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.99687532548693,
+      "seed_raw": [
+        0.555,
+        0.55
+      ]
+    },
+    {
+      "window_id": "dev-sideways",
+      "source_name": "24-25/IMG_3692.MOV",
+      "clip_sha256": "a2b67f2ea38f2bb03decdd9485cf6c5344a174e12043e051f860b1c14113e665",
+      "start_s": 3,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.998079508354138,
+      "seed_raw": [
+        0.55,
+        0.65
+      ]
+    },
+    {
+      "window_id": "test-idle",
+      "source_name": "24-25/IMG_3694.MOV",
+      "clip_sha256": "e4faf999f11510287fce02dfd9cc5d004c9ca85794e5b2c4ddc2dbdf2f348cdb",
+      "start_s": 40,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.99706869035599,
+      "seed_raw": [
+        0.28,
+        0.55
+      ]
+    },
+    {
+      "window_id": "test-underhand",
+      "source_name": "Competition/IMG_3862.MOV",
+      "clip_sha256": "a2321359094f94acd4ab0ba93562e923f01283e0691d468a08d79f3f0810af0f",
+      "start_s": 30,
+      "duration_s": 8,
+      "event_id": "underhand",
+      "fps": 29.997448111602587,
+      "seed_raw": [
+        0.589,
+        0.46
+      ]
+    },
+    {
+      "window_id": "test-crowded",
+      "source_name": "Competition/IMG_8065.MOV",
+      "clip_sha256": "72a809451b1ad03f9ab9db6b6b8fb4f0d35cb4b0c1806003a16429670bf4f80e",
+      "start_s": 24,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.99681731381286,
+      "seed_raw": [
+        0.56,
+        0.49
+      ]
+    },
+    {
+      "window_id": "test-sideways",
+      "source_name": "24-25/IMG_0104.mov",
+      "clip_sha256": "fd0d4b120a1a7fe9a4727a6d6998a740e33885d7a569ce86d77d94febb73e3b0",
+      "start_s": 80,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.644342374774997,
+      "seed_raw": [
+        0.47,
+        0.4
+      ]
+    },
+    {
+      "window_id": "dev-competition",
+      "source_name": "Competition/IMG_3867.MOV",
+      "clip_sha256": "9b5e4498bb0900e99d5fbc3d792aa7ad046e5211d12cd7434acce3ee4bf64e29",
+      "start_s": 8,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.98272884283247,
+      "seed_raw": [
+        0.34,
+        0.52
+      ]
+    },
+    {
+      "window_id": "test-standing",
+      "source_name": "Competition/IMG_3951.MOV",
+      "clip_sha256": "3f2cc6fd695b1683bc3e8e73abec20da270069cec16b1f0cdf29447554d4fa08",
+      "start_s": 30,
+      "duration_s": 8,
+      "event_id": "standing_block",
+      "fps": 29.997204361196534,
+      "seed_raw": [
+        0.705,
+        0.43
+      ]
+    }
+  ]
+}
