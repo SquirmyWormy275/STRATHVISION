@@ -25,3 +25,4 @@ export 'src/carne.dart';
 export 'src/drift.dart';
 export 'src/vision_stages.dart';
 export 'src/blazepose_map.dart';
+export 'src/track_analysis.dart';

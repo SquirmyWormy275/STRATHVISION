@@ -219,9 +219,10 @@ void main() {
       final s = await ready();
       final before = jsonEncode({for (final e in s.mixture.entries) e.key: e.value.toJson()});
       expect(s.step(), isA<StepAccepted>());
-      expect(s.step(), isA<StepAccepted>());
-      s.undo();
-      s.undo();
+      for (var i = 0; i < 4; i++) { s.step(); }
+      final count = s.edits.length;
+      expect(count, inInclusiveRange(1, 5));
+      for (var i = 0; i < count; i++) { s.undo(); }
       expect(jsonEncode({for (final e in s.mixture.entries) e.key: e.value.toJson()}), before);
       expect(s.edits, isEmpty);
       expect(s.undo(), isNull);

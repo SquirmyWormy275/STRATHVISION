@@ -81,7 +81,7 @@ ComparisonOutcome compare({
 
   final values = {for (final k in used) k: vector.metrics[k]!.value};
   final usedProfile = {for (final k in used) k: profile.metrics[k]!};
-  final score = styleMatchScore(values, usedProfile) ?? 0;
+  final score = styleMatchScore(values, usedProfile, exemplars: profile.referenceClips) ?? 0;
   final totalW = usedProfile.values.fold(0.0, (a, m) => a + m.weight);
 
   final deltas = <RankedDelta>[];
@@ -89,7 +89,7 @@ ComparisonOutcome compare({
     final m = profile.metrics[k]!;
     final v = values[k]!;
     final d = distanceSpreads(v, m);
-    final contrib = totalW == 0 ? 0.0 : m.weight * (1 - metricMatch(v, m)) / totalW;
+    final contrib = totalW == 0 ? 0.0 : m.weight * (1 - prototypeMatch(v, k, m, profile.referenceClips)) / totalW;
     deltas.add(RankedDelta(
       metricKey: k,
       userValue: v,

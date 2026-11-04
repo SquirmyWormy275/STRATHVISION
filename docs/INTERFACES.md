@@ -1,5 +1,9 @@
 # STRATHVISION Interfaces
 
+## Reproducible Gurr Academy experiments
+
+[Gurr Academy experiments](experiments/Gurr-Academy.md) defines the real-footage pipeline, anonymous track schema, quality gates and limits on interpreting the published results. Research exemplars use the same prototype scoring in evaluation and inference; gaps in a pose track never count as continuous action.
+
 This document defines contracts only. Implementation must conform. Changes require updating this file first.
 
 ## Profile Package (versioned artifact)

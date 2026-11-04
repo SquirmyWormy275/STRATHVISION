@@ -1,0 +1,13 @@
+# CARNE ASADA scoped work
+
+Owner: Codex for the experiment and research-correctness scope. Claude retains the active real-pose implementation and its shared files. Commits use explicit own paths, never `git add -A`.
+
+The user requested automatic identification of known athletes across new footage plus real Gurr Academy experiments. Automatic identity recognition is not implemented. The manual-label alternative was not accepted as fulfillment; its tested draft is preserved outside the repository at `~/Projects/CARNE ASADA/analysis/manual-label-draft-20261104/`, and its app/source/dependency changes were removed from the working tree. Do not report that requirement complete.
+
+Completed research work: all 12 MOV videos in the downloaded archive were processed locally (1743.553568 seconds); anonymous person detections and real BlazePose samples feed both candidate event configurations. `docs/experiments/Gurr-Academy.md` and `gurr-20261104-results.json` record the whole-corpus coverage and no-feedback controls. No named coach profile, fabricated mark or learning-improvement claim is published. Raw videos, contact sheets and per-frame pose coordinates stay local under `~/Projects/CARNE ASADA/analysis/`.
+
+Engine changes: preserve metric maps on exemplar edits; retain merged coach references; share prototype scoring across research/inference; compare held-out protection to the initial session baseline; split pose gaps before stroke detection. CARNE's production stroke factory now reads the real PoseService and uses gap-safe engine analysis. This does not add cross-video identity recognition.
+
+Verification completed: 105 engine tests, 96 app tests, five Python tracker tests; engine analysis and the production CARNE controller analysis pass. Experiment source/model provenance, all 12 clip summaries, zero-edit controls and documentation links validated. Native detector and two-track manual-label/persistence tests passed before that alternative was preserved. This checkpoint contains only the research scope and README results, leaving Claude's current pose/rotation changes untouched.
+
+Next: calibrate candidate events and implement tracking against annotated ground truth. Re-run `tools/carne_asada/footage.py` and `packages/analysis_engine/tool/gurr_experiment.dart` using the documented commands; keep source clips grouped during any future train/test split. Automatic named-person identity matching remains unimplemented and the manual-label draft is not its substitute.

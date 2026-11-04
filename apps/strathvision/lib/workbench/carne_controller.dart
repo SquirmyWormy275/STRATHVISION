@@ -9,12 +9,17 @@ import 'package:uuid/uuid.dart';
 
 import '../profiles/clip_probe.dart';
 import '../profiles/profile_package.dart';
+import '../vision/pose_service.dart';
 import '../workspace/project.dart' show Mark;
 
 typedef StrokeAnalyzer = Future<List<StrokeDetail>> Function(ClipSource clip);
 
-StrokeAnalyzer isolateStrokeAnalyzer(AnalysisPack pack) =>
-    (clip) => Isolate.run(() => AnalysisEngine(pack: pack).analyzeStrokes(clip));
+/// Production CARNE analysis uses real local pose and never bridges missing
+/// observations. Identity matching is separate and is not inferred here.
+StrokeAnalyzer isolateStrokeAnalyzer(AnalysisPack pack) => (clip) async {
+  final track = await PoseService.instance.track(clip);
+  return Isolate.run(() => analyzeContinuousTrack(pack, clip, track));
+};
 
 typedef MarksLookup = Future<List<Mark>> Function(String path);
 

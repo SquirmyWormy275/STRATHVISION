@@ -1,5 +1,9 @@
 # STRATHVISION Architectural Decisions
 
+## Reproducible Gurr Academy experiments
+
+[Gurr Academy experiments](experiments/Gurr-Academy.md) defines the real-footage pipeline, anonymous track schema, quality gates and limits on interpreting the published results. Research exemplars use the same prototype scoring in evaluation and inference; gaps in a pose track never count as continuous action.
+
 All decisions below are binding. Later implementation must conform. Do not invent alternatives.
 
 ## Core Engine

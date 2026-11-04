@@ -49,26 +49,32 @@ Status messages and edit explanations are specified in docs/DECISIONS.md.
 
 ## Experiment: CARNE ASADA on the Gurr Footage
 
-After a working desktop build exists, upload **all** race and training footage of Matthew Gurr and Daniel Gurr (every underhand, single buck, and standing block clip).
+The downloaded Gurr Academy archive has now been processed locally: **12 videos, 29 min 3.6 s**, including every competition and training video in this download. The first recorded experiment is anonymous multi-person ingestion plus a no-feedback control; it does not claim improved technique analysis or named-athlete recognition.
 
-Drop the entire set into the CARNE ASADA playground with priority set to slope (then optionally spacing and hinge). Let it run.
+### Recorded results on November 4 2026
 
-Results published in this section:
-- Total usable strokes ingested per coach and per event
-- Number of accepted mixture edits
-- Before/after residual on the priority attribute
-- Exact one-sentence explanations for every accepted edit
-- Whether the final mixture stayed inside the original coach hull
-- Raw logs and versioned package for reproduction
+| Measurement | Result |
+|---|---:|
+| Sampled frames at 5 fps | 8,718 |
+| Person detections | 10,364 |
+| Pose samples passing model presence gate | 7,541 |
+| Frames with multiple detected people | 1,608 |
+| Underhand candidate pass: strokes passing current pack gates | 26 of 151 |
+| Standing-block candidate pass: strokes passing current pack gates | 9 of 159 |
+| Accepted edits with no supplied coach marks | **0** |
 
-No cherry-picking. Date, footage count, and numbers go here.
+Both event packs were stress-tested on every clip, so candidate counts are not human-validated event counts. Spectators, rotated video, fragmented tracks and a grip-based implement proxy limit interpretation. Underhand met Good but correctly stopped at “no marks”; standing block remained below Good. No marks were fabricated, no coach-specific profile was declared ready, and no improvement is claimed.
+
+Read the [method, limitations and reproduction commands](docs/experiments/Gurr-Academy.md), or inspect the [full recorded results and source hashes](docs/experiments/gurr-20261104-results.json). Raw footage and contact sheets stay local. The same work fixes destructive exemplar edits, retains merged coach evidence, shares prototype scoring between research and inference, and splits missing-pose gaps before stroke detection.
+
+The following protocol remains the planned coach-specific learning experiment once identity/event ground truth and genuine feedback are available.
 
 ### How to run it
 
 Prerequisites:
 - A desktop build (docs/DISTRIBUTION.md).
 - The footage on that computer.
-- A real 3D pose model and implement tracker in place of the Phase 3 stand-ins (see `docs/handoff/STATUS.md`). With the stand-ins the numbers mean nothing.
+- The real 3D pose path and an independently validated implement tracker. The current grip-derived implement is a proxy, and coach-specific results require confirmed athlete/event labels.
 
 1. **Choose the event.** In the Library, pick **Underhand** (later **Standing block**) from the event menu in the top bar.
 2. **Build each coach's profile.** For each of Matthew Gurr and Daniel Gurr, tap **Build a profile** (person-plus icon), name it, and add that coach's clips for the event. Every clip reports Clean or why not. **Build profile** needs 15+ clean clips that pass self-consistency. Record the clip counts it reports.
@@ -79,7 +85,7 @@ Prerequisites:
 7. **Publish** the numbers above from that file, plus the profile versions.
    - Usable strokes: the "Found N strokes. K are clean enough…" lines.
    - Accepted edits: the `edits` count.
-   - Before/after residual on the priority attribute: `objective_before` of the first edit against `objective_after` of the last.
+   - Feedback-agreement objective: `objective_before` of the first edit against `objective_after` of the last. Measure physical residuals separately; these objective values are not angle errors.
    - Explanations: copy each `explanation` verbatim.
    - Hull compliance: every `after.center` lies within `hull`.
    - Raw logs: attach the zip.
@@ -97,7 +103,7 @@ Prerequisites:
 
 ## Current status
 
-Phases 1–9 of docs/EXECUTION_PLAN.md are implemented on the `implementation` branch. Live progress, open checks, and questions for the human are in [docs/handoff/STATUS.md](docs/handoff/STATUS.md). Pose, implement tracking and phase detection are still stand-ins behind real interfaces: the review tools are real, but analysis numbers are placeholders until real models are chosen. App usage and manual checks are in [apps/strathvision/README.md](apps/strathvision/README.md). Test builds are described in [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md).
+The `implementation` branch has a working review UI, real local 3D pose path, pack-driven analysis, and research tooling. It remains a prototype with open acceptance criteria; the earlier “all phases implemented” claim does not establish a complete v1. The implement direction is still a grip/forearm proxy. Live progress and open checks are in [docs/handoff/STATUS.md](docs/handoff/STATUS.md). App usage and manual checks are in [apps/strathvision/README.md](apps/strathvision/README.md). Test builds are described in [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md).
 
 ## For reviewers
 

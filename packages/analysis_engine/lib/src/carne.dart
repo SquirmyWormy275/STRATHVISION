@@ -253,6 +253,7 @@ class CarneSession {
   /// Coach hull: per metric, the range of the coach's own strokes.
   final Map<String, (double, double)> hull = {};
   List<Map<String, double>> heldOut = const [];
+  double _initialHeldOutScore = 0;
   final List<PileStroke> pile = [];
   final List<MixtureEdit> edits = [];
 
@@ -266,6 +267,7 @@ class CarneSession {
       if (vals.isNotEmpty) hull[m.key] = (vals.reduce(math.min), vals.reduce(math.max));
     }
     heldOut = [for (var i = 0; i < coachStrokes.length; i += 4) coachStrokes[i].metrics];
+    _initialHeldOutScore = _heldOutScore(mixture);
   }
 
   /// Adds another package's coach strokes (same event) to the hull and the
@@ -299,7 +301,7 @@ class CarneSession {
         notes: _profile.notes,
         metrics: Map.of(mixture),
         referenceClips: [
-          for (final r in _profile.referenceClips) if (!r.exemplar) r,
+          ...coachStrokes,
           ...exemplars,
         ],
       );
@@ -358,22 +360,8 @@ class CarneSession {
   /// the mixture component and the best weighted exemplar; weight-averaged.
   double _match(Map<String, double> values, Map<String, ProfileMetric> mix,
       List<ReferenceClip> ex) {
-    var num = 0.0, den = 0.0;
-    for (final k in priorityMetrics) {
-      final v = values[k];
-      final m = mix[k]!;
-      if (v == null || m.weight <= 0) continue;
-      var best = metricMatch(v, m);
-      for (final e in ex) {
-        final x = e.metrics[k];
-        if (x == null) continue;
-        final d = (v - x) / m.spread;
-        best = math.max(best, e.weight * math.exp(-d * d / 2));
-      }
-      num += m.weight * best;
-      den += m.weight;
-    }
-    return den == 0 ? 0 : num / den;
+    return styleMatchScore(values, {for (final k in priorityMetrics) k: mix[k]!},
+        exemplars: ex) ?? 0;
   }
 
   /// Agreement of the mixture with the winning marks on the priority
@@ -391,9 +379,9 @@ class CarneSession {
     return n == 0 ? 0 : sum / n;
   }
 
-  double _heldOutScore(Map<String, ProfileMetric> mix) {
+  double _heldOutScore(Map<String, ProfileMetric> mix, [List<ReferenceClip>? ex]) {
     if (heldOut.isEmpty) return 1;
-    final scores = [for (final h in heldOut) styleMatchScore(h, mix) ?? 0];
+    final scores = [for (final h in heldOut) styleMatchScore(h, mix, exemplars: ex ?? exemplars) ?? 0];
     return scores.reduce((a, b) => a + b) / scores.length;
   }
 
@@ -438,7 +426,7 @@ class CarneSession {
     if (marked.isEmpty) return const StepIdle('no marks');
 
     final obj0 = objective(mixture);
-    final held0 = _heldOutScore(mixture);
+    final held0 = _initialHeldOutScore;
     final cands = <_Candidate>[];
 
     // Diagnose: largest residual between green strokes and the mixture.
@@ -572,7 +560,7 @@ class CarneSession {
     for (final c in cands) {
       final obj1 = objective(c.mix, c.ex ?? exemplars);
       if (obj1 < obj0 + 0.005) continue;
-      if (_heldOutScore(c.mix) < held0 * 0.95) continue;
+      if (_heldOutScore(c.mix, c.ex) < held0 * 0.95) continue;
       if (!c.hullOk) {
         hullBlocked = true;
         continue;
@@ -601,9 +589,10 @@ class CarneSession {
       mixtureBefore: Map.of(mixture),
       exemplarsBefore: List.of(exemplars),
     );
+    final acceptedMix = Map<String, ProfileMetric>.of(best.mix);
     mixture
       ..clear()
-      ..addAll(best.mix);
+      ..addAll(acceptedMix);
     if (best.ex != null) {
       exemplars
         ..clear()
