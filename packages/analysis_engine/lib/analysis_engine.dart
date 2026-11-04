@@ -19,3 +19,4 @@ export 'src/patch.dart';
 export 'src/probes.dart';
 export 'src/pack_file.dart';
 export 'src/harness.dart';
+export 'src/adapters.dart';

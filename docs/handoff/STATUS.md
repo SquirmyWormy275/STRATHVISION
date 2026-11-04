@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T15:28:41Z
+heartbeat: 2026-11-04T15:31:41Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Phase 7 task 4-5: compile-once adapters (spec in pack → .paw adapter JSON, local runtime, example validation, ADAPTER_COMPILE_FAILED), then workbench UI (tune + compile, write patch/adapters into a new package version) and adapter loading in inference
+next: Phase 7 app: bundle reads adapters/*.paw, store packages with patches+adapters as new versions, adapters applied at inference (usable warning + focus), Claude Messages API compiler (raw HTTP, claude-opus-5-5, json_schema), workbench screen (harness + compile) on desktop
 <!-- STATE:END -->
 
 ## Phase progress
@@ -45,6 +45,7 @@ next: Phase 7 task 4-5: compile-once adapters (spec in pack → .paw adapter JSO
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T15:31:41Z **claude** — Phase 7 task 4 (engine): compile-once adapters — AdapterSpec in pack (timber: usable_footage, priority_scorer with examples), .paw logistic format, local runtime, example validation with feedback retries, ADAPTER_COMPILE_FAILED, stale/foreign detection by spec hash, generic adapter inputs. 75 engine tests. → next: Phase 7 app: bundle reads adapters/*.paw, store packages with patches+adapters as new versions, adapters applied at inference (usable warning + focus), Claude Messages API compiler (raw HTTP, claude-opus-5-5, json_schema), workbench screen (harness + compile) on desktop
 - 2026-11-04T15:28:41Z **claude** — Phase 7 tasks 1-3 (engine): SpecialistHarness — probe-only black-box coordinate search over the head output layer, DECISIONS.md accept rules declared per head in the pack (timber.json acceptance), typed rule checks, cumulative versioned patches that the phone loader accepts. 66 engine tests. → next: Phase 7 task 4-5: compile-once adapters (spec in pack → .paw adapter JSON, local runtime, example validation, ADAPTER_COMPILE_FAILED), then workbench UI (tune + compile, write patch/adapters into a new package version) and adapter loading in inference
 - 2026-11-04T15:25:19Z **claude** — Phase 6 done: timber pack (underhand, standing block) as runtime-loaded JSON; event picker in Library (settings table, DB v4); heads + five probes declared by the pack; real slope_residual = measured entry-slope error vs coach + MLP correction (patchable); generic aggregates; PackDefinition parser; engine has no timber strings (test-enforced). 56 engine + 71 app + 3 Linux real-decoder tests; release build runs. → next: Phase 7: read EXECUTION_PLAN Phase 7 (workbench harness + compile-once adapters) and DECISIONS weight-space layers 1-2; start task 1
 - 2026-11-04T15:14:43Z **claude** — Phase 5 done: compare-with-profile in the Analysis panel (score, expandable ranked deltas with definition/values/phase, warnings, patches line), patches loaded from package and applied in the isolate, comparison results stored (DB schema v3 comparison_rows). INTERFACES: Comparison rules + Specialist Patch format. 47 engine + 68 app + 3 Linux real-decoder tests pass. → next: Phase 6: read EXECUTION_PLAN Phase 6 (timber pack + slope_residual net) and start task 1

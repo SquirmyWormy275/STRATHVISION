@@ -1,3 +1,4 @@
+import 'adapters.dart';
 import 'body.dart';
 import 'errors.dart';
 
@@ -175,6 +176,7 @@ class AnalysisPack {
     this.selfConsistencyThreshold = 0.5,
     this.heads = const [],
     this.probes = const [],
+    this.adapters = const [],
   }) : criticalPhases = criticalPhases ?? phases;
 
   final String packId;
@@ -210,6 +212,9 @@ class AnalysisPack {
 
   /// Probes registered on those heads.
   final List<ProbeDef> probes;
+
+  /// Compile-once adapter specs (English) for this event.
+  final List<AdapterSpec> adapters;
 
   /// Reads an event's analysis section from pack JSON, or throws
   /// [AnalysisError] with SCHEMA_MISMATCH listing every problem.
@@ -474,6 +479,8 @@ class AnalysisPack {
       }
     }
 
+    final adapters = AdapterSpec.listFromJson(json['adapters'], problems);
+
     final minCritical = unit('min_critical_pose_confidence', 0.6);
     final selfConsistency = unit('self_consistency_threshold', 0.5);
 
@@ -496,6 +503,7 @@ class AnalysisPack {
       selfConsistencyThreshold: selfConsistency,
       heads: heads,
       probes: probes,
+      adapters: adapters,
     );
   }
 }
