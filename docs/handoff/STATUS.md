@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-04T15:10:11Z
+heartbeat: 2026-11-04T15:14:43Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Acceptance: Android real-decoder verification pending
-next: Phase 5 app: readProfileBundle (profile + patches from zip/dir), DB table for comparison results (schema v3), AnalysisController compare-with-profile, score + expandable ranked deltas + warnings in the Analysis panel
+next: Phase 6: read EXECUTION_PLAN Phase 6 (timber pack + slope_residual net) and start task 1
 <!-- STATE:END -->
 
 ## Phase progress
@@ -19,7 +19,8 @@ next: Phase 5 app: readProfileBundle (profile + patches from zip/dir), DB table 
 | 2 Dual-Video Workspace | tasks 1–9 implemented. 49 unit/widget tests plus a real-decoder test passing 3/3 on Linux. **Open: real video on Android** (see Blockers) |
 | 3 Analysis Runtime Skeleton | **done**. `packages/analysis_engine` (18 tests), Analyze button and panel (6 app tests), real-decoder Analyze test passes on Linux. Pose, implement and phase stages are stubs behind real interfaces |
 | 4 Profile Builder | **done**. The engine builder (quality, fit, leave-one-out self-consistency, gates, export) has 31 engine tests. The Build a profile screen has 4 app tests. The real-decoder probe test passes on Linux |
-| 5–9 | not started |
+| 5 Style Comparison | **done**. `compare()` and the patch loader have 47 engine tests. The panel shows score, expandable ranked deltas, warnings and the profile picker. Results are stored (DB v3). 68 app tests and 3 Linux real-decoder tests pass |
+| 6–9 | not started |
 
 ## Blockers / questions for the human
 
@@ -41,6 +42,7 @@ next: Phase 5 app: readProfileBundle (profile + patches from zip/dir), DB table 
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-04T15:14:43Z **claude** — Phase 5 done: compare-with-profile in the Analysis panel (score, expandable ranked deltas with definition/values/phase, warnings, patches line), patches loaded from package and applied in the isolate, comparison results stored (DB schema v3 comparison_rows). INTERFACES: Comparison rules + Specialist Patch format. 47 engine + 68 app + 3 Linux real-decoder tests pass. → next: Phase 6: read EXECUTION_PLAN Phase 6 (timber pack + slope_residual net) and start task 1
 - 2026-11-04T15:10:11Z **claude** — Phase 5 tasks 1+5 (engine): compare() MetricVector+Profile → ComparisonResult per new INTERFACES 'Comparison rules' (contribution ranking, coverage, warnings, nearest refs); specialist patch format in INTERFACES + loader (PATCH_REJECTED, ≤2% weights, highest valid version) + applyPatches; describeMetric. 47 engine tests pass. → next: Phase 5 app: readProfileBundle (profile + patches from zip/dir), DB table for comparison results (schema v3), AnalysisController compare-with-profile, score + expandable ranked deltas + warnings in the Analysis panel
 - 2026-11-04T15:07:33Z **claude** — Phase 4 done: Build a profile screen (Library → person-plus): clip import with per-clip quality, Build → ready profile stored as zip (profile.json + specialist_patches/ + adapters/) and listed in Library, or Error-Contract rejection; Save a copy. Headless media_kit probe (vid=auto fix). Drift row class renamed ProfileRow. 59 app + 31 engine + 3 Linux real-decoder tests pass. Docs: INTERFACES gates/pack fields, DECISIONS Phase 4. → next: Phase 5 task 1: comparison engine in packages/analysis_engine/lib/src/compare.dart: MetricVector + Profile → ComparisonResult (ranked deltas by contribution, coverage, nearest reference clips, applied_patches), schema checks per INTERFACES Versioning Rules
 - 2026-11-04T14:31:24Z **claude** — Phase 4 tasks 1-3 (engine): clip quality evaluation, profile fitting (mean/SD floored by pack min_spread, confidence-scaled weights), leave-one-out self-consistency, gates → ready Profile or Error-Contract rejection; validateProfile + Profile model in engine; style-seeded synthetic stub pose. 31 engine tests pass. → next: Phase 4 app side: ProfileMetadata.fromJson → engine validateProfile; media_kit clip probe; Build profile screen from Library (pick 15+ clips, quality list, Build, Export zip with profile.json + specialist_patches/ + adapters/, add to Library)

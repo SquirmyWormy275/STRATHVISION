@@ -57,6 +57,14 @@ scripts/run_android_player_test.sh [device-id]
 
 Flutter only builds Windows apps on Windows, and only builds iOS and macOS apps on macOS.
 
+## Phase 5 manual check
+
+1. Build a profile (Phase 4 check) or import one for the same pack/event.
+2. Open a review, add a clip, and tap **Analyze**. The panel shows **Compare with: <Coach> · v1**, a big style-match percentage, any warnings, and **Biggest differences**, ranked.
+3. Tap a difference. It expands to show the definition, this clip's value, the coach's value ± spread, and the phase.
+4. If the package has `specialist_patches/slope_residual_vN.patch`, the coverage line reads "patches: slope_residual_vN". A broken patch is skipped and shown as a warning.
+5. Choose **Nobody** to see measurements only. Each comparison is stored for drift.
+
 ## Phase 4 manual check
 
 1. In **Library**, tap the person-plus icon (**Build a profile**).

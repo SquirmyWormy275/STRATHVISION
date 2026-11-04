@@ -1115,16 +1115,544 @@ class ProjectRowsCompanion extends UpdateCompanion<ProjectRow> {
   }
 }
 
+class $ComparisonRowsTable extends ComparisonRows
+    with TableInfo<$ComparisonRowsTable, ComparisonRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ComparisonRowsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _resultIdMeta = const VerificationMeta(
+    'resultId',
+  );
+  @override
+  late final GeneratedColumn<String> resultId = GeneratedColumn<String>(
+    'result_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _projectIdMeta = const VerificationMeta(
+    'projectId',
+  );
+  @override
+  late final GeneratedColumn<String> projectId = GeneratedColumn<String>(
+    'project_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _clipIdMeta = const VerificationMeta('clipId');
+  @override
+  late final GeneratedColumn<String> clipId = GeneratedColumn<String>(
+    'clip_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _profileIdMeta = const VerificationMeta(
+    'profileId',
+  );
+  @override
+  late final GeneratedColumn<String> profileId = GeneratedColumn<String>(
+    'profile_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _profileVersionMeta = const VerificationMeta(
+    'profileVersion',
+  );
+  @override
+  late final GeneratedColumn<int> profileVersion = GeneratedColumn<int>(
+    'profile_version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _overallScoreMeta = const VerificationMeta(
+    'overallScore',
+  );
+  @override
+  late final GeneratedColumn<double> overallScore = GeneratedColumn<double>(
+    'overall_score',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _jsonMeta = const VerificationMeta('json');
+  @override
+  late final GeneratedColumn<String> json = GeneratedColumn<String>(
+    'json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    resultId,
+    projectId,
+    clipId,
+    profileId,
+    profileVersion,
+    overallScore,
+    json,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'comparison_rows';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ComparisonRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('result_id')) {
+      context.handle(
+        _resultIdMeta,
+        resultId.isAcceptableOrUnknown(data['result_id']!, _resultIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_resultIdMeta);
+    }
+    if (data.containsKey('project_id')) {
+      context.handle(
+        _projectIdMeta,
+        projectId.isAcceptableOrUnknown(data['project_id']!, _projectIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_projectIdMeta);
+    }
+    if (data.containsKey('clip_id')) {
+      context.handle(
+        _clipIdMeta,
+        clipId.isAcceptableOrUnknown(data['clip_id']!, _clipIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_clipIdMeta);
+    }
+    if (data.containsKey('profile_id')) {
+      context.handle(
+        _profileIdMeta,
+        profileId.isAcceptableOrUnknown(data['profile_id']!, _profileIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_profileIdMeta);
+    }
+    if (data.containsKey('profile_version')) {
+      context.handle(
+        _profileVersionMeta,
+        profileVersion.isAcceptableOrUnknown(
+          data['profile_version']!,
+          _profileVersionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_profileVersionMeta);
+    }
+    if (data.containsKey('overall_score')) {
+      context.handle(
+        _overallScoreMeta,
+        overallScore.isAcceptableOrUnknown(
+          data['overall_score']!,
+          _overallScoreMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_overallScoreMeta);
+    }
+    if (data.containsKey('json')) {
+      context.handle(
+        _jsonMeta,
+        json.isAcceptableOrUnknown(data['json']!, _jsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_jsonMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {resultId};
+  @override
+  ComparisonRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ComparisonRow(
+      resultId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}result_id'],
+      )!,
+      projectId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}project_id'],
+      )!,
+      clipId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}clip_id'],
+      )!,
+      profileId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}profile_id'],
+      )!,
+      profileVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}profile_version'],
+      )!,
+      overallScore: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}overall_score'],
+      )!,
+      json: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}json'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ComparisonRowsTable createAlias(String alias) {
+    return $ComparisonRowsTable(attachedDatabase, alias);
+  }
+}
+
+class ComparisonRow extends DataClass implements Insertable<ComparisonRow> {
+  final String resultId;
+  final String projectId;
+  final String clipId;
+  final String profileId;
+  final int profileVersion;
+  final double overallScore;
+  final String json;
+  final DateTime createdAt;
+  const ComparisonRow({
+    required this.resultId,
+    required this.projectId,
+    required this.clipId,
+    required this.profileId,
+    required this.profileVersion,
+    required this.overallScore,
+    required this.json,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['result_id'] = Variable<String>(resultId);
+    map['project_id'] = Variable<String>(projectId);
+    map['clip_id'] = Variable<String>(clipId);
+    map['profile_id'] = Variable<String>(profileId);
+    map['profile_version'] = Variable<int>(profileVersion);
+    map['overall_score'] = Variable<double>(overallScore);
+    map['json'] = Variable<String>(json);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  ComparisonRowsCompanion toCompanion(bool nullToAbsent) {
+    return ComparisonRowsCompanion(
+      resultId: Value(resultId),
+      projectId: Value(projectId),
+      clipId: Value(clipId),
+      profileId: Value(profileId),
+      profileVersion: Value(profileVersion),
+      overallScore: Value(overallScore),
+      json: Value(json),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory ComparisonRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ComparisonRow(
+      resultId: serializer.fromJson<String>(json['resultId']),
+      projectId: serializer.fromJson<String>(json['projectId']),
+      clipId: serializer.fromJson<String>(json['clipId']),
+      profileId: serializer.fromJson<String>(json['profileId']),
+      profileVersion: serializer.fromJson<int>(json['profileVersion']),
+      overallScore: serializer.fromJson<double>(json['overallScore']),
+      json: serializer.fromJson<String>(json['json']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'resultId': serializer.toJson<String>(resultId),
+      'projectId': serializer.toJson<String>(projectId),
+      'clipId': serializer.toJson<String>(clipId),
+      'profileId': serializer.toJson<String>(profileId),
+      'profileVersion': serializer.toJson<int>(profileVersion),
+      'overallScore': serializer.toJson<double>(overallScore),
+      'json': serializer.toJson<String>(json),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  ComparisonRow copyWith({
+    String? resultId,
+    String? projectId,
+    String? clipId,
+    String? profileId,
+    int? profileVersion,
+    double? overallScore,
+    String? json,
+    DateTime? createdAt,
+  }) => ComparisonRow(
+    resultId: resultId ?? this.resultId,
+    projectId: projectId ?? this.projectId,
+    clipId: clipId ?? this.clipId,
+    profileId: profileId ?? this.profileId,
+    profileVersion: profileVersion ?? this.profileVersion,
+    overallScore: overallScore ?? this.overallScore,
+    json: json ?? this.json,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  ComparisonRow copyWithCompanion(ComparisonRowsCompanion data) {
+    return ComparisonRow(
+      resultId: data.resultId.present ? data.resultId.value : this.resultId,
+      projectId: data.projectId.present ? data.projectId.value : this.projectId,
+      clipId: data.clipId.present ? data.clipId.value : this.clipId,
+      profileId: data.profileId.present ? data.profileId.value : this.profileId,
+      profileVersion: data.profileVersion.present
+          ? data.profileVersion.value
+          : this.profileVersion,
+      overallScore: data.overallScore.present
+          ? data.overallScore.value
+          : this.overallScore,
+      json: data.json.present ? data.json.value : this.json,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ComparisonRow(')
+          ..write('resultId: $resultId, ')
+          ..write('projectId: $projectId, ')
+          ..write('clipId: $clipId, ')
+          ..write('profileId: $profileId, ')
+          ..write('profileVersion: $profileVersion, ')
+          ..write('overallScore: $overallScore, ')
+          ..write('json: $json, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    resultId,
+    projectId,
+    clipId,
+    profileId,
+    profileVersion,
+    overallScore,
+    json,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ComparisonRow &&
+          other.resultId == this.resultId &&
+          other.projectId == this.projectId &&
+          other.clipId == this.clipId &&
+          other.profileId == this.profileId &&
+          other.profileVersion == this.profileVersion &&
+          other.overallScore == this.overallScore &&
+          other.json == this.json &&
+          other.createdAt == this.createdAt);
+}
+
+class ComparisonRowsCompanion extends UpdateCompanion<ComparisonRow> {
+  final Value<String> resultId;
+  final Value<String> projectId;
+  final Value<String> clipId;
+  final Value<String> profileId;
+  final Value<int> profileVersion;
+  final Value<double> overallScore;
+  final Value<String> json;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const ComparisonRowsCompanion({
+    this.resultId = const Value.absent(),
+    this.projectId = const Value.absent(),
+    this.clipId = const Value.absent(),
+    this.profileId = const Value.absent(),
+    this.profileVersion = const Value.absent(),
+    this.overallScore = const Value.absent(),
+    this.json = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ComparisonRowsCompanion.insert({
+    required String resultId,
+    required String projectId,
+    required String clipId,
+    required String profileId,
+    required int profileVersion,
+    required double overallScore,
+    required String json,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : resultId = Value(resultId),
+       projectId = Value(projectId),
+       clipId = Value(clipId),
+       profileId = Value(profileId),
+       profileVersion = Value(profileVersion),
+       overallScore = Value(overallScore),
+       json = Value(json),
+       createdAt = Value(createdAt);
+  static Insertable<ComparisonRow> custom({
+    Expression<String>? resultId,
+    Expression<String>? projectId,
+    Expression<String>? clipId,
+    Expression<String>? profileId,
+    Expression<int>? profileVersion,
+    Expression<double>? overallScore,
+    Expression<String>? json,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (resultId != null) 'result_id': resultId,
+      if (projectId != null) 'project_id': projectId,
+      if (clipId != null) 'clip_id': clipId,
+      if (profileId != null) 'profile_id': profileId,
+      if (profileVersion != null) 'profile_version': profileVersion,
+      if (overallScore != null) 'overall_score': overallScore,
+      if (json != null) 'json': json,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ComparisonRowsCompanion copyWith({
+    Value<String>? resultId,
+    Value<String>? projectId,
+    Value<String>? clipId,
+    Value<String>? profileId,
+    Value<int>? profileVersion,
+    Value<double>? overallScore,
+    Value<String>? json,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return ComparisonRowsCompanion(
+      resultId: resultId ?? this.resultId,
+      projectId: projectId ?? this.projectId,
+      clipId: clipId ?? this.clipId,
+      profileId: profileId ?? this.profileId,
+      profileVersion: profileVersion ?? this.profileVersion,
+      overallScore: overallScore ?? this.overallScore,
+      json: json ?? this.json,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (resultId.present) {
+      map['result_id'] = Variable<String>(resultId.value);
+    }
+    if (projectId.present) {
+      map['project_id'] = Variable<String>(projectId.value);
+    }
+    if (clipId.present) {
+      map['clip_id'] = Variable<String>(clipId.value);
+    }
+    if (profileId.present) {
+      map['profile_id'] = Variable<String>(profileId.value);
+    }
+    if (profileVersion.present) {
+      map['profile_version'] = Variable<int>(profileVersion.value);
+    }
+    if (overallScore.present) {
+      map['overall_score'] = Variable<double>(overallScore.value);
+    }
+    if (json.present) {
+      map['json'] = Variable<String>(json.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ComparisonRowsCompanion(')
+          ..write('resultId: $resultId, ')
+          ..write('projectId: $projectId, ')
+          ..write('clipId: $clipId, ')
+          ..write('profileId: $profileId, ')
+          ..write('profileVersion: $profileVersion, ')
+          ..write('overallScore: $overallScore, ')
+          ..write('json: $json, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $ProfilesTable profiles = $ProfilesTable(this);
   late final $ProjectRowsTable projectRows = $ProjectRowsTable(this);
+  late final $ComparisonRowsTable comparisonRows = $ComparisonRowsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [profiles, projectRows];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    profiles,
+    projectRows,
+    comparisonRows,
+  ];
 }
 
 typedef $$ProfilesTableCreateCompanionBuilder = ProfilesCompanion Function({
@@ -1687,6 +2215,278 @@ typedef $$ProjectRowsTableProcessedTableManager =
       ProjectRow,
       PrefetchHooks Function()
     >;
+typedef $$ComparisonRowsTableCreateCompanionBuilder =
+    ComparisonRowsCompanion Function({
+      required String resultId,
+      required String projectId,
+      required String clipId,
+      required String profileId,
+      required int profileVersion,
+      required double overallScore,
+      required String json,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$ComparisonRowsTableUpdateCompanionBuilder =
+    ComparisonRowsCompanion Function({
+      Value<String> resultId,
+      Value<String> projectId,
+      Value<String> clipId,
+      Value<String> profileId,
+      Value<int> profileVersion,
+      Value<double> overallScore,
+      Value<String> json,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $$ComparisonRowsTableFilterComposer
+    extends Composer<_$AppDatabase, $ComparisonRowsTable> {
+  $$ComparisonRowsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get resultId => $composableBuilder(
+    column: $table.resultId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get projectId => $composableBuilder(
+    column: $table.projectId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get clipId => $composableBuilder(
+    column: $table.clipId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get profileId => $composableBuilder(
+    column: $table.profileId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get profileVersion => $composableBuilder(
+    column: $table.profileVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get overallScore => $composableBuilder(
+    column: $table.overallScore,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get json => $composableBuilder(
+    column: $table.json,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ComparisonRowsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ComparisonRowsTable> {
+  $$ComparisonRowsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get resultId => $composableBuilder(
+    column: $table.resultId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get projectId => $composableBuilder(
+    column: $table.projectId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get clipId => $composableBuilder(
+    column: $table.clipId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get profileId => $composableBuilder(
+    column: $table.profileId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get profileVersion => $composableBuilder(
+    column: $table.profileVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get overallScore => $composableBuilder(
+    column: $table.overallScore,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get json => $composableBuilder(
+    column: $table.json,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ComparisonRowsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ComparisonRowsTable> {
+  $$ComparisonRowsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get resultId =>
+      $composableBuilder(column: $table.resultId, builder: (column) => column);
+
+  GeneratedColumn<String> get projectId =>
+      $composableBuilder(column: $table.projectId, builder: (column) => column);
+
+  GeneratedColumn<String> get clipId =>
+      $composableBuilder(column: $table.clipId, builder: (column) => column);
+
+  GeneratedColumn<String> get profileId =>
+      $composableBuilder(column: $table.profileId, builder: (column) => column);
+
+  GeneratedColumn<int> get profileVersion => $composableBuilder(
+    column: $table.profileVersion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get overallScore => $composableBuilder(
+    column: $table.overallScore,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get json =>
+      $composableBuilder(column: $table.json, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$ComparisonRowsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ComparisonRowsTable,
+          ComparisonRow,
+          $$ComparisonRowsTableFilterComposer,
+          $$ComparisonRowsTableOrderingComposer,
+          $$ComparisonRowsTableAnnotationComposer,
+          $$ComparisonRowsTableCreateCompanionBuilder,
+          $$ComparisonRowsTableUpdateCompanionBuilder,
+          (
+            ComparisonRow,
+            BaseReferences<_$AppDatabase, $ComparisonRowsTable, ComparisonRow>,
+          ),
+          ComparisonRow,
+          PrefetchHooks Function()
+        > {
+  $$ComparisonRowsTableTableManager(
+    _$AppDatabase db,
+    $ComparisonRowsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ComparisonRowsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ComparisonRowsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ComparisonRowsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> resultId = const Value.absent(),
+                Value<String> projectId = const Value.absent(),
+                Value<String> clipId = const Value.absent(),
+                Value<String> profileId = const Value.absent(),
+                Value<int> profileVersion = const Value.absent(),
+                Value<double> overallScore = const Value.absent(),
+                Value<String> json = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ComparisonRowsCompanion(
+                resultId: resultId,
+                projectId: projectId,
+                clipId: clipId,
+                profileId: profileId,
+                profileVersion: profileVersion,
+                overallScore: overallScore,
+                json: json,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String resultId,
+                required String projectId,
+                required String clipId,
+                required String profileId,
+                required int profileVersion,
+                required double overallScore,
+                required String json,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ComparisonRowsCompanion.insert(
+                resultId: resultId,
+                projectId: projectId,
+                clipId: clipId,
+                profileId: profileId,
+                profileVersion: profileVersion,
+                overallScore: overallScore,
+                json: json,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ComparisonRowsTable, ComparisonRow>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ComparisonRowsTable,
+                    ComparisonRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ComparisonRowsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ComparisonRowsTable,
+      ComparisonRow,
+      $$ComparisonRowsTableFilterComposer,
+      $$ComparisonRowsTableOrderingComposer,
+      $$ComparisonRowsTableAnnotationComposer,
+      $$ComparisonRowsTableCreateCompanionBuilder,
+      $$ComparisonRowsTableUpdateCompanionBuilder,
+      (
+        ComparisonRow,
+        BaseReferences<_$AppDatabase, $ComparisonRowsTable, ComparisonRow>,
+      ),
+      ComparisonRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1695,4 +2495,6 @@ class $AppDatabaseManager {
       $$ProfilesTableTableManager(_db, _db.profiles);
   $$ProjectRowsTableTableManager get projectRows =>
       $$ProjectRowsTableTableManager(_db, _db.projectRows);
+  $$ComparisonRowsTableTableManager get comparisonRows =>
+      $$ComparisonRowsTableTableManager(_db, _db.comparisonRows);
 }

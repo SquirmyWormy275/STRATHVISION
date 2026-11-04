@@ -39,7 +39,60 @@ class AnalyzeButton extends StatelessWidget {
   }
 }
 
-/// Raw analysis output for the clip on the active stage (Phase 3).
+/// "Compare with" picker. Lists ready profiles for this pack's event.
+class _ProfileSelector extends StatelessWidget {
+  const _ProfileSelector({required this.analysis});
+  final AnalysisController analysis;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final muted = theme.textTheme.bodySmall
+        ?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    final choices = analysis.choices;
+    final error = analysis.profileError;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 8, 6),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        if (choices.isEmpty)
+          Text('Build or import a profile to compare against it.',
+              key: const Key('no-profiles'), style: muted)
+        else
+          Row(children: [
+            Text('Compare with', style: muted),
+            const SizedBox(width: 8),
+            Expanded(
+              child: DropdownButton<String>(
+                key: const Key('profile-select'),
+                isExpanded: true,
+                isDense: true,
+                underline: const SizedBox.shrink(),
+                value: analysis.selectedProfile?.key ?? '',
+                items: [
+                  const DropdownMenuItem(value: '', child: Text('Nobody')),
+                  for (final c in choices)
+                    DropdownMenuItem(
+                        value: c.key,
+                        child: Text(c.label, overflow: TextOverflow.ellipsis)),
+                ],
+                onChanged: analysis.running
+                    ? null
+                    : (k) => analysis.selectProfile(
+                        choices.where((c) => c.key == k).firstOrNull),
+              ),
+            ),
+          ]),
+        if (error != null)
+          Text(error.message,
+              key: const Key('profile-error'),
+              style: muted?.copyWith(color: theme.colorScheme.error)),
+      ]),
+    );
+  }
+}
+
+/// Analysis output for the clip on the active stage: the style comparison
+/// (Phase 5) when a profile is selected, then the raw measurements.
 class AnalysisPanel extends StatelessWidget {
   const AnalysisPanel({super.key, required this.analysis, required this.pack});
 
@@ -71,8 +124,13 @@ class AnalysisPanel extends StatelessWidget {
       );
     } else {
       body = switch (result) {
-        AnalysisSuccess(:final vector) =>
-          _Metrics(vector: vector, pack: pack, fps: analysis.fps),
+        AnalysisSuccess(:final vector) => _Metrics(
+            vector: vector,
+            pack: pack,
+            fps: analysis.fps,
+            comparison: analysis.comparison,
+            profileLabel: analysis.selectedProfile?.label,
+          ),
         AnalysisFailure(:final error) => _Failure(error: error),
       };
     }
@@ -116,6 +174,7 @@ class AnalysisPanel extends StatelessWidget {
               ),
             ]),
           ),
+          if (clip != null) _ProfileSelector(analysis: analysis),
           const Divider(height: 1),
           Expanded(
             child: AnimatedSwitcher(
@@ -212,11 +271,19 @@ class _Failure extends StatelessWidget {
 }
 
 class _Metrics extends StatelessWidget {
-  const _Metrics({required this.vector, required this.pack, required this.fps});
+  const _Metrics({
+    required this.vector,
+    required this.pack,
+    required this.fps,
+    this.comparison,
+    this.profileLabel,
+  });
 
   final MetricVector vector;
   final PackInfo pack;
   final double fps;
+  final ComparisonOutcome? comparison;
+  final String? profileLabel;
 
   String _units(String key) {
     for (final m in pack.analysisPack.metrics) {
@@ -247,6 +314,21 @@ class _Metrics extends StatelessWidget {
       key: const Key('analysis-metrics'),
       padding: const EdgeInsets.only(bottom: 16),
       children: [
+        if (comparison case final c?)
+          switch (c) {
+            ComparisonSuccess(:final result) => _Comparison(
+                result: result, pack: pack, profileLabel: profileLabel ?? ''),
+            ComparisonFailure(:final error) => Padding(
+                key: const Key('comparison-error'),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: Row(children: [
+                  Icon(Icons.info_outline, color: scheme.error, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(child: Text(error.message)),
+                  Text(error.errorCode, style: muted),
+                ]),
+              ),
+          },
         Container(
           margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -259,6 +341,7 @@ class _Metrics extends StatelessWidget {
                 ?.copyWith(color: scheme.onTertiaryContainer),
           ),
         ),
+        section('Measurements'),
         section('Body tracking'),
         _Row(
           label: 'Confidence',
@@ -353,6 +436,169 @@ class _Row extends StatelessWidget {
           ),
         ],
       ]),
+    );
+  }
+}
+
+/// Overall score, warnings, and ranked deltas (expandable).
+class _Comparison extends StatelessWidget {
+  const _Comparison({
+    required this.result,
+    required this.pack,
+    required this.profileLabel,
+  });
+
+  final ComparisonResult result;
+  final PackInfo pack;
+  final String profileLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final muted = theme.textTheme.bodySmall
+        ?.copyWith(color: scheme.onSurfaceVariant, fontFeatures: _tabular);
+    final defs = {for (final m in pack.analysisPack.metrics) m.key: m};
+    return Column(
+      key: const Key('comparison'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            Text('${(result.overallScore * 100).round()}%',
+                key: const Key('overall-score'),
+                style: theme.textTheme.displaySmall?.copyWith(
+                    fontWeight: FontWeight.w600, fontFeatures: _tabular)),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Text('style match with $profileLabel',
+                    style: theme.textTheme.bodyMedium),
+              ),
+            ),
+          ]),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+              '${result.metricsUsed} measurements compared'
+              '${result.appliedPatches.isEmpty ? '' : ' · patches: ${result.appliedPatches.join(', ')}'}',
+              key: const Key('comparison-coverage'),
+              style: muted),
+        ),
+        for (final w in result.warnings)
+          Container(
+            key: Key('warning-${result.warnings.indexOf(w)}'),
+            margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+                color: scheme.errorContainer,
+                borderRadius: BorderRadius.circular(8)),
+            child: Row(children: [
+              Icon(Icons.warning_amber_rounded,
+                  size: 16, color: scheme.onErrorContainer),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(w,
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: scheme.onErrorContainer)),
+              ),
+            ]),
+          ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 2),
+          child: Text('BIGGEST DIFFERENCES',
+              style: theme.textTheme.labelSmall?.copyWith(
+                  color: scheme.onSurfaceVariant, letterSpacing: 0.8)),
+        ),
+        for (final d in result.rankedDeltas)
+          _DeltaTile(delta: d, def: defs[d.metricKey], pack: pack),
+      ],
+    );
+  }
+}
+
+class _DeltaTile extends StatelessWidget {
+  const _DeltaTile({required this.delta, required this.def, required this.pack});
+
+  final RankedDelta delta;
+  final MetricDef? def;
+  final PackInfo pack;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final d = delta;
+    final unit = def?.unit ?? '';
+    String v(double x) => '${x.toStringAsFixed(1)}${unit == '°' ? '' : ' '}$unit';
+    final (IconData icon, String dir) = switch (d.direction) {
+      'higher' => (Icons.arrow_upward, 'Higher than coach'),
+      'lower' => (Icons.arrow_downward, 'Lower than coach'),
+      _ => (Icons.check, 'Within the coach\'s range'),
+    };
+    final muted = theme.textTheme.bodySmall
+        ?.copyWith(color: scheme.onSurfaceVariant, fontFeatures: _tabular);
+    final figures = theme.textTheme.bodyMedium
+        ?.copyWith(fontFeatures: _tabular, fontWeight: FontWeight.w600);
+    return ExpansionTile(
+      key: Key('delta-${d.metricKey}'),
+      tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+      childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      expandedCrossAxisAlignment: CrossAxisAlignment.start,
+      leading: Icon(icon,
+          size: 20,
+          color: d.direction == 'neutral' ? scheme.primary : scheme.tertiary),
+      title: Text(pack.metricLabel(d.metricKey), overflow: TextOverflow.ellipsis),
+      subtitle: Text(
+          '${pack.phaseLabel(d.phase)} · $dir · '
+          '${d.distanceSpreads.toStringAsFixed(1)} spreads',
+          style: muted),
+      trailing: SizedBox(
+        width: 40,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(2),
+          child: LinearProgressIndicator(
+            value: (d.contribution * 2).clamp(0.0, 1.0),
+            minHeight: 4,
+            color: scheme.tertiary,
+            backgroundColor: scheme.surfaceContainerHighest,
+          ),
+        ),
+      ),
+      children: [
+        if (def != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+                describeMetric(def!, phaseLabel: pack.phaseLabel),
+                key: Key('definition-${d.metricKey}'),
+                style: theme.textTheme.bodySmall),
+          ),
+        Row(children: [
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('This clip', style: muted),
+              Text(v(d.userValue), key: Key('user-${d.metricKey}'), style: figures),
+            ]),
+          ),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('Coach', style: muted),
+              Text('${v(d.coachCenter)} ± ${v(d.coachSpread)}',
+                  key: Key('coach-${d.metricKey}'), style: figures),
+            ]),
+          ),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('Phase', style: muted),
+              Text(pack.phaseLabel(d.phase), style: figures),
+            ]),
+          ),
+        ]),
+      ],
     );
   }
 }

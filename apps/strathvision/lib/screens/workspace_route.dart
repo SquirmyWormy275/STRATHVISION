@@ -8,6 +8,25 @@ import '../workspace/stage_player.dart';
 import '../workspace/workspace_controller.dart';
 import 'workspace_screen.dart';
 
+/// Ready profiles for the active pack's event, newest first.
+Future<List<ProfileChoice>> compatibleProfiles(
+    AppDatabase db, PackInfo pack) async {
+  final a = pack.analysisPack;
+  return [
+    for (final r in await db.allProfiles())
+      if (r.packId == a.packId &&
+          r.eventId == a.eventId &&
+          r.minClipsMet &&
+          r.selfConsistencyPassed)
+        ProfileChoice(
+          profileId: r.profileId,
+          version: r.version,
+          label: '${r.coachName} · v${r.version}',
+          path: r.sourcePath,
+        ),
+  ];
+}
+
 typedef StagePlayerFactory = StagePlayer Function();
 
 StagePlayer defaultStagePlayer() => MediaKitStagePlayer();
@@ -48,6 +67,9 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
   late final AnalysisController _analysis = AnalysisController(
     workspace: _controller,
     run: widget.analysisRunner ?? isolateRunner(placeholderPack.analysisPack),
+    listProfiles: () => compatibleProfiles(widget.db, placeholderPack),
+    saveResult: (r) =>
+        widget.db.saveComparison(projectId: widget.project.projectId, result: r),
   );
 
   @override

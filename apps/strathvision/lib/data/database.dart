@@ -4,6 +4,8 @@ import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:analysis_engine/analysis_engine.dart' show ComparisonResult;
+
 import '../profiles/profile_package.dart';
 import '../workspace/project.dart';
 import '../workspace/workspace_controller.dart';
@@ -44,7 +46,24 @@ class ProjectRows extends Table {
   Set<Column> get primaryKey => {projectId};
 }
 
-@DriftDatabase(tables: [Profiles, ProjectRows])
+/// Comparison Results kept for later drift (Phase 5 task 4). `json` is the
+/// exact INTERFACES.md Comparison Result.
+@DataClassName('ComparisonRow')
+class ComparisonRows extends Table {
+  TextColumn get resultId => text()();
+  TextColumn get projectId => text()();
+  TextColumn get clipId => text()();
+  TextColumn get profileId => text()();
+  IntColumn get profileVersion => integer()();
+  RealColumn get overallScore => real()();
+  TextColumn get json => text()();
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {resultId};
+}
+
+@DriftDatabase(tables: [Profiles, ProjectRows, ComparisonRows])
 class AppDatabase extends _$AppDatabase implements ProjectStore {
   AppDatabase([QueryExecutor? executor])
       : super(executor ??
@@ -56,13 +75,14 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
             ));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
         onUpgrade: (m, from, to) async {
           if (from < 2) await m.createTable(projectRows);
+          if (from < 3) await m.createTable(comparisonRows);
         },
       );
 
@@ -90,7 +110,38 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
         ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
       .watch();
 
+  // ---- comparison results -------------------------------------------------
+
+  Future<void> saveComparison(
+          {required String projectId,
+          required ComparisonResult result,
+          DateTime? at}) =>
+      into(comparisonRows).insertOnConflictUpdate(ComparisonRowsCompanion.insert(
+        resultId: result.resultId,
+        projectId: projectId,
+        clipId: result.clipId,
+        profileId: result.profileId,
+        profileVersion: result.profileVersion,
+        overallScore: result.overallScore,
+        json: jsonEncode(result.toJson()),
+        createdAt: at ?? DateTime.now(),
+      ));
+
+  /// Stored results for one profile, oldest first (the drift series).
+  Future<List<ComparisonRow>> comparisonsForProfile(String profileId) =>
+      (select(comparisonRows)
+            ..where((t) => t.profileId.equals(profileId))
+            ..orderBy([(t) => OrderingTerm.asc(t.createdAt)]))
+          .get();
+
   // ---- profiles -----------------------------------------------------------
+
+  Future<List<ProfileRow>> allProfiles() => (select(profiles)
+        ..orderBy([
+          (t) => OrderingTerm.desc(t.importedAt),
+          (t) => OrderingTerm.desc(t.version),
+        ]))
+      .get();
 
   Stream<List<ProfileRow>> watchProfiles() => (select(profiles)
         ..orderBy([

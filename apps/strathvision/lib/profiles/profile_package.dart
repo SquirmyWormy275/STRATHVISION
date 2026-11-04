@@ -70,14 +70,33 @@ class ProfileMetadata {
 }
 
 
-/// Reads profile metadata from a `.json` file, a `.zip` package, or a package
-/// directory. Throws [AnalysisError] on anything unreadable or invalid.
-Future<ProfileMetadata> readProfilePackage(String path) async {
-  final String text;
+/// A profile package as the comparison engine needs it: the full manifest
+/// plus any specialist patch files (name → contents).
+class ProfileBundle {
+  const ProfileBundle({required this.profile, required this.patchFiles});
+  final Profile profile;
+  final Map<String, String> patchFiles;
+}
+
+/// Raw manifest text and patch files from a `.json`, `.zip`, or directory.
+Future<(String, Map<String, String>)> _readPackage(String path) async {
   try {
     if (await FileSystemEntity.isDirectory(path)) {
-      text = await File(p.join(path, profileManifestName)).readAsString();
-    } else if (p.extension(path).toLowerCase() == '.zip') {
+      final patches = <String, String>{};
+      final dir = Directory(p.join(path, 'specialist_patches'));
+      if (await dir.exists()) {
+        await for (final f in dir.list()) {
+          if (f is File && f.path.endsWith('.patch')) {
+            patches[p.basename(f.path)] = await f.readAsString();
+          }
+        }
+      }
+      return (
+        await File(p.join(path, profileManifestName)).readAsString(),
+        patches
+      );
+    }
+    if (p.extension(path).toLowerCase() == '.zip') {
       final archive = ZipDecoder().decodeBytes(await File(path).readAsBytes());
       final entry = archive.files.where((f) =>
           f.isFile && p.basename(f.name) == profileManifestName).firstOrNull;
@@ -85,23 +104,45 @@ Future<ProfileMetadata> readProfilePackage(String path) async {
         throw AnalysisError(ErrorCode.schemaMismatch,
             'The package has no $profileManifestName inside it.');
       }
-      text = utf8.decode(entry.content as List<int>);
-    } else {
-      text = await File(path).readAsString();
+      final patches = <String, String>{
+        for (final f in archive.files)
+          if (f.isFile &&
+              p.basename(p.dirname(f.name)) == 'specialist_patches' &&
+              f.name.endsWith('.patch'))
+            p.basename(f.name): utf8.decode(f.content as List<int>),
+      };
+      return (utf8.decode(entry.content as List<int>), patches);
     }
+    return (await File(path).readAsString(), <String, String>{});
   } on AnalysisError {
     rethrow;
   } on Object catch (e) {
     throw AnalysisError(ErrorCode.schemaMismatch, 'The file could not be read.',
         {'cause': e.toString()});
   }
+}
 
-  final Object? json;
+Object? _decode(String text) {
   try {
-    json = jsonDecode(text);
+    return jsonDecode(text);
   } on FormatException catch (e) {
     throw AnalysisError(
         ErrorCode.schemaMismatch, 'The file is not valid JSON.', {'cause': e.message});
   }
-  return ProfileMetadata.fromJson(json);
+}
+
+/// Reads profile metadata from a `.json` file, a `.zip` package, or a package
+/// directory. Throws [AnalysisError] on anything unreadable or invalid.
+Future<ProfileMetadata> readProfilePackage(String path) async {
+  final (text, _) = await _readPackage(path);
+  return ProfileMetadata.fromJson(_decode(text));
+}
+
+/// Reads the full profile and its patch files. Throws [AnalysisError].
+Future<ProfileBundle> readProfileBundle(String path) async {
+  final (text, patches) = await _readPackage(path);
+  final json = _decode(text);
+  ProfileMetadata.fromJson(json); // same checks as import
+  return ProfileBundle(
+      profile: Profile.fromJson(json as Map<String, Object?>), patchFiles: patches);
 }
