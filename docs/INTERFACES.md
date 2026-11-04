@@ -4,7 +4,7 @@ This document defines contracts only. Implementation must conform. Changes requi
 
 ## Profile Package (versioned artifact)
 
-A profile is a directory or zip containing:
+A profile is a directory or zip containing at minimum:
 
 ```json
 {
@@ -33,7 +33,13 @@ A profile is a directory or zip containing:
 }
 ```
 
-Additional files may include reference frame indices or thumbnail paths. The JSON above is the minimum required contract.
+Additional required/optional objects:
+- `specialist_patches/` — versioned residual patches (e.g. slope_residual_vN.patch)
+- `adapters/` — compile-once adapters (e.g. usable_footage.paw)
+- `carne_asada/` — research logs and mixture edit deltas (desktop-only, never required for inference)
+- Reference frame indices or thumbnail paths
+
+The JSON above is the minimum required contract for inference.
 
 ## Metric Vector (per analyzed clip)
 
@@ -57,7 +63,10 @@ Additional files may include reference frame indices or thumbnail paths. The JSO
       "phase": "string"
     }
   },
-  "pose_confidence_summary": 0.0
+  "pose_confidence_summary": 0.0,
+  "specialist_residuals": {
+    "slope_residual": 0.0
+  }
 }
 ```
 
@@ -89,7 +98,8 @@ Additional files may include reference frame indices or thumbnail paths. The JSO
     "low_confidence_phases": []
   },
   "nearest_reference_clip_ids": [],
-  "warnings": []
+  "warnings": [],
+  "applied_patches": ["slope_residual_v3"]
 }
 ```
 
@@ -110,8 +120,9 @@ The dual-video workspace must support these operations as first-class:
 - Mirror stage B
 - Swap stages
 - Annotate on active stage
+- Red/green mark on selected attribute for current stroke
 
-Sync state and annotations must be persistable inside a Project.
+Sync state, annotations, and marks must be persistable inside a Project.
 
 ## Project
 
@@ -129,7 +140,8 @@ Sync state and annotations must be persistable inside a Project.
     }
   ],
   "annotations": [],
-  "linked_profile_ids": []
+  "linked_profile_ids": [],
+  "marks": []
 }
 ```
 
@@ -149,7 +161,7 @@ All analysis operations return either a success payload matching the schemas abo
 
 ```json
 {
-  "error_code": "INSUFFICIENT_CLIPS | LOW_POSE_CONFIDENCE | PHASE_DETECTION_FAILED | SCHEMA_MISMATCH | PROFILE_NOT_READY",
+  "error_code": "INSUFFICIENT_CLIPS | LOW_POSE_CONFIDENCE | PHASE_DETECTION_FAILED | SCHEMA_MISMATCH | PROFILE_NOT_READY | PATCH_REJECTED | ADAPTER_COMPILE_FAILED",
   "message": "string",
   "details": {}
 }
@@ -160,3 +172,4 @@ All analysis operations return either a success payload matching the schemas abo
 - Metric schema changes require a new `metric_schema_version`.
 - Profiles built under an old schema may not be scored against clips using a new schema without an explicit migration step.
 - Profile versions are strictly increasing. Old versions remain readable.
+- Specialist patches and adapters version independently inside the package.
