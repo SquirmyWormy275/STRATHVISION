@@ -90,6 +90,7 @@ def publish(document,rows,repo):
             'limitations':['Single-reviewer old references; diagnostics only.',
                            'Automatic ambiguities/orientation doubts defer measurement; deferrals count as missing contacts.',
                            'Torso centre error is a different metric from the original detector-box checkpoint coverage.',
+                           'Person selection, HDR handling, sampling and engine revision differ from the saved-pose baseline; this is not a controlled ablation.',
                            'Reduced-resolution windows do not establish whole-recording throughput or field coaching accuracy.',
                            'The implement remains a grip proxy; no genuine technique judgments were supplied.']}
 
@@ -106,6 +107,9 @@ def main():
     else:
         if not a.native or not a.repo or not a.output:p.error('score requires --native, --repo and --output')
         result=publish(json.loads(a.native.read_text()),rows,a.repo)
+        result['scorer_sha256']=sha256(Path(__file__))
+        result['reference_artifacts_sha256']={name:sha256(a.references/name) for name in
+            ['gurr-inputs.json','gurr-reference.json','gurr-phase-inputs.json','gurr-phase-reference.json']}
         write_json(a.output,result);print(json.dumps(result['groups'],indent=2))
 
 

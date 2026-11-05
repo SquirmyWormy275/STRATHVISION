@@ -2,7 +2,7 @@
 
 **Local-first athletic video analysis with inspectable style matching and weight-space programming.**
 
-STRATHVISION is a dual-video workstation and pack-driven analysis engine for technique sports. The visual review tools are excellent on their own. The AI layer is constrained, versioned, fully inspectable, and includes local weight-space programming so models can actually improve from feedback.
+STRATHVISION is a dual-video workstation and pack-driven analysis engine for technique sports. Visual review works independently of analysis. Its experimental AI layer records measured differences, versioned profiles and bounded local model edits, with accuracy and learning evidence reported separately below.
 
 This repository answers a research question while remaining a usable product.
 
@@ -10,7 +10,7 @@ This repository answers a research question while remaining a usable product.
 
 **Can a local, evidence-bounded weight-space programming loop improve a sports technique model over time without full retraining, cloud infrastructure, or drifting outside coach-derived bounds?**
 
-Secondary claims tested by the system:
+Hypotheses for controlled evaluation:
 - Sparse LLM-directed edits on specialist nets can fix concentrated failure modes faster than gradient steps on the same data.
 - Compile-once adapters for fuzzy decisions (usable footage, attribute priority, event classification) match or beat hand-written rules while staying fully local.
 - A constrained recursive loop (CARNE ASADA) on a phase-conditioned Gaussian mixture + residual exemplars can compound attribute-specific improvement from red/green + coach marks without context stuffing.
@@ -51,7 +51,7 @@ Status messages and edit explanations are specified in docs/DECISIONS.md.
 
 Application evidence: [controller/widget regression tests](apps/strathvision/test/carne_run_test.dart) cover duplicates, mark refresh, failures, stop states and export retries; [native Linux checks](apps/strathvision/integration_test/carne_run_flow_test.dart) save a zero-edit report and verify content-keyed pose caching. Export/UI fixtures are explicitly synthetic. The real-footage research results follow below.
 
-Competitor tracking now offers correction inside CARNE and pauses when a selection is uncertain. Its desktop sampling budget preserves swing timing on long recordings. The [local feedback review workflow](docs/FEEDBACK_REVIEW.md) collects real stroke judgments and supports a source-disjoint learning replay; it is ready for field use, with coaching effectiveness still unvalidated.
+Competitor tracking now offers correction inside CARNE and pauses when a selection is uncertain. A four-second preview asks for uncertain competitors before full processing; its desktop sampling budget preserves swing timing on long recordings. The [local feedback review workflow](docs/FEEDBACK_REVIEW.md) collects real stroke judgments and supports a source-disjoint learning replay; it is ready for field use, with coaching effectiveness still unvalidated.
 
 ## Experiment: CARNE ASADA on the Gurr Footage
 
@@ -85,7 +85,7 @@ The following protocol remains the planned coach-specific learning experiment on
 
 ### Current engine and axe-detector follow-up
 
-The latest [round-2 report](docs/experiments/Gurr-Round2.md) pins the standing-block engine and publishes diagnostic replays: **1/15** contact matches with two extras on the original test, and **3/3** with one extra on the smaller follow-up. These already-opened references are comparisons, not a new holdout.
+The [round-2 report](docs/experiments/Gurr-Round2.md) pins the standing-block engine and publishes diagnostic replays: **1/15** contact matches with two extras on the original test, and **3/3** with one extra on the smaller follow-up. These already-opened references are comparisons, not a new holdout.
 
 Two image-only axe prototypes were trained and evaluated: a HOG/linear-SVM baseline and a COCO-pretrained SSDLite model with locally fitted detection heads. Both failed validation. Frozen test results were **0/16** visible axe heads for HOG and **0/8** on four newly reserved recordings for SSDLite. Uncertain/occluded frames were unrated. Code, coarse single-reviewer annotations, model coefficients/weights, source hashes and failures are published in the report. The axe prototypes remain research-only; the app still uses its disclosed grip proxy for implement measurements.
 

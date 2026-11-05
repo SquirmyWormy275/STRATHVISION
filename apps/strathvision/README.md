@@ -40,7 +40,8 @@ dart pub get && dart analyze && dart test
 
 ```sh
 # Linux desktop
-flutter test integration_test -d linux --dart-define=CLIP_DIR=$PWD/integration_test/assets
+flutter test integration_test/real_player_test.dart -d linux \
+  --dart-define=CLIP_DIR=$PWD/integration_test/assets
 # Android device or emulator (pushes clips once the app has created its files folder)
 scripts/run_android_player_test.sh [device-id]
 # Every screen, end to end, on the desktop (real video; optional screenshots)
@@ -76,12 +77,15 @@ Flutter only builds Windows apps on Windows, and only builds iOS and macOS apps 
 
 1. Open the Workbench for a ready Underhand profile and tap **CARNE ASADA**. The feed opens with "Priority is slope. Only slope updates will be considered this session."
 2. Drag clips onto **Feed CARNE ASADA**, or use **or choose files**. Each clip reports "Found N strokes. K are clean enough for slope. Adding them.", the implement-dropout line, or the below-threshold line with **Use anyway**. Dropping a copy or renamed copy refreshes its marks and counts its footage once. Different recordings with the same filename remain independent. A failed file does not abort the remaining inputs.
+   Uncertain automatic selection pauses at **Choose competitor**. Tap the athlete in the picker and confirm; **Change competitor** replaces that source’s measurements before accepted edits. Long recordings use a four-second selection preview and a desktop 30 Hz sampling budget. This is within-recording tracking, with no named identity recognition.
 3. Once usable footage reaches Good (2 min), and the clips carry green/red Slope marks from reviews, accepted updates appear as "CARNE ASADA accepted an update. Slope mean shifted 1.1° steeper on the downswing.", followed by the session tally. **What did it just do?** lists each one-sentence explanation.
 4. The current status explains why updates stopped, including insufficient usable footage and missing feedback. **Save experiment** writes a standalone JSON report even with zero edits or failed inputs. Canceling or failing the save permits a retry; changing the session makes the saved snapshot older. See [the record format](../../docs/CARNE_RUN_REPORT.md).
 5. **Undo** reverts the last edit. **Save as vN+1** is enabled for accepted edits and writes the new version with `carne_asada/mixture_edits_vN.json`. Phones ignore that folder. Saving an experiment alone never creates a profile version.
 6. A text note containing `priority: hinge` switches the priority (before any edit). `ignore this clip` drops the last clip. All notes in the batch finish before an update is tried.
 
-Automated Linux verification: `flutter test integration_test/carne_run_flow_test.dart -d linux --dart-define=CLIP_DIR=<absolute integration_test/assets path> --dart-define=OUT=<absolute output directory>`. The UI/export case uses explicitly synthetic measurements and writes an inspectable JSON plus screenshot. A separate case decodes the licensed `cleave.webm` and checks that a changed content key invalidates the real pose cache. These checks establish application behavior, not coaching accuracy.
+For the first genuine judgments, use the [private video review workflow](../../docs/FEEDBACK_REVIEW.md). Its real tasks start unlabelled. **Save experiment** exports measured stroke vectors for source-disjoint learning evaluation. Field coaching effectiveness remains unvalidated.
+
+Automated Linux verification: `flutter test integration_test/carne_run_flow_test.dart -d linux --dart-define=CLIP_DIR=<absolute integration_test/assets path> --dart-define=OUT=<absolute output directory>`. The UI/export case uses explicitly synthetic measurements and writes an inspectable JSON plus screenshot. A separate case decodes the licensed `cleave.webm` and checks that a changed content key invalidates the real pose cache. These checks establish application behavior, not coaching accuracy. The private Gurr diagnostic requires separate source footage and arguments; follow [the round-2 reproduction guide](../../docs/experiments/Gurr-Round2.md#reproduce-native-diagnostics).
 
 ## Phase 7 manual check (desktop)
 

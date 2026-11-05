@@ -42,5 +42,6 @@ Additional run files can follow the first. The tool evaluates the unchanged prof
 
 - Python tests cover draft rejection, immutable source/partition provenance, byte-range video playback, persistence, repeated stroke tasks, failed-write rollback and cross-origin write rejection.
 - A Chromium test decoded the licensed cleave fixture, selected 1–2 seconds, saved/exported a synthetic judgment, created a new unlabelled stroke and checked the 390-pixel layout.
+- A read-only Chromium check played the real Gurr packet, checked an upright conversion of a sideways clip, and confirmed all twelve tasks remained unlabelled.
 - Dart tests replay synthetic measured exports through the actual CARNE loop, preserve the original profile, reject source leakage and count duplicate footage once.
 - The real Gurr packet currently contains zero judgments. Its [evaluation status](experiments/evaluation/round2/genuine-feedback-status.json) is explicitly pending; no coach-learning improvement is claimed.
