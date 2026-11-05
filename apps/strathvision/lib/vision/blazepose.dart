@@ -1,6 +1,12 @@
+import 'dart:ffi' as ffi;
 import 'dart:typed_data';
 
+import 'package:ffi/ffi.dart';
 import 'package:onnxruntime/onnxruntime.dart';
+// The generated C API bindings: reading a tensor's buffer directly (the
+// plugin's `value` builds nested Dart lists, ~80 ms for a detector output).
+// ignore: implementation_imports
+import 'package:onnxruntime/src/bindings/onnxruntime_bindings_generated.dart' as bg;
 
 import 'pose_math.dart';
 
@@ -30,6 +36,19 @@ List<double> flattenOrt(Object? v) {
 
   walk(v);
   return out;
+}
+
+/// A float tensor's [count] values, copied straight from its native buffer.
+Float32List tensorFloats(OrtValue value, int count) {
+  final out = calloc<ffi.Pointer<ffi.Void>>();
+  try {
+    final status = OrtEnv.instance.ortApiPtr.ref.GetTensorMutableData.asFunction<
+        bg.OrtStatusPtr Function(ffi.Pointer<bg.OrtValue>, ffi.Pointer<ffi.Pointer<ffi.Void>>)>()(value.ptr, out);
+    OrtStatus.checkOrtStatus(status);
+    return Float32List.fromList(out.value.cast<ffi.Float>().asTypedList(count));
+  } finally {
+    calloc.free(out);
+  }
 }
 
 /// Initializes ONNX Runtime once for every model in the app.

@@ -34,6 +34,11 @@ class FrameGrabber {
       await native.setProperty('vo', 'null');
       await native.setProperty('ao', 'null');
       await native.setProperty('hr-seek', 'yes');
+      // frame-step plays one frame at playback speed, so at 1× each step
+      // waited out the frame's display time (~90 ms per 1080p HDR frame;
+      // 27 ms at 16×). Never drop frames: every step must be the next one.
+      await native.setProperty('speed', '16');
+      await native.setProperty('framedrop', 'no');
     }
     await p.open(Media(path), play: false);
     if (native is NativePlayer) await native.setProperty('vid', 'auto');

@@ -121,10 +121,10 @@ class PersonDetector {
   PersonDetector._(this._session);
   final OrtSession _session;
 
-  static PersonDetector load(Uint8List modelBytes) {
+  static PersonDetector load(Uint8List modelBytes, {int threads = 2}) {
     ensureOrtEnv();
     final options = OrtSessionOptions()
-      ..setIntraOpNumThreads(2)
+      ..setIntraOpNumThreads(threads)
       ..setSessionGraphOptimizationLevel(GraphOptimizationLevel.ortEnableAll);
     return PersonDetector._(OrtSession.fromBuffer(modelBytes, options));
   }
@@ -139,7 +139,7 @@ class PersonDetector {
     final run = OrtRunOptions();
     try {
       final outs = await _session.runAsync(run, {'images': tensor}, ['output']) ?? const [];
-      final raw = flattenOrt(outs.first?.value);
+      final raw = tensorFloats(outs.first!, 3549 * 85);
       for (final o in outs) {
         o?.release();
       }

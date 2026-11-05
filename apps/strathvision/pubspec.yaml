@@ -49,6 +49,7 @@ dependencies:
     path: ../../packages/analysis_engine
   desktop_drop: ^0.8.0
   onnxruntime: ^1.4.1
+  ffi: ^2.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
