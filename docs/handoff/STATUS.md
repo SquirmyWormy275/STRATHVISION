@@ -3,7 +3,7 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T23:38:15Z
+heartbeat: 2026-11-05T23:47:14Z
 branch: implementation
 phase: 8 — Seagate multi-sport footage research
 task: Inventory all Seagate sources, exclude partial downloads and duplicates, expand axe training labels, and establish a separate weightlifting experiment
