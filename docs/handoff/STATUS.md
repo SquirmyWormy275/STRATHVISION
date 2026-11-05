@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T20:43:15Z
+heartbeat: 2026-11-05T21:09:06Z
 branch: implementation
 phase: 8 — additional novice/event footage training experiment
-task: User authorized new ZIP footage for continued training; inventory four archives/56 video entries, deduplicate old corpus, freeze grouped split before fitting
-next: Use private analysis/new-footage-20261105. Verify/extract ALL new archives, inspect metadata and split sessions before pixels; make axe/impact engineering labels, fit model, freeze then evaluate reserved recordings. Keep genuine coach feedback unlabelled; preserve previous result freezes and both real review servers.
+task: New footage:55fresh videos;capture-group split36train/13val/6test frozen192c25c;144train+52valframes ready;engineering annotations/model fit in progress
+next: Read private analysis/new-footage-20261105/working-state.json. Finish49train/val source annotations; axe_faster.py smoke/fit and freeze beforeopening24testframes. Reportactualheldoutresults/README. Keepoldresults/reviewservers unchanged; no fabricatedcoachlabels.
 <!-- STATE:END -->
 
 ## Phase progress

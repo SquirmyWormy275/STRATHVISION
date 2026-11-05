@@ -39,7 +39,7 @@ def split(manifest, previous):
                             'Early-training context is not a red/green technique label.']}
 
 
-def prepare(parent, partition, freeze, workers):
+def prepare(parent, partition, freeze, workers, model=None):
     plan = json.loads((parent / 'plan.json').read_text())
     if partition == 'test':
         if not freeze:
@@ -47,6 +47,8 @@ def prepare(parent, partition, freeze, workers):
         frozen = json.loads(freeze.read_text())
         if frozen['plan_sha256'] != sha256(parent / 'plan.json') or not frozen['model_sha256']:
             raise ValueError('Model freeze does not match source plan')
+        if model is None or sha256(model) != frozen['model_sha256']:
+            raise ValueError('Actual model weights do not match the freeze')
     jobs = [(s, f) for s in plan['sources'] if s['split'] == partition for f in s['frames']]
     def one(job):
         source, frame = job
@@ -80,12 +82,52 @@ def prepare(parent, partition, freeze, workers):
     print(f'Prepared {len(rows)} {partition} frames from {len(by_source)} videos', flush=True)
 
 
+def reference(parent, annotations, output):
+    plan = json.loads((parent/'plan.json').read_text());marks = json.loads(annotations.read_text())
+    dimensions = {}
+    for partition in ('train', 'validation', 'test'):
+        path = parent/('frames-'+partition+'.json')
+        if path.exists():
+            for row in json.loads(path.read_text())['frames']:
+                dimensions[row['clip_sha256']] = (row['width'], row['height'])
+    names = [r['member'] for r in plan['sources']]
+    if len(set(names)) != len(names): raise ValueError('Use content IDs when source filenames collide')
+    rows = []
+    for source in plan['sources']:
+        mark = marks.get(source['member']);roi = [0., 0., 1., 1.]
+        if mark:
+            if source['sha256'] not in dimensions: raise ValueError('Cannot annotate unopened pixels')
+            w, h = dimensions[source['sha256']]
+            a, b, c, d = mark['roi_px'];roi = [a/w, b/h, c/w, d/h]
+        frames = []
+        for k, frame in enumerate(source['frames']):
+            label = mark['frames'][k] if mark else {'head_box_px': None, 'visibility': 'unreviewed'}
+            box = label['head_box_px']
+            if box:
+                x, y, r, bottom = box;box = [x/w, y/h, r/w, bottom/h]
+                if not (roi[0] <= box[0] < box[2] <= roi[2] and roi[1] <= box[1] < box[3] <= roi[3]):
+                    raise ValueError('Annotated head lies outside the broad athlete ROI')
+            frames.append({'time_s': frame['time_s'], 'head_box': box, 'visibility': label['visibility']})
+        rows.append({'window_id': 'new-'+source['sha256'][:16], 'clip_sha256': source['sha256'],
+                     'source_name': source['relative_path'], 'split': source['split'], 'start_s': 0.,
+                     'duration_s': source['duration_s'], 'rotation_cw': 0, 'search_roi': roi, 'frames': frames})
+    result = {'format': 'axe-reference/1', 'source_plan_sha256': sha256(parent/'plan.json'),
+              'reviewer': 'Codex visual engineering annotations; not coach judgments',
+              'target': 'Selected athlete active axe head, conditional on a broad manually supplied ROI',
+              'windows': rows}
+    from axe_data import validate
+    validate(result);write_json(output, result)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['plan', 'sample'])
+    parser.add_argument('action', choices=['plan', 'sample', 'reference'])
     parser.add_argument('--parent', type=Path, required=True)
     parser.add_argument('--partition', choices=['train', 'validation', 'test'])
     parser.add_argument('--freeze', type=Path)
+    parser.add_argument('--model', type=Path)
+    parser.add_argument('--annotations', type=Path)
+    parser.add_argument('--output', type=Path)
     parser.add_argument('--workers', type=int, default=2)
     args = parser.parse_args()
     if args.action == 'plan':
@@ -99,9 +141,12 @@ def main():
         print(json.dumps({p: {'sources': sum(r['split']==p for r in result['sources']),
                              'frames': sum(len(r['frames']) for r in result['sources'] if r['split']==p)}
                           for p in ('train', 'validation', 'test')}, indent=2))
+    elif args.action == 'reference':
+        if not args.annotations or not args.output: parser.error('reference needs --annotations and --output')
+        reference(args.parent, args.annotations, args.output)
     else:
         if not args.partition: parser.error('sample needs --partition')
-        prepare(args.parent, args.partition, args.freeze, args.workers)
+        prepare(args.parent, args.partition, args.freeze, args.workers, args.model)
 
 
 if __name__ == '__main__':

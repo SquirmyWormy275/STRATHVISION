@@ -33,3 +33,14 @@ def test_test_frame_preparation_requires_a_matching_model_freeze(tmp_path):
     (tmp_path/'plan.json').write_text(json.dumps({'sources': []}))
     with pytest.raises(ValueError, match='unopened'):
         prepare(tmp_path, 'test', None, 1)
+
+
+def test_test_pixels_stay_closed_if_actual_weights_changed(tmp_path):
+    import json
+    from footage import sha256
+    plan = tmp_path/'plan.json';plan.write_text(json.dumps({'sources': []}))
+    frozen = tmp_path/'freeze.json';frozen.write_text(json.dumps({'plan_sha256':sha256(plan),'model_sha256':'old'}))
+    model = tmp_path/'model.pt';model.write_bytes(b'changed')
+    with pytest.raises(ValueError, match='Actual model weights'):
+        prepare(tmp_path, 'test', frozen, 1, model)
+    assert not (tmp_path/'frames/test').exists()
