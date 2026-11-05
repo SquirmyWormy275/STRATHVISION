@@ -1,5 +1,7 @@
 # STRATHVISION Interfaces
 
+Research image-space implement observations and reviewed feedback follow [AXE_OBSERVATIONS.md](AXE_OBSERVATIONS.md). These records do not replace metric-space `ImplementTrack` with uncalibrated 2D coordinates. Draft judgments remain unlabelled; test-source feedback cannot fit or select a model.
+
 ## Reproducible Gurr Academy experiments
 
 [Gurr Academy experiments](experiments/Gurr-Academy.md) defines the real-footage pipeline, anonymous track schema, quality gates and limits on interpreting the published results. Research exemplars use the same prototype scoring in evaluation and inference; gaps in a pose track never count as continuous action.

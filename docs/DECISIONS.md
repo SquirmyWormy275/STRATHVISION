@@ -195,6 +195,8 @@ See docs/CARNE_ASADA.md for full specification.
 
 ## Phase 9 Drift, Health, Distribution Decisions
 
+Research accuracy follow-up: image-space axe observations and source-disjoint genuine-feedback evaluation use [AXE_OBSERVATIONS.md](AXE_OBSERVATIONS.md). A trained axe prototype is evaluated independently of the forearm proxy and remains research-only unless its measured performance supports promotion. Body pose, anonymous competitor selection, object localization, contact timing and technique feedback have separate validation claims. See [Gurr round 2](experiments/Gurr-Round2.md).
+
 - **Drift view** (Library → a profile's chart icon). It shows stored comparisons for that profile across all its versions. With one user per install, the athlete is implicit. Comparisons are grouped by local day into sessions.
   - The view shows the latest session's style match, the change since the first session, and the trend. "Getting closer" or "Drifting away" applies when the least-squares change exceeds 1 point per session; otherwise it reads "Holding steady".
   - The chart has one line, plus a table view and per-measurement distance sparklines.
