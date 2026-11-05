@@ -1,0 +1,312 @@
+{
+  "format": "weightlifting-selection/1",
+  "seed": 365,
+  "fractions": [
+    0.35,
+    0.65
+  ],
+  "selection": "60 smallest SHA256(barbell-365:YouTube ID) among snapshot completed instructional candidates",
+  "target": "Foreground demonstration barbell, including shaft and attached plates; one box, full-frame inference",
+  "sources": [
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/-sM5af2545M - Dial in Your Squat \uff5c Olympic Weightlifting Squat Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/im1XWpMAlZY - Tipping Forward in the Pull.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/_mgM1KtA48M - Avoid Crashing - Turn Your Cleans into Front Squats.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/Hz0FDyNCyrE - Better Bracing\uff1a Expand Your Ribs Sideways.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/8tG3JFzDAOA - What Do the Arms Do in the Snatch\uff1f \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/CnZ2-c_fP1U - Pause Squats for Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/E1yJ0SOmd1A - Bar Position for the Jerk Rack.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/AQUvwDpU8d8 - Floppy Pulls Make Sloppy Lifts - Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/nBpRbvtJ2qk - Jerk Dip Depth.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/vx7RSDmHAQQ - Snatch & Clean Pull\uff1a Extension vs. Drive vs. Pull.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/n_uzi0aWBmg - Leg Drive vs Leg Extension in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/yeVujzme86w - Stop Collapsing in the Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/dfVWkhUaw7s - Keep Elevating the Bar in the Snatch Turnover.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/t8QGgK8vREk - Are You Over The Bar\uff1f \uff5c Snatch & Clean Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/4lVhS5k7fvY - Lower Abs for Better Jerks.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/xNJwxfxiBew - Find Your Pulling Stance for the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/T6aT-sL48Ew - Make Deadlifts Useful for Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/PQkkYo83AhE - Lifting Vs. Sliding The Feet in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/6JdErP7Rn6Q - Pulling Posture for the Snatch & Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/NGtExNRv7K4 - Power vs Squat vs Split Jerk\uff1a Which Should You Use\uff1f.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/zpZOlqsaiNE - Power Position in Snatch & Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/V-KJfr6ae1s - Finish The Pull \uff5c Snatch & Clean Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/lzhh5irGK0E - Moving the Feet in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/7EaRI9utO68 - Full Grip in the Clean Turnover\uff1f \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/euq5wJJ2t3I - Olympic Weightlifting Self-Correction Tools.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/hF2SlVSWy5s - Jerk Dip & Drive Technical Styles - Strength vs. Elastic.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/oa4o1Qjo55s - Simplest Way to a Better Overhead Position.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/5NleQRu_hvY - How to Stay Over the Bar in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/A4whHErmWAU - Efficiency & Foot Movement in the Snatch & Clean - Lift vs Shuffle.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/wjD1_6uLCkk - Stronger Jerk Dip = More Drive Power.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/R-mOBUraB9E - How to Safely Miss Snatches Backward.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/4RwcRgTpBpY - Don't Push The Bar Forward with the Shins - Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/s82-kiwLDg8 - How to Find Your Split Jerk Stance \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/gQN5Fy5TaJs - Head Movement in the Jerk \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/bUiFessanXs - Everything You Need to Fix Your Jerk Split Position.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/5ug9VmULols - No Thigh Gap\uff1a Push The Bar Back with The Lats.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "train"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/ngmjKLYfhQ4 - How to Re-Rack \u29f8 Lower Jerks.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/cOmiTlek4EE - Back Foot Hits First in the Split Jerk.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/8kS5pt5wrJg - Pause in The Power Receiving Position \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/1BmuOvt5434 - The Missing Piece of the Clean Turnover.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/shacMSdSyIg - Unstable Split Jerk\uff1f Use This Technique Primer.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/PgmjWQm9D9Y - The Jerk\uff1a Scapular Protraction to Retraction \uff5c Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/8v6CI6Of7G8 - Pull Under Harder Does NOT Mean Receiving Lower \uff5c Snatch & Clean Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/KqZrD80z7zM - Neutral Spine or Pervert Hips\uff1f Neutral is NOT Straight!.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/ZuiCAVQHljY - Blocks vs. Hang Lifts \uff5c Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/MXJXLqi-XLo - Jerk Rack Position - Relax Your Grip.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/AVVAIHlN-sA - Snatch & Clean Hang Positions \uff5c Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/JPT-t-p2L-c - Hand & Wrist Position in the Snatch & Jerk.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "validation"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/5SxVx_bO5n4 - Push The Knees Back in the Pull\uff1f \uff5c Snatch & Clean Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/Ot9oody896I - Leg Drive Not Jumping - Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/8906XVfDOGU - Land on Flat Feet in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/wuRosR_UjMQ - Overhead Position - Avoid Excessive Forward Lean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/rQoykixtu8g - 3 Ways to Instantly Strengthen Your Pull \uff5c Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/pd_43mSZhxo - Positions for Tall & Long-Legged Athletes \uff5c Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/OhJ_zO8JgtM - Arms in Snatch & Clean Pulls - Guide & Slide.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/9ApKFVIWg-s - Should You Use a Dynamic Start in the Olympic lifts\uff1f.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/_4x2Zp89KOk - Locking Your Elbows in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/Rjheh8HwqkU - Slow Lockout in Jerk or Snatch\uff1f.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/6JHxmVqApMI - Jerk Rack Position.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/ZhKAMKaIxcU - Hold The Bar Overhead with the Upper Back.mp4",
+      "sport": "olympic_weightlifting",
+      "study_split": "test"
+    }
+  ]
+}

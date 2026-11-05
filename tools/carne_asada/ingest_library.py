@@ -99,7 +99,7 @@ def summarize(rows):
                        for sport in sorted({r['sport'] for r in unique.values()})}}
 
 
-def run(root, output, known_paths, workers):
+def run(root, output, known_paths, workers, priority=None):
     if output.exists():
         raise ValueError('Inventory already exists; use a new snapshot output')
     known = {r['sha256'] for p in known_paths for r in json.loads(p.read_text())['clips']}
@@ -123,6 +123,9 @@ def run(root, output, known_paths, workers):
         write(snapshot, document)
     prior = json.loads(progress.read_text()) if progress.exists() else {}
     jobs = [r for r in document['files'] if r['disposition'] == 'candidate_video']
+    if priority:
+        order = {name: i for i, name in enumerate(json.loads(priority.read_text()))}
+        jobs.sort(key=lambda r: order.get(r['relative_path'], len(order)))
     # A resume reuses a completed hash only when the frozen snapshot signature still matches.
     cache = {r['relative_path']: prior[r['relative_path']] for r in jobs
              if r['relative_path'] in prior and prior[r['relative_path']].get('state') == 'verified'
@@ -149,5 +152,6 @@ if __name__ == '__main__':
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--known', type=Path, action='append', default=[])
     parser.add_argument('--workers', type=int, default=2)
+    parser.add_argument('--priority', type=Path, help='Optional ordered relative paths; all snapshot videos are still verified')
     args = parser.parse_args()
-    run(args.root, args.output, args.known, args.workers)
+    run(args.root, args.output, args.known, args.workers, args.priority)
