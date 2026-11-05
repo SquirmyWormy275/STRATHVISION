@@ -88,6 +88,7 @@ def publish(document,rows,repo):
                       for name,study,split in [('pilot_development','pilot','development'),('pilot_test','pilot','test'),('followup','followup','test')]},
             'windows':scored,'claimed_technique_improvement':False,
             'limitations':['Single-reviewer old references; diagnostics only.',
+                           'Runs PoseService and engine stages directly; CARNE preflight, correction UI and feedback loop are tested separately.',
                            'Automatic ambiguities/orientation doubts defer measurement; deferrals count as missing contacts.',
                            'Torso centre error is a different metric from the original detector-box checkpoint coverage.',
                            'Person selection, HDR handling, sampling and engine revision differ from the saved-pose baseline; this is not a controlled ablation.',

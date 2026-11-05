@@ -50,6 +50,24 @@ CARNE consumes the app's person detector and selected-track API. A four-second s
 
 The [local review workflow](../FEEDBACK_REVIEW.md) is implemented and verified with private Gurr playback. Its twelve real tasks start unlabelled. A separate synthetic packet exercises saving/export, repeated strokes and narrow layouts; synthetic labels never enter the real packet. Measured CARNE exports support a bounded learning replay with disjoint source recordings and unchanged base-profile gates. The [real feedback result](evaluation/round2/genuine-feedback-status.json) remains pending: zero judgments and zero edits. The collection/evaluation mechanism is delivered; learning effectiveness has not been field-tested.
 
+## Native app diagnostic result
+
+The isolated native run completed all thirteen real-video windows at runtime base `77c95b3`, with the diagnostic harness from `9430b3d`. This exercises the app person/pose and engine stages directly; CARNE preflight, correction UI and feedback replay are tested separately. Completion is not an accuracy acceptance result. Later decoder/tensor performance changes in `247597d` are outside this frozen runtime.
+
+| Opened reference group | Windows | Deferred selections | Orientation correct | Contact matches | Extras | Misses |
+|---|---:|---:|---:|---:|---:|---:|
+| Pilot development | 5 | 1 | 4/5 | 3/7 | 0 | 4 |
+| Pilot test | 5 | 1 | 5/5 | 4/15 | 3 | 11 |
+| Follow-up | 3 | 1 | 3/3 | 2/3 | 2 | 1 |
+
+All four pilot-test matches come from underhand footage. The standing-block heat's eight contacts were deferred because competitor selection was ambiguous. The three extras include two on a handling-only sideways window. The follow-up's one positive window produced two matched contacts and two extras. These are still substantial failures.
+
+Torso checkpoints were observed at 18/24 development, 19/25 pilot-test and 9/15 follow-up locations; missing/deferred checkpoints are reported separately. Mean observed error was 3.04%, 3.46% and 15.47% of image diagonal respectively. The last mean includes `test-new-competition-b`, whose automatic target differed from the reference torso by 30.38% on average without an ambiguity flag. This is a selection failure against the specified target, not successful tracking coverage. The correction picker is available, but user corrections were not applied to improve these automatic scores.
+
+The [complete native artifact](evaluation/round2/native-77c95b3-diagnostic.json) includes per-window results, prepared clip hashes, model/source hashes, contact timing and limitations. This sparse torso error differs from the first pilot's detector-box coverage metric. Do not compare those percentages as if they were the same measurement or attribute gains to one change.
+
+Verification for this delivery: **128 app unit/widget tests, 108 engine tests and 37 Python research tests passed** in the isolated source snapshot/research environment; Flutter/Dart analysis was clean. Two separate Linux CARNE UI/export/cache checks and the thirteen-window native harness completed. Browser checks exercised synthetic save/export and real Gurr playback. Synthetic learning fixtures establish mechanism behavior, not genuine learning or field coaching outcomes.
+
 ## Reproduce the image experiments
 
 Use the private Python 3.12 research environment described in [Gurr Academy](Gurr-Academy.md#reproduce-the-run). SSDLite used Torch 2.10.0+cu128 / TorchVision 0.25.0+cu128 on the RTX 4070 Laptop GPU; [requirements-training.txt](../../tools/carne_asada/requirements-training.txt) records the complete environment. CUDA wheels come from the official PyTorch cu128 index. GPU fitting uses deterministic settings with warnings enabled, so newly fitted weights need not be byte-identical; use the committed state for the frozen test.

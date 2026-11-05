@@ -89,6 +89,8 @@ The [round-2 report](docs/experiments/Gurr-Round2.md) pins the standing-block en
 
 Two image-only axe prototypes were trained and evaluated: a HOG/linear-SVM baseline and a COCO-pretrained SSDLite model with locally fitted detection heads. Both failed validation. Frozen test results were **0/16** visible axe heads for HOG and **0/8** on four newly reserved recordings for SSDLite. Uncertain/occluded frames were unrated. Code, coarse single-reviewer annotations, model coefficients/weights, source hashes and failures are published in the report. The axe prototypes remain research-only; the app still uses its disclosed grip proxy for implement measurements.
 
+A separate native Flutter diagnostic completed all thirteen existing pilot/follow-up windows. Its original test matched **4/15** contacts with three extras; all matches were underhand, while the standing-block heat deferred to competitor selection. One follow-up rear view also showed a large target mismatch without an ambiguity flag. The [native result and limitations](docs/experiments/Gurr-Round2.md#native-app-diagnostic-result) document the tested runtime and remaining failures. These opened references do not establish field coaching accuracy.
+
 ### How to run it
 
 Prerequisites:
