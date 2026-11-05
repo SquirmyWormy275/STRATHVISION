@@ -78,3 +78,24 @@ def test_another_stroke_preserves_source_partition_and_starts_unlabelled(http):
     assert another['task_id']!='fixture' and another['feedback'] is None
     assert another['clip_sha256']=='a'*64 and another['partition']=='fit'
     assert json.load(urlopen(base+'/api/export'))['pending_tasks']==2
+
+
+def test_live_candidates_preserve_judgments_and_reject_out_of_range_updates(http):
+    base,path=http
+    req=Request(base+'/api/feedback/fixture',data=json.dumps(judgment()).encode(),headers={'Content-Type':'application/json'})
+    saved=json.load(urlopen(req))['feedback']
+    body={'clip_sha256':'a'*64,'candidate_spans_s':[[13,14]],'runtime_key':'synthetic-only',
+          'label':'red','partition':'forged'}
+    req=Request(base+'/api/candidates',data=json.dumps(body).encode(),headers={'Content-Type':'application/json'})
+    assert json.load(urlopen(req))['candidate_count']==1
+    packet=json.loads((path/'packet.json').read_text());t=packet['tasks'][0]
+    assert t['feedback']==saved and t['partition']=='fit'
+    assert t['candidate_spans_s']==[[13,14]]
+    candidates=json.load(urlopen(base+'/api/candidates'))['tasks'][0]
+    assert candidates['candidate_runtime_key']=='synthetic-only'
+    body['candidate_spans_s']=[[0,50]]
+    with pytest.raises(HTTPError) as error:
+        urlopen(Request(base+'/api/candidates',data=json.dumps(body).encode(),headers={'Content-Type':'application/json'}))
+    assert error.value.code==400
+    assert json.loads((path/'packet.json').read_text())['tasks'][0]['feedback']==saved
+    assert json.load(urlopen(base+'/api/candidates'))['tasks'][0]['candidate_spans_s']==[[13,14]]

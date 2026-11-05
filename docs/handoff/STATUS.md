@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T16:13:33Z
+heartbeat: 2026-11-05T18:10:22Z
 branch: implementation
-phase: 8 — full-population native CARNE experiment
-task: All 47 full recordings running through pinned release-native pipeline; full playback/review preparation active
-next: Monitor ~/Projects/CARNE ASADA/analysis/native-population-20261105/native and execution.log. After 47 results: population.py publish; population_review.py candidates before server; update Gurr-Population.md/README. Preserve Claude pending core/pack files.
+phase: 8 — full-population bounded native experiment
+task: 47 full review videos ready;195 full-coverage native windows running in frozen six-worker batches; continuous failures preserved
+next: Continue native-population-20261105 bounded prepare7584/batches64797. Wait for all195 results; window_population.py publish; verify47 sources/all cores; upload catalog to44597/api/candidates, updateREADME/report, commit/push. Full details in CARNE_ASADA.md/working-state.json.
 <!-- STATE:END -->
 
 ## Phase progress

@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+from urllib.request import Request,urlopen
 
 from footage import sha256, write_json
 from population import validate_inputs
@@ -85,16 +86,24 @@ def prepare(directory,references,workers):
     print('Ready:',packet,flush=True)
 
 
-def add_candidates(directory):
+def add_candidates(directory,server=None):
     path=directory/'review-all47/packet.json';packet=json.loads(path.read_text())
     for t in packet['tasks']:
-        source=directory/'native'/t['clip_sha256'];result=json.loads((source/'result.json').read_text())
+        source=directory/'native'/t['clip_sha256'];result_path=source/'result.json'
+        if server and not result_path.exists():continue
+        result=json.loads(result_path.read_text())
         event=t['event_hint']
         if result['status']!='complete' or event not in ('standing_block','underhand'):continue
         data=json.loads((source/'private-measurements.json').read_text())[event]
         t['candidate_spans_s']=[[r['start_frame']/result['fps'],min(t['duration_s'],(r['end_frame']+1)/result['fps'])]
             for r in data if r['usable']]
         t['candidate_provenance']='Unreviewed phase candidates; verify person, event and bounds before judging.'
+        if server:
+            body={'clip_sha256':t['clip_sha256'],'candidate_spans_s':t['candidate_spans_s'],'runtime_key':result['runtime_key']}
+            with urlopen(Request(server.rstrip('/')+'/api/candidates',data=json.dumps(body).encode(),headers={'Content-Type':'application/json'})) as response:json.load(response)
+    if server:
+        print('Published completed-source candidates through the live server; judgments preserved.')
+        return
     # Server must be stopped before metadata enrichment to preserve its in-memory state.
     temporary=path.with_suffix('.pending.json');write_json(temporary,packet);temporary.replace(path)
     print('Added unreviewed candidate navigation; existing judgments preserved.')
@@ -103,11 +112,11 @@ def add_candidates(directory):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['prepare','candidates'])
     p.add_argument('--directory',required=True,type=Path);p.add_argument('--references',type=Path)
-    p.add_argument('--workers',type=int,default=2);a=p.parse_args()
+    p.add_argument('--workers',type=int,default=2);p.add_argument('--server');a=p.parse_args()
     if a.action=='prepare':
         if not a.references:p.error('prepare requires --references')
         prepare(a.directory,a.references,a.workers)
-    else:add_candidates(a.directory)
+    else:add_candidates(a.directory,a.server)
 
 
 if __name__=='__main__':main()

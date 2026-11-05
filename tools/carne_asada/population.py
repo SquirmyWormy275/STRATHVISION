@@ -1,5 +1,6 @@
 """Freeze, resume and summarize full-recording native population runs."""
 import argparse
+import fcntl
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import hashlib
@@ -7,6 +8,7 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import tarfile
 import time
@@ -94,12 +96,53 @@ def validate_result(row,result,key):
 def run(directory,workers,display):
     frozen=json.loads((directory/'freeze.json').read_text())
     if freeze(directory)!=frozen:raise ValueError('Frozen runtime changed')
-    clips=validate_inputs(json.loads((directory/'inputs.json').read_text()))
-    binary=directory/'runtime/apps/strathvision/build/linux/x64/release/bundle/strathvision'
+    document=json.loads((directory/'inputs.json').read_text())
+    clips=validate_inputs(document)
+    original=directory/'runtime/apps/strathvision/build/linux/x64/release/bundle/strathvision'
+    bundle=directory/'worker-bundle'
+    if not bundle.exists():
+        shutil.copytree(original.parent,bundle)
+        (bundle/'strathvision').rename(bundle/'carne-pop-worker')
+    binary=bundle/'carne-pop-worker'
+    if sha256(binary)!=frozen['binary_sha256']:raise ValueError('Worker binary changed')
     output=directory/'native';output.mkdir(exist_ok=True)
+    existing=[]
+    for row in clips:
+        path=output/row['sha256']/'result.json'
+        if not path.exists():break
+        record=json.loads(path.read_text());validate_result(row,record,frozen['runtime_key'])
+        if record['status']!='complete':break
+        existing.append(record)
+    if len(existing)==len(clips):
+        print(f'Resume: all {len(clips)} same-runtime recordings already complete; original timing preserved.',flush=True)
+        return
+    def active(index):
+        for process in Path('/proc').iterdir():
+            if not process.name.isdigit():continue
+            try:
+                if process.joinpath('exe').resolve() not in (original,binary):continue
+                values=process.joinpath('environ').read_bytes().split(b'\0')
+                required=[f'SV_POP_INDEX={index}',f'SV_POP_RUNTIME_KEY={frozen["runtime_key"]}',
+                          f'SV_POP_INPUT={directory/"inputs.json"}']
+                if all(value.encode() in values for value in required):return True
+            except OSError:continue
+        unit=f'carne-pop-{frozen["runtime_key"][:8]}-{clips[index]["sha256"][:16]}'
+        state=subprocess.run(['systemctl','--user','show',unit,'--property=ActiveState','--value'],
+            stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True).stdout.strip()
+        return state in ('active','activating','deactivating')
     def one(index):
         row=clips[index];folder=output/row['sha256'];folder.mkdir(exist_ok=True)
+        # Dispatchers can resume without duplicating an in-flight recording.
+        with (folder/'worker.lock').open('a') as lock:
+            fcntl.flock(lock,fcntl.LOCK_EX)
+            return locked_one(index,row,folder)
+    def locked_one(index,row,folder):
         result=folder/'result.json'
+        if active(index):
+            while active(index):time.sleep(2)
+            if result.exists():
+                record=json.loads(result.read_text());validate_result(row,record,frozen['runtime_key'])
+                if record['status']=='complete':return {'source':row['relative_path'],'status':'adopted'}
         if result.exists():
             previous=json.loads(result.read_text());validate_result(row,previous,frozen['runtime_key'])
             if previous['status']=='complete':return {'source':row['relative_path'],'status':'resumed'}
@@ -107,8 +150,17 @@ def run(directory,workers,display):
             result.rename(folder/f'failed-attempt-{stamp}.json')
         env={**os.environ,'GDK_BACKEND':'x11','DISPLAY':display,'SV_POP_INPUT':str(directory/'inputs.json'),
              'SV_POP_INDEX':str(index),'SV_POP_OUTPUT':str(output),'SV_POP_RUNTIME_KEY':frozen['runtime_key']}
-        with (folder/'native.log').open('a') as log:
-            process=subprocess.run([str(binary)],env=env,stdout=log,stderr=subprocess.STDOUT)
+        log_path=(folder/'native.log').resolve()
+        unit=f'carne-pop-{frozen["runtime_key"][:8]}-{row["sha256"][:16]}'
+        command=['systemd-run','--user','--collect','--wait','--quiet','--unit='+unit,
+                 '--property=Description=CARNE ASADA full recording '+row['relative_path'],
+                 '--property=StandardOutput=append:'+str(log_path),
+                 '--property=StandardError=append:'+str(log_path)]
+        for name in ['GDK_BACKEND','DISPLAY','SV_POP_INPUT','SV_POP_INDEX','SV_POP_OUTPUT','SV_POP_RUNTIME_KEY']:
+            command.append('--setenv='+name+'='+env[name])
+        command.append(str(binary.resolve()))
+        with log_path.open('a') as log:
+            process=subprocess.run(command,env=env,stdout=log,stderr=subprocess.STDOUT)
         if not result.exists():
             write_json(result,{'format':'gurr-population-clip/1','runtime_key':frozen['runtime_key'],
                 'clip_sha256':row['sha256'],'inventory_duration_s':row['duration_s'],
@@ -116,12 +168,18 @@ def run(directory,workers,display):
                 'error':'Native process exited before writing a result'})
         record=json.loads(result.read_text());validate_result(row,record,frozen['runtime_key'])
         return {'source':row['relative_path'],'status':record['status'],'exit_code':process.returncode}
-    start=time.monotonic()
+    start=time.monotonic();epoch=directory/'run-start.json'
+    if not epoch.exists():
+        began=[p.stat().st_mtime-json.loads(p.read_text())['elapsed_s'] for p in output.glob('*/progress.json')]
+        write_json(epoch,{'epoch_s':min(began,default=time.time()),'runtime_key':frozen['runtime_key']})
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        futures=[pool.submit(one,i) for i in sorted(range(len(clips)),key=lambda i:-clips[i]['duration_s'])]
+        order=document.get('dispatch_order',sorted(range(len(clips)),key=lambda i:-clips[i]['duration_s']))
+        if sorted(order)!=list(range(len(clips))):raise ValueError('Invalid dispatch order')
+        futures=[pool.submit(one,i) for i in order]
         for count,future in enumerate(as_completed(futures),1):
             print(json.dumps({'finished':count,'total':len(clips),'elapsed_s':round(time.monotonic()-start,1),**future.result()}),flush=True)
-    write_json(directory/'run-execution.json',{'workers':workers,'wall_s':time.monotonic()-start,
+    write_json(directory/'run-execution.json',{'workers':workers,'wall_s':time.time()-json.loads(epoch.read_text())['epoch_s'],
+        'dispatcher_wall_s':time.monotonic()-start,
         'expected_sources':len(clips),'runtime_key':frozen['runtime_key']})
 
 
@@ -149,6 +207,12 @@ def summarize(clips,records,key):
 def publish(directory,output):
     frozen=json.loads((directory/'freeze.json').read_text());clips=validate_inputs(json.loads((directory/'inputs.json').read_text()))
     records=[json.loads((directory/'native'/c['sha256']/'result.json').read_text()) for c in clips]
+    for row,record in zip(clips,records):
+        previous=sorted((directory/'native'/row['sha256']).glob('failed-attempt-*.json'))
+        record['previous_failed_attempts']=[{k:d.get(k) for k in ['status','exit_code','error']}
+            for d in [json.loads(path.read_text()) for path in previous]]
+        if record.get('error'):
+            record['error']=record['error'].replace(row['path'],row['relative_path']).replace(str(directory),'<private analysis>')
     result={'format':'gurr-full-population/1','freeze':frozen,
         'orchestration_sha256':sha256(Path(__file__)),
         'summary':summarize(clips,records,frozen['runtime_key']),'clips':records,

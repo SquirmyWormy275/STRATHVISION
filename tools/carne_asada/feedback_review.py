@@ -83,6 +83,24 @@ def export_feedback(packet):
             'pending_tasks':sum(not t.get('feedback') for t in packet['tasks'])}
 
 
+def update_candidates(packet,body):
+    tasks=[t for t in packet['tasks'] if t['clip_sha256']==body.get('clip_sha256')]
+    if not tasks:raise ValueError('Unknown candidate source')
+    spans=body.get('candidate_spans_s')
+    if not isinstance(spans,list):raise ValueError('Expected candidate spans')
+    for task in tasks:
+        for span in spans:
+            if (not isinstance(span,list) or len(span)!=2 or
+                any(not isinstance(x,(int,float)) or not math.isfinite(x) for x in span) or
+                not task['source_start_s']<=span[0]<span[1]<=task['source_start_s']+task['duration_s']+.01):
+                raise ValueError('Candidate lies outside the recording')
+    for task in tasks:
+        task['candidate_spans_s']=spans
+        task['candidate_runtime_key']=body.get('runtime_key')
+        task['candidate_provenance']='Unreviewed phase candidates; verify person, event and bounds before judging.'
+    return {'updated_tasks':len(tasks),'candidate_count':len(spans)}
+
+
 def server(directory,port=0):
     directory=Path(directory);path=directory/'packet.json';lock=threading.Lock()
     packet=json.loads(path.read_text())
@@ -101,6 +119,9 @@ def server(directory,port=0):
             if route=='/':return self.respond(200,html,'text/html; charset=utf-8')
             if route=='/api/tasks':return self.respond(200,packet)
             if route=='/api/export':return self.respond(200,export_feedback(packet))
+            if route=='/api/candidates':return self.respond(200,{'tasks':[
+                {k:t.get(k) for k in ['task_id','candidate_spans_s','candidate_runtime_key']}
+                for t in packet['tasks']]})
             if route.startswith('/media/'):
                 task=next((t for t in packet['tasks'] if t['task_id']==route[7:]),None)
                 if task is None:return self.respond(404,{'error':'Unknown clip'})
@@ -135,22 +156,26 @@ def server(directory,port=0):
             expected=f'http://{self.headers.get("Host")}'
             if origin and origin!=expected:return self.respond(403,{'error':'Unexpected request origin'})
             duplicate=route.startswith('/api/another/')
-            if not duplicate and not route.startswith('/api/feedback/'):return self.respond(404,{'error':'Not found'})
+            candidates=route=='/api/candidates'
+            if not candidates and not duplicate and not route.startswith('/api/feedback/'):return self.respond(404,{'error':'Not found'})
             if self.headers.get('Content-Type')!='application/json':return self.respond(415,{'error':'Expected JSON'})
             length=int(self.headers.get('Content-Length','0'))
-            if not 0<length<=65536:return self.respond(413,{'error':'Invalid judgment size'})
+            if not 0<length<=(1048576 if candidates else 65536):return self.respond(413,{'error':'Invalid judgment size'})
             try:
                 body=json.loads(self.rfile.read(length))
                 with lock:
                     updated=deepcopy(packet)
-                    task_id=route[13:] if duplicate else route[14:]
-                    task=next((t for t in updated['tasks'] if t['task_id']==task_id),None)
-                    if task is None:raise ValueError('Unknown task')
-                    if duplicate:
+                    if candidates:
+                        result=update_candidates(updated,body)
+                    else:
+                        task_id=route[13:] if duplicate else route[14:]
+                        task=next((t for t in updated['tasks'] if t['task_id']==task_id),None)
+                        if task is None:raise ValueError('Unknown task')
+                    if not candidates and duplicate:
                         task=deepcopy(task);task['task_id']+='-'+uuid4().hex[:8];task['feedback']=None
                         updated['tasks'].append(task)
                         result={'task':task}
-                    else:
+                    elif not candidates:
                         feedback=validated_feedback(task,body)
                         task['feedback']=feedback
                         result={'feedback':feedback}

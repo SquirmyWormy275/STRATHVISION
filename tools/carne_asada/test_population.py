@@ -62,3 +62,18 @@ def test_full_review_preserves_entire_duration_and_requires_confirmed_event():
     assert result['partition']=='evaluation' and result['stroke_span_s']==[95,96]
     j['event_id']='invented'
     with pytest.raises(ValueError,match='Confirm the event'):validated_feedback(t,j)
+
+
+def test_bounded_windows_cover_the_full_tail_and_context_does_not_duplicate_strokes():
+    from window_population import intervals,verify_coverage,deduplicate
+    plan=intervals(1718.928333)
+    verify_coverage(plan,1718.928333)
+    assert sum(r['core_end_s']-r['core_start_s'] for r in plan)==pytest.approx(1718.928333)
+    assert plan[-1]['core_end_s']==1718.928333
+    broken=deepcopy(plan);broken[1]['core_start_s']+=.1
+    with pytest.raises(ValueError,match='Gap'):verify_coverage(broken,1718.928333)
+    rows=[{'window_index':0,'span_s':[44,46],'usable':True,'context_margin_s':3},
+          {'window_index':1,'span_s':[44.1,46.1],'usable':True,'context_margin_s':4},
+          {'window_index':1,'span_s':[47,48],'usable':True,'context_margin_s':2}]
+    result,removed=deduplicate(rows)
+    assert len(result)==2 and removed==1 and result[0]['window_index']==1

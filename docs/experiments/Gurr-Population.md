@@ -4,9 +4,17 @@ This run covers every one of the **47 unique recordings, 7,787.428656 seconds**,
 
 ## Method and current execution
 
-The run is in progress. Its isolated runtime contains the committed native pipeline plus `36d02c8`, the empty-opening search fix described below. Full original recordings are read directly, with a maximum sampling rate of 30 Hz and a 90,000-sample budget per source. No earlier pose cache counts as new output. Each recording runs in a separate release-mode Flutter process; five workers save independent source-keyed results, poses and measured stroke vectors. Source bytes, native executable, model/code hashes and settings are frozen before the run. Interrupted work can resume only under the same runtime key.
+The model run is in progress. The full review packet is ready: all 47 complete browser playback copies have verified durations, audio and upright/HDR-corrected presentation. A read-only Chromium check sought beyond 90 seconds in a real recording, checked a sideways source, and left all judgments unlabelled.
 
-The production four-second selection preflight is exercised first. If it requests a competitor, diagnostic processing continues through the full source and its measurements remain quarantined from production eligibility. Both existing event packs are candidate stress-test passes. Catalog event hints are unreviewed, and the four springboard sources remain explicitly unsupported by this pinned pack. Candidate counts are not human-confirmed strokes, correct-athlete identity or technique accuracy. No reviewed coaching profile/feedback is supplied, so a learning loop is not executed.
+Continuous full-source workers repeatedly received SIGKILL. The sender remains unidentified; cgroup/kernel diagnostics did not establish an OOM cause, and separate transient user services did not eliminate the failures. Those outputs, failed attempts and binary are retained as a separate baseline. Unfinished continuous jobs were deliberately stopped when the bounded execution variant replaced them.
+
+The bounded scan schedules **195 windows covering every source second**: nonoverlapping 45-second scored cores, plus four seconds of context on each side where available. FFV1 inputs losslessly store resized frames with a maximum image edge of 960 pixels and retain HDR transfer metadata, matching the earlier native diagnostic's resolution. The original files remain unchanged. Native sampling is capped at 30 Hz with the 90,000-sample budget. Each window uses the same pinned release-native binary; no older pose prediction is reused.
+
+Prepared windows run in frozen batches while later windows are encoded. Actual prepared-file hashes, executable/model/code hashes and settings are recorded before each batch starts. The batch driver asserts that every batch shares the same native executable and source/model fingerprints. Independent transient services, source locks and saved results make interrupted windows retryable without redoing successful windows.
+
+Automatic athlete/orientation selection restarts per window. This differs from following one person continuously through a whole recording, and it does not add named-athlete identity recognition. The four-second production selection preflight runs first; deferred diagnostics remain quarantined. Both original event packs are candidate stress-test passes; catalog event hints are unreviewed, and springboard is unsupported by this pinned pack. Later application changes are separate from this frozen runtime.
+
+Only strokes whose midpoints lie within a scored core are retained. Cross-window predictions with interval IoU of at least 0.5 are deduplicated, preferring usable phases and more surrounding context. Source intervals must cover each original recording without a gap or overlapping scored cores. Pose counts inside scored cores and counts including context are reported separately. Candidate quality gates are not human-confirmed contacts, correct-person identity, a ready coaching profile or learning evidence.
 
 ## A bug found by expanding the population
 
@@ -38,18 +46,20 @@ dart run build_runner build -d
 flutter build linux --release --target tool/population_runner.dart
 ```
 
-Back in the original repository, freeze and run. `--display` is an existing X display; the recorded run used a private Xvfb server. It does not require changing desktop settings.
+Back in the original repository, freeze the native model/runtime and start bounded preparation and inference. `:93` denotes the private Xvfb display used here. The batch command can run in another terminal while preparation proceeds; it waits for complete prepared windows.
 
 ```sh
 "$SV_PY" tools/carne_asada/population.py freeze --directory "$SV_POP"
-"$SV_PY" tools/carne_asada/population.py run --directory "$SV_POP" --workers 5 --display :93
-"$SV_PY" tools/carne_asada/population.py publish --directory "$SV_POP" \
+"$SV_PY" tools/carne_asada/window_population.py prepare --parent "$SV_POP" --workers 2
+# May run while preparation above is still active:
+"$SV_PY" tools/carne_asada/window_batches.py --parent "$SV_POP" --workers 6 --batch-size 12
+"$SV_PY" tools/carne_asada/window_population.py publish --parent "$SV_POP" \
   --output '/path/to/private-analysis/population-results.json'
 "$SV_PY" tools/carne_asada/population_review.py prepare --directory "$SV_POP" \
   --references docs/experiments/evaluation --workers 2
-# Once inference completes, before starting the review server:
-"$SV_PY" tools/carne_asada/population_review.py candidates --directory "$SV_POP"
 "$SV_PY" tools/carne_asada/feedback_review.py serve --directory "$SV_POP/review-all47"
 ```
 
-The publisher refuses missing, duplicate, changed-runtime or truncated-source records, and rejects production eligibility for quarantined/unsupported candidates. A completed native call and evidence reaching the final planned sample are reported separately. Full-population coverage without independent annotations is not a new held-out accuracy result.
+Completed-source candidate navigation can be uploaded to the live review server through its candidate API. It atomically preserves saved judgments; browser refresh changes candidate metadata without clearing unsaved fields. The initial twelve-task packet remains intact.
+
+The publisher rejects missing windows, mismatched native runtimes, gaps, duplicate scored cores and incomplete source tails. Completed native calls, final-sample progress and core coverage are distinct fields. Full-population coverage without independent annotations is not a new held-out accuracy result. No reviewed coaching profile/feedback is supplied to this inference run, so no learning loop is executed.
