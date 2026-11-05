@@ -1,0 +1,1489 @@
+{
+  "format": "gurr-population-engine-comparison/1",
+  "coverage": {
+    "unique_recordings": 47,
+    "source_duration_s": 7787.428656,
+    "native_windows": 195,
+    "native_completed_windows": 195,
+    "native_failed_windows": 0,
+    "windows_reaching_final_sample": 183,
+    "source_tails_reaching_final_sample": 47,
+    "core_intervals_reached": 195,
+    "sources_reaching_all_scored_cores": 47,
+    "pose_samples_in_scored_cores": 207987,
+    "retried_failures": 0,
+    "complete_sources": 47
+  },
+  "baseline_reproduces_native": true,
+  "base_engine_revision": "501466a6d7b3670e3a6bc7a58112f5e58ccb6bed",
+  "current_engine_revision": "d0d6f465ddb23fd817d29af148d2160229129849",
+  "base": {
+    "deferred_windows": 30,
+    "events": {
+      "standing_block": {
+        "candidate_strokes": 2104,
+        "duplicate_predictions_removed": 0,
+        "gate_passing_candidates": 922,
+        "gate_passing_union_seconds": 2880.1221853680577,
+        "selection_and_pack_eligible_candidates": 739
+      },
+      "underhand": {
+        "candidate_strokes": 2122,
+        "duplicate_predictions_removed": 5,
+        "gate_passing_candidates": 1498,
+        "gate_passing_union_seconds": 4536.686864863471,
+        "selection_and_pack_eligible_candidates": 14
+      }
+    }
+  },
+  "current": {
+    "deferred_windows": 30,
+    "events": {
+      "springboard": {
+        "candidate_strokes": 2101,
+        "duplicate_predictions_removed": 0,
+        "gate_passing_candidates": 952,
+        "gate_passing_union_seconds": 2917.69158270963,
+        "selection_and_pack_eligible_candidates": 67
+      },
+      "standing_block": {
+        "candidate_strokes": 2101,
+        "duplicate_predictions_removed": 0,
+        "gate_passing_candidates": 952,
+        "gate_passing_union_seconds": 2917.69158270963,
+        "selection_and_pack_eligible_candidates": 756
+      },
+      "underhand": {
+        "candidate_strokes": 2122,
+        "duplicate_predictions_removed": 5,
+        "gate_passing_candidates": 1498,
+        "gate_passing_union_seconds": 4536.686864863471,
+        "selection_and_pack_eligible_candidates": 14
+      }
+    }
+  },
+  "changed_sources": [
+    {
+      "clip_sha256": "d2f29a252bde13e69a852be0e29ade17769aaf2e4e6eec104c3b47c39ce47dd5",
+      "source_name": "24-25/IMG_0103.mov",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 21,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 26.561798349703338,
+            "gate_passing_union_seconds": 26.561798349703338,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "fd0d4b120a1a7fe9a4727a6d6998a740e33885d7a569ce86d77d94febb73e3b0",
+      "source_name": "24-25/IMG_0104.mov",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 36,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 17,
+            "gate_passing_seconds": 76.24719272465603,
+            "gate_passing_union_seconds": 76.24719272465603,
+            "selection_and_pack_eligible_candidates": 14
+          },
+          "current": {
+            "candidate_strokes": 36,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 17,
+            "gate_passing_seconds": 76.179776992804,
+            "gate_passing_union_seconds": 76.179776992804,
+            "selection_and_pack_eligible_candidates": 14
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 36,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 17,
+            "gate_passing_seconds": 76.179776992804,
+            "gate_passing_union_seconds": 76.179776992804,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "aa8bf39b045986b0cb318edd967f81c96e441e7e0f96d42a4d216cd09fc64858",
+      "source_name": "24-25/IMG_0105.mov",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 32,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 20.831461142280034,
+            "gate_passing_union_seconds": 20.831461142280034,
+            "selection_and_pack_eligible_candidates": 8
+          },
+          "current": {
+            "candidate_strokes": 32,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 7,
+            "gate_passing_seconds": 19.887640896351492,
+            "gate_passing_union_seconds": 19.887640896351492,
+            "selection_and_pack_eligible_candidates": 7
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 32,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 7,
+            "gate_passing_seconds": 19.887640896351492,
+            "gate_passing_union_seconds": 19.887640896351492,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "8a68ad811b7dc2fa195b36bd7d493ba1e1ca5d9249047f15fe02f8d1592a5d2b",
+      "source_name": "24-25/IMG_3690.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 15,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 10,
+            "gate_passing_seconds": 18.618599981381404,
+            "gate_passing_union_seconds": 18.6185999813814,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "01f7dc6e371dd550cc0400b809111a14be7f86ae171b1403c7b023d95958a6b8",
+      "source_name": "24-25/IMG_3691.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 17,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 17.733333333333334,
+            "gate_passing_union_seconds": 17.733333333333334,
+            "selection_and_pack_eligible_candidates": 8
+          },
+          "current": {
+            "candidate_strokes": 17,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 9,
+            "gate_passing_seconds": 18.6,
+            "gate_passing_union_seconds": 18.6,
+            "selection_and_pack_eligible_candidates": 9
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 17,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 9,
+            "gate_passing_seconds": 18.6,
+            "gate_passing_union_seconds": 18.6,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "a2b67f2ea38f2bb03decdd9485cf6c5344a174e12043e051f860b1c14113e665",
+      "source_name": "24-25/IMG_3692.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 6,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 5,
+            "gate_passing_seconds": 7.799999999999997,
+            "gate_passing_union_seconds": 7.799999999999997,
+            "selection_and_pack_eligible_candidates": 5
+          },
+          "current": {
+            "candidate_strokes": 6,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 4,
+            "gate_passing_seconds": 6.399999999999999,
+            "gate_passing_union_seconds": 6.399999999999999,
+            "selection_and_pack_eligible_candidates": 4
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 6,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 4,
+            "gate_passing_seconds": 6.399999999999999,
+            "gate_passing_union_seconds": 6.399999999999999,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "c0472d60767f4493b3c88d49e2c765f7e031c3528c9be1e749328ad51117ad2e",
+      "source_name": "24-25/IMG_3693.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 23,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 21,
+            "gate_passing_seconds": 138.5666666666667,
+            "gate_passing_union_seconds": 135.73333333333335,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "e4faf999f11510287fce02dfd9cc5d004c9ca85794e5b2c4ddc2dbdf2f348cdb",
+      "source_name": "24-25/IMG_3694.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 8,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 5,
+            "gate_passing_seconds": 63.43333333333334,
+            "gate_passing_union_seconds": 63.43333333333334,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "b850155e8a8625d94a27de71d4080e1254b60686fb2f67656526cd2f05fc27e8",
+      "source_name": "24-25/IMG_3696.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 8,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 3,
+            "gate_passing_seconds": 4.237566662429099,
+            "gate_passing_union_seconds": 4.237566662429099,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "57078bc27f2ae7c8cc4e16902254fdcf54c1e0e6da5835a98792b165b62a6396",
+      "source_name": "24-25/IMG_3697.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 36,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 39.93333333333334,
+            "gate_passing_union_seconds": 39.93333333333334,
+            "selection_and_pack_eligible_candidates": 16
+          },
+          "current": {
+            "candidate_strokes": 36,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 39.53333333333334,
+            "gate_passing_union_seconds": 39.53333333333334,
+            "selection_and_pack_eligible_candidates": 16
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 36,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 39.53333333333334,
+            "gate_passing_union_seconds": 39.53333333333334,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "0bf90eaeff75c653806315740e556c062721647da19d825ea472fadc688c04de",
+      "source_name": "24-25/IMG_3698.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 225,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 139,
+            "gate_passing_seconds": 524.2333333333333,
+            "gate_passing_union_seconds": 520.3333333333333,
+            "selection_and_pack_eligible_candidates": 135
+          },
+          "current": {
+            "candidate_strokes": 225,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 139,
+            "gate_passing_seconds": 524.1333333333333,
+            "gate_passing_union_seconds": 520.2333333333332,
+            "selection_and_pack_eligible_candidates": 135
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 225,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 139,
+            "gate_passing_seconds": 524.1333333333333,
+            "gate_passing_union_seconds": 520.2333333333332,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "07d9db34891c9e5641c852116c8d5ddcbb320d56e1cc42cb2a0b530973febe3a",
+      "source_name": "24-25/IMG_3699.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 44,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 65.00000000000001,
+            "gate_passing_union_seconds": 65.0,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "19adfeb1e2b4a08e5744c98cacb1b809e19658f011411b84058cafbfe8e46c2e",
+      "source_name": "24-25/IMG_3711.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 29,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 18,
+            "gate_passing_seconds": 27.933333333333334,
+            "gate_passing_union_seconds": 27.933333333333334,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "85747d5d5dd2c30465369f3acd1b80063429a256c8c8ff3d3a3926a8dcefc077",
+      "source_name": "24-25/IMG_3712.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 29,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 15,
+            "gate_passing_seconds": 21.688333311645,
+            "gate_passing_union_seconds": 21.688333311644996,
+            "selection_and_pack_eligible_candidates": 15
+          },
+          "current": {
+            "candidate_strokes": 29,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 22.2221999777778,
+            "gate_passing_union_seconds": 22.2221999777778,
+            "selection_and_pack_eligible_candidates": 16
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 29,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 22.2221999777778,
+            "gate_passing_union_seconds": 22.2221999777778,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "977fefcd2639830cf4eaa41991d7fff3b8e57751c7dad340d13fef038cdef525",
+      "source_name": "24-25/IMG_3715.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 16,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 12,
+            "gate_passing_seconds": 54.166666666666686,
+            "gate_passing_union_seconds": 54.16666666666667,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "57df8c8ce6a051cc7a07bf39d8778cf8aceaa24f2a1473d85af37d2160558ccb",
+      "source_name": "24-25/IMG_3744.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 24,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 18,
+            "gate_passing_seconds": 33.466766633199896,
+            "gate_passing_union_seconds": 33.425766674240904,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "082e2f4cca234f294b509b7dccfe65edde618561f126af76adabb3d2c17a7a3d",
+      "source_name": "24-25/IMG_3745.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 25,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 20,
+            "gate_passing_seconds": 39.43939996056059,
+            "gate_passing_union_seconds": 39.43176666823489,
+            "selection_and_pack_eligible_candidates": 20
+          },
+          "current": {
+            "candidate_strokes": 25,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 20,
+            "gate_passing_seconds": 39.406033293927294,
+            "gate_passing_union_seconds": 39.398400001601594,
+            "selection_and_pack_eligible_candidates": 20
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 25,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 20,
+            "gate_passing_seconds": 39.406033293927294,
+            "gate_passing_union_seconds": 39.398400001601594,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "67a35e240f82ae59ea831b382a4ae3c6afa0badde1c8416506b94c221101ee00",
+      "source_name": "24-25/IMG_3746.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 202,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 88,
+            "gate_passing_seconds": 346.5666666666669,
+            "gate_passing_union_seconds": 343.80000000000024,
+            "selection_and_pack_eligible_candidates": 74
+          },
+          "current": {
+            "candidate_strokes": 202,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 88,
+            "gate_passing_seconds": 338.1,
+            "gate_passing_union_seconds": 335.33333333333337,
+            "selection_and_pack_eligible_candidates": 74
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 202,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 88,
+            "gate_passing_seconds": 338.1,
+            "gate_passing_union_seconds": 335.33333333333337,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "0aeb3e3b6845c0a13257b394fbf08828d834d5ab0a4db426881e279b623c6d6d",
+      "source_name": "24-25/IMG_3747.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 429,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 166,
+            "gate_passing_seconds": 621.0999999999998,
+            "gate_passing_union_seconds": 620.9999999999998,
+            "selection_and_pack_eligible_candidates": 141
+          },
+          "current": {
+            "candidate_strokes": 429,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 174,
+            "gate_passing_seconds": 636.0,
+            "gate_passing_union_seconds": 636.0,
+            "selection_and_pack_eligible_candidates": 148
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 429,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 174,
+            "gate_passing_seconds": 636.0,
+            "gate_passing_union_seconds": 636.0,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "c2727341e353ae6de7addfb4ed9c31c8b552d11ccb906b1999e84c82b4fb4d92",
+      "source_name": "24-25/IMG_3748.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 22.155466644511197,
+            "gate_passing_union_seconds": 22.155466644511197,
+            "selection_and_pack_eligible_candidates": 8
+          },
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 22.055366644611293,
+            "gate_passing_union_seconds": 22.055366644611293,
+            "selection_and_pack_eligible_candidates": 8
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 22.055366644611293,
+            "gate_passing_union_seconds": 22.055366644611293,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "07348243badcf87b7b5d640d39c18142afbe45df3b2e92859c10fa4f5eedcf49",
+      "source_name": "Competition/3-Board/IMG_3917.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 21,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 7,
+            "gate_passing_seconds": 24.633333333333333,
+            "gate_passing_union_seconds": 24.633333333333333,
+            "selection_and_pack_eligible_candidates": 0
+          },
+          "current": {
+            "candidate_strokes": 20,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 7,
+            "gate_passing_seconds": 24.633333333333333,
+            "gate_passing_union_seconds": 24.633333333333333,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 20,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 7,
+            "gate_passing_seconds": 24.633333333333333,
+            "gate_passing_union_seconds": 24.633333333333333,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "0d455a55999b4d78dfd7c684efef9d24c98b4761e4dfed9ef8bd7af9c53298ee",
+      "source_name": "Competition/3-Board/IMG_3925.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 60,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 20,
+            "gate_passing_seconds": 31.13333333333337,
+            "gate_passing_union_seconds": 31.13333333333337,
+            "selection_and_pack_eligible_candidates": 0
+          },
+          "current": {
+            "candidate_strokes": 60,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 23,
+            "gate_passing_seconds": 33.80000000000005,
+            "gate_passing_union_seconds": 33.80000000000005,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 60,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 23,
+            "gate_passing_seconds": 33.80000000000005,
+            "gate_passing_union_seconds": 33.80000000000005,
+            "selection_and_pack_eligible_candidates": 23
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "41171b31d1d431b5eefc38ea8dc6271d8ec570159d43e302c19659dcdc5197b2",
+      "source_name": "Competition/3-Board/IMG_7993.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 75,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 22,
+            "gate_passing_seconds": 40.20683329312647,
+            "gate_passing_union_seconds": 40.20683329312647,
+            "selection_and_pack_eligible_candidates": 0
+          },
+          "current": {
+            "candidate_strokes": 74,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 25,
+            "gate_passing_seconds": 50.3169332830164,
+            "gate_passing_union_seconds": 50.3169332830164,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 74,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 25,
+            "gate_passing_seconds": 50.3169332830164,
+            "gate_passing_union_seconds": 50.3169332830164,
+            "selection_and_pack_eligible_candidates": 23
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "7b6b23bebb38ab55e940d5ff82df72afdcb8d1e43742274cb2048fda1898421c",
+      "source_name": "Competition/3-Board/IMG_8010.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 68,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 19,
+            "gate_passing_seconds": 33.133333333333276,
+            "gate_passing_union_seconds": 33.133333333333276,
+            "selection_and_pack_eligible_candidates": 0
+          },
+          "current": {
+            "candidate_strokes": 68,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 22,
+            "gate_passing_seconds": 36.600000000000016,
+            "gate_passing_union_seconds": 36.600000000000016,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 68,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 22,
+            "gate_passing_seconds": 36.600000000000016,
+            "gate_passing_union_seconds": 36.600000000000016,
+            "selection_and_pack_eligible_candidates": 21
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "a2321359094f94acd4ab0ba93562e923f01283e0691d468a08d79f3f0810af0f",
+      "source_name": "Competition/IMG_3862.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 21,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 6,
+            "gate_passing_seconds": 39.06666666666667,
+            "gate_passing_union_seconds": 39.06666666666667,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "2b08026ae931171f68d85b2e92b4b84b3fe9a8778a88a729f4f2400debcb9394",
+      "source_name": "Competition/IMG_3864.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 20,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 9,
+            "gate_passing_seconds": 13.833333333333337,
+            "gate_passing_union_seconds": 13.833333333333337,
+            "selection_and_pack_eligible_candidates": 9
+          },
+          "current": {
+            "candidate_strokes": 20,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 9,
+            "gate_passing_seconds": 14.200000000000003,
+            "gate_passing_union_seconds": 14.200000000000003,
+            "selection_and_pack_eligible_candidates": 9
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 20,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 9,
+            "gate_passing_seconds": 14.200000000000003,
+            "gate_passing_union_seconds": 14.200000000000003,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "9b5e4498bb0900e99d5fbc3d792aa7ad046e5211d12cd7434acce3ee4bf64e29",
+      "source_name": "Competition/IMG_3867.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 12.078733321254601,
+            "gate_passing_union_seconds": 12.078733321254601,
+            "selection_and_pack_eligible_candidates": 8
+          },
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 9,
+            "gate_passing_seconds": 12.879533320453803,
+            "gate_passing_union_seconds": 12.879533320453803,
+            "selection_and_pack_eligible_candidates": 9
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 9,
+            "gate_passing_seconds": 12.879533320453803,
+            "gate_passing_union_seconds": 12.879533320453803,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "1012fc4a0ff4ed3c283cc08f694ee66a75ead4d52070344c4cf18b40e66e5b77",
+      "source_name": "Competition/IMG_3868.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 42,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 21,
+            "gate_passing_seconds": 31.33333333333334,
+            "gate_passing_union_seconds": 31.33333333333334,
+            "selection_and_pack_eligible_candidates": 6
+          },
+          "current": {
+            "candidate_strokes": 42,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 22,
+            "gate_passing_seconds": 32.466666666666676,
+            "gate_passing_union_seconds": 32.466666666666676,
+            "selection_and_pack_eligible_candidates": 7
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 42,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 22,
+            "gate_passing_seconds": 32.466666666666676,
+            "gate_passing_union_seconds": 32.466666666666676,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "ac3695b3caf3ce81d93944ca5dc13b6cba87d6c7f606f28552c9ae6e6e35c704",
+      "source_name": "Competition/IMG_3869.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 55,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 17,
+            "gate_passing_seconds": 38.40503329492829,
+            "gate_passing_union_seconds": 38.40503329492829,
+            "selection_and_pack_eligible_candidates": 4
+          },
+          "current": {
+            "candidate_strokes": 54,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 18,
+            "gate_passing_seconds": 40.10673329322658,
+            "gate_passing_union_seconds": 40.10673329322658,
+            "selection_and_pack_eligible_candidates": 4
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 54,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 18,
+            "gate_passing_seconds": 40.10673329322658,
+            "gate_passing_union_seconds": 40.10673329322658,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "cfbabcbaaa24776af4f96f82081c76ccf81245515c34ec32c24d05da5f11d990",
+      "source_name": "Competition/IMG_3923.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 13,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 7,
+            "gate_passing_seconds": 22.6,
+            "gate_passing_union_seconds": 22.6,
+            "selection_and_pack_eligible_candidates": 7
+          },
+          "current": {
+            "candidate_strokes": 13,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 24.1,
+            "gate_passing_union_seconds": 24.1,
+            "selection_and_pack_eligible_candidates": 8
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 13,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 24.1,
+            "gate_passing_union_seconds": 24.1,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "3f2cc6fd695b1683bc3e8e73abec20da270069cec16b1f0cdf29447554d4fa08",
+      "source_name": "Competition/IMG_3951.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 24,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 7,
+            "gate_passing_seconds": 17.866666666666656,
+            "gate_passing_union_seconds": 17.866666666666656,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "d88ec507e862054a7534f5d58ade834ba01614ded37565377be31ad2230520bc",
+      "source_name": "Competition/IMG_7980.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 8,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 2,
+            "gate_passing_seconds": 6.4999999999999964,
+            "gate_passing_union_seconds": 6.4999999999999964,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "6a631435a4a970bc2a673ef9753a86ce5c29d8a1028c8ca42f6877500a862158",
+      "source_name": "Competition/IMG_7985.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 17,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 4,
+            "gate_passing_seconds": 6.366666666666667,
+            "gate_passing_union_seconds": 6.366666666666667,
+            "selection_and_pack_eligible_candidates": 4
+          },
+          "current": {
+            "candidate_strokes": 17,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 5,
+            "gate_passing_seconds": 7.399999999999997,
+            "gate_passing_union_seconds": 7.399999999999997,
+            "selection_and_pack_eligible_candidates": 5
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 17,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 5,
+            "gate_passing_seconds": 7.399999999999997,
+            "gate_passing_union_seconds": 7.399999999999997,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "1cd3b407053cdea552ffb433c1be762d7f0495c80a6b88c2a02ae6c6f09d5113",
+      "source_name": "Competition/IMG_7987.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 25,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 12,
+            "gate_passing_seconds": 17.066666666666684,
+            "gate_passing_union_seconds": 17.066666666666684,
+            "selection_and_pack_eligible_candidates": 9
+          },
+          "current": {
+            "candidate_strokes": 25,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 13,
+            "gate_passing_seconds": 17.93333333333335,
+            "gate_passing_union_seconds": 17.93333333333335,
+            "selection_and_pack_eligible_candidates": 9
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 25,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 13,
+            "gate_passing_seconds": 17.93333333333335,
+            "gate_passing_union_seconds": 17.93333333333335,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "836beec1920eb44f787617bef929a7a485bd039722265906cd5d68778b1b896d",
+      "source_name": "Competition/IMG_7991.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 22,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 14,
+            "gate_passing_seconds": 18.300000000000004,
+            "gate_passing_union_seconds": 18.300000000000004,
+            "selection_and_pack_eligible_candidates": 14
+          },
+          "current": {
+            "candidate_strokes": 22,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 20.13333333333334,
+            "gate_passing_union_seconds": 20.13333333333334,
+            "selection_and_pack_eligible_candidates": 16
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 22,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 20.13333333333334,
+            "gate_passing_union_seconds": 20.13333333333334,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "2305e17f557c8e30a5b9d5977d4495d98f4e86e9891b004f7aa6b0ed13e156c9",
+      "source_name": "Competition/IMG_7998.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 18,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 12,
+            "gate_passing_seconds": 20.700000000000003,
+            "gate_passing_union_seconds": 20.7,
+            "selection_and_pack_eligible_candidates": 12
+          },
+          "current": {
+            "candidate_strokes": 18,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 11,
+            "gate_passing_seconds": 18.5,
+            "gate_passing_union_seconds": 18.500000000000004,
+            "selection_and_pack_eligible_candidates": 11
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 18,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 11,
+            "gate_passing_seconds": 18.5,
+            "gate_passing_union_seconds": 18.500000000000004,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "5b53392a7bb1b0afc6d834a9a5b8299fa0b274b1980cfcbc4e7788e2b429caa5",
+      "source_name": "Competition/IMG_7999.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 21,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 9,
+            "gate_passing_seconds": 10.533333333333331,
+            "gate_passing_union_seconds": 10.533333333333331,
+            "selection_and_pack_eligible_candidates": 9
+          },
+          "current": {
+            "candidate_strokes": 21,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 10,
+            "gate_passing_seconds": 11.833333333333332,
+            "gate_passing_union_seconds": 11.833333333333332,
+            "selection_and_pack_eligible_candidates": 10
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 21,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 10,
+            "gate_passing_seconds": 11.833333333333332,
+            "gate_passing_union_seconds": 11.833333333333332,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "2751b0ff512cf38c19219eeb79234941d08e46a240f4ce02df67ac27588b8738",
+      "source_name": "Competition/IMG_8014.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 15,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 4,
+            "gate_passing_seconds": 5.7390666609276,
+            "gate_passing_union_seconds": 5.7390666609276,
+            "selection_and_pack_eligible_candidates": 4
+          },
+          "current": {
+            "candidate_strokes": 15,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 4,
+            "gate_passing_seconds": 5.905899994094099,
+            "gate_passing_union_seconds": 5.905899994094099,
+            "selection_and_pack_eligible_candidates": 4
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 15,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 4,
+            "gate_passing_seconds": 5.905899994094099,
+            "gate_passing_union_seconds": 5.905899994094099,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "1ce5459a599cee1ebf4422bba4cc4865c3bd289421e4b06cda6825ad1ac801a6",
+      "source_name": "Competition/IMG_8023.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 27,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 14,
+            "gate_passing_seconds": 18.918899981081104,
+            "gate_passing_union_seconds": 18.918899981081104,
+            "selection_and_pack_eligible_candidates": 14
+          },
+          "current": {
+            "candidate_strokes": 27,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 14,
+            "gate_passing_seconds": 19.686333313646998,
+            "gate_passing_union_seconds": 19.686333313646998,
+            "selection_and_pack_eligible_candidates": 14
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 27,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 14,
+            "gate_passing_seconds": 19.686333313646998,
+            "gate_passing_union_seconds": 19.686333313646998,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "473aa852d6c92a991a75d494577b794a6b97aaf169abf4219b9eab21b0ad3e5e",
+      "source_name": "Competition/IMG_8024.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 15,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 6,
+            "gate_passing_seconds": 9.008999990991,
+            "gate_passing_union_seconds": 9.008999990991,
+            "selection_and_pack_eligible_candidates": 6
+          },
+          "current": {
+            "candidate_strokes": 15,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 6,
+            "gate_passing_seconds": 9.0423666576243,
+            "gate_passing_union_seconds": 9.0423666576243,
+            "selection_and_pack_eligible_candidates": 6
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 15,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 6,
+            "gate_passing_seconds": 9.0423666576243,
+            "gate_passing_union_seconds": 9.0423666576243,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+      "source_name": "Competition/IMG_8055.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 6,
+            "gate_passing_seconds": 8.100000000000001,
+            "gate_passing_union_seconds": 8.100000000000001,
+            "selection_and_pack_eligible_candidates": 6
+          },
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 5,
+            "gate_passing_seconds": 6.733333333333335,
+            "gate_passing_union_seconds": 6.733333333333335,
+            "selection_and_pack_eligible_candidates": 5
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 5,
+            "gate_passing_seconds": 6.733333333333335,
+            "gate_passing_union_seconds": 6.733333333333335,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "a52b0f53112a94fb9a7cc54e9e0f6095064f54593ef18338eecab18ca0c81836",
+      "source_name": "Competition/IMG_8056.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 6,
+            "gate_passing_seconds": 6.666666666666668,
+            "gate_passing_union_seconds": 6.666666666666668,
+            "selection_and_pack_eligible_candidates": 6
+          },
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 8.866666666666667,
+            "gate_passing_union_seconds": 8.866666666666667,
+            "selection_and_pack_eligible_candidates": 8
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 8,
+            "gate_passing_seconds": 8.866666666666667,
+            "gate_passing_union_seconds": 8.866666666666667,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "3c73c92c205b14ec829173b4f74f18647f6c039cfbf8a5270bd9e5fa5eb52d99",
+      "source_name": "Competition/IMG_8062.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 37,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 15,
+            "gate_passing_seconds": 18.73333333333332,
+            "gate_passing_union_seconds": 18.73333333333332,
+            "selection_and_pack_eligible_candidates": 0
+          },
+          "current": {
+            "candidate_strokes": 37,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 19.39999999999999,
+            "gate_passing_union_seconds": 19.39999999999999,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 37,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 16,
+            "gate_passing_seconds": 19.39999999999999,
+            "gate_passing_union_seconds": 19.39999999999999,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "72a809451b1ad03f9ab9db6b6b8fb4f0d35cb4b0c1806003a16429670bf4f80e",
+      "source_name": "Competition/IMG_8065.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 6,
+            "gate_passing_seconds": 8.799999999999994,
+            "gate_passing_union_seconds": 8.799999999999994,
+            "selection_and_pack_eligible_candidates": 6
+          },
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 7,
+            "gate_passing_seconds": 10.23333333333333,
+            "gate_passing_union_seconds": 10.23333333333333,
+            "selection_and_pack_eligible_candidates": 7
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 19,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 7,
+            "gate_passing_seconds": 10.23333333333333,
+            "gate_passing_union_seconds": 10.23333333333333,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "bb758d669ebeec6309502335bb6ff282954e57a58819d73f7351353bf1ece303",
+      "source_name": "Competition/IMG_8067.MOV",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 20,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 4,
+            "gate_passing_seconds": 5.833333333333332,
+            "gate_passing_union_seconds": 5.833333333333332,
+            "selection_and_pack_eligible_candidates": 4
+          },
+          "current": {
+            "candidate_strokes": 20,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 3,
+            "gate_passing_seconds": 4.166666666666668,
+            "gate_passing_union_seconds": 4.166666666666668,
+            "selection_and_pack_eligible_candidates": 3
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 20,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 3,
+            "gate_passing_seconds": 4.166666666666668,
+            "gate_passing_union_seconds": 4.166666666666668,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "3022ab3ede7feb0d15a16271c12f8a38b22bc4dcbc8daac39586638a7730f927",
+      "source_name": "Competition/IMG_8069.MOV",
+      "events": {
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 7,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 0,
+            "gate_passing_seconds": 0,
+            "gate_passing_union_seconds": 0.0,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    },
+    {
+      "clip_sha256": "d9f2a45e65fec1bfbbdc898ea0afd53802d6d23da52881b1fd78551532cc4683",
+      "source_name": "Training/25-26/Gurr 30DEC25.mov",
+      "events": {
+        "standing_block": {
+          "base": {
+            "candidate_strokes": 153,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 64,
+            "gate_passing_seconds": 256.26666666666677,
+            "gate_passing_union_seconds": 254.50000000000014,
+            "selection_and_pack_eligible_candidates": 48
+          },
+          "current": {
+            "candidate_strokes": 153,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 67,
+            "gate_passing_seconds": 262.13333333333344,
+            "gate_passing_union_seconds": 260.3666666666668,
+            "selection_and_pack_eligible_candidates": 51
+          }
+        },
+        "springboard": {
+          "base": null,
+          "current": {
+            "candidate_strokes": 153,
+            "duplicate_predictions_removed": 0,
+            "gate_passing_candidates": 67,
+            "gate_passing_seconds": 262.13333333333344,
+            "gate_passing_union_seconds": 260.3666666666668,
+            "selection_and_pack_eligible_candidates": 0
+          }
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Same cached native poses; later tracking changes were not re-inferred.",
+    "Event stress-test passes overlap and must not be added as unique footage.",
+    "Gate-passing candidates are not confirmed contacts, correct identity or coaching validation.",
+    "Event hints remain unreviewed; eligible counts are diagnostic, not profile readiness."
+  ],
+  "artifacts_sha256": {
+    "native": "3ba52e39cb131ed37aba4d3d2dcbb213f6cad9a19e622c83a2a787e0e155787c",
+    "base": "cfbf9d16420dbcd715f7656fcc4d1d6969ba9130372ac9ed8adc9ddc2372953a",
+    "current": "8b06d830582cf7951a02f15b87226410e45c09265dcede13cbc5a5a70c89fedb"
+  }
+}

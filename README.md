@@ -85,7 +85,9 @@ The following protocol remains the planned coach-specific learning experiment on
 
 ### Current engine and axe-detector follow-up
 
-A [full-duration native follow-up](docs/experiments/Gurr-Population.md) is now running across all 47 unique recordings, with a complete-source review packet being prepared. The smaller studies below remain historical results.
+The [full-duration native study](docs/experiments/Gurr-Population.md) is complete: **all 47 unique videos, 2 h 9 min 47 s**, processed in **195 bounded windows**, with **207,987 pose samples inside scored cores** and zero failed windows. The [source coverage ledger](docs/experiments/evaluation/population/gurr-full-windowed-results.json) accounts for every source tail. Expanding the scan found and fixed an early exit that discarded recordings with quiet openings; a full-video review packet now offers 960 unreviewed navigation suggestions.
+
+On the same cached poses, the revised phase engine increased standing-block gate-passing candidates **922 → 952**. Existing timing checks remained **2/15 contacts with one extra** and **2/3 with two extras**; these already-opened references are diagnostic. More accepted phases have not established improved contact timing or coaching effectiveness. The full report separates native inference, engine-only replay and the first genuine review workflow. The smaller studies below remain historical results.
 
 The [round-2 report](docs/experiments/Gurr-Round2.md) pins the standing-block engine and publishes diagnostic replays: **1/15** contact matches with two extras on the original test, and **3/3** with one extra on the smaller follow-up. These already-opened references are comparisons, not a new holdout.
 
@@ -100,7 +102,7 @@ Prerequisites:
 - The footage on that computer.
 - The real 3D pose path and an independently validated implement tracker. The current grip-derived implement is a proxy, and coach-specific results require confirmed athlete/event labels.
 
-1. **Choose the event.** In the Library, pick **Underhand** (later **Standing block**) from the event menu in the top bar.
+1. **Choose the event.** In the Library, pick **Underhand** or **Standing block** from the event menu in the top bar. **Springboard** currently has provisional metrics for review.
 2. **Build each coach's profile.** For each of Matthew Gurr and Daniel Gurr, tap **Build a profile** (person-plus icon), name it, and add that coach's clips for the event. Every clip reports Clean or why not. **Build profile** needs 15+ clean clips that pass self-consistency. Record the clip counts it reports.
 3. **Optional: marks.** Review clips in a workspace and add green/red **Slope** marks on strokes. CARNE ASADA binds marks from any review of the same file to the stroke at that time. Coach marks override athlete marks.
 4. **Feed CARNE ASADA.** Open the profile's **Workbench** (tune icon) → **CARNE ASADA**. Priority starts at slope (a text note `priority: spacing` or `priority: hinge` changes it before the first edit). Drop the whole set onto **Feed CARNE ASADA**. Record each status line.

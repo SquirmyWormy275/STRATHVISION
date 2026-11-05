@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T19:57:37Z
+heartbeat: 2026-11-05T20:24:39Z
 branch: implementation
-phase: 8 — full-population bounded native experiment
-task: Full native population active;168/195 windows,44/47 complete sources,zero failures;49 Python tests passed; both replays controlled
-next: Keep batches64797/replay82969 alive. Finalizer37821 waits for195 native windows plus both replay caches, publishes three population artifacts and checked comparison. Inspect final-results-ready.json, upload current candidate catalog to44597/api/candidates, finish README/report, commit/push. See private working-state.json.
+phase: 8 — full-population native experiment complete
+task: All47 full videos/195cores complete;207987 core poses;zero failures;phase comparison and opened timing diagnostics published;49 Python tests pass
+next: Verify final result commit/push, then release scoped ownership. Full review live44597 with960 unreviewed suggestions and0 judgments. Future work: first genuine reviews or new reserved accuracy evidence; no coaching gain or named identity recognition claimed. See CARNE_ASADA.md and Gurr-Population.md.
 <!-- STATE:END -->
 
 ## Phase progress
