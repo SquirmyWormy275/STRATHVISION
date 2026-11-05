@@ -115,4 +115,41 @@ void main() {
       expect(spans[k - 1].$2, spans[k].$1 - 2);
     }
   });
+
+  test('a phase cut short by the stroke edge has no duration measurement', () {
+    final pack = AnalysisPack(
+      packId: 't',
+      eventId: 'e',
+      metricSchemaVersion: '1',
+      phases: const ['swing', 'recovery'],
+      criticalPhases: const ['swing'],
+      metrics: const [
+        MetricDef(key: 'swing_time', kind: MetricKind.phaseDuration, phase: 'swing', unit: 's'),
+        MetricDef(key: 'recovery_time', kind: MetricKind.phaseDuration, phase: 'recovery', unit: 's'),
+      ],
+    );
+    Map<String, MetricValue> metrics({required bool cut}) => extractMetrics(
+          pack: pack,
+          pose: const PoseTrack(fps: 30, frames: []),
+          implement: const ImplementTrack(frames: []),
+          phases: {
+            'swing': const PhaseSpan(startFrame: 0, endFrame: 29, confidence: 0.8),
+            'recovery': PhaseSpan(startFrame: 30, endFrame: 30, confidence: 0.4, cutShort: cut),
+          },
+        );
+    expect(metrics(cut: true).keys, ['swing_time']);
+    expect(metrics(cut: false)['recovery_time']!.value, closeTo(1 / 30, 1e-3));
+    // The heads' fixed-width input still forms, with 0 for the gap.
+    final f = featureVector(
+        pack: pack,
+        pose: const PoseTrack(fps: 30, frames: []),
+        implement: const ImplementTrack(frames: []),
+        phases: {
+          'swing': const PhaseSpan(startFrame: 0, endFrame: 29, confidence: 0.8),
+          'recovery': const PhaseSpan(startFrame: 30, endFrame: 30, confidence: 0.4, cutShort: true),
+        },
+        metrics: metrics(cut: true));
+    expect(f.length, featureWidth);
+    expect(f.take(2), [closeTo(0.1, 1e-3), 0]);
+  });
 }

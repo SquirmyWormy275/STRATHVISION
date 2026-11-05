@@ -7,11 +7,16 @@ class PhaseSpan {
     required this.startFrame,
     required this.endFrame,
     required this.confidence,
+    this.cutShort = false,
   });
 
   final int startFrame;
   final int endFrame;
   final double confidence;
+
+  /// The recording or the stroke's edge cut this phase short, so its
+  /// length is not its real duration. In memory only (not serialized).
+  final bool cutShort;
 
   Map<String, Object?> toJson() => {
         'start_frame': startFrame,

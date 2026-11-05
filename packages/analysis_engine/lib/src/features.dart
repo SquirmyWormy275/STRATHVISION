@@ -42,6 +42,8 @@ Map<String, MetricValue> extractMetrics({
             ? 0
             : imp.map((i) => i.confidence).reduce((x, y) => x + y) / imp.length;
       case MetricKind.phaseDuration:
+        // A phase cut short has no real duration: not measured.
+        if (span.cutShort) continue;
         value = (span.endFrame - span.startFrame + 1) / pose.fps;
         conf = 1;
     }
@@ -78,9 +80,9 @@ double _round(double v) => (v * 1e4).roundToDouble() / 1e4;
 const featureWidth = 64;
 
 /// Fixed-width feature vector for specialist heads:
-/// [normalized metrics in pack order] + [mean implement inclination per
-/// phase / 90] + [mean root-relative joint positions], zero-padded or
-/// truncated to [featureWidth].
+/// [normalized metrics in pack order; 0 for one not measured] + [mean
+/// implement inclination per phase / 90] + [mean root-relative joint
+/// positions], zero-padded or truncated to [featureWidth].
 List<double> featureVector({
   required AnalysisPack pack,
   required PoseTrack pose,
@@ -90,7 +92,7 @@ List<double> featureVector({
 }) {
   final v = <double>[];
   for (final m in pack.metrics) {
-    final x = metrics[m.key]!.value;
+    final x = metrics[m.key]?.value ?? 0;
     v.add(switch (m.kind) {
       MetricKind.phaseDuration => x / 10,
       _ => x / 180,

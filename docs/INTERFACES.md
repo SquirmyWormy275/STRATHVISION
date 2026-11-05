@@ -238,7 +238,7 @@ At inference:
 
   Speeds for `stop`, `release` and `stops` use the tip with single-sample pose glitches removed, lightly smoothed.
   
-  Without `phase_events`, phases split evenly at confidence 0.5. The first and last phases may be shorter than `min_phase_frames` (cut by the recording), at half confidence.
+  Without `phase_events`, phases split evenly at confidence 0.5. The first and last phases may be shorter than `min_phase_frames` (cut by the recording), at half confidence. A `phase_duration` metric of such a phase is not measured: it is absent from `metrics` (comparisons list it under `metrics_missing`), and a clip summary takes it from the strokes where it was measured.
 - A stroke is usable action when phases are assigned, critical-phase pose confidence meets `min_critical_pose_confidence`, and no implement dropout (confidence below 0.5) lasts longer than `max_implement_dropout_s`.
 - `attribute_metrics` says which metrics a mark attribute speaks to. CARNE ASADA edits only the priority attribute's metrics.
 - `direction_words` give the words used in status copy, as [comparative, plain].

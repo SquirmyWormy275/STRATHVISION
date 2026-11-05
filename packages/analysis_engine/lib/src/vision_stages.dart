@@ -253,7 +253,8 @@ class EventPhaseDetector implements PhaseDetector {
         pack.phases[i]: PhaseSpan(
             startFrame: bounds[i],
             endFrame: bounds[i + 1] - 1,
-            confidence: short.contains(i) ? double.parse((conf / 2).toStringAsFixed(4)) : conf),
+            confidence: short.contains(i) ? double.parse((conf / 2).toStringAsFixed(4)) : conf,
+            cutShort: short.contains(i)),
     };
   }
 }

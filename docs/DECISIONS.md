@@ -249,7 +249,7 @@ Research accuracy follow-up: image-space axe observations and source-disjoint ge
   - `settle` (speed below 25% of peak)
   - `fastest`
   
-  The first and last phases may be cut short by the recording; they are allowed at half confidence.
+  The first and last phases may be cut short by the recording; they are allowed at half confidence. Their durations are not measured: in fast competition rhythm the pull-out runs straight into the next stroke, so the recovery was one frame and `recovery_time` compared a non-measurement against the coach (14 of 34 usable competition strokes on the saved Gurr tracks).
 - **Strokes:**
   - `stroke_signal: tops` (timber underhand) gives one stroke per backswing top. A top whose rise is cut off by the clip start counts, because real clips often start mid-backswing.
   - `stops` (timber standing block) gives one stroke per contact, where a fast swing stops sharply. Standing block contacts are sideways into the block, often from flat hip-height swings, so height-based "top/low" rules do not apply. Phases use `rise`, `reach` (the turnaround before the swing), `stop` (contact) and `release` (pull-out).
