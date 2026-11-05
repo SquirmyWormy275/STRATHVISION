@@ -3,10 +3,10 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T19:03:33Z
+heartbeat: 2026-11-05T19:16:51Z
 branch: implementation
 phase: 8 — full-population bounded native experiment
-task: 47 full review videos ready;195 full-coverage native windows running in frozen six-worker batches; continuous failures preserved
+task: Full population native scan active;108/195 windows,31/47 complete sources,zero failed; full review44597 ready
 next: Continue native-population-20261105 bounded prepare7584/batches64797. Wait for all195 results; window_population.py publish; verify47 sources/all cores; upload catalog to44597/api/candidates, updateREADME/report, commit/push. Full details in CARNE_ASADA.md/working-state.json.
 <!-- STATE:END -->
 
