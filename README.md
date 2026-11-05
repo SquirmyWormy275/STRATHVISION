@@ -85,6 +85,8 @@ The following protocol remains the planned coach-specific learning experiment on
 
 ### Current engine and axe-detector follow-up
 
+A [full-duration native follow-up](docs/experiments/Gurr-Population.md) is now running across all 47 unique recordings, with a complete-source review packet being prepared. The smaller studies below remain historical results.
+
 The [round-2 report](docs/experiments/Gurr-Round2.md) pins the standing-block engine and publishes diagnostic replays: **1/15** contact matches with two extras on the original test, and **3/3** with one extra on the smaller follow-up. These already-opened references are comparisons, not a new holdout.
 
 Two image-only axe prototypes were trained and evaluated: a HOG/linear-SVM baseline and a COCO-pretrained SSDLite model with locally fitted detection heads. Both failed validation. Frozen test results were **0/16** visible axe heads for HOG and **0/8** on four newly reserved recordings for SSDLite. Uncertain/occluded frames were unrated. Code, coarse single-reviewer annotations, model coefficients/weights, source hashes and failures are published in the report. The axe prototypes remain research-only; the app still uses its disclosed grip proxy for implement measurements.

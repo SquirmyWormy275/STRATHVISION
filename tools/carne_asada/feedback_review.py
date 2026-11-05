@@ -36,7 +36,7 @@ def make_packet(reference,root,directory):
             transfer=tags.get('streams',[{}])[0].get('color_transfer')
             if transfer in ('arib-std-b67','smpte2084'):
                 filters.append('zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p')
-            filters.append('scale=960:960:force_original_aspect_ratio=decrease')
+            filters.append('scale=960:960:force_original_aspect_ratio=decrease:force_divisible_by=2')
             subprocess.run(['ffmpeg','-v','error','-threads','2','-ss',str(row['start_s']),'-i',str(source),
                 '-t',str(row['duration_s']),'-vf',','.join(filters),
                 '-c:v','libx264','-preset','fast','-crf','23','-pix_fmt','yuv420p','-c:a','aac',
@@ -59,12 +59,17 @@ def validated_feedback(task,body):
     for key in ('author_id','reviewer_id'):
         if not isinstance(body.get(key),str) or not body[key].strip():raise ValueError('Reviewer name is required')
     if body.get('author_role')!='coach':raise ValueError('This packet collects coach judgments')
+    event_id=task['event_id']
+    if task.get('allowed_event_ids'):
+        event_id=body.get('event_id')
+        if event_id not in task['allowed_event_ids'] or body.get('event_confirmed') is not True:
+            raise ValueError('Confirm the event for this stroke')
     span=body.get('stroke_span_s')
     if not isinstance(span,list) or len(span)!=2 or any(not isinstance(x,(float,int)) or not math.isfinite(x) for x in span):
         raise ValueError('Invalid stroke span')
     if not task['source_start_s']<=span[0]<span[1]<=task['source_start_s']+task['duration_s']+.01:
         raise ValueError('Stroke span lies outside the review clip')
-    return {'feedback_id':task['task_id'],'clip_sha256':task['clip_sha256'],'event_id':task['event_id'],
+    return {'feedback_id':task['task_id'],'clip_sha256':task['clip_sha256'],'event_id':event_id,
             'partition':task['partition'],'stroke_span_s':span,'attribute':body['attribute'],
             'label':body['label'],'author_id':body['author_id'].strip(),'author_role':'coach',
             'reviewer_id':body['reviewer_id'].strip(),'reviewed':True,'single_stroke_confirmed':True,
