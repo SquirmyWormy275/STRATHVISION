@@ -41,7 +41,38 @@ documents, comparison code, the Library profile-building entry point, and build
 configuration. It did not run tests, launch devices, inspect research holdouts,
 or change any runtime files. No phase is newly certified by this review.
 
-The next independent task is to verify the documented Phase 1 acceptance evidence
-and prepare contract reconciliation for device roles. Research work can continue
-without touching this file. Coordinate any future edits to shared contracts with
-the active owner before making them.
+## Follow-up: app documentation and focused checks
+
+On 2026-11-05, the second session claimed this file and
+`apps/strathvision/README.md` in handoff issue #1. The active research owner retained
+all research work and STATUS.md ownership. Runtime code and contracts were not
+changed.
+
+Inspection confirmed that WorkspaceRoute defaults to `visionRunner` and the
+profile builder defaults to `visionEvaluator`. Both use real local pose tracks;
+`GripImplementTracker` infers a segment from the wrists and forearms. The README
+now describes that distinction, removes obsolete fixed placeholder counts, and
+explains the difference between synthetic test fixtures and real-footage gates.
+It also gives a beginner entry path and the focused Phase 1 test command.
+
+Verification against runtime source at `4c892c8`:
+
+```sh
+cd apps/strathvision
+flutter test --no-pub --concurrency=1 test/widget_test.dart test/profile_package_test.dart
+```
+
+All **14 tests passed**: Library/Workspace navigation, dummy import display,
+invalid import rejection without storage, metadata persistence after database
+reopen, JSON/directory/ZIP package reading, and malformed-package rejection.
+The first attempt failed before assertions because Flutter could not copy a
+temporary compiler artifact (`Disk quota exceeded` under `/tmp`). The successful
+retry used a fresh private `TMPDIR` under the home filesystem. No shared temporary
+files or other agents' processes were removed.
+
+These tests use substituted players and file pickers. They do not establish
+Windows launch acceptance, native dialog behavior, real-decoder accuracy, or
+mobile device acceptance. The strict Phase 1 Windows gate remains open.
+
+Next: collect Windows launch/import/restart evidence; coordinate device-role
+contract reconciliation before changing the mobile profile-building flow.

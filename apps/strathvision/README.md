@@ -1,6 +1,21 @@
 # STRATHVISION app
 
-Flutter client for every platform: Android, iOS, Windows, macOS, Linux.
+Local-first video review client for Android, iOS, Windows, macOS, and Linux.
+Start with two clips: align a visible event, review in slow motion, and save the
+sync and marks in a local project. Analysis is an additional review tool; video
+review does not require a profile or a successful analysis.
+
+For a first contribution, follow Setup, run the focused Phase 1 checks below,
+then try the Phase 2 manual check. The [architecture](../../docs/ARCHITECTURE.md),
+[contracts](../../docs/INTERFACES.md), and [ordered execution plan](../../docs/EXECUTION_PLAN.md)
+explain the boundaries. [Handoff status](../../docs/handoff/STATUS.md) separates
+recorded test results from outstanding device acceptance.
+
+The default app runs a local person detector and BlazePose pose estimation, then
+pack-driven stroke, phase, and metric extraction. Implement position is inferred
+from the hands and forearms; it is not a directly detected tool position. Synthetic
+pose runners remain available for tests. See the [measured accuracy limitations](../../docs/experiments/Gurr-Pipeline-Findings.md)
+before interpreting analysis output as evidence about technique.
 
 ## Requirements
 
@@ -26,6 +41,17 @@ flutter test
 ```
 
 `test/fixtures/dummy_profile.json` is the dummy profile used to check the Phase 1 import.
+
+For a focused check of navigation, profile import, invalid-package rejection, and
+metadata persistence across database reopen:
+
+```sh
+flutter test --no-pub --concurrency=1 test/widget_test.dart test/profile_package_test.dart
+```
+
+These tests substitute the file picker and video players. They do not verify a
+native file dialog or a Windows/mobile launch. The Phase 1 manual check below is
+still required on the target devices; a successful build alone does not close it.
 
 The analysis engine is a pure-Dart package with its own tests:
 
@@ -120,17 +146,23 @@ Automated Linux verification: `flutter test integration_test/carne_run_flow_test
    - **Rejected:** a plain message and the error code, for example "Add 6 more clean clips…" (`INSUFFICIENT_CLIPS`). Nothing is stored.
 4. Go back. The Library lists the new profile as Ready.
 
-With the stand-in pose model, any 15 clips build. Real gating needs the real pose model.
+The default builder evaluates real video through the local pose pipeline. Fifteen
+selected files do not guarantee a ready profile: enough clips must be usable and
+the pack's confidence and self-consistency gates must pass. Synthetic fixtures
+exercise the builder in tests; they do not validate accuracy on real footage.
 
 ## Phase 3 manual check
 
 1. Open a review and add a clip on A.
 2. Tap **Analyze** in the top bar, or press A. On phones the button shows only its icon.
-3. The Analysis panel opens: beside the video on wide screens, under it on narrow ones. It lists body-tracking confidence, the three placeholder phases (times and frames), four metrics with units and confidence, and `slope_residual`.
+3. The Analysis panel opens: beside the video on wide screens, under it on narrow ones. Successful analysis shows measurements and phases from the active pack, confidence, and any configured specialist residuals. Check the selected athlete and any warnings. Footage that cannot be measured should show a structured failure rather than the old placeholder values.
 4. Add a clip on B. B becomes the active stage and the panel reads "Not analyzed yet". Analyze it.
 5. Scrub, step and play while the panel is open. Review controls are unaffected.
 
-In this build the pose model is a stand-in, so the values are placeholders.
+The production workspace uses `visionRunner`; `isolateRunner` supplies synthetic
+poses for tests. The default builder similarly uses `visionEvaluator`. Metric and
+phase counts depend on the selected pack. A residual or style-match score does
+not establish absolute movement quality.
 
 ## Phase 2 manual check
 
