@@ -754,6 +754,395 @@
         "release"
       ],
       "stroke_signal": "stops"
+    },
+    {
+      "event_id": "springboard",
+      "label": "Springboard",
+      "metric_schema_version": "timber-springboard-1",
+      "phases": [
+        "setup",
+        "backswing",
+        "downswing",
+        "entry",
+        "recovery"
+      ],
+      "critical_phases": [
+        "downswing",
+        "entry"
+      ],
+      "min_clips": 15,
+      "metrics": [
+        {
+          "key": "entry_slope",
+          "kind": "implement_inclination",
+          "phase": "downswing",
+          "aggregate": "end",
+          "unit": "°",
+          "weight": 2.0,
+          "min_spread": 1.0
+        },
+        {
+          "key": "downswing_slope",
+          "kind": "implement_inclination",
+          "phase": "downswing",
+          "unit": "°",
+          "min_spread": 1.0
+        },
+        {
+          "key": "backswing_top_slope",
+          "kind": "implement_inclination",
+          "phase": "backswing",
+          "aggregate": "end",
+          "unit": "°",
+          "min_spread": 2.0
+        },
+        {
+          "key": "hinge_at_entry",
+          "kind": "joint_angle",
+          "phase": "entry",
+          "aggregate": "start",
+          "unit": "°",
+          "joints": [
+            "neck",
+            "pelvis",
+            "left_knee"
+          ],
+          "min_spread": 2.0
+        },
+        {
+          "key": "lead_elbow_at_entry",
+          "kind": "joint_angle",
+          "phase": "entry",
+          "aggregate": "start",
+          "unit": "°",
+          "joints": [
+            "left_shoulder",
+            "left_elbow",
+            "left_wrist"
+          ],
+          "weight": 1.5,
+          "min_spread": 2.0
+        },
+        {
+          "key": "lead_knee_at_entry",
+          "kind": "joint_angle",
+          "phase": "entry",
+          "aggregate": "start",
+          "unit": "°",
+          "joints": [
+            "left_hip",
+            "left_knee",
+            "left_ankle"
+          ],
+          "min_spread": 2.0
+        },
+        {
+          "key": "trail_knee_at_entry",
+          "kind": "joint_angle",
+          "phase": "entry",
+          "aggregate": "start",
+          "unit": "°",
+          "joints": [
+            "right_hip",
+            "right_knee",
+            "right_ankle"
+          ],
+          "min_spread": 2.0
+        },
+        {
+          "key": "trail_elbow_downswing",
+          "kind": "joint_angle",
+          "phase": "downswing",
+          "unit": "°",
+          "joints": [
+            "right_shoulder",
+            "right_elbow",
+            "right_wrist"
+          ],
+          "min_spread": 2.0
+        },
+        {
+          "key": "shoulder_lift_backswing",
+          "kind": "joint_range",
+          "phase": "backswing",
+          "unit": "°",
+          "joints": [
+            "right_hip",
+            "right_shoulder",
+            "right_elbow"
+          ],
+          "min_spread": 2.0
+        },
+        {
+          "key": "backswing_time",
+          "kind": "phase_duration",
+          "phase": "backswing",
+          "unit": "s",
+          "min_spread": 0.03
+        },
+        {
+          "key": "downswing_time",
+          "kind": "phase_duration",
+          "phase": "downswing",
+          "unit": "s",
+          "weight": 1.5,
+          "min_spread": 0.02
+        },
+        {
+          "key": "recovery_time",
+          "kind": "phase_duration",
+          "phase": "recovery",
+          "unit": "s",
+          "min_spread": 0.05
+        }
+      ],
+      "heads": [
+        {
+          "name": "slope_residual",
+          "kind": "mlp_residual",
+          "base": "slope_residual/timber-springboard/v1",
+          "target_metric": "entry_slope",
+          "acceptance": {
+            "primary_probe": "slope_bias",
+            "min_improvement": 0.8,
+            "no_regress": [
+              "slope_error_deg"
+            ],
+            "within_fraction": {
+              "phase_stability": 0.05,
+              "track_confidence_correlation": 0.05
+            },
+            "max_weight_fraction": 0.02
+          }
+        }
+      ],
+      "probes": [
+        {
+          "name": "slope_error_deg",
+          "head": "slope_residual",
+          "kind": "mean_abs_residual"
+        },
+        {
+          "name": "slope_bias",
+          "head": "slope_residual",
+          "kind": "signed_mean_residual"
+        },
+        {
+          "name": "priority_agreement",
+          "head": "slope_residual",
+          "kind": "mark_agreement",
+          "attribute": "Slope",
+          "tolerance": 2.0
+        },
+        {
+          "name": "phase_stability",
+          "head": "slope_residual",
+          "kind": "residual_variance"
+        },
+        {
+          "name": "track_confidence_correlation",
+          "head": "slope_residual",
+          "kind": "confidence_correlation"
+        }
+      ],
+      "adapters": [
+        {
+          "name": "usable_footage",
+          "spec": "Decide whether a clip is usable footage for learning this event. It is usable when the body is tracked confidently (pose confidence about 0.6 or more), the implement is tracked confidently (implement confidence about 0.5 or more), and the downswing and entry phases were found (phase confidence about 0.4 or more). If any one of these is clearly lower, the clip is not usable.",
+          "outputs": [
+            "usable"
+          ],
+          "threshold": 0.5,
+          "examples": [
+            {
+              "inputs": {
+                "pose_confidence": 0.85,
+                "implement_confidence": 0.8,
+                "phase_confidence.downswing": 0.5,
+                "phase_confidence.entry": 0.5
+              },
+              "expect": {
+                "usable": true
+              }
+            },
+            {
+              "inputs": {
+                "pose_confidence": 0.95,
+                "implement_confidence": 0.9,
+                "phase_confidence.downswing": 0.9,
+                "phase_confidence.entry": 0.9
+              },
+              "expect": {
+                "usable": true
+              }
+            },
+            {
+              "inputs": {
+                "pose_confidence": 0.3,
+                "implement_confidence": 0.8,
+                "phase_confidence.downswing": 0.5,
+                "phase_confidence.entry": 0.5
+              },
+              "expect": {
+                "usable": false
+              }
+            },
+            {
+              "inputs": {
+                "pose_confidence": 0.85,
+                "implement_confidence": 0.2,
+                "phase_confidence.downswing": 0.5,
+                "phase_confidence.entry": 0.5
+              },
+              "expect": {
+                "usable": false
+              }
+            },
+            {
+              "inputs": {
+                "pose_confidence": 0.85,
+                "implement_confidence": 0.8,
+                "phase_confidence.downswing": 0.1,
+                "phase_confidence.entry": 0.1
+              },
+              "expect": {
+                "usable": false
+              }
+            }
+          ]
+        },
+        {
+          "name": "priority_scorer",
+          "spec": "Suggest which attribute the athlete should focus on next, from how far each measurement is from the coach (abs_delta, in spreads). Slope: entry slope and downswing slope differ most. Hinge: hinge at entry differs most. Spacing: lead elbow at entry and the knees at entry (stance on the board) differ most. Path: trail elbow in the downswing and shoulder lift in the backswing differ most. The attribute whose measurements are furthest from the coach should score highest.",
+          "outputs": [
+            "Slope",
+            "Spacing",
+            "Hinge",
+            "Path"
+          ],
+          "examples": [
+            {
+              "inputs": {
+                "abs_delta.entry_slope": 3.0,
+                "abs_delta.downswing_slope": 2.5,
+                "abs_delta.hinge_at_entry": 0.3,
+                "abs_delta.lead_elbow_at_entry": 0.2,
+                "abs_delta.trail_elbow_downswing": 0.4,
+                "abs_delta.shoulder_lift_backswing": 0.3,
+                "abs_delta.lead_knee_at_entry": 0.3,
+                "abs_delta.trail_knee_at_entry": 0.2
+              },
+              "expect": {
+                "top": "Slope"
+              }
+            },
+            {
+              "inputs": {
+                "abs_delta.entry_slope": 0.3,
+                "abs_delta.downswing_slope": 0.2,
+                "abs_delta.hinge_at_entry": 2.8,
+                "abs_delta.lead_elbow_at_entry": 0.4,
+                "abs_delta.trail_elbow_downswing": 0.3,
+                "abs_delta.shoulder_lift_backswing": 0.2,
+                "abs_delta.lead_knee_at_entry": 0.3,
+                "abs_delta.trail_knee_at_entry": 0.2
+              },
+              "expect": {
+                "top": "Hinge"
+              }
+            },
+            {
+              "inputs": {
+                "abs_delta.entry_slope": 0.4,
+                "abs_delta.downswing_slope": 0.3,
+                "abs_delta.hinge_at_entry": 0.3,
+                "abs_delta.lead_elbow_at_entry": 2.6,
+                "abs_delta.trail_elbow_downswing": 0.2,
+                "abs_delta.shoulder_lift_backswing": 0.4,
+                "abs_delta.lead_knee_at_entry": 2.3,
+                "abs_delta.trail_knee_at_entry": 2.1
+              },
+              "expect": {
+                "top": "Spacing"
+              }
+            },
+            {
+              "inputs": {
+                "abs_delta.entry_slope": 0.2,
+                "abs_delta.downswing_slope": 0.4,
+                "abs_delta.hinge_at_entry": 0.2,
+                "abs_delta.lead_elbow_at_entry": 0.3,
+                "abs_delta.trail_elbow_downswing": 2.4,
+                "abs_delta.shoulder_lift_backswing": 2.2,
+                "abs_delta.lead_knee_at_entry": 0.3,
+                "abs_delta.trail_knee_at_entry": 0.2
+              },
+              "expect": {
+                "top": "Path"
+              }
+            }
+          ]
+        }
+      ],
+      "max_implement_dropout_s": 0.3,
+      "attribute_metrics": {
+        "Slope": [
+          "entry_slope",
+          "downswing_slope",
+          "backswing_top_slope"
+        ],
+        "Spacing": [
+          "lead_elbow_at_entry",
+          "lead_knee_at_entry",
+          "trail_knee_at_entry"
+        ],
+        "Hinge": [
+          "hinge_at_entry"
+        ],
+        "Path": [
+          "trail_elbow_downswing",
+          "shoulder_lift_backswing"
+        ]
+      },
+      "direction_words": {
+        "entry_slope": {
+          "higher": [
+            "flatter",
+            "flat"
+          ],
+          "lower": [
+            "steeper",
+            "steep"
+          ]
+        },
+        "downswing_slope": {
+          "higher": [
+            "flatter",
+            "flat"
+          ],
+          "lower": [
+            "steeper",
+            "steep"
+          ]
+        },
+        "backswing_top_slope": {
+          "higher": [
+            "flatter",
+            "flat"
+          ],
+          "lower": [
+            "steeper",
+            "steep"
+          ]
+        }
+      },
+      "phase_events": [
+        "rise",
+        "reach",
+        "stop",
+        "release"
+      ],
+      "stroke_signal": "stops"
     }
   ]
 }

@@ -66,7 +66,7 @@ void main() {
     }
   });
 
-  for (final event in ['underhand', 'standing_block']) {
+  for (final event in ['underhand', 'standing_block', 'springboard']) {
     test('$event: compiled adapters satisfy their examples and run locally',
         () async {
       final pack = timber.event(event)!.analysis;

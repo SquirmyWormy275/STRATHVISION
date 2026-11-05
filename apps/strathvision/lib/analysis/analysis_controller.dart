@@ -82,8 +82,14 @@ class ClipAnalysis {
     this.profileKey,
     this.focus,
     this.usable,
+    this.strokes = 0,
+    this.usableStrokes = 0,
   });
   final AnalysisOutcome outcome;
+
+  /// Strokes found, and how many could be measured.
+  final int strokes;
+  final int usableStrokes;
   final ComparisonOutcome? comparison;
   final String? profileKey;
 
@@ -93,6 +99,12 @@ class ClipAnalysis {
   /// Verdict of the package's usable-footage adapter, if any.
   final bool? usable;
 }
+
+/// Whether to suggest filming at a higher frame rate: most strokes found
+/// could not be measured (fast swings blur into each other at 30 fps or
+/// less), and the clip is not already high frame rate.
+bool suggestHigherFrameRate(ClipAnalysis a, double fps) =>
+    fps < 50 && a.strokes >= 3 && a.usableStrokes < 0.6 * a.strokes;
 
 /// Names of the adapters the app knows how to apply at inference.
 const usableAdapter = 'usable_footage';
@@ -280,7 +292,9 @@ class AnalysisController extends ChangeNotifier {
           comparison: comparison,
           profileKey: choice?.key,
           focus: focus,
-          usable: usable);
+          usable: usable,
+          strokes: detail.strokes,
+          usableStrokes: detail.usableStrokes);
       _fps[clip.clipId] = fps;
     } finally {
       _running.remove(clip.clipId);

@@ -75,4 +75,44 @@ void main() {
     expect(phases['entry']!.startFrame, inInclusiveRange(40, 42));
     expect(phases['backswing']!.startFrame, lessThanOrEqualTo(18));
   });
+
+  test('in fast rhythm each stroke starts before its backswing', () {
+    // Competition rhythm: three samples in the material, then the axe loops
+    // straight back over (no pause at the top) and swings in. The midpoint
+    // between contacts falls inside the next backswing.
+    final tips = <Vec3>[];
+    for (var k = 0; k < 3; k++) {
+      for (var i = 0; i < (k == 0 ? 8 : 3); i++) {
+        tips.add(const Vec3(1, 0, 0));
+      }
+      for (var i = 1; i <= 6; i++) {
+        tips.add(Vec3(math.cos(math.pi * i / 6), math.sin(math.pi * i / 6), 0));
+      }
+      for (var i = 1; i <= 3; i++) {
+        tips.add(Vec3(-1 + 2 * i / 3, 0, 0));
+      }
+    }
+    for (var i = 0; i < 8; i++) {
+      tips.add(const Vec3(1, 0, 0));
+    }
+    final imp = ImplementTrack(frames: [
+      for (var i = 0; i < tips.length; i++)
+        ImplementFrame(frame: i * 2, grip: const Vec3(0, 0, 0), tip: tips[i], confidence: 1),
+    ]);
+    final stops = findStops(imp, 30);
+    expect(stops.length, 3);
+    final spans = segmentStrokesByStops(imp, 30);
+    expect(spans.length, 3);
+    for (var k = 1; k < spans.length; k++) {
+      // The first sample after the previous contact where the tip has left.
+      var out = stops[k - 1];
+      while (imp.frames[out].tip.x > 1 - 1e-9) {
+        out++;
+      }
+      final leaves = imp.frames[out].frame;
+      expect(spans[k].$1, lessThanOrEqualTo(leaves));
+      expect(spans[k].$1, greaterThan(imp.frames[stops[k - 1]].frame));
+      expect(spans[k - 1].$2, spans[k].$1 - 2);
+    }
+  });
 }

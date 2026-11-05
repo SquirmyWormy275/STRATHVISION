@@ -31,7 +31,7 @@ void main() {
 
   test('timber pack defines both initial events with phases and metrics', () {
     expect(timber.packId, 'timber');
-    expect(timber.events.map((e) => e.eventId), ['underhand', 'standing_block']);
+    expect(timber.events.map((e) => e.eventId), ['underhand', 'standing_block', 'springboard']);
     for (final e in timber.events) {
       final a = e.analysis;
       expect(a.phases, ['setup', 'backswing', 'downswing', 'entry', 'recovery']);

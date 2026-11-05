@@ -224,7 +224,7 @@ At inference:
 - How strokes are found depends on `stroke_signal`:
   - `speed_peaks` (default): one implement-speed peak per stroke, with boundaries midway between peaks. Edge partials and strokes outside 0.5–1.5× the median length are dropped.
   - `tops`: one backswing top per stroke, from the rise before it through contact. The cut after contact sits where the tip has risen 15% of the way back to the next top (at most halfway), so the pause and settle stay with the stroke. A top whose rise is cut off by the clip start counts if it stands out after it.
-  - `stops`: one contact per stroke, where a fast swing (a speed peak of at least 40% of the clip's fastest and 4 m/s) stops sharply (below 30% of the peak within 0.6 s). Cuts sit midway between contacts. This works for high and flat swings alike.
+  - `stops`: one contact per stroke, where a fast swing (a speed peak of at least 40% of the clip's fastest and 4 m/s) stops sharply (below 30% of the peak within 0.6 s). Cuts sit midway between contacts. This works for high and flat swings alike. In fast rhythm (no pause between strokes) the backswing starts before that midpoint; the cut then moves back to where the stroke starts moving (walking back from its fastest point, the last sample below 30% of that speed), at most 0.4 s and never into the previous contact.
 - `phase_events` gives one motion event per phase boundary, in order, on the implement tip:
   - `low_before_top` (rise)
   - `top`

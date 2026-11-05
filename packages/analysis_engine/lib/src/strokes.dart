@@ -77,18 +77,47 @@ List<int> findStops(ImplementTrack imp, double fps) {
 /// cuts sit midway between contacts, so a stroke holds its own backswing,
 /// swing, contact and the time in the material after it. Edge strokes
 /// extend half the typical stroke length past their contact.
+///
+/// In fast rhythm (no pause between strokes) the backswing starts before
+/// that midpoint. The cut then moves back to where the stroke starts
+/// moving: walking back from its fastest point, the last sample below 30%
+/// of that speed, at most 0.4 s earlier and never into the previous
+/// contact.
 List<(int, int)> segmentStrokesByStops(ImplementTrack imp, double fps) {
   final f = imp.frames;
   final stops = findStops(imp, fps);
   if (stops.isEmpty) return const [];
+  final v = tipSpeed(imp, despikedTips(imp), fps);
   final gaps = [for (var k = 1; k < stops.length; k++) stops[k] - stops[k - 1]]..sort();
   final half = gaps.isEmpty
       ? (1.5 * fps / math.max(1, f.length > 1 ? f[1].frame - f[0].frame : 1)).round()
       : gaps[gaps.length ~/ 2] ~/ 2;
+  // First sample of stroke k: no later than where it starts moving.
+  const maxShift = 0.4; // seconds
+  int startOf(int k, int planned) {
+    final floor = k == 0 ? 0 : stops[k - 1] + 1;
+    var peak = math.max(floor, planned);
+    for (var i = peak; i < stops[k]; i++) {
+      if (v[i] > v[peak]) peak = i;
+    }
+    var i = peak;
+    while (i > floor && v[i] >= 0.3 * v[peak]) {
+      i--;
+    }
+    // Only a clear start close before the planned cut moves it; otherwise
+    // the walk ran into an earlier, weaker swing.
+    if (v[i] >= 0.3 * v[peak] || (f[planned].frame - f[i].frame) / fps > maxShift) return planned;
+    return math.max(floor, math.min(planned, i));
+  }
+
+  final starts = [
+    for (var k = 0; k < stops.length; k++)
+      startOf(k, k == 0 ? math.max(0, stops[k] - half) : (stops[k - 1] + stops[k]) ~/ 2 + 1),
+  ];
   final spans = <(int, int)>[];
   for (var k = 0; k < stops.length; k++) {
-    final a = k == 0 ? math.max(0, stops[k] - half) : (stops[k - 1] + stops[k]) ~/ 2 + 1;
-    final b = k == stops.length - 1 ? math.min(f.length - 1, stops[k] + half) : (stops[k] + stops[k + 1]) ~/ 2;
+    final a = starts[k];
+    final b = k == stops.length - 1 ? math.min(f.length - 1, stops[k] + half) : starts[k + 1] - 1;
     if (b > a) spans.add((f[a].frame, f[b].frame));
   }
   return spans;

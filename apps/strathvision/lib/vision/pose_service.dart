@@ -266,7 +266,14 @@ class PoseService {
       // again (only near where they were) when the pose is lost.
       var last = chosen.last;
       Roi? roi = chosen.samples.last.frame == f - step && chosen.state is Roi ? chosen.state! as Roi : null;
-      var sinceCheck = 0;
+      // The athlete's usual detected height (recent detections), and where
+      // their pose region was when [last] was detected: between detector
+      // checks [last] moves with the pose, so a lost athlete is looked for
+      // where they went, not where the detector last saw them.
+      final heights = [for (final s in chosen.samples) s.box.height];
+      (double, double)? anchor = roi == null ? null : (roi.cx, roi.cy);
+      (double, double)? seenAt = anchor;
+      var sinceCheck = 0, lostFor = 0;
       for (; f < n; f += step) {
         final img = await grabber.frameIndex(f, fps: clip.fps);
         if (img == null) continue;
@@ -277,14 +284,25 @@ class PoseService {
         final lost = out == null || out.presence < 0.5;
         if (lost || ++sinceCheck >= recheckEvery) {
           sinceCheck = 0;
-          final next = continueTrack(last, await detector.detect(img, quarterTurns: q, threshold: 0.25));
+          final typical = median(heights.length > 9 ? heights.sublist(heights.length - 9) : heights);
+          final near = anchor != null && seenAt != null
+              ? movedTo(last, last.cx + (seenAt.$1 - anchor.$1) / view.viewWidth,
+                  last.cy + (seenAt.$2 - anchor.$2) / view.viewHeight)
+              : last;
+          final people = await detector.detect(img, quarterTurns: q, threshold: 0.25);
+          var next = continueTrack(near, people, typicalHeight: typical);
+          // Lost for over a second: look above and below (climbing).
+          if (next == null && lost && lostFor * step / clip.fps >= 1) next = findAgain(near, typical, people);
           if (next != null) {
             last = next;
+            heights.add(next.height);
             if (lost || roi == null || !_inside(next, roi, view)) {
               final (r, o) = await _fromBox(next, view, poseAt);
               roi = r;
               out = o;
             }
+            anchor = (roi.cx, roi.cy);
+            seenAt = anchor;
           } else if (lost) {
             // Lost and not found near `last`: no pose for this frame.
             roi = null;
@@ -295,8 +313,11 @@ class PoseService {
           emit(f, _Seen(poseFrameFromBlazePose(f, out.world, out.visibility, out.landmarkPresence),
               _frameXy(out.landmarks, roi, view)), img.width, img.height);
           roi = roiFromLandmarks(out.landmarks, roi);
+          seenAt = (roi.cx, roi.cy);
+          lostFor = 0;
         } else {
           roi = null;
+          lostFor++;
         }
         onProgress?.call((f + 1) / n);
         progress.value = (f + 1) / n;

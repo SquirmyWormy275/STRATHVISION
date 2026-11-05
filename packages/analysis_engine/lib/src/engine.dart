@@ -34,8 +34,15 @@ class AnalysisDetail {
   const AnalysisDetail(this.outcome, this.phasePoseConfidence,
       {this.implementConfidence = 0,
       this.features = const [],
-      this.headBases = const {}});
+      this.headBases = const {},
+      this.strokes = 0,
+      this.usableStrokes = 0});
   final AnalysisOutcome outcome;
+
+  /// Per-stroke analysis: strokes found in the clip, and how many of them
+  /// could be measured (0 and 0 when the clip is measured as one movement).
+  final int strokes;
+  final int usableStrokes;
 
   /// The feature vector given to the heads (harness input).
   final List<double> features;
@@ -103,7 +110,8 @@ class AnalysisEngine {
                 'issues': [for (final s in strokes) [for (final i in s.issues) i.name]],
               },
             )),
-            const {});
+            const {},
+            strokes: strokes.length);
       }
       if (good.isNotEmpty) {
         final vectors = [for (final s in good) (s.detail.outcome as AnalysisSuccess).vector];
@@ -120,7 +128,9 @@ class AnalysisEngine {
               implementConfidence: _r(
                   good.map((s) => s.detail.implementConfidence).reduce((a, b) => a + b) / good.length),
               features: first.features,
-              headBases: first.headBases);
+              headBases: first.headBases,
+              strokes: strokes.length,
+              usableStrokes: good.length);
         }
       }
     }

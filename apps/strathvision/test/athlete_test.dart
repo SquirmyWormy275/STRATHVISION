@@ -132,4 +132,32 @@ void main() {
     const t = AthleteTarget(quarterTurns: 3, frame: 42, x: 0.25, y: 0.75);
     expect(AthleteTarget.fromJson(t.toJson()), t);
   });
+
+  test('re-finding a lost athlete ignores smaller people nearby', () {
+    // IMG_3925-like: the chopper (about 0.25 of the picture tall) is lost
+    // climbing; a judge (0.11) stands just below where they were.
+    const last = PersonBox(0.40, 0.45, 0.52, 0.65, 0.8); // crouched on a board
+    const judge = PersonBox(0.46, 0.58, 0.51, 0.69, 0.8);
+    expect(continueTrack(last, const [judge]), judge); // size alone admits them
+    expect(continueTrack(last, const [judge], typicalHeight: 0.25), isNull);
+  });
+
+  test('a climbing athlete is found again above where they were lost', () {
+    const last = PersonBox(0.40, 0.55, 0.52, 0.80, 0.8);
+    const top = PersonBox(0.42, 0.20, 0.56, 0.42, 0.8); // on the top board
+    const judge = PersonBox(0.62, 0.66, 0.67, 0.77, 0.8);
+    const other = PersonBox(0.85, 0.30, 0.97, 0.55, 0.8); // another chopper
+    // Too far for continuity; found by size and side position.
+    expect(continueTrack(last, const [top, judge, other], typicalHeight: 0.25), isNull);
+    expect(findAgain(last, 0.25, const [top, judge, other]), top);
+    // Two people of the athlete's size at the same side position: no guess.
+    expect(findAgain(last, 0.25, const [top, PersonBox(0.41, 0.6, 0.53, 0.84, 0.8)]), isNull);
+  });
+
+  test('a box can be moved with the pose between detector checks', () {
+    final b = movedTo(const PersonBox(0.1, 0.2, 0.3, 0.6, 0.7), 0.5, 0.5);
+    expect([b.x1, b.y1, b.x2, b.y2, b.score], [closeTo(0.4, 1e-9), closeTo(0.3, 1e-9), closeTo(0.6, 1e-9), closeTo(0.7, 1e-9), 0.7]);
+    expect(median([3, 1, 2]), 2);
+    expect(median([4, 1, 2, 3]), 2.5);
+  });
 }

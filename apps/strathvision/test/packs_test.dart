@@ -22,7 +22,7 @@ void main() {
     final packs = await loadPacks(rootBundle);
     expect(packs.map((p) => p.packId), ['placeholder', 'timber']);
     final all = PackInfo.all(packs).map((p) => p.key);
-    expect(all, ['placeholder/placeholder', 'timber/underhand', 'timber/standing_block']);
+    expect(all, ['placeholder/placeholder', 'timber/underhand', 'timber/standing_block', 'timber/springboard']);
   });
 
   test('active pack: saved choice, else first domain event, else placeholder',

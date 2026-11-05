@@ -180,6 +180,39 @@ void main() {
     expect(find.byKey(const Key('athlete-question')), findsOneWidget);
   });
 
+  testWidgets('blurred swings: suggests filming at a higher frame rate', (tester) async {
+    Future<void> show(int found, int measured) async {
+      analysis.dispose();
+      analysis = AnalysisController(
+        workspace: ws,
+        pack: placeholderPack.analysisPack,
+        run: (clip, patches, reference) async => AnalysisDetail(
+            AnalysisFailure(AnalysisError(ErrorCode.phaseDetectionFailed, 'None measured.', const {})),
+            const {},
+            strokes: found,
+            usableStrokes: measured),
+      );
+      await pumpPanel(tester);
+      await tester.runAsync(analysis.analyze);
+      await tester.pump();
+    }
+
+    await show(6, 1);
+    expect(find.byKey(const Key('filming-tip')), findsOneWidget);
+    expect(find.textContaining('1 of 6 swings could be measured'), findsOneWidget);
+    // Most swings measured: no tip.
+    await show(6, 5);
+    expect(find.byKey(const Key('filming-tip')), findsNothing);
+  });
+
+  test('the frame-rate tip needs blur-like failures at a low frame rate', () {
+    final out = AnalysisFailure(AnalysisError(ErrorCode.phaseDetectionFailed, 'x', const {}));
+    expect(suggestHigherFrameRate(ClipAnalysis(outcome: out, strokes: 10, usableStrokes: 3), 30), isTrue);
+    expect(suggestHigherFrameRate(ClipAnalysis(outcome: out, strokes: 10, usableStrokes: 3), 60), isFalse);
+    expect(suggestHigherFrameRate(ClipAnalysis(outcome: out, strokes: 2, usableStrokes: 0), 30), isFalse);
+    expect(suggestHigherFrameRate(ClipAnalysis(outcome: out, strokes: 10, usableStrokes: 6), 30), isFalse);
+  });
+
   test('the athlete choice round-trips through the project JSON', () {
     final c = Clip(
         clipId: 'c', path: '/p', displayName: 'd', addedAt: DateTime.utc(2026), athlete: const {'x': 0.5});

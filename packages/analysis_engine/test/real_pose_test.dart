@@ -71,6 +71,12 @@ void main() {
     expect(v.metrics['lead_knee_at_entry']!.value, inInclusiveRange(100, 180));
     expect(v.metrics['backswing_time']!.value, inInclusiveRange(0.3, 3));
     expect(v.poseConfidenceSummary, greaterThan(0.5));
+    // The detail reports how many strokes were found and measured.
+    final d = await engine(underhand, cleave, perStroke: true).analyzeDetailed(clip);
+    final strokes = await engine(underhand, cleave).analyzeStrokes(clip);
+    expect(d.strokes, strokes.length);
+    expect(d.usableStrokes, strokes.where((s) => s.usable).length);
+    expect(d.usableStrokes, greaterThan(0));
   });
 
   test('hard footage fails with the Error Contract, not a crash', () async {

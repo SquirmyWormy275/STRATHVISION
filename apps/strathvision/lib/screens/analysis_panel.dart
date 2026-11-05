@@ -180,6 +180,9 @@ class AnalysisPanel extends StatelessWidget {
           if (clip != null) _ProfileSelector(analysis: analysis),
           if (clip != null && analysis.athletes != null && !analysis.running && result != null)
             _AthleteBar(analysis: analysis, clipId: clip.clipId),
+          if (analysis.analysis case final a?
+              when !analysis.running && suggestHigherFrameRate(a, analysis.fps))
+            _FilmingTip(measured: a.usableStrokes, found: a.strokes),
           const Divider(height: 1),
           Expanded(
             child: AnimatedSwitcher(
@@ -276,6 +279,33 @@ class _AthleteBar extends StatelessWidget {
           );
         },
       );
+}
+
+/// Most swings could not be measured: say how to film them sharper.
+class _FilmingTip extends StatelessWidget {
+  const _FilmingTip({required this.measured, required this.found});
+  final int measured, found;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    return Padding(
+      key: const Key('filming-tip'),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(Icons.videocam_outlined, size: 18, color: scheme.onSurfaceVariant),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            '$measured of $found swings could be measured; fast swings blur at this frame rate. '
+            'Film at 60 frames per second for sharper swings (in the camera\'s video settings).',
+            style: theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+          ),
+        ),
+      ]),
+    );
+  }
 }
 
 class _Running extends StatelessWidget {

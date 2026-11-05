@@ -255,14 +255,49 @@ Candidate? selectByPoint(List<Candidate> candidates, int frame, double x, double
 
 /// The detection that continues following [last] (0..1 view boxes): it
 /// must be of similar height (0.5–2×) and overlap or sit close; the best
-/// by overlap and closeness. Null when nothing qualifies, or when two
-/// detections are nearly as good (never guess between people).
-PersonBox? continueTrack(PersonBox last, List<PersonBox> detections) {
+/// by overlap and closeness. With [typicalHeight] (the athlete's usual
+/// detected height), detections under 0.6× or over 1.8× of it are not
+/// the athlete: a judge or onlooker nearby is smaller in the picture.
+/// Null when nothing qualifies, or when two detections are nearly as good
+/// (never guess between people).
+PersonBox? continueTrack(PersonBox last, List<PersonBox> detections, {double? typicalHeight}) {
   final ranked = <(double, PersonBox)>[
     for (final d in detections)
-      if (continuity(last, d) case final k?) (k + 0.1 * d.score, d),
+      if (typicalHeight == null || _usualSize(d, typicalHeight))
+        if (continuity(last, d) case final k?) (k + 0.1 * d.score, d),
   ]..sort((a, b) => b.$1.compareTo(a.$1));
   if (ranked.isEmpty) return null;
   if (ranked.length > 1 && ranked[0].$1 - ranked[1].$1 < 0.12) return null;
   return ranked.first.$2;
+}
+
+bool _usualSize(PersonBox d, double typicalHeight) =>
+    d.height >= 0.6 * typicalHeight && d.height <= 1.8 * typicalHeight;
+
+/// The athlete again after they have been lost for a while (climbing past
+/// a pole, hidden behind it): someone of their usual size roughly above
+/// or below where they were last seen (centre within 1.5 box widths
+/// sideways; any height in the picture, as a springboard chopper climbs).
+/// The nearest sideways wins; null when nobody fits or two fit about
+/// equally well.
+PersonBox? findAgain(PersonBox last, double typicalHeight, List<PersonBox> detections) {
+  final w = math.max(last.width, 0.02);
+  final ranked = <(double, PersonBox)>[
+    for (final d in detections)
+      if (_usualSize(d, typicalHeight) && (d.cx - last.cx).abs() <= 1.5 * w)
+        ((d.cx - last.cx).abs() / w + 0.5 * (d.height / typicalHeight - 1).abs(), d),
+  ]..sort((a, b) => a.$1.compareTo(b.$1));
+  if (ranked.isEmpty) return null;
+  if (ranked.length > 1 && ranked[1].$1 - ranked[0].$1 < 0.25) return null;
+  return ranked.first.$2;
+}
+
+/// [b] moved so its centre is at ([cx], [cy]), same size.
+PersonBox movedTo(PersonBox b, double cx, double cy) =>
+    PersonBox(cx - b.width / 2, cy - b.height / 2, cx + b.width / 2, cy + b.height / 2, b.score);
+
+/// The median of [xs] (not empty).
+double median(List<double> xs) {
+  final s = [...xs]..sort();
+  return s.length.isOdd ? s[s.length ~/ 2] : (s[s.length ~/ 2 - 1] + s[s.length ~/ 2]) / 2;
 }
