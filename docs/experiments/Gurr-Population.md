@@ -87,3 +87,16 @@ After both pinned replay executables have been built in `engine-replay-base/` an
 ```
 
 The comparison refuses incomplete population coverage, differing native inputs, or a base replay that does not reproduce the native source results. Its per-event durations use the union of retained intervals. Separate event stress-test passes overlap, so their durations cannot be added as unique footage.
+
+The [timing diagnostic](../../tools/carne_asada/score_population.py) can also reuse the original pilot/follow-up references, without editing or adding labels:
+
+```sh
+"$SV_PY" tools/carne_asada/score_population.py --parent "$SV_POP" \
+  --native '/path/to/private-analysis/population-results.json' \
+  --base '/path/to/private-analysis/base-results.json' \
+  --current '/path/to/private-analysis/current-results.json' \
+  --evaluation docs/experiments/evaluation \
+  --output '/path/to/private-analysis/opened-reference-diagnostic.json'
+```
+
+It converts entry-phase boundaries back to original-source time, applies the existing ignored intervals/tolerance and one-to-one matcher, and keeps unrated windows distinct from idle windows. It reports both phase-gate-only predictions and the subset passing selection gates. These already-opened references are diagnostic; longer-window context and athlete selection differ from the eight-second pilots.

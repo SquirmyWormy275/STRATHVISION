@@ -5,6 +5,36 @@ from population import summarize, validate_inputs, validate_result
 from population_review import task
 from feedback_review import validated_feedback
 from compare_population import compare as compare_population
+from score_population import score as score_population
+
+
+def test_population_timing_uses_global_offsets_and_keeps_selection_quarantine():
+    ref = {'clip_sha256': 'a' * 64, 'window_id': 'synthetic', 'score_interval_s': [0, 7],
+           'ignored_intervals_s': [[4.8, 5.2]], 'contact_intervals_s': [[.9, 1.1], [4.9, 5.1]]}
+    window = {'clip_sha256': ref['clip_sha256'], 'window_id': ref['window_id'], 'start_s': 124}
+
+    def stroke(frame, eligible):
+        return {'usable': True, 'selection_eligible': eligible, 'window_start_s': 120, 'native_fps': 10,
+                'measurement': {'phases': {'entry': {'start_frame': frame}}}}
+
+    strokes = [stroke(50, False), stroke(90, True), stroke(100, True)]
+    result = score_population(ref, window, strokes, .1, False)
+    assert result['predicted_times_s'] == [1, 6]
+    assert (result['tp'], result['fp'], result['fn']) == (1, 1, 0)
+    result = score_population(ref, window, strokes, .1, True)
+    assert result['predicted_times_s'] == [6]
+    assert (result['tp'], result['fp'], result['fn']) == (0, 1, 1)
+
+
+def test_population_timing_distinguishes_unrated_from_idle():
+    ref = {'clip_sha256': 'a' * 64, 'window_id': 'synthetic', 'score_interval_s': [0, 7],
+           'ignored_intervals_s': [], 'contact_intervals_s': None}
+    window = {'clip_sha256': ref['clip_sha256'], 'window_id': ref['window_id'], 'start_s': 0}
+    strokes = [{'usable': True, 'selection_eligible': True, 'window_start_s': 0, 'native_fps': 10,
+                'measurement': {'phases': {'entry': {'start_frame': 10}}}}]
+    assert score_population(ref, window, strokes, .1, True) is None
+    ref['contact_intervals_s'] = []
+    assert score_population(ref, window, strokes, .1, True)['fp'] == 1
 
 
 def comparison_fixture():
