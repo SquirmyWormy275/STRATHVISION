@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../analysis/analysis_controller.dart';
+import '../vision/athlete.dart';
+import '../vision/athlete_choices.dart';
 import '../data/database.dart';
 import '../packs/placeholder_pack.dart';
 import '../workspace/project.dart';
@@ -68,10 +70,15 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
     playerB: _b,
     attributes: widget.pack.topAttributes,
   );
+  late final AthleteChoices _athletes = AthleteChoices(targetFor: (id) {
+    final j = _controller.athleteFor(id);
+    return j == null ? null : AthleteTarget.fromJson(j);
+  });
   late final AnalysisController _analysis = AnalysisController(
     workspace: _controller,
     pack: widget.pack.analysisPack,
-    run: widget.analysisRunner ?? visionRunner(widget.pack.analysisPack),
+    run: widget.analysisRunner ?? visionRunner(widget.pack.analysisPack, athletes: _athletes),
+    athletes: widget.analysisRunner == null ? _athletes : null,
     listProfiles: () => compatibleProfiles(widget.db, widget.pack),
     metricLabel: widget.pack.metricLabel,
     phaseLabel: (id) => widget.pack.phaseLabel(id).toLowerCase(),
@@ -88,6 +95,7 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
   @override
   void dispose() {
     _analysis.dispose();
+    _athletes.dispose();
     _controller.pause();
     _controller.dispose();
     _a.dispose();

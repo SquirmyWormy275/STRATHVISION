@@ -21,8 +21,11 @@ VideoFrame? _frame(Uint8List? bytes, int? w, int? h) {
 /// Decodes frames at exact times with a headless media_kit player (no
 /// window, no sound). Video never leaves the device.
 class FrameGrabber {
-  FrameGrabber._(this._player);
+  FrameGrabber._(this._player, {this.toneMapped = false});
   final Player _player;
+
+  /// The clip is HDR and frames are tone-mapped to standard video.
+  final bool toneMapped;
 
   static Future<FrameGrabber?> open(String path) async {
     final p = Player();
@@ -42,14 +45,51 @@ class FrameGrabber {
       await p.dispose();
       return null;
     }
-    // Wait for the first decoded frame: grabbing frame 0 straight after
-    // open raced the decoder and sometimes got nothing.
+    await _firstFrame(p);
+    // HDR video (phones record HLG / Dolby Vision) comes out of the
+    // headless decoder washed out, so bright scenes lose the person
+    // entirely. Tone-map it to standard video; SDR is left as is.
+    var mapped = false;
+    if (native is NativePlayer) {
+      final gamma = await native.getProperty('video-params/gamma');
+      if (gamma == 'pq' || gamma == 'hlg') mapped = await _toneMap(p, native);
+    }
+    return FrameGrabber._(p, toneMapped: mapped);
+  }
+
+  /// HDR → SDR filters, best first: zscale + Hable tone mapping (fast;
+  /// needs libmpv built with zimg), then mpv's own colour conversion.
+  static const toneMapFilters = [
+    'lavfi=[zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,'
+        'tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p]',
+    'format=convert=yes:gamma=bt.1886:primaries=bt.709',
+  ];
+
+  static Future<bool> _toneMap(Player p, NativePlayer native) async {
+    for (final vf in toneMapFilters) {
+      try {
+        await native.setProperty('vf', vf);
+      } catch (_) {
+        continue;
+      }
+      await p.seek(Duration.zero);
+      if (await _firstFrame(p) && (await native.getProperty('vf')).isNotEmpty) return true;
+      await native.setProperty('vf', '');
+    }
+    await p.seek(Duration.zero);
+    await _firstFrame(p);
+    return false;
+  }
+
+  /// Waits (up to 3 s) until a decoded frame is available: grabbing frame
+  /// 0 straight after open raced the decoder and sometimes got nothing.
+  static Future<bool> _firstFrame(Player p) async {
     final end = DateTime.now().add(const Duration(seconds: 3));
     while (DateTime.now().isBefore(end)) {
-      if (_frame(await p.screenshot(format: null), p.state.width, p.state.height) != null) break;
+      if (_frame(await p.screenshot(format: null), p.state.width, p.state.height) != null) return true;
       await Future<void>.delayed(const Duration(milliseconds: 5));
     }
-    return FrameGrabber._(p);
+    return false;
   }
 
   Duration get duration => _player.state.duration;

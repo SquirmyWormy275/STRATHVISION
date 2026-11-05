@@ -10,6 +10,7 @@ class Clip {
     required this.path,
     required this.displayName,
     required this.addedAt,
+    this.athlete,
   });
 
   final String clipId;
@@ -17,11 +18,19 @@ class Clip {
   final String displayName;
   final DateTime addedAt;
 
+  /// Who to analyse in this clip, when the user chose (INTERFACES.md
+  /// "Project": `athlete`); null = automatic.
+  final Map<String, Object?>? athlete;
+
+  Clip withAthlete(Map<String, Object?>? value) => Clip(
+      clipId: clipId, path: path, displayName: displayName, addedAt: addedAt, athlete: value);
+
   Map<String, Object?> toJson() => {
         'clip_id': clipId,
         'path': path,
         'display_name': displayName,
         'added_at': _iso(addedAt),
+        if (athlete != null) 'athlete': athlete,
       };
 
   factory Clip.fromJson(Map<String, Object?> j) => Clip(
@@ -29,6 +38,7 @@ class Clip {
         path: j['path'] as String,
         displayName: j['display_name'] as String,
         addedAt: _date(j['added_at']),
+        athlete: j['athlete'] == null ? null : Map<String, Object?>.from(j['athlete'] as Map),
       );
 }
 

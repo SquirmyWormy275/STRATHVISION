@@ -217,8 +217,25 @@ Research accuracy follow-up: image-space axe observations and source-disjoint ge
   - It is converted to ONNX (`assets/models/pose_landmark_full.onnx`, 12.8 MB) and runs through the `onnxruntime` Flutter plugin, which bundles the native runtime for Android, iOS, macOS, Windows and Linux.
   - The conversion matches the original within 1e-3 on landmarks.
   - Chosen by the agent when the human said to proceed without stopping. Listed for confirmation in STATUS.
-- **Person finding:** there is no separate detector, because the detector model didn't convert cleanly. The tracker starts on the whole frame and then follows the body from the previous frame's hip-centre and scale landmarks (MediaPipe's own tracking rule). If presence drops below 0.5, it searches the whole frame again. This suits clips where one athlete fills a good part of the shot. Crowded wide shots may lock onto the wrong person.
+- **Person finding:** YOLOX-Nano (Apache-2.0, official ONNX, `assets/models/yolox_nano.onnx`, 3.7 MB) on the same ONNX Runtime. Its preprocessing matches the reference (OpenCV) implementation used in `tools/carne_asada` to integer rounding.
+  - **Why:** whole-frame tracking failed on the Gurr competition, underhand-heat and springboard footage. The person was found in 0–40 of 300 frames.
+  - **Auto-pick, then correct (human decision, 2026-11-04):** "offer an autodetect AND a way to correct it."
+    - For the first 4 s, everyone detected (top 5) is followed. Each person's pose comes from their own landmark region, and the detector only identifies them.
+    - The athlete is the person whose wrists travel furthest relative to their hips (torso lengths per sample), weighted by how much of the window they were seen. This beats spectators, judges, walkers and false detections such as a camp chair.
+    - When the runner-up is at least 75% as active (two choppers in a heat), or nobody moves enough, the pick is marked unsure. The Analysis panel then asks the user to pick the athlete.
+    - Otherwise the panel shows "Wrong person?". The picker shows one frame with every detected person boxed, lets the user turn a sideways picture, and offers "Pick automatically".
+    - The choice is saved on the clip (INTERFACES "Project", `athlete`) and reused on every re-analysis.
+  - **Following:** BlazePose follows the athlete from their own landmarks (MediaPipe's rule). The detector re-checks every second. When the pose is lost, the athlete is re-found only near where they were last seen (similar height, overlapping or close). It never jumps between two near-equal candidates. Frames where the athlete is lost get no pose.
+  - **Orientation:** phones filmed sideways without rotation metadata show people lying down.
+    - On five frames spread across the clip, each quarter-turn is scored as detector score × pose presence × cos⁴ of the hips→shoulders angle from vertical. The pose model is reliable on upright people and unsure or wrong on lying ones.
+    - The picture stays unturned unless a turn scores more than twice as high. The user can correct it in the picker.
+    - Scoring with the pose model alone, on whole frames, picked wrong turns on upright crowded clips, so it was dropped.
+    - On 17 Gurr frames (sideways both ways, upright training, crowded competition) the rule chose correctly every time.
 - **Frames:** a headless media_kit player (no window, no sound) decodes exact frames as raw BGRA. Clips are sampled at up to 15 fps, at most 1,800 samples per clip. On this laptop that runs at about 39 ms per frame.
+  - **HDR:** 45 of the 48 Gurr Academy videos are iPhone HDR (HLG / Dolby Vision, BT.2020, 10-bit). The headless decoder returns them washed out; on a bright scene the detector found nobody.
+    - HDR clips (mpv `video-params/gamma` `pq` or `hlg`) are tone-mapped to standard video before analysis with zscale + Hable (as fast as no filter), falling back to mpv's own colour conversion (about 4× slower) where zimg is missing. Standard clips are untouched.
+    - The display player is not affected; it renders HDR on the GPU.
+  - Frame stepping detects each new frame by a change of position. mpv's `estimated-frame-number` counts milliseconds on WebM, which made every step wait out its timeout and broke determinism.
 - **Joint confidence:** presence × (0.4 + 0.6 × visibility), so a joint that is hidden but in frame still counts at 0.4. BlazePose infers hidden joints well, and visibility alone made every far-side wrist look missing.
 - **Implement:** `GripImplementTracker` infers the implement from the grip: a 0.75 m segment from between the hands along the forearms, with the better-seen wrist's confidence. This is not a vision detector for the implement itself; one can replace it behind `ImplementTracker` once a trained detector exists.
 - **Phases:** `EventPhaseDetector` places boundaries from pack-declared events on the implement tip:
@@ -229,7 +246,11 @@ Research accuracy follow-up: image-space axe observations and source-disjoint ge
   - `fastest`
   
   The first and last phases may be cut short by the recording; they are allowed at half confidence.
-- **Strokes:** with pack `stroke_signal: tops` (timber underhand), there is one stroke per backswing top, split in the pause after contact. With `speed_peaks` (the default, and standing block for now), there is one stroke per speed peak.
+- **Strokes:**
+  - `stroke_signal: tops` (timber underhand) gives one stroke per backswing top. A top whose rise is cut off by the clip start counts, because real clips often start mid-backswing.
+  - `stops` (timber standing block) gives one stroke per contact, where a fast swing stops sharply. Standing block contacts are sideways into the block, often from flat hip-height swings, so height-based "top/low" rules do not apply. Phases use `rise`, `reach` (the turnaround before the swing), `stop` (contact) and `release` (pull-out).
+  - `speed_peaks` remains the default.
+  - Validated against Gurr training footage frame by frame. An independent pre-registered check (Codex, docs/experiments/Gurr-Accuracy.md) found 3/3 fresh contacts against 0/3 for the height rules, about 0.2 s late.
 - **Clip measurements:** a clip's Metric Vector is the median over its usable strokes; phases come from the stroke nearest the median.
 - **Validation** on openly licensed real footage:
   - Wood cleaving: two overhead strokes found, contact within the hand-checked range, plausible angles. Dart and Python runs agree to a 3.7 cm median.

@@ -146,6 +146,17 @@ class WorkspaceController extends ChangeNotifier {
     if (locked) await _alignB();
   }
 
+  /// The saved choice of who to analyse in [clipId] (null = automatic).
+  Map<String, Object?>? athleteFor(String clipId) => _project.clipById(clipId)?.athlete;
+
+  /// Saves who to analyse in [clipId] (null returns to automatic).
+  Future<void> setAthlete(String clipId, Map<String, Object?>? athlete) async {
+    if (_project.clipById(clipId) == null) return;
+    await _commit(_project.copyWith(clips: [
+      for (final c in _project.clips) c.clipId == clipId ? c.withAthlete(athlete) : c,
+    ]));
+  }
+
   /// Scrub one stage. When locked, the other stage follows at the offset.
   Future<void> scrub(Stage stage, Duration position) async {
     _activeStage = stage;

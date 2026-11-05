@@ -41,7 +41,7 @@ List<double> tipSpeed(ImplementTrack imp, List<Vec3> tips, double fps, {int r = 
 
 /// Contacts: fast swings that stop sharply. A sample is a contact when the
 /// tip speed peaks (at least 40% of the clip's fastest and 4 m/s) and then
-/// falls below 30% of that peak within 0.4 s. Returns the stop indices,
+/// falls below 30% of that peak within 0.6 s. Returns the stop indices,
 /// at least 0.6 s apart.
 List<int> findStops(ImplementTrack imp, double fps) {
   final v = tipSpeed(imp, despikedTips(imp), fps);
@@ -53,7 +53,7 @@ List<int> findStops(ImplementTrack imp, double fps) {
     if (!(v[i] >= v[i - 1] && v[i] > v[i + 1])) continue;
     if (v[i] < 0.4 * top || v[i] < 4) continue;
     final f0 = imp.frames[i].frame;
-    for (var j = i + 1; j < v.length && (imp.frames[j].frame - f0) / fps <= 0.4; j++) {
+    for (var j = i + 1; j < v.length && (imp.frames[j].frame - f0) / fps <= 0.6; j++) {
       if (v[j] < 0.3 * v[i]) {
         final f = imp.frames[j].frame;
         if (stops.isNotEmpty && (f - imp.frames[stops.last].frame) / fps < 0.6) {
@@ -98,7 +98,8 @@ List<(int, int)> segmentStrokesByStops(ImplementTrack imp, double fps) {
 /// the low point before it (rise) through the low after it (contact); the
 /// cut between strokes sits midway through the pause between contact and
 /// the next rise. Tops must stand out by 30% of the clip's height range and
-/// be at least 0.5 s apart.
+/// be at least 0.5 s apart; a top whose rise is cut off by the clip start
+/// only needs to stand out after it.
 List<(int, int)> segmentStrokesByTops(ImplementTrack imp, double fps) {
   final f = imp.frames;
   if (f.length < 8) return const [];
@@ -117,13 +118,18 @@ List<(int, int)> segmentStrokesByTops(ImplementTrack imp, double fps) {
   for (var i = 1; i < h.length - 1; i++) {
     if (!(h[i] >= h[i - 1] && h[i] > h[i + 1])) continue;
     var leftLow = h[i], rightLow = h[i];
-    for (var j = i - 1; j >= 0 && h[j] <= h[i]; j--) {
+    var j = i - 1;
+    for (; j >= 0 && h[j] <= h[i]; j--) {
       leftLow = math.min(leftLow, h[j]);
     }
-    for (var j = i + 1; j < h.length && h[j] <= h[i]; j++) {
-      rightLow = math.min(rightLow, h[j]);
+    // Reaching the clip start without a higher point: the rise was cut off
+    // by the recording (clip starts mid-backswing), so the left side
+    // cannot be judged and does not disqualify the top.
+    final leftCut = j < 0;
+    for (var k = i + 1; k < h.length && h[k] <= h[i]; k++) {
+      rightLow = math.min(rightLow, h[k]);
     }
-    if (h[i] - leftLow < prominence && i > 0) continue;
+    if (h[i] - leftLow < prominence && !leftCut) continue;
     if (h[i] - rightLow < prominence) continue;
     if (tops.isNotEmpty && (f[i].frame - f[tops.last].frame) / fps < 0.5) {
       if (h[i] > h[tops.last]) tops[tops.length - 1] = i;

@@ -92,3 +92,26 @@ Roi roiFromLandmarks(List<double> landmarks, Roi roi, {int stride = 5}) {
   return Roi(hx, hy, math.max(size, 32));
 }
 
+
+/// A display copy of a frame: turned by [quarterTurns] and scaled so the
+/// longer side is at most [maxSide]; RGBA bytes, [width] × [height].
+({Uint8List rgba, int width, int height}) viewRgba(Uint8List bgra, int width, int height,
+    {int? stride, int quarterTurns = 0, int maxSide = 720}) {
+  final view = FrameView(width, height, quarterTurns);
+  final scale = math.min(1.0, maxSide / math.max(view.viewWidth, view.viewHeight));
+  final w = math.max(1, (view.viewWidth * scale).round()), h = math.max(1, (view.viewHeight * scale).round());
+  final rowBytes = stride ?? width * 4;
+  final out = Uint8List(w * h * 4);
+  for (var y = 0; y < h; y++) {
+    for (var x = 0; x < w; x++) {
+      final (sx, sy) = view.toFrame((x + 0.5) / scale, (y + 0.5) / scale);
+      final i = sy.floor().clamp(0, height - 1) * rowBytes + sx.floor().clamp(0, width - 1) * 4;
+      final o = (y * w + x) * 4;
+      out[o] = bgra[i + 2];
+      out[o + 1] = bgra[i + 1];
+      out[o + 2] = bgra[i];
+      out[o + 3] = 255;
+    }
+  }
+  return (rgba: out, width: w, height: h);
+}

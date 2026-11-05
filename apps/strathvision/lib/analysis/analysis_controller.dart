@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../profiles/profile_package.dart';
+import '../vision/athlete.dart';
+import '../vision/athlete_choices.dart';
 import '../vision/pose_service.dart';
 import '../workspace/workspace_controller.dart';
 
@@ -13,12 +15,16 @@ import '../workspace/workspace_controller.dart';
 typedef AnalysisRunner = Future<AnalysisDetail> Function(ClipSource clip,
     List<SpecialistPatch> patches, Map<String, double> reference);
 
-/// The production runner: real 3D pose (BlazePose) on this device, then the
-/// engine on a background isolate (per-stroke, pack phase events).
-AnalysisRunner visionRunner(AnalysisPack pack, {PoseService? poses}) =>
+/// The production runner: finds the athlete (person detector + who is
+/// chopping, or the user's saved choice in [athletes]), real 3D pose
+/// (BlazePose) on them on this device, then the engine on a background
+/// isolate (per-stroke, pack phase events).
+AnalysisRunner visionRunner(AnalysisPack pack, {PoseService? poses, AthleteChoices? athletes}) =>
     (clip, patches, reference) async {
-      final track = await (poses ?? PoseService.instance).track(clip);
-      return analyzeWithTrack(pack, clip, track, patches: patches, reference: reference);
+      final found = await (poses ?? PoseService.instance)
+          .trackAthlete(clip, target: athletes?.targetFor(clip.clipId));
+      athletes?.record(clip, found);
+      return analyzeWithTrack(pack, clip, found.track, patches: patches, reference: reference);
     };
 
 /// The engine on a precomputed real pose track, off the UI isolate.
@@ -104,6 +110,7 @@ class AnalysisController extends ChangeNotifier {
     this.saveResult,
     this.metricLabel,
     this.phaseLabel,
+    this.athletes,
   });
 
   final WorkspaceController workspace;
@@ -118,6 +125,10 @@ class AnalysisController extends ChangeNotifier {
   /// Pack labels for plain-language warnings.
   final String Function(String key)? metricLabel;
   final String Function(String id)? phaseLabel;
+
+  /// Who is analysed per clip (vision runs only; null in tests and with
+  /// the stand-in pose).
+  final AthleteChoices? athletes;
   static const _uuid = Uuid();
 
   final Map<String, ClipAnalysis> _results = {};
@@ -148,6 +159,15 @@ class AnalysisController extends ChangeNotifier {
 
   /// Frame rate the current result was computed at (for frame → time).
   double get fps => _fps[clipId] ?? 30;
+
+  /// Analyse [target] in the current clip from now on (saved with the
+  /// project), and re-analyse. Null returns to the automatic pick.
+  Future<void> chooseAthlete(AthleteTarget? target) async {
+    final id = clipId;
+    if (id == null) return;
+    await workspace.setAthlete(id, target?.toJson());
+    await analyze();
+  }
 
   void closePanel() {
     _open = false;

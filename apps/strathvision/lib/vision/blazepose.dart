@@ -16,7 +16,7 @@ class BlazePoseOutput {
   List<double> get landmarkPresence => [for (var i = 0; i < 39; i++) landmarks[i * 5 + 4]];
 }
 
-List<double> _flat(Object? v) {
+List<double> flattenOrt(Object? v) {
   final out = <double>[];
   void walk(Object? x) {
     if (x is num) {
@@ -32,18 +32,23 @@ List<double> _flat(Object? v) {
   return out;
 }
 
+/// Initializes ONNX Runtime once for every model in the app.
+void ensureOrtEnv() {
+  if (_envReady) return;
+  OrtEnv.instance.init();
+  _envReady = true;
+}
+
+bool _envReady = false;
+
 /// BlazePose GHUM 3D landmark model on ONNX Runtime. Inference runs on
 /// ONNX Runtime's worker isolate, so the UI keeps rendering.
 class BlazePose {
   BlazePose._(this._session);
   final OrtSession _session;
-  static bool _envReady = false;
 
   static BlazePose load(Uint8List modelBytes) {
-    if (!_envReady) {
-      OrtEnv.instance.init();
-      _envReady = true;
-    }
+    ensureOrtEnv();
     final options = OrtSessionOptions()
       ..setIntraOpNumThreads(2)
       ..setSessionGraphOptimizationLevel(GraphOptimizationLevel.ortEnableAll);
@@ -58,7 +63,7 @@ class BlazePose {
       final outs = await _session.runAsync(
               run, {'input_1': tensor}, ['Identity', 'Identity_1', 'Identity_4']) ??
           const [];
-      final values = [for (final o in outs) _flat(o?.value)];
+      final values = [for (final o in outs) flattenOrt(o?.value)];
       for (final o in outs) {
         o?.release();
       }

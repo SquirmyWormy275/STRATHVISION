@@ -1,7 +1,7 @@
 // Evaluation on real coaching footage (not committed; paths passed in).
 //   flutter test integration_test/gurr_eval_test.dart -d linux \
 //     --dart-define=CLIPS='/path/a.MOV|/path/b.MOV' --dart-define=EVENT=standing_block \
-//     --dart-define=SECONDS=25 --dart-define=OUT=/tmp/eval [--dart-define=TURNS=1|3]
+//     --dart-define=SECONDS=25 --dart-define=OUT=/tmp/eval [--dart-define=TURNS=0|1|3 (default: automatic)] [--dart-define=RATE=15]
 import 'dart:convert';
 import 'dart:io';
 
@@ -39,10 +39,15 @@ void main() {
         final xy = <Map<String, Object?>>[];
         var size = [0, 0];
         final sw = Stopwatch()..start();
-        final track = await PoseService(quarterTurns: const int.fromEnvironment('TURNS')).track(clip, onLandmarks: (f, pts, w, h) {
+        const turns = int.fromEnvironment('TURNS', defaultValue: -1);
+        final athlete = await PoseService(
+                quarterTurns: turns < 0 ? null : turns,
+                maxSampleRate: const int.fromEnvironment('RATE', defaultValue: 15).toDouble())
+            .trackAthlete(clip, onLandmarks: (f, pts, w, h) {
           xy.add({'f': f, 'xy': [for (final v in pts) double.parse(v.toStringAsFixed(1))]});
           size = [w, h];
         });
+        final track = athlete.track;
         final engine = AnalysisEngine(
             pack: pack,
             pose: PrecomputedPoseEstimator(track),
@@ -59,6 +64,10 @@ void main() {
           'pose_frames': track.frames.length,
           'ms_per_frame': sw.elapsedMilliseconds / (track.frames.isEmpty ? 1 : track.frames.length),
           'mean_confidence': track.meanConfidence,
+          'target': athlete.target?.toJson(),
+          'ambiguous': athlete.ambiguous,
+          'orientation_sure': athlete.orientationSure,
+          'candidates': [for (final b in athlete.candidates) b.toJson()],
           'strokes': [
             for (final s in strokes)
               {
@@ -91,6 +100,7 @@ void main() {
         print('EVAL $name ${size[0]}x${size[1]} pose ${track.frames.length} frames '
             '${(report['ms_per_frame'] as double).toStringAsFixed(0)} ms/f conf ${track.meanConfidence.toStringAsFixed(2)} '
             'strokes ${strokes.length} usable ${strokes.where((s) => s.usable).length} '
+            'turns ${athlete.target?.quarterTurns} ${athlete.ambiguous ? 'AMBIGUOUS ' : ''}${athlete.orientationSure ? '' : 'ORIENT? '}'
             'summary ${summary is AnalysisSuccess ? 'ok' : (summary as AnalysisFailure).error.errorCode}');
       }
     });

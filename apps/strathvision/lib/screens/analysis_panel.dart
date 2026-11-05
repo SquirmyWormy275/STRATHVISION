@@ -2,9 +2,10 @@ import 'package:analysis_engine/analysis_engine.dart';
 import 'package:flutter/material.dart';
 
 import '../analysis/analysis_controller.dart';
-import '../vision/pose_service.dart';
 import '../packs/placeholder_pack.dart';
+import '../vision/pose_service.dart';
 import '../workspace/workspace_controller.dart';
+import 'athlete_picker.dart';
 
 const _tabular = [FontFeature.tabularFigures()];
 
@@ -177,6 +178,8 @@ class AnalysisPanel extends StatelessWidget {
             ]),
           ),
           if (clip != null) _ProfileSelector(analysis: analysis),
+          if (clip != null && analysis.athletes != null && !analysis.running && result != null)
+            _AthleteBar(analysis: analysis, clipId: clip.clipId),
           const Divider(height: 1),
           Expanded(
             child: AnimatedSwitcher(
@@ -188,6 +191,91 @@ class AnalysisPanel extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Who was measured, with a way to correct it; asks when the automatic
+/// pick was unsure.
+class _AthleteBar extends StatelessWidget {
+  const _AthleteBar({required this.analysis, required this.clipId});
+  final AnalysisController analysis;
+  final String clipId;
+
+  Future<void> _pick(BuildContext context, {required bool asking}) async {
+    final athletes = analysis.athletes!;
+    final found = athletes.found(clipId), source = athletes.source(clipId);
+    if (found == null || source == null) return;
+    final choice = await showAthletePicker(context,
+        clip: source, found: found, asking: asking, load: athletes.loadPeople);
+    switch (choice) {
+      case FollowPerson(:final target):
+        await analysis.chooseAthlete(target);
+      case FollowAutomatic():
+        await analysis.chooseAthlete(null);
+      case null:
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => ListenableBuilder(
+        listenable: analysis.athletes!,
+        builder: (context, _) {
+          final athletes = analysis.athletes!;
+          final found = athletes.found(clipId);
+          if (found == null) return const SizedBox.shrink();
+          final theme = Theme.of(context);
+          final scheme = theme.colorScheme;
+          final chosen = athletes.targetFor(clipId) != null;
+          if (athletes.needsChoice(clipId) || found.target == null) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+              child: Material(
+                key: const Key('athlete-question'),
+                color: scheme.tertiaryContainer,
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                  child: Row(children: [
+                    Icon(Icons.groups_outlined, color: scheme.onTertiaryContainer),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        found.target == null
+                            ? 'Nobody could be followed automatically. Pick the athlete to measure.'
+                            : 'More than one person is moving. Check that the right person was measured.',
+                        style: theme.textTheme.bodyMedium?.copyWith(color: scheme.onTertiaryContainer),
+                      ),
+                    ),
+                    FilledButton.tonal(
+                      key: const Key('athlete-ask'),
+                      onPressed: () => _pick(context, asking: true),
+                      child: const Text('Pick athlete'),
+                    ),
+                  ]),
+                ),
+              ),
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 8, 4),
+            child: Row(children: [
+              Icon(Icons.person_search_outlined, size: 18, color: scheme.onSurfaceVariant),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  chosen ? 'Measuring the person you chose.' : 'Measuring the person picked automatically.',
+                  style: theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+                ),
+              ),
+              TextButton(
+                key: const Key('athlete-wrong'),
+                onPressed: () => _pick(context, asking: false),
+                child: Text(found.orientationSure ? 'Wrong person?' : 'Wrong person or sideways?'),
+              ),
+            ]),
+          );
+        },
+      );
 }
 
 class _Running extends StatelessWidget {

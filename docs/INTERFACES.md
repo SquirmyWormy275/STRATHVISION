@@ -223,8 +223,8 @@ At inference:
 
 - How strokes are found depends on `stroke_signal`:
   - `speed_peaks` (default): one implement-speed peak per stroke, with boundaries midway between peaks. Edge partials and strokes outside 0.5–1.5× the median length are dropped.
-  - `tops`: one backswing top per stroke, from the rise before it through contact. The cut after contact sits where the tip has risen 15% of the way back to the next top (at most halfway), so the pause and settle stay with the stroke.
-  - `stops`: one contact per stroke, where a fast swing (a speed peak of at least 40% of the clip's fastest and 4 m/s) stops sharply (below 30% of the peak within 0.4 s). Cuts sit midway between contacts. This works for high and flat swings alike.
+  - `tops`: one backswing top per stroke, from the rise before it through contact. The cut after contact sits where the tip has risen 15% of the way back to the next top (at most halfway), so the pause and settle stay with the stroke. A top whose rise is cut off by the clip start counts if it stands out after it.
+  - `stops`: one contact per stroke, where a fast swing (a speed peak of at least 40% of the clip's fastest and 4 m/s) stops sharply (below 30% of the peak within 0.6 s). Cuts sit midway between contacts. This works for high and flat swings alike.
 - `phase_events` gives one motion event per phase boundary, in order, on the implement tip:
   - `low_before_top` (rise)
   - `top`
@@ -445,9 +445,17 @@ Sync state, annotations, and marks must be persistable inside a Project.
   "clip_id": "uuid",
   "path": "string (local file path)",
   "display_name": "string",
-  "added_at": "iso8601"
+  "added_at": "iso8601",
+  "athlete": { "quarter_turns": 0, "frame": 0, "x": 0.5, "y": 0.5 }
 }
 ```
+
+`athlete` (optional) says who to analyse when the user chose. It is absent when the choice is automatic.
+- `quarter_turns`: clockwise quarter-turns that make the picture upright, applied after the file's own rotation metadata.
+- `frame`: the sampled frame the person was chosen on.
+- `x`, `y`: a point on that person, 0–1 of the turned picture.
+
+The person chosen is the detected person whose box contains the point on that frame (the smallest such box, otherwise the nearest). Tracking is deterministic, so the same entry always selects the same person.
 
 `sync_relationships[]`: `offset_ms = position_b_ms - position_a_ms` at the moment Set Sync Point is pressed. Locked playback keeps `position_b = position_a + offset_ms`. At most one relationship exists per (clip_a_id, clip_b_id) pair. Setting it again replaces the old one, and Clear Sync removes it.
 

@@ -234,7 +234,8 @@ void main() {
     () async {
       final c = fixture.controller();
       addTearDown(c.dispose);
-      final paths = [for (var i = 0; i < 3; i++) video('$i', 'note-$i')];
+      // Two clips meet the Good baseline exactly; ignoring one drops below.
+      final paths = [for (var i = 0; i < 2; i++) video('$i', 'note-$i')];
       await c.drop(paths);
       expect(c.session.baselineMet, isTrue);
       final before = (c.runReport()['loop_attempts'] as List).length;
