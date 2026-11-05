@@ -233,7 +233,7 @@ At inference:
   - `settle` (speed below 25% of peak)
   - `rise` (start of the backswing: the slowest moment before the reach)
   - `reach` (end of the backswing: the turnaround, the speed minimum just before the fastest point; high or flat)
-  - `stop` (contact by speed: after the fastest point, the first sample below 30% of it)
+  - `stop` (contact by speed: after the fastest point the head stops, below 30% of that speed; the boundary is the midpoint between the last fast and the first slow sample, on unsmoothed speed)
   - `release` (pulled free: back above 30% of the stroke's peak speed)
 
   Speeds for `stop`, `release` and `stops` use the tip with single-sample pose glitches removed, lightly smoothed.

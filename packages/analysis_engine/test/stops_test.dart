@@ -67,10 +67,12 @@ void main() {
     final clip = ClipSource(clipId: 'c', path: '/x', durationMs: (n * 2 / 30 * 1000).round(), fps: 30);
     final phases = const EventPhaseDetector()
         .detect(clip, const PoseTrack(fps: 30, frames: []), imp, pack);
-    // Reach: the turnaround at x = -1 (sample 17, frame 34); contact after
-    // the swing back (sample 21+, frame >= 42).
+    // Reach: the turnaround at x = -1 (sample 17, frame 34); contact at
+    // the end of the swing back.
     expect(phases['downswing']!.startFrame, inInclusiveRange(32, 36));
-    expect(phases['entry']!.startFrame, greaterThanOrEqualTo(42));
+    // The swing arrives at frame 40 and the tip is still by 42: contact
+    // is placed between them.
+    expect(phases['entry']!.startFrame, inInclusiveRange(40, 42));
     expect(phases['backswing']!.startFrame, lessThanOrEqualTo(18));
   });
 }

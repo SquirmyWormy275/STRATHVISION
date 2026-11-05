@@ -72,8 +72,9 @@ List<double> _smooth(List<double> xs, int r) => [
 /// * `reach` – end of the backswing: the turnaround (speed minimum) just
 ///   before the fastest point, high or flat
 /// * `rise` – start of the backswing: the slowest moment before the reach
-/// * `stop` – contact by speed: after the fastest point, the first point
-///   below 30% of that speed (the head stopped, in any direction)
+/// * `stop` – contact by speed: after the fastest point the head stops
+///   (below 30% of that speed, in any direction); the boundary is the
+///   midpoint between the last fast and first slow sample (unsmoothed)
 /// * `release` – after the previous boundary, the first point back above
 ///   30% of the stroke's peak speed (the implement pulled free)
 ///
@@ -122,6 +123,7 @@ class EventPhaseDetector implements PhaseDetector {
     // is sharp (one or two samples) and heavier smoothing hides it.
     final tips = despikedTips(ImplementTrack(frames: imp));
     final v1 = tipSpeed(ImplementTrack(frames: imp), tips, clip.fps);
+    final raw = tipSpeed(ImplementTrack(frames: imp), tips, clip.fps, r: 0);
     // Contact by speed.
     int stopAfter(int from) {
       final peak = argBy(from, last, (i) => v1[i]);
@@ -144,6 +146,8 @@ class EventPhaseDetector implements PhaseDetector {
     }
 
     final cuts = <int>[];
+    // Boundary frame per cut when it falls between two samples (contact).
+    final cutFrames = <int, int>{};
     var cursor = 0;
     for (var ei = 0; ei < events.length; ei++) {
       final e = events[ei];
@@ -177,7 +181,24 @@ class EventPhaseDetector implements PhaseDetector {
             }
             return last;
           }(),
-        'stop' => stopAfter(from),
+        'stop' => () {
+            // Contact lies between the last fast sample and the first slow
+            // one (unsmoothed speed): the boundary frame is their midpoint.
+            // Smoothed speed alone placed it about 3 frames late.
+            final s1 = stopAfter(from);
+            var p = s1;
+            for (var i = s1; i >= from; i--) {
+              if (v1[i] > v1[p]) p = i;
+              if (v1[i] < 0.3 * v1[p]) break;
+            }
+            var r = p + 1;
+            while (r <= last && raw[r] >= 0.3 * v1[p]) {
+              r++;
+            }
+            if (r > last || r <= from) return s1;
+            cutFrames[cuts.length] = (imp[r - 1].frame + imp[r].frame) ~/ 2;
+            return r;
+          }(),
         'reach' => reachFrom(from),
         'rise' => () {
             // Start of the backswing: the slowest moment between the stroke
@@ -207,7 +228,7 @@ class EventPhaseDetector implements PhaseDetector {
     // Sample indices → clip frames; phases must have room.
     final bounds = [
       start,
-      for (final c in cuts) imp[c].frame,
+      for (var k = 0; k < cuts.length; k++) cutFrames[k] ?? imp[cuts[k]].frame,
       end + 1,
     ];
     // Middle phases need full length. The first and last may be cut short
