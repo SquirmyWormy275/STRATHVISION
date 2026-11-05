@@ -221,13 +221,20 @@ At inference:
 
 - How strokes are found depends on `stroke_signal`:
   - `speed_peaks` (default): one implement-speed peak per stroke, with boundaries midway between peaks. Edge partials and strokes outside 0.5–1.5× the median length are dropped.
-  - `tops`: one backswing top per stroke, from the rise before it through contact, split in the pause after contact.
+  - `tops`: one backswing top per stroke, from the rise before it through contact. The cut after contact sits where the tip has risen 15% of the way back to the next top (at most halfway), so the pause and settle stay with the stroke.
+  - `stops`: one contact per stroke, where a fast swing (a speed peak of at least 40% of the clip's fastest and 4 m/s) stops sharply (below 30% of the peak within 0.4 s). Cuts sit midway between contacts. This works for high and flat swings alike.
 - `phase_events` gives one motion event per phase boundary, in order, on the implement tip:
   - `low_before_top` (rise)
   - `top`
   - `fastest`
   - `low` (contact: the descent slows to 20% of its peak)
   - `settle` (speed below 25% of peak)
+  - `rise` (start of the backswing: the slowest moment before the reach)
+  - `reach` (end of the backswing: the turnaround, the speed minimum just before the fastest point; high or flat)
+  - `stop` (contact by speed: after the fastest point, the first sample below 30% of it)
+  - `release` (pulled free: back above 30% of the stroke's peak speed)
+
+  Speeds for `stop`, `release` and `stops` use the tip with single-sample pose glitches removed, lightly smoothed.
   
   Without `phase_events`, phases split evenly at confidence 0.5. The first and last phases may be shorter than `min_phase_frames` (cut by the recording), at half confidence.
 - A stroke is usable action when phases are assigned, critical-phase pose confidence meets `min_critical_pose_confidence`, and no implement dropout (confidence below 0.5) lasts longer than `max_implement_dropout_s`.

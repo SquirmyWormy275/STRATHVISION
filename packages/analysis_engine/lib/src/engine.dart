@@ -89,6 +89,22 @@ class AnalysisEngine {
         for (final s in strokes)
           if (s.usable && s.detail.outcome is AnalysisSuccess) s,
       ];
+      if (good.isEmpty) {
+        // Real pose, but no usable stroke: say so rather than measuring the
+        // whole clip as one movement.
+        return AnalysisDetail(
+            AnalysisFailure(AnalysisError(
+              ErrorCode.phaseDetectionFailed,
+              strokes.isEmpty
+                  ? 'No complete strokes were found in this clip.'
+                  : 'None of the strokes in this clip could be measured cleanly.',
+              {
+                'strokes': strokes.length,
+                'issues': [for (final s in strokes) [for (final i in s.issues) i.name]],
+              },
+            )),
+            const {});
+      }
       if (good.isNotEmpty) {
         final vectors = [for (final s in good) (s.detail.outcome as AnalysisSuccess).vector];
         final summary = summarizeStrokes(vectors);
@@ -144,9 +160,11 @@ class AnalysisEngine {
     if (clip.durationMs <= 0 || clip.fps <= 0) return const [];
     final track = await pose.estimate(clip);
     final imp = await implement.track(clip, track);
-    final spans = pack.strokeSignal == 'tops'
-        ? segmentStrokesByTops(imp, clip.fps)
-        : segmentStrokes(imp, clip.fps);
+    final spans = switch (pack.strokeSignal) {
+      'tops' => segmentStrokesByTops(imp, clip.fps),
+      'stops' => segmentStrokesByStops(imp, clip.fps),
+      _ => segmentStrokes(imp, clip.fps),
+    };
     final clipDropout = longestDropout(imp, clip.fps, 0, clip.frameCount - 1);
     final out = <StrokeDetail>[];
     for (var i = 0; i < spans.length; i++) {

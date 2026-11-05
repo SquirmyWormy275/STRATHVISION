@@ -551,7 +551,7 @@ class AnalysisPack {
 
     final events = <String>[];
     final rawEvents = json['phase_events'] ?? const [];
-    const kinds = ['low_before_top', 'top', 'fastest', 'low', 'settle'];
+    const kinds = ['low_before_top', 'top', 'fastest', 'low', 'settle', 'stop', 'release', 'rise', 'reach'];
     if (rawEvents is! List || rawEvents.any((e) => !kinds.contains(e))) {
       problems.add('phase_events must list ${kinds.join(' | ')}');
     } else if (rawEvents.isNotEmpty && rawEvents.length != phases.length - 1) {
@@ -562,8 +562,8 @@ class AnalysisPack {
     }
 
     final strokeSignal = json['stroke_signal'] ?? 'speed_peaks';
-    if (strokeSignal != 'speed_peaks' && strokeSignal != 'tops') {
-      problems.add('stroke_signal must be speed_peaks | tops');
+    if (!const ['speed_peaks', 'tops', 'stops'].contains(strokeSignal)) {
+      problems.add('stroke_signal must be speed_peaks | tops | stops');
     }
 
     final minCritical = unit('min_critical_pose_confidence', 0.6);

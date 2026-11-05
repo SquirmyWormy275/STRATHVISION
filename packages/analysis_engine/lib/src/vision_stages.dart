@@ -5,6 +5,7 @@ import 'contracts.dart';
 import 'errors.dart';
 import 'pack.dart';
 import 'stages.dart';
+import 'strokes.dart';
 
 /// A pose track computed elsewhere (on device, by the app's pose model) and
 /// handed to the engine. Lets the engine run in an isolate while the model
@@ -68,6 +69,13 @@ List<double> _smooth(List<double> xs, int r) => [
 ///   descent has slowed to 20% (the head stopped)
 /// * `settle` – first point where tip speed falls below 25% of the peak
 ///   after the previous boundary
+/// * `reach` – end of the backswing: the turnaround (speed minimum) just
+///   before the fastest point, high or flat
+/// * `rise` – start of the backswing: the slowest moment before the reach
+/// * `stop` – contact by speed: after the fastest point, the first point
+///   below 30% of that speed (the head stopped, in any direction)
+/// * `release` – after the previous boundary, the first point back above
+///   30% of the stroke's peak speed (the implement pulled free)
 ///
 /// Each event is searched after the previous boundary. Without declared
 /// events the clip is split evenly at confidence 0.5.
@@ -110,11 +118,45 @@ class EventPhaseDetector implements PhaseDetector {
     }
 
     final last = imp.length - 1;
+    // Lightly smoothed speed on de-glitched tips: a stop in the material
+    // is sharp (one or two samples) and heavier smoothing hides it.
+    final tips = despikedTips(ImplementTrack(frames: imp));
+    final v1 = tipSpeed(ImplementTrack(frames: imp), tips, clip.fps);
+    // Contact by speed.
+    int stopAfter(int from) {
+      final peak = argBy(from, last, (i) => v1[i]);
+      for (var i = peak + 1; i <= last; i++) {
+        if (v1[i] < 0.3 * v1[peak]) return i;
+      }
+      return argBy(peak, last, (i) => v1[i], max: false);
+    }
+
+    // End of the backswing: the turnaround before the fastest point, where
+    // the tip is slowest just before it accelerates into the swing (high or
+    // flat swings alike).
+    int reachFrom(int from) {
+      final peak = argBy(from, last, (i) => v1[i]);
+      var j = peak;
+      while (j - 1 >= from && v1[j - 1] <= v1[j]) {
+        j--;
+      }
+      return j;
+    }
+
     final cuts = <int>[];
     var cursor = 0;
-    for (final e in events) {
+    for (var ei = 0; ei < events.length; ei++) {
+      final e = events[ei];
       final from = cursor + 1;
-      if (from >= last) throw fail('ran out of movement before "$e"');
+      if (from >= last) {
+        // Only the final boundary may be cut off by the end of the stroke:
+        // the last phase then runs to the end (counted as cut short).
+        if (ei == events.length - 1 && cursor < last) {
+          cuts.add(last);
+          break;
+        }
+        throw fail('ran out of movement before "$e"');
+      }
       final idx = switch (e) {
         'top' => argBy(from, last, (i) => h[i]),
         'fastest' => argBy(from, last, (i) => v[i]),
@@ -135,6 +177,23 @@ class EventPhaseDetector implements PhaseDetector {
             }
             return last;
           }(),
+        'stop' => stopAfter(from),
+        'reach' => reachFrom(from),
+        'rise' => () {
+            // Start of the backswing: the slowest moment between the stroke
+            // start and the reach (at least two samples before it).
+            final r = reachFrom(from);
+            return r - 2 <= from ? from : argBy(from, r - 2, (i) => v[i], max: false);
+          }(),
+        'release' => () {
+            // Pulled free: after the stop, the first moment the tip moves
+            // at 30% of the stroke's peak speed again.
+            final peak = v1.reduce(math.max);
+            for (var i = from; i <= last; i++) {
+              if (v1[i] > 0.3 * peak) return i;
+            }
+            return last;
+          }(),
         'low_before_top' => () {
             final top = argBy(from, last, (i) => h[i]);
             return top <= from ? from : argBy(from, top - 1, (i) => h[i], max: false);
@@ -144,6 +203,7 @@ class EventPhaseDetector implements PhaseDetector {
       cuts.add(idx);
       cursor = idx;
     }
+    if (cuts.length < events.length) throw fail('not every boundary was found');
     // Sample indices → clip frames; phases must have room.
     final bounds = [
       start,

@@ -4,6 +4,96 @@ import 'body.dart';
 import 'engine.dart';
 import 'pack.dart';
 
+/// Implement tip positions with single-sample glitches removed: a sample
+/// far from both neighbours while they agree with each other (the pose
+/// model briefly flipping a forearm) is replaced by their midpoint.
+List<Vec3> despikedTips(ImplementTrack imp) {
+  final t = [for (final f in imp.frames) f.tip];
+  final out = [...t];
+  for (var i = 1; i < t.length - 1; i++) {
+    final mid = (t[i - 1] + t[i + 1]).scale(0.5);
+    final gap = (t[i + 1] - t[i - 1]).length;
+    if ((t[i] - mid).length > 2 * gap + 0.2) out[i] = mid;
+  }
+  return out;
+}
+
+/// Tip speed per sample (m/s) from [tips], averaged over [r] samples
+/// either side.
+List<double> tipSpeed(ImplementTrack imp, List<Vec3> tips, double fps, {int r = 1}) {
+  final raw = <double>[0];
+  for (var i = 1; i < tips.length; i++) {
+    final df = math.max(1, imp.frames[i].frame - imp.frames[i - 1].frame);
+    raw.add((tips[i] - tips[i - 1]).length / df * fps);
+  }
+  return [
+    for (var i = 0; i < raw.length; i++)
+      () {
+        final a = math.max(0, i - r), b = math.min(raw.length - 1, i + r);
+        var sum = 0.0;
+        for (var j = a; j <= b; j++) {
+          sum += raw[j];
+        }
+        return sum / (b - a + 1);
+      }(),
+  ];
+}
+
+/// Contacts: fast swings that stop sharply. A sample is a contact when the
+/// tip speed peaks (at least 40% of the clip's fastest and 4 m/s) and then
+/// falls below 30% of that peak within 0.4 s. Returns the stop indices,
+/// at least 0.6 s apart.
+List<int> findStops(ImplementTrack imp, double fps) {
+  final v = tipSpeed(imp, despikedTips(imp), fps);
+  if (v.length < 5) return const [];
+  final top = v.reduce(math.max);
+  final stops = <int>[];
+  final peaks = <int>[];
+  for (var i = 1; i < v.length - 1; i++) {
+    if (!(v[i] >= v[i - 1] && v[i] > v[i + 1])) continue;
+    if (v[i] < 0.4 * top || v[i] < 4) continue;
+    final f0 = imp.frames[i].frame;
+    for (var j = i + 1; j < v.length && (imp.frames[j].frame - f0) / fps <= 0.4; j++) {
+      if (v[j] < 0.3 * v[i]) {
+        final f = imp.frames[j].frame;
+        if (stops.isNotEmpty && (f - imp.frames[stops.last].frame) / fps < 0.6) {
+          // Same swing: keep the faster.
+          if (v[i] > v[peaks.last]) {
+            stops[stops.length - 1] = j;
+            peaks[peaks.length - 1] = i;
+          }
+        } else {
+          stops.add(j);
+          peaks.add(i);
+        }
+        break;
+      }
+    }
+  }
+  return stops;
+}
+
+/// Stroke spans from contacts ([findStops]): each contact is one stroke;
+/// cuts sit midway between contacts, so a stroke holds its own backswing,
+/// swing, contact and the time in the material after it. Edge strokes
+/// extend half the typical stroke length past their contact.
+List<(int, int)> segmentStrokesByStops(ImplementTrack imp, double fps) {
+  final f = imp.frames;
+  final stops = findStops(imp, fps);
+  if (stops.isEmpty) return const [];
+  final gaps = [for (var k = 1; k < stops.length; k++) stops[k] - stops[k - 1]]..sort();
+  final half = gaps.isEmpty
+      ? (1.5 * fps / math.max(1, f.length > 1 ? f[1].frame - f[0].frame : 1)).round()
+      : gaps[gaps.length ~/ 2] ~/ 2;
+  final spans = <(int, int)>[];
+  for (var k = 0; k < stops.length; k++) {
+    final a = k == 0 ? math.max(0, stops[k] - half) : (stops[k - 1] + stops[k]) ~/ 2 + 1;
+    final b = k == stops.length - 1 ? math.min(f.length - 1, stops[k] + half) : (stops[k] + stops[k + 1]) ~/ 2;
+    if (b > a) spans.add((f[a].frame, f[b].frame));
+  }
+  return spans;
+}
+
 /// Stroke spans from backswing tops: each top is one stroke, running from
 /// the low point before it (rise) through the low after it (contact); the
 /// cut between strokes sits midway through the pause between contact and
@@ -50,6 +140,19 @@ List<(int, int)> segmentStrokesByTops(ImplementTrack imp, double fps) {
     return best;
   }
 
+  // Boundary between stroke k and k+1: after contact, where the tip has
+  // risen 15% of the way back to the next top (pause and settle stay with
+  // stroke k; continuous motion gets part of the lift as its recovery).
+  int boundary(int k) {
+    final contact = argMin(tops[k], tops[k + 1]);
+    final rise = 0.15 * (h[tops[k + 1]] - h[contact]);
+    final cap = contact + (tops[k + 1] - contact) ~/ 2;
+    for (var i = contact; i < cap; i++) {
+      if (h[i] - h[contact] >= rise) return i;
+    }
+    return cap;
+  }
+
   final spans = <(int, int)>[];
   for (var k = 0; k < tops.length; k++) {
     final prevTop = k == 0 ? 0 : tops[k - 1];
@@ -58,13 +161,11 @@ List<(int, int)> segmentStrokesByTops(ImplementTrack imp, double fps) {
     final contact = argMin(tops[k], nextTop);
     // Need a real downswing after the top.
     if (h[tops[k]] - h[contact] < prominence) continue;
-    // Pause after contact: until the next stroke's rise (or clip end).
-    final nextRise = k == tops.length - 1 ? h.length - 1 : argMin(contact, tops[k + 1]);
-    final prevContact = k == 0 ? 0 : argMin(tops[k - 1], tops[k]);
-    final startIdx = k == 0 ? math.max(0, rise - (contact - rise) ~/ 3) : (prevContact + rise) ~/ 2;
+    final startIdx =
+        k == 0 ? math.max(0, rise - (contact - rise) ~/ 3) : boundary(k - 1) + 1;
     final endIdx = k == tops.length - 1
         ? math.min(h.length - 1, contact + (contact - rise) ~/ 3)
-        : (contact + math.max(contact, nextRise)) ~/ 2;
+        : boundary(k);
     if (endIdx <= startIdx) continue;
     spans.add((f[startIdx].frame, f[endIdx].frame));
   }

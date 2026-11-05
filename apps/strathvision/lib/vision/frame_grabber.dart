@@ -3,11 +3,19 @@ import 'dart:typed_data';
 
 import 'package:media_kit/media_kit.dart';
 
-/// One decoded frame: BGRA pixels.
+/// One decoded frame: BGRA pixels. Rows may be padded: [stride] is the
+/// number of bytes per row (mpv aligns rows, e.g. 1080 px → 4352 bytes).
 class VideoFrame {
-  const VideoFrame(this.bgra, this.width, this.height);
+  const VideoFrame(this.bgra, this.width, this.height, this.stride);
   final Uint8List bgra;
-  final int width, height;
+  final int width, height, stride;
+}
+
+VideoFrame? _frame(Uint8List? bytes, int? w, int? h) {
+  if (bytes == null || w == null || h == null || h == 0) return null;
+  final stride = bytes.length ~/ h;
+  if (stride < w * 4) return null;
+  return VideoFrame(bytes, w, h, stride);
 }
 
 /// Decodes frames at exact times with a headless media_kit player (no
@@ -34,6 +42,13 @@ class FrameGrabber {
       await p.dispose();
       return null;
     }
+    // Wait for the first decoded frame: grabbing frame 0 straight after
+    // open raced the decoder and sometimes got nothing.
+    final end = DateTime.now().add(const Duration(seconds: 3));
+    while (DateTime.now().isBefore(end)) {
+      if (_frame(await p.screenshot(format: null), p.state.width, p.state.height) != null) break;
+      await Future<void>.delayed(const Duration(milliseconds: 5));
+    }
     return FrameGrabber._(p);
   }
 
@@ -57,13 +72,10 @@ class FrameGrabber {
       }
       await Future<void>.delayed(const Duration(milliseconds: 3));
     }
-    final w = _player.state.width, h = _player.state.height;
-    final bytes = await _player.screenshot(format: null);
-    if (bytes == null || w == null || h == null || bytes.length < w * h * 4) return null;
-    return VideoFrame(bytes, w, h);
+    return _frame(await _player.screenshot(format: null), _player.state.width, _player.state.height);
   }
 
-  int _frame = 0;
+  int _index = 0;
 
   /// Sequential decoding: the frame with index [index] (counting from 0 at
   /// the clip start), reached by stepping forward one decoded frame at a
@@ -71,14 +83,18 @@ class FrameGrabber {
   Future<VideoFrame?> frameIndex(int index, {required double fps}) async {
     final native = _player.platform;
     if (native is! NativePlayer) return frameAt(Duration(microseconds: (index * 1e6 / fps).round()), fps: fps);
-    while (_frame < index) {
+    while (_index < index) {
+      // One frame-step decodes exactly one frame; it has landed when the
+      // position moves. (mpv's estimated-frame-number is not usable: for
+      // containers with a millisecond timebase, e.g. WebM, it counts
+      // milliseconds.)
+      final before = await native.getProperty('time-pos');
       await native.command(['frame-step']);
-      _frame++;
-      final want = '$_frame';
+      _index++;
       final end = DateTime.now().add(const Duration(milliseconds: 1000));
       var reached = false;
       while (DateTime.now().isBefore(end)) {
-        if (await native.getProperty('estimated-frame-number') == want) {
+        if (await native.getProperty('time-pos') != before) {
           reached = true;
           break;
         }
@@ -86,10 +102,7 @@ class FrameGrabber {
       }
       if (!reached && await native.getProperty('eof-reached') == 'yes') return null;
     }
-    final w = _player.state.width, h = _player.state.height;
-    final bytes = await _player.screenshot(format: null);
-    if (bytes == null || w == null || h == null || bytes.length < w * h * 4) return null;
-    return VideoFrame(bytes, w, h);
+    return _frame(await _player.screenshot(format: null), _player.state.width, _player.state.height);
   }
 
   Future<void> close() => _player.dispose();

@@ -748,12 +748,12 @@
         }
       },
       "phase_events": [
-        "low_before_top",
-        "top",
-        "low",
-        "settle"
+        "rise",
+        "reach",
+        "stop",
+        "release"
       ],
-      "stroke_signal": "speed_peaks"
+      "stroke_signal": "stops"
     }
   ]
 }

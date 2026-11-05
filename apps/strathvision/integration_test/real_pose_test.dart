@@ -42,11 +42,39 @@ void main() {
 
       // Same clip, same frames, same pose: tracking is deterministic.
       final again = await PoseService(maxSampleRate: 15).track(clip);
-      expect(again.frames.length, track.frames.length);
+      final a = {for (final f in track.frames) f.frame}, b = {for (final f in again.frames) f.frame};
+      expect(again.frames.length, track.frames.length,
+          reason: 'only first run: ${a.difference(b)}, only second: ${b.difference(a)}');
       for (var i = 0; i < track.frames.length; i++) {
         expect((again.frames[i].joints[Joint.leftWrist]! - track.frames[i].joints[Joint.leftWrist]!).length,
             lessThan(1e-9), reason: 'frame ${track.frames[i].frame}');
       }
+
+      // The same clip filmed sideways (person lying in the picture, no
+      // rotation metadata), turned upright with quarterTurns, gives the
+      // same pose.
+      final side = await probeClip('$clipDir/cleave_sideways.webm');
+      expect(side, isNotNull);
+      final sideTrack = await PoseService(maxSampleRate: 15, quarterTurns: 3).track(ClipSource(
+          clipId: 'cleave_sideways',
+          path: '$clipDir/cleave_sideways.webm',
+          durationMs: side!.durationMs,
+          fps: side.fps));
+      final upright = {for (final f in track.frames) f.frame: f};
+      final sideErrs = <double>[];
+      for (final f in sideTrack.frames) {
+        final u = upright[f.frame];
+        if (u == null) continue;
+        for (final j in [Joint.leftWrist, Joint.rightWrist, Joint.leftKnee, Joint.rightKnee]) {
+          sideErrs.add((f.joints[j]! - u.joints[j]!).length);
+        }
+      }
+      sideErrs.sort();
+      // ignore: avoid_print
+      print('sideways: ${sideTrack.frames.length} frames, median joint difference to upright '
+          '${(sideErrs[sideErrs.length ~/ 2] * 100).toStringAsFixed(1)} cm');
+      expect(sideTrack.frames.length, greaterThan(track.frames.length * 0.9));
+      expect(sideErrs[sideErrs.length ~/ 2], lessThan(0.08));
 
       // Compare with the Python reference run (every frame there).
       if (refPath.isNotEmpty) {
@@ -100,5 +128,5 @@ void main() {
       print('entry_slope=${v.metrics['entry_slope']!.value} hinge=${v.metrics['hinge_at_entry']!.value} '
           'downswing_time=${v.metrics['downswing_time']!.value}');
     });
-  }, timeout: const Timeout(Duration(minutes: 5)));
+  }, timeout: const Timeout(Duration(minutes: 15)));
 }
