@@ -46,7 +46,8 @@ Evaluation harness: `apps/strathvision/integration_test/gurr_eval_test.dart`. It
   - **IMG_8010 is not usable automatically, before and after:** the auto-pick takes a distant figure at the far pole, and later the follower drifts to spectators near the camera (28 s, 90 s). Its stroke counts (27/21 before, 22/15 after) are not real chops. The user has to pick the athlete; the choppers are small and far.
   - Colour (torso hue histogram) did not separate athlete from judges on IMG_3925; not used.
 - **Regression check of the new tracking + cut (auto5, 20 s per clip):** training 64 usable (auto4: 58), no clip worse (IMG_3744 5 → 8, IMG_3692 2 → 4, IMG_0105 4 → 5). Competition: IMG_3869 2 → 11 of 14, IMG_3867 1 → 4 of 11, IMG_3923 2 → 3 of 5, IMG_8014 0 → 4 of 9. Underhand IMG_3862 1 of 1.
-  - IMG_8055 4 → 5 of 6, IMG_8067 2 → 3 of 4, IMG_7987 1 → 1 of 1, IMG_7985 2 → 5 of 8. All eight competition clips: 14 → 36 usable (55 → 58 strokes found); no clip worse. IMG_8014's strokes are not checked on video.
+  - IMG_8055 4 → 5 of 6, IMG_8067 2 → 3 of 4, IMG_7987 1 → 1 of 1, IMG_7985 2 → 5 of 8. All eight competition clips: 14 → 36 usable (55 → 58 strokes found); no clip worse.
+  - **IMG_8014's 4 usable strokes are not trustworthy (checked on video).** Contacts 243 and 301 are marked about 5–7 frames after the chop lands (about frame 236–237: the swing is a blur), during the pull-back. Contacts 475 and 577 come after the camera moves; the person then wears a different singlet and may be the other chopper in the race (not decidable from the video). "Usable" means phases were found, not that they are right; on heavily blurred footage the two differ. Without IMG_8014 the competition total is 32 usable.
 - **Filming tip:** shown when at least 3 strokes are found, under 60% measured, and the clip is under 50 fps. That 60 fps helps is not yet measured (no 60 fps footage).
 
 ## Not fixed
@@ -69,3 +70,5 @@ Evaluation harness: `apps/strathvision/integration_test/gurr_eval_test.dart`. It
 - **Filming guidance:** a faster shutter / higher frame rate for competition footage, and the camera side-on to the swing. Blur is the limit on competition clips, not tracking.
 - **A trained implement (axe-head) detector,** to replace the forearm projection that magnifies blur. Codex's first two frozen prototypes failed (HOG 0/16, SSDLite 0/8 visible heads; Gurr-Round2), so this needs labelled training data first.
 - **Coach review** of the standing-block phase definitions (rise / reach / stop / release).
+- **Springboard has two kinds of chop:** the pocket cuts for the boards and the top-block chopping are different swings, but a clip's measurements are the median over all its strokes. A coach should say whether they are measured separately (and what each measures) before the springboard event is relied on.
+- **Usable vs right:** a check that rejects strokes whose contact is far from the speed drop on blurred footage (IMG_8014) would need hand-read contacts on competition clips to tune; none exist yet beyond the six training contacts.
