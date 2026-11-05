@@ -236,6 +236,17 @@ class PoseService {
           windowEnd = math.min(n, windowEnd + (pickWindowSeconds * clip.fps).round());
           continue;
         }
+        // An empty opening does not make the rest of a recording empty.
+        // Search fresh windows so a late entrant is not penalized by all
+        // the earlier samples without a person. An explicit target still
+        // fails rather than being silently assigned to a later athlete.
+        if (target == null && chosen == null && windowEnd < n) {
+          candidates.clear();
+          boxesAt.clear();
+          windowSamples = 0;
+          windowEnd = math.min(n, windowEnd + (pickWindowSeconds * clip.fps).round());
+          continue;
+        }
         f += step;
         break;
       }
