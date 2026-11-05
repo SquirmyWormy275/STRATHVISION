@@ -18,4 +18,14 @@ The user confirmed that technique judgments have not been created or field-teste
 
 ## Results
 
-In progress. No round-2 accuracy or learning result is claimed until its measured artifacts are linked here.
+The pinned engine replay uses exactly the earlier pose predictions. Target selection is therefore unchanged. These are diagnostic scores on already-opened labels:
+
+| Existing set | Contact matches | Extra predictions | Missed contacts |
+|---|---:|---:|---:|
+| Original development | 3/7 | 0 | 4 |
+| Original test | 1/15 | 2 | 14 |
+| Three-source follow-up | 3/3 | 1 | 0 |
+
+The original test includes one idle false positive. The narrow follow-up's matched contacts still average 0.206 s midpoint error. Results: [development](evaluation/round2/ce649ed-pilot-development.json), [original test](evaluation/round2/ce649ed-pilot-test.json), [follow-up](evaluation/round2/ce649ed-followup-test.json). The revised standing-block rules help some clear training footage but do not establish broad contact detection.
+
+New benchmark and trained axe prototype: in progress. No round-2 holdout or learning result is claimed yet.
