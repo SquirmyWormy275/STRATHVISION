@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T23:47:14Z
+heartbeat: 2026-11-05T23:54:46Z
 branch: implementation
 phase: 8 — Seagate multi-sport footage research
 task: Inventory all Seagate sources, exclude partial downloads and duplicates, expand axe training labels, and establish a separate weightlifting experiment
-next: Axe expanded-label fit completed:73positives/3negatives,1000steps,validation11TP11FP15FN;no old-test rerun. Seagate inventory session36202 and lifting preparation session in private seagate-20261105 are active. Finish 60-source barbell references/fit/frozen test, all-library inventory/sample coverage, report and verification.
+next: Barbell fit complete and frozen before test pixels:47 positives/9 negatives,1000 steps,validation8TP3FP5FN. Prepare/label 24 reserved frames, score once, finish Seagate inventory session36202 and library audit session99501, publish final README/results and release.
 <!-- STATE:END -->
 
 ## Phase progress

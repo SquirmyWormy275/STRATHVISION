@@ -1,0 +1,693 @@
+{
+  "format": "barbell-model/1",
+  "settings": {
+    "seed": 365,
+    "steps": 1000,
+    "batch_size": 2,
+    "checkpoint_every": 200,
+    "learning_rate": 0.002,
+    "momentum": 0.9,
+    "weight_decay": 0.0005,
+    "frozen_resnet_body": true,
+    "min_size": 640,
+    "max_size": 1024,
+    "anchor_sizes": [
+      16,
+      32,
+      64,
+      128,
+      256
+    ],
+    "anchor_aspect_ratios": [
+      0.125,
+      0.5,
+      2.0
+    ],
+    "iou_threshold": 0.5,
+    "max_candidates_per_frame": 1,
+    "input": "full frame",
+    "target": "foreground demonstration barbell, including shaft and attached plates"
+  },
+  "architecture": "TorchVision Faster R-CNN ResNet50 FPN v2",
+  "pretrained_url": "https://download.pytorch.org/models/fasterrcnn_resnet50_fpn_v2_coco-dd69338a.pth",
+  "pretrained_sha256": "dd69338a24b8d7381807e247652bdc356325bcbaf1cd3e092e00e0a1a58706bf",
+  "delta_sha256": "eff730bdfc5ba9a508b7eaf6bc963737d347f0af8aac9a07805b1a5fbb220fb2",
+  "state_scope": "All tensors except frozen backbone.body",
+  "chosen_step": 600,
+  "threshold": 0.5447220206260681,
+  "plan_sha256": "1997cab5a151237cbb0054c2bfae76d03ba48828e94741b1f6b95b4962d683fc",
+  "fit_reference_sha256": "09569989ed4b1cdc629590928839fcce4ec695df99020e9e38b188a973d257d2",
+  "fit_sources": [
+    "133ffab0e89994d5f394a423b8e1002e6d85d9526476084a7c1716ca0dd9edce",
+    "1908951bd929b5dd76217f7c8331e5faef7583a5202eb8d6bb01939d1d2f1211",
+    "2724a2a098b3ad6e056ba75caa6f1026f048f193040d8315d41da288968aa1b9",
+    "2860f7611d58599028706778b5acea61f96f3b560888993982d19938b30f5eea",
+    "2d52157282d9c85a61f16607f399d0512444422661e8dbfd9a4d02d6771a656d",
+    "30c19b376848b7d659569facf1c037093ff660ad7db1508c594e6c7b28af5a96",
+    "31297e0fde11175a055fbbf98c9a5bd92c89b108d81da7bd1c3ad9ebac1dc893",
+    "327f6f856e732d8bea82d1a04b0e3f3507a9157c7df8a5b6ce96cbdde7a0dcd0",
+    "346f75c8f920316af378f5e6491473a02d4aa96ae250c28a351ff2c4c691ce01",
+    "35b2181424aadb90dcf470e5060408c17e504bc0c7a3941011e8f716660bd181",
+    "3884e3de99384e67435f8959aa0ac4f3cc7db6a4b4cb11cd069bc01a8c4b5975",
+    "3b4329ef4e9106eff1a717ae1dbd50edb6ba284bc5616d616efd967476162c6f",
+    "445703b6d3a60c4c8d530b84595bee33d07dcbee0dbdf1839463a633fbcaa506",
+    "4697da732853c30bd5d149a883f471385805da1fbd2d053e5b5064cbb5cab53c",
+    "499a607cb37ad8007defff7369079023b41d4de1118d2ad173db98e1311472e3",
+    "4d3ff92f804391bd25db23e86f25c01450d5c561546a5401087ffcba6f00195f",
+    "4f88f733a7a8ee6d8f064c8e98e1dfa1171f9d53ec723dae68715c773726c00a",
+    "517c9a40abf481e5f58d239fdf2f61b54aad870d42795cbc86cd716c6d2e23bc",
+    "5fb710687f0b6a5f76b5e39be1a5a48398c8e537cba55dbd294b89244de28d5e",
+    "62c9ded5e9fdf5c8821ec9ce5f6e2f47048da384a46ab22afffdec1d52a2cc2f",
+    "66553147d8f5118c4815342ee415bc674d3a8178a12f183452b99aa5d3e82d56",
+    "69399aa7263ec52173ce2e188762c3cd8eee0d41825d9d7ea11b60cc183317f4",
+    "6c0e5be78f19af8caccb8bf25f5b3dfa85ce93c55d8e5967cc0a202e3fa1e31c",
+    "6e6dbcc92d8b95c4f3342e3bb1f5223a0ae9a1aae5e529451ad8f96cf1ca535d",
+    "7283b804f423a55a1c7b74e20c0fe746bc52a42709908d8248d1f73ec6badcb5",
+    "73b61f7ce29b9e6ec4ba8ee04128e51120bb5ab893bd653902a3d2203215b585",
+    "7c1e763354e6bae01d43119eb4fc6ec82f9b35fc0bcae7817a8afc240a7976b5",
+    "80ffac4a20f1850e795492cfae83ab5ee3a8f5fbff3d5bf4d2bae0ddd8f268ee",
+    "81bcb9ec20ed83cb6c08dcfe1a179ae2e09b800ca069b25faf08ca25d58e3220",
+    "84c7b5bc36a0c311f23535f51874739d82b451845a7bedb7b2d1d7bdb48e2109",
+    "8e03cb12b1c1d9163247b3d29b1b04be0230bd4d416c0bdce5c3432e7273b5a6",
+    "8f0895f20030584b3e60263fcc4d766b524628752676b3c330b354cdf21c87a1",
+    "9363f671af98d3be6edf03648af0107b0c6d4e9c6758c14c41f57ed2001cbf30",
+    "9db8370bb555f2a4e6d4f61b8505381926b182a4888a27399b290cd6d0155c07",
+    "a0008cefd6b908fa8a0757d1befba0c5a376c3d2a374e7b1cbb5f4c529ef3aa4",
+    "aad8de54b6a321f986ee53b6b2b35d76b6eec7a70cacae8982d7f5a718a90cf2",
+    "ab8455f52b87ac64a853a06bc8d1583b964817131a2fc4535b7f2db1cc43977a",
+    "b08d81078a2c9d22cde8246496bc38bbffe63e8f95538e3a4bbcad95b92d1c17",
+    "c28a43c33d6840508bfdc8fb386cc97bc913a9d0d7af1691e07cb34593e18c24",
+    "c416e38f2b075d0bf5f7d41aa07498767bcdba0cd8b208f2a737cc492777a53c",
+    "ceaaa2f4d278896a12f52328ca05213aabfc9320cef0e95f785bbe3cfc568993",
+    "d2966c8a2280a4e870095292e7beefe94d9fd9fe4201d5ae9978f8ca09b7258c",
+    "dba4df2c485e9e1fd97a9eb3484d9ea167027281acaaaa5a839d922e52e1f59b",
+    "f3964c213a486b1c100a9599fb35d8c895a80ea79061e91b0129292412598f60",
+    "f6bda561036aebc5f893e149d80c6c17ad4c4ed89310976d1c26b82c7003d14b",
+    "fa32ad9426e7cc82472237743cf32ada24b7fed369e802614b33f11d736fba1c",
+    "fb7ced0a96b876e48f0efec36e1edf4b1f98be912105b8adf868f688f68fbc96",
+    "fef2f954046bfd7ceec8a3e205f95635edfc030e67995d4cda387e00303deedd"
+  ],
+  "training_positive_frames": 47,
+  "training_empty_frames": 9,
+  "training_unrated_frames": 16,
+  "validation_history": [
+    {
+      "step": 200,
+      "threshold": 0.49007508158683777,
+      "metrics": {
+        "tp": 5,
+        "fp": 2,
+        "fn": 8,
+        "unrated_frames": 9,
+        "precision": 0.7142857142857143,
+        "recall": 0.38461538461538464,
+        "f1": 0.5,
+        "mean_matched_iou": 0.7215957458333309,
+        "windows": [
+          {
+            "window_id": "barbell-327f6f856e732d8b",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-6e6dbcc92d8b95c4",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-6c0e5be78f19af8c",
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-4697da732853c30b",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-3b4329ef4e9106ef",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-4d3ff92f804391bd",
+            "tp": 0,
+            "fp": 1,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-aad8de54b6a321f9",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-f3964c213a486b1c",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-35b2181424aadb90",
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-66553147d8f5118c",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-30c19b376848b7d6",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-2d52157282d9c85a",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": 400,
+      "threshold": 0.5993481874465942,
+      "metrics": {
+        "tp": 8,
+        "fp": 4,
+        "fn": 5,
+        "unrated_frames": 9,
+        "precision": 0.6666666666666666,
+        "recall": 0.6153846153846154,
+        "f1": 0.64,
+        "mean_matched_iou": 0.7452347967076497,
+        "windows": [
+          {
+            "window_id": "barbell-327f6f856e732d8b",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-6e6dbcc92d8b95c4",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-6c0e5be78f19af8c",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-4697da732853c30b",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-3b4329ef4e9106ef",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-4d3ff92f804391bd",
+            "tp": 0,
+            "fp": 2,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-aad8de54b6a321f9",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-f3964c213a486b1c",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-35b2181424aadb90",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-66553147d8f5118c",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-30c19b376848b7d6",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-2d52157282d9c85a",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": 600,
+      "threshold": 0.5447220206260681,
+      "metrics": {
+        "tp": 8,
+        "fp": 3,
+        "fn": 5,
+        "unrated_frames": 9,
+        "precision": 0.7272727272727273,
+        "recall": 0.6153846153846154,
+        "f1": 0.6666666666666666,
+        "mean_matched_iou": 0.788003998705403,
+        "windows": [
+          {
+            "window_id": "barbell-327f6f856e732d8b",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-6e6dbcc92d8b95c4",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-6c0e5be78f19af8c",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-4697da732853c30b",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-3b4329ef4e9106ef",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-4d3ff92f804391bd",
+            "tp": 0,
+            "fp": 2,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-aad8de54b6a321f9",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-f3964c213a486b1c",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-35b2181424aadb90",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-66553147d8f5118c",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-30c19b376848b7d6",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-2d52157282d9c85a",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": 800,
+      "threshold": 0.7005176544189453,
+      "metrics": {
+        "tp": 8,
+        "fp": 3,
+        "fn": 5,
+        "unrated_frames": 9,
+        "precision": 0.7272727272727273,
+        "recall": 0.6153846153846154,
+        "f1": 0.6666666666666666,
+        "mean_matched_iou": 0.8035404485349359,
+        "windows": [
+          {
+            "window_id": "barbell-327f6f856e732d8b",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-6e6dbcc92d8b95c4",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-6c0e5be78f19af8c",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-4697da732853c30b",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-3b4329ef4e9106ef",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-4d3ff92f804391bd",
+            "tp": 0,
+            "fp": 2,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-aad8de54b6a321f9",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-f3964c213a486b1c",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-35b2181424aadb90",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-66553147d8f5118c",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-30c19b376848b7d6",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-2d52157282d9c85a",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": 1000,
+      "threshold": 0.680202841758728,
+      "metrics": {
+        "tp": 8,
+        "fp": 3,
+        "fn": 5,
+        "unrated_frames": 9,
+        "precision": 0.7272727272727273,
+        "recall": 0.6153846153846154,
+        "f1": 0.6666666666666666,
+        "mean_matched_iou": 0.8111246618786057,
+        "windows": [
+          {
+            "window_id": "barbell-327f6f856e732d8b",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-6e6dbcc92d8b95c4",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-6c0e5be78f19af8c",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-4697da732853c30b",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-3b4329ef4e9106ef",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-4d3ff92f804391bd",
+            "tp": 0,
+            "fp": 2,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-aad8de54b6a321f9",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-f3964c213a486b1c",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-35b2181424aadb90",
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 0
+          },
+          {
+            "window_id": "barbell-66553147d8f5118c",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 1
+          },
+          {
+            "window_id": "barbell-30c19b376848b7d6",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 2
+          },
+          {
+            "window_id": "barbell-2d52157282d9c85a",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 1
+          }
+        ]
+      }
+    }
+  ],
+  "training_frame_sha256": {
+    "barbell-fb7ced0a96b876e4:80.587174": "b9e5c1a4ba068a53cc605f1625e7cb82a4884950ee37ede38b50159551d83f8e",
+    "barbell-fb7ced0a96b876e4:149.661895": "f2025d1151017af40502202ab6a29e4a4a0bb834961f0d4d33e325a52ff89945",
+    "barbell-a0008cefd6b908fa:70.509714": "fb8ee01636fe275095619c4a82f24690f215782ab79fc8167ef2c75ef8668cb0",
+    "barbell-a0008cefd6b908fa:130.946613": "82df84aa76f28f728681455eafe9b43b6f3785a2f8d436125d5fc3fd2079a3bd",
+    "barbell-fef2f954046bfd7c:26.307048": "09ed7aac33fddd7f65901eba4bf681cb2983c8bac7fd74b8e04eab3adce67128",
+    "barbell-fef2f954046bfd7c:48.855945": "d86b7e569f74dca79f1fea98d0fafac8f889482557a99f05e7ec839192d2293c",
+    "barbell-2724a2a098b3ad6e:23.28381": "95516e9c388c225e916f6ea1a4815fde533eb62d7a254a2c88f6f825f4f343aa",
+    "barbell-2724a2a098b3ad6e:43.241361": "0f7df1072881ee9b54ba83a5245b6e6328820667f4268471319f93e8fa92b198",
+    "barbell-81bcb9ec20ed83cb:33.466921": "8840cb56c7ffddbc6e84c5afc75388fa821220849e439adaba0ce5f255985f72",
+    "barbell-81bcb9ec20ed83cb:62.152852": "09c34d0df64aa0cac882ca027ed0ca45c407f06fb99d78a17ea561e194ec553f",
+    "barbell-346f75c8f920316a:36.839619": "034bf6fa9f52425a7fc9a7ca6e622863c4e25fdba155fb2b0b20e45c5078d3e7",
+    "barbell-346f75c8f920316a:68.416435": "58f43d92a9d4bbf3ebab5f2575e83c8ed1ec4d86e533b5a188a3accd230580ae",
+    "barbell-8f0895f20030584b:14.197841": "1d90560fce98f33cd87c5e473ba4ae84dc7d022bc0967f857bcca64776d30b79",
+    "barbell-9363f671af98d3be:16.985397": "4dbdb1ce11a8fb84a2547d0c84759c05212cf258666fab1ab9a72e81796301ad",
+    "barbell-c28a43c33d684050:18.277587": "33587bf83f97ac71511be950f9778099faaa302031a72301cce7319fb790bb2f",
+    "barbell-517c9a40abf481e5:27.672381": "031d1cd6dc103ca40525924f7bd187c74d8416a8665cbf80cfdd98f37b43e3c7",
+    "barbell-517c9a40abf481e5:51.391565": "7947d5945a1233e7d33341afb7df316e4235b805072779563e5b6598d833a7cd",
+    "barbell-4f88f733a7a8ee6d:47.014603": "725374c8164aea4530e9ab4915efd5d0aee7f00515c1548db4672a951a9a27de",
+    "barbell-fa32ad9426e7cc82:33.808254": "60330ac1e798c076590ec7cf9e67452333d96ff9e651c173c02ba2ba9929a2f6",
+    "barbell-fa32ad9426e7cc82:62.786757": "8533409808d619742609f6aec215245907aae5fe7b4f55122a79190ad48efecc",
+    "barbell-84c7b5bc36a0c311:27.371682": "5cb3227c1ada92df5d6f3f8edcf31d4a548c09726c8473e558835e3cf492f720",
+    "barbell-80ffac4a20f1850e:17.529905": "354f8aec3c04509a4e13147ca8c8eb64772be308d402661c2e24880b6870c606",
+    "barbell-8e03cb12b1c1d916:34.312127": "948a4dc5f1299de1eaa54e1353d32b97a6ea6b53bdb7f0ff9f7a8297ccfcee57",
+    "barbell-8e03cb12b1c1d916:63.722522": "053bfe534b18c74b9d148bdf7a48cebfe05e897d8e6492140c92d2fa89e55957",
+    "barbell-3884e3de99384e67:35.937524": "0992f3061f3ae46c6a70af7022b9367c8dd8772aa1a8c56d1de47217faaebe37",
+    "barbell-3884e3de99384e67:66.741115": "e29c96dea1742fe529a8ee0d42b15dc08de26a7c37d71691aa7874c69cfe504d",
+    "barbell-dba4df2c485e9e1f:79.434304": "81e9b2a376c535b51250a844621714016a2e7e2501f15e3f4610a62c35b843ed",
+    "barbell-2860f7611d585990:56.58819": "ff4d3dac6af33e1b51f030e6cd9917669a16395b464a3d126d243aadb6c8e7dd",
+    "barbell-2860f7611d585990:105.092354": "f045598f8833b336791773c4e982cf5f44bfe05b09a5cb9072fc21da7d57cceb",
+    "barbell-445703b6d3a60c4c:46.494476": "f1da218ba7b37dcdee64757e9f9d07f942bf3c53fa05f91710e50a8cba7fdaa1",
+    "barbell-b08d81078a2c9d22:48.444952": "03fe05668d40d7eec0f905713cb2f4a1e8ae031d3576b50a73d0c190ac92b80a",
+    "barbell-b08d81078a2c9d22:89.969198": "50bd2b27550aa48faa788c7e623fa275ecee2b60818a3bb552e98c4f5932fbd1",
+    "barbell-d2966c8a2280a4e8:39.212698": "74f86ab2f5fcf6a0630d485ac40988372c3fe5528e4286fba34c5cbf803c6b23",
+    "barbell-d2966c8a2280a4e8:72.823583": "2a6bb40f80660b55976dffcb81eac238e8b74095fecd11f4cfe1d2f1dc5aada4",
+    "barbell-62c9ded5e9fdf5c8:50.127238": "46ebf57ac4f989b5273499b10d1b7c928a5a873a4f5e77c0065a1840cdd557fe",
+    "barbell-62c9ded5e9fdf5c8:93.093442": "fa60b37126eee38d6e6b1a38009d35050550bf94b28b888253e5e998e520fc16",
+    "barbell-7283b804f423a55a:89.112381": "95c43792308e59ebf2544383cb6f104dc2e709c3745e01dc2b12f5b8d4e65448",
+    "barbell-31297e0fde11175a:39.066413": "ca3674f1637ba893bd9660877c5ed999a03f72a2062bbbbff8c6326828ec5b3a",
+    "barbell-31297e0fde11175a:72.551909": "b6b8767a6ab14333b6d6002dfef91b7462979b0434dbf484468bdbc4767b9058",
+    "barbell-ceaaa2f4d278896a:21.723429": "c2caa952e5a0335c89f3d3aab339b4473c22bf88ee21a574fe1c3b9a952a07e5",
+    "barbell-ceaaa2f4d278896a:40.34351": "5fe458ad74d04506df491b2f39ce842d2a870f61cdeab399fc2e086a9c5920b6",
+    "barbell-9db8370bb555f2a4:41.179429": "900e9b879bfc6111ef348c83ed5cd864ab0bad36d749bd87432bfc6ff0a993aa",
+    "barbell-9db8370bb555f2a4:76.476082": "2c8e916f83ecedbc14a50e68453af39aa7b5ddff9da0041a790c3d4f1489fcf2",
+    "barbell-1908951bd929b5dd:126.19581": "3656b565167a48a580685a534c5825f2476f2e8448baccbeb13c98a3827b0129",
+    "barbell-1908951bd929b5dd:234.363646": "60c64951ff8acfb0c63e358ffd82af4f6ee0482cc1e8742d7a2947c3000e584f",
+    "barbell-499a607cb37ad800:30.102349": "d9a47f307fe5552f3e095cb7d9727e8904b741483d6bbe42999c33463cad2bde",
+    "barbell-499a607cb37ad800:55.904363": "c21c81ca70c3df0373ddbd48987dde8fae1a4d1b799fe60c8481b5fe3bc5f82e",
+    "barbell-7c1e763354e6bae0:25.380571": "b5257745e97303ad6206592f29dbbe4576465f65061e4189d406ea709cc2d833",
+    "barbell-7c1e763354e6bae0:47.135347": "79cdd9fa521dca78f64b2f29533b5a2269ff9c25c00e24125febbb22747e1e1f",
+    "barbell-5fb710687f0b6a5f:21.85346": "d33a12840cb14657756ddcb91576bc9226833de7c996d6f3f58f61b11d0742a0",
+    "barbell-5fb710687f0b6a5f:40.584998": "7eb3644976e92d14b8dfb999a3bb21d93df56e87b2382bf3aa6f2524018e4717",
+    "barbell-c416e38f2b075d0b:25.177397": "72406e1596676d5d99c28c0e61d418ade3de8701ccfa4daa7202a94aa4bd0d0f",
+    "barbell-c416e38f2b075d0b:46.758023": "8ddf0525be486fb19f5b8579af5d40466e93a934634f15a7f4ed24890f617cb6",
+    "barbell-f6bda561036aebc5:67.990349": "3ffd61dee68a24c01890aa749e968adfdf2f3bb68759ff86d62a02f09bb5213f",
+    "barbell-f6bda561036aebc5:126.267792": "587127a617ce317d16b415dd1b220b6ecf43b57674d32c117a4969ba7e2cf904",
+    "barbell-ab8455f52b87ac64:32.207238": "4ba6faa056275918e0efa33f5a0c23edda03480a8c865a0123bda395f034a01f"
+  },
+  "validation_frame_sha256": {
+    "barbell-327f6f856e732d8b:24.527238": "2b1a1cdfe625aa56aa2450414445a0324b87f38bc2f1c0fd0fa84e4e5d300d3c",
+    "barbell-327f6f856e732d8b:45.550585": "bcf8719db3d8c3d87f6d6c9dd8b67bbf48c9844aac1dc1d16b28d2cfb62c9d8a",
+    "barbell-6e6dbcc92d8b95c4:33.540064": "c34bc4d2a106b0bff90fc8cd2ff9b88bc5624f35e6543f69745f97a06bbb0a8a",
+    "barbell-6e6dbcc92d8b95c4:62.288689": "361e78c8c1aec51dc476222b0de3e7a9243e241a286572919c8caccab46a286b",
+    "barbell-6c0e5be78f19af8c:21.024508": "162b6706a24a63048a8a356c3205edb159fe6bedd6c5d1eeb64483b335e780ea",
+    "barbell-6c0e5be78f19af8c:39.045515": "5065e9867f7234bd9ffb2bcbd9e0f4db8d4210123cc570038a9786cc022b6404",
+    "barbell-4697da732853c30b:44.657778": "923549a759b3fd080a82dbfdf8d52dad07ab53432aa69545fe60f3be0f63cf3b",
+    "barbell-4697da732853c30b:82.935873": "0f39954b90291b782be8a43dc607c5d4cf3e1b1e68d4631adfafbfbc10d1b6d6",
+    "barbell-3b4329ef4e9106ef:31.630222": "f3f3ec687dc57d4e0fc4b48257fef197e0882b620e0202b8d8c13213b28e208b",
+    "barbell-3b4329ef4e9106ef:58.741841": "7048addda4fe28b32868b10e7c82704e9bef8d8cca0601a9a78b0ea32789deea",
+    "barbell-4d3ff92f804391bd:28.485079": "70041485d809531fbb074ec12f191a1bfca844c4b66e17a9a0d6ecf4a56f2d79",
+    "barbell-4d3ff92f804391bd:52.900862": "0c1255dcfb33ee63457c744c48ead744f628daf32cc2a300709ef824caf52e02",
+    "barbell-aad8de54b6a321f9:35.774984": "6286dfd9509706610fc447084019a19248e4df141026c879b10d368bf43c06b8",
+    "barbell-aad8de54b6a321f9:66.439256": "15516b7df8271d3af9fd65bfb07026ce580888fe0f858cb3c6ce4c7afbbbe336",
+    "barbell-f3964c213a486b1c:28.119365": "9a1e521457630bb403b9ee5f36751f5de574286f65b37cbf40b56aaa2704eaab",
+    "barbell-f3964c213a486b1c:52.221678": "54ba14f082a0de691b5670afea3acf8ba0911a4e9c880098bd6fdfec340df93b",
+    "barbell-35b2181424aadb90:54.954667": "1e639b954d2f77a26d93f1d824ca982499d06b4e958ef39ab883920260ef1309",
+    "barbell-35b2181424aadb90:102.058666": "8651b405bbf3a0ea96fc6d86829a3d1fc4461e0a9500ee968c808500a7b8a50d",
+    "barbell-66553147d8f5118c:17.32673": "58a1073b301f6915c2143bf9202b42a125240a99a0e75c043b5115d8129f9c8a",
+    "barbell-66553147d8f5118c:32.178213": "fdbd1f84368ff8ef6a680e115485044d981a0ec063fe8199ea5d10685209ec41",
+    "barbell-30c19b376848b7d6:31.353905": "5b7c6a2f22c3760913a96088802bd235d6e5377ba7e149bb7ebd0adc16e8cb81",
+    "barbell-30c19b376848b7d6:58.22868": "0ef5be39f15b7570e028f52526751ce82c6d722f2b3b2d8a6e7e89871946c097",
+    "barbell-2d52157282d9c85a:33.726984": "110a123eadc7d13848f991b85b7bd997646f7ed64a2f172842fe2bf1506a44a1",
+    "barbell-2d52157282d9c85a:62.635828": "2a82b0389eabb9985000beca40cea5253d4a13e8988516c92dd78bcc17cc6898"
+  },
+  "code_sha256": {
+    "barbell_detector.py": "79cd14f186a2687454f4f8788754c71e3b6e3530f870037a48362b05f14a2d76",
+    "barbell_data.py": "9435cfb92f25e5a253a43f24698e1ebdafee978e22621b9b00d67258befe3213",
+    "axe_faster.py": "efa62fcdab2a21690c26d7e7852e1a661f13d1f34ce121fb6c2255c02148aec6",
+    "axe_data.py": "48783795d8e95a78ee73a45255e1d92b704233420fae8135cd13eb62d4ef94d3",
+    "axe_detector.py": "380a278cc133fc63d1d6bf5deba3558d7600ffda34ac27e13c98f6d8fa12fe6e",
+    "new_dataset.py": "0ffa00b443009ed2ea96daf0d6a6a056842ab527707073ac53ceddaf4e84ea17",
+    "footage.py": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8"
+  },
+  "torch": "2.10.0+cu128",
+  "torchvision": "0.25.0+cu128",
+  "device": "cuda",
+  "elapsed_s": 317.3635939899832,
+  "promoted_for_coaching": false
+}

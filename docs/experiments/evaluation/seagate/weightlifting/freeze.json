@@ -1,0 +1,14 @@
+{
+  "plan_sha256": "1997cab5a151237cbb0054c2bfae76d03ba48828e94741b1f6b95b4962d683fc",
+  "model_sha256": "eff730bdfc5ba9a508b7eaf6bc963737d347f0af8aac9a07805b1a5fbb220fb2",
+  "metadata_sha256": "d1120dff2c475fa1b10dedb0032fa67e8a85879c95dbeb3ecb9492a19ce9d594",
+  "code_sha256": {
+    "barbell_detector.py": "79cd14f186a2687454f4f8788754c71e3b6e3530f870037a48362b05f14a2d76",
+    "barbell_data.py": "9435cfb92f25e5a253a43f24698e1ebdafee978e22621b9b00d67258befe3213",
+    "axe_faster.py": "efa62fcdab2a21690c26d7e7852e1a661f13d1f34ce121fb6c2255c02148aec6",
+    "axe_data.py": "48783795d8e95a78ee73a45255e1d92b704233420fae8135cd13eb62d4ef94d3",
+    "axe_detector.py": "380a278cc133fc63d1d6bf5deba3558d7600ffda34ac27e13c98f6d8fa12fe6e",
+    "new_dataset.py": "0ffa00b443009ed2ea96daf0d6a6a056842ab527707073ac53ceddaf4e84ea17",
+    "footage.py": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8"
+  }
+}
