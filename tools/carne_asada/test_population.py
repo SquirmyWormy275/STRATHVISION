@@ -77,3 +77,9 @@ def test_bounded_windows_cover_the_full_tail_and_context_does_not_duplicate_stro
           {'window_index':1,'span_s':[47,48],'usable':True,'context_margin_s':2}]
     result,removed=deduplicate(rows)
     assert len(result)==2 and removed==1 and result[0]['window_index']==1
+
+
+def test_overlapping_candidate_spans_cannot_inflate_unique_usable_seconds():
+    from window_population import span_union_seconds
+    assert span_union_seconds([[1,3],[2,4],[4,5],[9,10]])==5
+    assert span_union_seconds([])==0

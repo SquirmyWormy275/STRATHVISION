@@ -1,6 +1,6 @@
 # Full-population native Gurr experiment
 
-This run covers every one of the **47 unique recordings, 7,787.428656 seconds**, in the verified five-part export. The earlier full-corpus pass used an older research pipeline at 5 Hz. The later native study used thirteen short windows and the first review packet contained twelve eight-second excerpts. Those are historical results; this experiment requests complete source durations through the native person/pose and phase pipeline.
+This experiment schedules every one of the **47 unique recordings, 7,787.428656 seconds**, in the verified five-part export. The earlier full-corpus pass used an older research pipeline at 5 Hz. The later native study used thirteen short windows and the first review packet contained twelve eight-second excerpts. Those are historical results; this experiment requests complete source durations through the native person/pose and phase pipeline.
 
 ## Method and current execution
 
@@ -63,3 +63,10 @@ Back in the original repository, freeze the native model/runtime and start bound
 Completed-source candidate navigation can be uploaded to the live review server through its candidate API. It atomically preserves saved judgments; browser refresh changes candidate metadata without clearing unsaved fields. The initial twelve-task packet remains intact.
 
 The publisher rejects missing windows, mismatched native runtimes, gaps, duplicate scored cores and incomplete source tails. Completed native calls, final-sample progress and core coverage are distinct fields. Full-population coverage without independent annotations is not a new held-out accuracy result. No reviewed coaching profile/feedback is supplied to this inference run, so no learning loop is executed.
+
+
+## Controlled engine replay
+
+Saved native poses also run through two separate compiled pure-Dart engines: the matching base at `501466a` and the later fast-rhythm/springboard engine/pack at `d0d6f46`. The [replay tool](../../packages/analysis_engine/tool/population_replay.dart) checks pose provenance; the [driver](../../tools/carne_asada/replay_population.py) requires the base replay to reproduce native stroke spans and quality decisions before accepting its cache. Both executables and source/pack files have separate fingerprints.
+
+This comparison changes the engine/pack while retaining the same native pose observations. It does not re-run the later tracking changes. Candidate counts and interval-union coverage remain diagnostic measures, with genuine coaching effectiveness unvalidated. [Progress reader](../../tools/carne_asada/window_status.py) reports completed model windows and complete original sources without counting context as additional recordings.

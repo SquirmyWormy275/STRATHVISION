@@ -98,7 +98,15 @@ def deduplicate(rows):
     return sorted(kept,key=lambda r:r['span_s'][0]),removed
 
 
-def collate(parent,output):
+def span_union_seconds(spans):
+    end=None;total=0.
+    for lo,hi in sorted(spans):
+        if end is None or lo>=end:total+=hi-lo;end=hi
+        elif hi>end:total+=hi-end;end=hi
+    return total
+
+
+def collate(parent,output,replay_label=None):
     directory=parent/'bounded';inputs=json.loads((directory/'inputs.json').read_text())
     locations={};batch_freezes=[]
     for batch in sorted((directory/'batches').glob('batch-*')):
@@ -116,6 +124,12 @@ def collate(parent,output):
             'shared_native_binary_sha256':batch_freezes[0]['binary_sha256'],
             'shared_native_source_sha256':batch_freezes[0]['source_sha256'],
             'prepared_inputs_sha256':sha256(directory/'inputs.json'),'batches':batch_freezes}
+    replay_meta=None;event_ids=['underhand','standing_block']
+    if replay_label:
+        replay_meta=json.loads((directory/'engine-replays/engines.json').read_text())[replay_label]
+        first=json.loads((directory/'engine-replays'/replay_label/(inputs['clips'][0]['sha256']+'.json')).read_text())
+        event_ids=list(first['measurements'])
+        study_key=hashlib.sha256((study_key+replay_meta['fingerprint']).encode()).hexdigest()
     bysource={s['sha256']:[] for s in inputs['original_sources']}
     for window in inputs['clips']:
         batch,key=locations[window['sha256']]
@@ -123,6 +137,13 @@ def collate(parent,output):
         if result['runtime_key']!=key or result['clip_sha256']!=window['sha256']:
             raise ValueError('Window runtime/source mismatch')
         measurements=json.loads((p/'private-measurements.json').read_text()) if result['status']=='complete' else {}
+        if replay_label and result['status']=='complete':
+            replay_path=directory/'engine-replays'/replay_label/(window['sha256']+'.json')
+            replay=json.loads(replay_path.read_text());meta=json.loads(replay_path.with_suffix('.meta.json').read_text())
+            if (meta['engine_fingerprint']!=replay_meta['fingerprint'] or meta['native_runtime_key']!=key or
+                meta['track_sha256']!=sha256(p/'private-track.json') or replay['clip_sha256']!=window['sha256']):
+                raise ValueError('Engine replay provenance mismatch')
+            measurements=replay['measurements']
         if result['status']=='complete':
             track=json.loads((p/'private-track.json').read_text())['track']
             result['core_pose_samples']=sum(window['core_start_s']<=window['window_start_s']+f['f']/result['fps']<window['core_end_s'] for f in track)
@@ -133,7 +154,9 @@ def collate(parent,output):
     for source in inputs['original_sources']:
         windows=bysource[source['sha256']];verify_coverage([w for w,_,_ in windows],source['duration_s'])
         complete=[r for _,r,_ in windows if r['status']=='complete'];events={};private_events={}
-        for event in ['underhand','standing_block']:
+        hint=source['supported_event_hint']
+        if hint is None and 'springboard' in event_ids:hint='springboard'
+        for event in event_ids:
             candidates=[]
             for window,result,measurements in windows:
                 if result['status']!='complete':continue
@@ -148,13 +171,14 @@ def collate(parent,output):
                         'context_margin_s':min(mid-window['window_start_s'],window['window_end_s']-mid),
                         'selection_eligible':safe})
             selected,removed=deduplicate(candidates);usable=[r for r in selected if r['usable']]
-            eligible=[r for r in usable if r['selection_eligible'] and source['supported_event_hint']==event]
+            eligible=[r for r in usable if r['selection_eligible'] and hint==event]
             events[event]={'candidate_strokes':len(selected),'duplicate_predictions_removed':removed,
                 'gate_passing_candidates':len(usable),'gate_passing_seconds':sum(r['span_s'][1]-r['span_s'][0] for r in usable),
+                'gate_passing_union_seconds':span_union_seconds([r['span_s'] for r in usable]),
                 'selection_and_pack_eligible_candidates':len(eligible)}
             private_events[event]=selected
-        private_path=directory/'source-measurements'/(source['sha256']+'.json');write_json(private_path,private_events)
-        hint=source['supported_event_hint']
+        suffix='-'+replay_label if replay_label else ''
+        private_path=directory/('source-measurements'+suffix)/(source['sha256']+'.json');write_json(private_path,private_events)
         candidate_catalog.append({'clip_sha256':source['sha256'],
             'candidate_spans_s':[r['span_s'] for r in private_events.get(hint,[]) if r['usable']],
             'runtime_key':'study:'+study_key})
@@ -188,18 +212,21 @@ def collate(parent,output):
             'Coverage and phase candidates are not independent technique/contact-accuracy evidence.',
             'Continuous full-source worker failures are retained as a separate baseline; this is a different execution variant.'],
         'claimed_technique_improvement':False,'raw_footage_published':False}
-    write_json(directory/'candidate-catalog.json',candidate_catalog);write_json(output,result)
+    if replay_meta:
+        result['engine_replay']={**replay_meta,'same_native_pose_inputs':True,
+            'scope':'Engine/pack replay only. Later tracking changes were not re-inferred.'}
+    write_json(directory/('candidate-catalog'+('-'+replay_label if replay_label else '')+'.json'),candidate_catalog);write_json(output,result)
     print(json.dumps(result['summary'],indent=2))
 
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['prepare','publish'])
     p.add_argument('--parent',required=True,type=Path);p.add_argument('--workers',type=int,default=2)
-    p.add_argument('--output',type=Path);a=p.parse_args()
+    p.add_argument('--output',type=Path);p.add_argument('--engine-replay',choices=['base','current']);a=p.parse_args()
     if a.action=='prepare':prepare(a.parent,a.workers)
     else:
         if not a.output:p.error('publish requires --output')
-        collate(a.parent,a.output)
+        collate(a.parent,a.output,a.engine_replay)
 
 
 if __name__=='__main__':main()
