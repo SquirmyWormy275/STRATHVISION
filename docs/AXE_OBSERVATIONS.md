@@ -8,4 +8,6 @@ This contract is separate from the engine's metric-space `ImplementTrack`. Singl
 
 `axe-model/1` records the feature geometry, linear coefficients/intercept, training source/annotation hashes, validation-selected threshold and code/dependency provenance. Test-source annotations cannot participate in fitting or threshold selection. The scorer uses one-to-one IoU matches and reports false positives/misses even when localization error on matched boxes is small.
 
+The separate `axe-transfer-model/1` records pretrained-weight origin/hash, locally trained tensor-state hash, architecture, fixed training settings, training/validation sources and pixel hashes, validation-selected threshold, and source/code freeze. A new held-out source group is reserved after the first prototype's test is opened. Neural detections remain image-space observations; tensor states contain no raw frames.
+
 `coach-feedback/1` keeps genuine author/reviewer provenance, source content, stroke span, attribute, red/green judgment and fit/evaluation partition. Draft review entries are unlabelled. No timing annotation, detector output or synthetic test fixture can create a genuine technique label. Empty/unreviewed feedback leaves learning evaluation pending.
