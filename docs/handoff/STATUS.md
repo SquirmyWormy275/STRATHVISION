@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T21:51:22Z
+heartbeat: 2026-11-05T22:01:22Z
 branch: implementation
 phase: 8 — additional novice/event footage training experiment
-task: Actual1000step CUDA fitcomplete;step800selected,validation8TP2FP18FN;freezeweights beforetestpixels
-next: Frozenmodel docs/experiments/evaluation/new-footage/axe-faster.pt,json,freeze.json. Testpixels NOTyetopened. Run new_dataset sample test --freeze --model; annotate6sources24frames, commitreference BEFOREtestpredict. PublishactualresultREADME;sourcehashsession32657 pending.
+task: Frozen model3bfac94 pushed;test6sources24frames manuallyreviewed9visible15unrated;commitreferences BEFOREtestprediction
+next: Testreference ready docs/experiments/evaluation/new-footage/test-reference.json;fitreferencehashunchanged. Run axe_faster.py test withprivatefreeze/models/reference;oneheldoutpass. PublishactualcountsREADME+New-Footage;all55rawsourcehashesverified. Keepreviewservers44597/45851.
 <!-- STATE:END -->
 
 ## Phase progress
