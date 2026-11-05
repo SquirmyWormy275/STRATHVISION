@@ -2,12 +2,12 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-05T20:24:39Z
+owner: none
+heartbeat: 2026-11-05T20:25:41Z
 branch: implementation
 phase: 8 — full-population native experiment complete
-task: All47 full videos/195cores complete;207987 core poses;zero failures;phase comparison and opened timing diagnostics published;49 Python tests pass
-next: Verify final result commit/push, then release scoped ownership. Full review live44597 with960 unreviewed suggestions and0 judgments. Future work: first genuine reviews or new reserved accuracy evidence; no coaching gain or named identity recognition claimed. See CARNE_ASADA.md and Gurr-Population.md.
+task: COMPLETED: all47 full videos/195cores; results and README pushed in e11c3c6;49 Python tests pass; no compute remains
+next: Full-population study is complete. Keep real review44597 live (960 unreviewed suggestions;0 judgments at recorded check), legacy45851 preserved. Future requested work: first genuine reviews/new reserved accuracy evidence; later tracking needs a separately pinned native rerun. Read Gurr-Population.md/CARNE_ASADA.md.
 <!-- STATE:END -->
 
 ## Phase progress
