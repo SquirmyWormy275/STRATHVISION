@@ -18,4 +18,15 @@ Weightlifting is a separate task and corpus. It will use source-grouped partitio
 - [`axe_faster.py`](../../tools/carne_asada/axe_faster.py): unchanged source-guarded training and validation selection.
 - [Expanded axe fit references](evaluation/seagate/axe/fit-reference.json) and [prepared-image hashes](evaluation/seagate/axe/fit-image-hashes.json).
 
-Results are pending; the protocol and reviewed axe references are committed before the follow-up fit starts.
+## Expanded axe result
+
+The real CUDA fit completed 1,000 steps; validation selected step 600 and score threshold 0.1577141136. The original validation references, pixels, architecture and training schedule were unchanged.
+
+| Same validation set: 26 visible heads, 26 unrated frames | Correct | Incorrect boxes | Misses | Precision | Recall | F1 |
+|---|---:|---:|---:|---:|---:|---:|
+| Earlier 35-positive fit | 8 | 2 | 18 | 80.0% | 30.8% | 44.4% |
+| Expanded 73-positive fit | 11 | 11 | 15 | 50.0% | 42.3% | 45.8% |
+
+Expanded supervision increased recall while introducing many more incorrect boxes at the independently selected validation thresholds. The 1.4 percentage-point F1 increase is exploratory, not an independently tested improvement. Correlated neighboring frames do not equal new recording sessions. No old-test re-score or app promotion was performed. The conditional athlete ROI and lack of clear empty validation frames still limit the claim.
+
+The [weights](evaluation/seagate/axe/axe-faster.pt), [training metadata and checkpoint history](evaluation/seagate/axe/axe-faster.json), [validation predictions](evaluation/seagate/axe/validation.json), and [fit log](evaluation/seagate/axe/fit.log) preserve the result. Weightlifting results and the final library audit are in progress.
