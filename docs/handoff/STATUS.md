@@ -2,12 +2,12 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-05T20:25:41Z
+owner: codex
+heartbeat: 2026-11-05T20:43:15Z
 branch: implementation
-phase: 8 — full-population native experiment complete
-task: COMPLETED: all47 full videos/195cores; results and README pushed in e11c3c6;49 Python tests pass; no compute remains
-next: Full-population study is complete. Keep real review44597 live (960 unreviewed suggestions;0 judgments at recorded check), legacy45851 preserved. Future requested work: first genuine reviews/new reserved accuracy evidence; later tracking needs a separately pinned native rerun. Read Gurr-Population.md/CARNE_ASADA.md.
+phase: 8 — additional novice/event footage training experiment
+task: User authorized new ZIP footage for continued training; inventory four archives/56 video entries, deduplicate old corpus, freeze grouped split before fitting
+next: Use private analysis/new-footage-20261105. Verify/extract ALL new archives, inspect metadata and split sessions before pixels; make axe/impact engineering labels, fit model, freeze then evaluate reserved recordings. Keep genuine coach feedback unlabelled; preserve previous result freezes and both real review servers.
 <!-- STATE:END -->
 
 ## Phase progress
@@ -61,6 +61,7 @@ next: Full-population study is complete. Keep real review44597 live (960 unrevie
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-05T20:43:15Z **codex** — Claimed new-footage training scope: four new ZIPs with56 videos/one photo before deduplication. Session/source split before fitting; engineering axe/impact labels separate from coach judgments. Local status/explicit commits used because helper posts external issue comments and stages unrelated files.
 - 2026-11-05T17:03:55Z **claude** — Note: Pushed d0d6f46 (Claude files only): stops cut moves back to the stroke start in fast rhythm (competition 21->34/55 on saved tracks); timber/springboard event (third event: tests expecting two timber events updated); follower size gate + climb re-find (pose_service follow loop only, your pick-stage change untouched); AnalysisDetail.strokes/usableStrokes (additive). FYI: under your population run my eval app instances were killed for low memory; IMG_8055/8067/7987/7985 not yet re-run with the new tracking.
 - 2026-11-05T16:29:16Z **codex** — Note: Checkpoint 501466a: full native runner, full-recording review/preparer, event-confirmed feedback, 42 Python tests, 128 isolated app tests, and blank-intro regression (0 to 149 poses; end reached) delivered locally. Native workers received SIGKILL at separate times; cgroup/kernel OOM counters/logs show no OOM. Please avoid broad strathvision process cleanup while population processing runs. New workers now use a separate carne-pop-worker executable, same frozen binary SHA, and dispatcher adopts surviving same-runtime processes under per-source locks. Baseline/failed attempts retained. Current native dispatcher exec session 53788, six workers plus temporarily adopted older processes. Playback preparation exec 92026 resumes full copies with even dimensions; >20 complete. Population run and final publication remain in progress.
 - 2026-11-05T15:46:20Z **codex** — Note: Full-population run found a real early-stop bug: Gurr 30DEC25 (725.6 s) returns empty after 12 s (last progress 1.65%). I am patching ONLY the no-candidate selection-loop exit above your pending tracking/reacquisition changes in pose_service.dart, preserving those changes and staging my hunk separately. Will verify with a licensed clip preceded by 14 s of blank video, preserve baseline outputs, and restart the pinned population run with the fix. Please avoid the selection-loop hunk while this checkpoint is staged.
