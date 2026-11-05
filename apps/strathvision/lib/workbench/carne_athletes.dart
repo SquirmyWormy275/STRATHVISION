@@ -36,3 +36,45 @@ class CarneAthleteChoiceNeeded implements Exception {
   final ClipSource clip;
   final AthleteTrack result;
 }
+
+typedef CarneTrackLoader = Future<AthleteTrack> Function(
+  ClipSource clip,
+  AthleteTarget? target,
+);
+
+Future<AthleteTrack> loadCarneTrack(
+  ClipSource clip,
+  CarneAthleteState state, {
+  CarneTrackLoader? load,
+}) async {
+  final loader =
+      load ??
+      (source, target) => carnePoseService.trackAthlete(
+        source,
+        sourceKey: source.clipId,
+        target: target,
+      );
+  var target = state.targets[clip.clipId];
+  // Ask after the short selection window, rather than finishing a long
+  // recording before revealing that its competitor was ambiguous.
+  if (target == null && clip.durationMs > 4000) {
+    final preview = ClipSource(
+      clipId: clip.clipId,
+      path: clip.path,
+      durationMs: 4000,
+      fps: clip.fps,
+    );
+    final found = await loader(preview, null);
+    state.record(clip, found);
+    if (found.ambiguous || !found.orientationSure || found.target == null) {
+      throw CarneAthleteChoiceNeeded(clip, found);
+    }
+    target = found.target;
+  }
+  final found = await loader(clip, target);
+  state.record(clip, found);
+  if (found.ambiguous || !found.orientationSure || found.target == null) {
+    throw CarneAthleteChoiceNeeded(clip, found);
+  }
+  return found;
+}

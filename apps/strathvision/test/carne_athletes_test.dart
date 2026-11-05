@@ -19,6 +19,40 @@ void main() {
   setUpAll(() async => fixture = await CarneFixture.load());
 
   test(
+    'an ambiguous long recording asks after four seconds of analysis',
+    () async {
+      final state = CarneAthleteState();
+      final requested = <int>[];
+      final clip = ClipSource(
+        clipId: 'source',
+        path: '/fixture',
+        durationMs: 1718929,
+        fps: 30,
+      );
+      await expectLater(
+        loadCarneTrack(
+          clip,
+          state,
+          load: (source, target) async {
+            requested.add(source.durationMs);
+            return AthleteTrack(
+              track: PoseTrack(fps: 30, frames: const []),
+              target: null,
+              ambiguous: true,
+              orientationSure: true,
+              candidatesFrame: 0,
+              candidates: const [],
+            );
+          },
+        ),
+        throwsA(isA<CarneAthleteChoiceNeeded>()),
+      );
+      expect(requested, [4000]);
+      expect(state.clips['source']!.durationMs, 1718929);
+    },
+  );
+
+  test(
     'desktop sample policy preserves swing timing on the longest Gurr source',
     () {
       final longestFrames = (1718.929 * 30).ceil();

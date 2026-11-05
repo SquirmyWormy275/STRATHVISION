@@ -42,15 +42,7 @@ StrokeAnalyzer isolateStrokeAnalyzer(
 }) {
   final state = athletes ?? CarneAthleteState();
   return (clip) async {
-    final result = await carnePoseService.trackAthlete(
-      clip,
-      sourceKey: clip.clipId,
-      target: state.targets[clip.clipId],
-    );
-    state.record(clip, result);
-    if (result.ambiguous || !result.orientationSure) {
-      throw CarneAthleteChoiceNeeded(clip, result);
-    }
+    final result = await loadCarneTrack(clip, state);
     return Isolate.run(() => analyzeContinuousTrack(pack, clip, result.track));
   };
 }
