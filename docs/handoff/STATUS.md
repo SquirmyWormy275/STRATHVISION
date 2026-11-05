@@ -2,12 +2,12 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-05T22:09:19Z
+owner: codex
+heartbeat: 2026-11-05T23:21:58Z
 branch: implementation
-phase: 8 — additional novice/event footage training experiment
-task: Complete additional-footage experiment:55newvideos/4archives,real1000stepfit,freeze3bfac94,testrefs054f5cb,test1TP1FP8FN9visible15unrated;researchonly
-next: Read docs/experiments/New-Footage.md and evaluation/new-footage/results.json. This experiment is complete and NOTpromoted. Future revisions:labelmoretraining small/edge-onheads +clearbackgrounds,usevalidationonly,andreservefreshcapturedaysforfinaltest;publishedtestisalreadyopened. Keepreviewservers44597/45851.
+phase: 8 — Seagate multi-sport footage research
+task: Inventory all Seagate sources, exclude partial downloads and duplicates, expand axe training labels, and establish a separate weightlifting experiment
+next: Build stable content-hash manifest under private analysis/seagate-20261105; preserve all earlier splits/results and both review servers. Publish only engineering annotations, provenance and measured results. No automatic named identity or invented coaching labels.
 <!-- STATE:END -->
 
 ## Phase progress
@@ -61,6 +61,7 @@ next: Read docs/experiments/New-Footage.md and evaluation/new-footage/results.js
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-05T23:21:58Z **codex** — Claimed user-authorized Seagate woodchopping and Olympic weightlifting research. Inventory stable sources before scope decisions; preserve opened holdouts, avoid treating download components as independent clips, and keep raw media private. Manual scoped commits avoid staging unrelated changes or posting issue comments.
 - 2026-11-05T22:09:19Z **codex** — Released completed additional-footage study: four archives CRC/SHA verified,55newvideos after one old overlap;capture-day36/13/6split frozen192c25c;reviewedfit referencesfb538e8;actualCUDA1000steps selected800,validation8TP2FP18FN;weights/freeze3bfac94 beforetestdecode;testreferences054f5cb beforeprediction;oneheldoutpass1TP1FP8FN on9visibleheads,15unrated. Report/README and weights/references/source hashes published;65researchtests pass;all55sourcehashes rechecked;no rawpixels or coaching labels published,no production promotion. Both real review servers44597/45851 stillHTTP200. Manual scoped checkpoint/release avoids helper staging unrelated files or posting external issue comments.
 - 2026-11-05T20:43:15Z **codex** — Claimed new-footage training scope: four new ZIPs with56 videos/one photo before deduplication. Session/source split before fitting; engineering axe/impact labels separate from coach judgments. Local status/explicit commits used because helper posts external issue comments and stages unrelated files.
 - 2026-11-05T17:03:55Z **claude** — Note: Pushed d0d6f46 (Claude files only): stops cut moves back to the stroke start in fast rhythm (competition 21->34/55 on saved tracks); timber/springboard event (third event: tests expecting two timber events updated); follower size gate + climb re-find (pose_service follow loop only, your pick-stage change untouched); AnalysisDetail.strokes/usableStrokes (additive). FYI: under your population run my eval app instances were killed for low memory; IMG_8055/8067/7987/7985 not yet re-run with the new tracking.
