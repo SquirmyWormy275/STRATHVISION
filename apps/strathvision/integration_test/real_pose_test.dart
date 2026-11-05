@@ -4,6 +4,10 @@
 //   flutter test integration_test/real_pose_test.dart -d linux \
 //     --dart-define=CLIP_DIR=$PWD/integration_test/assets \
 //     --dart-define=REF=$PWD/../../packages/analysis_engine/test/fixtures/cleave_pose.json
+//   Android: FILES="cleave.webm cleave_sideways.webm" \
+//     scripts/run_android_player_test.sh "" integration_test/real_pose_test.dart
+//            (CLIP_DIR=android: the test prints "CLIPS_DIR <path>" and waits
+//             for the clips to be pushed; no reference comparison.)
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
@@ -13,11 +17,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart' hide ComparisonResult;
 import 'package:integration_test/integration_test.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:strathvision/packs/pack_registry.dart';
 import 'package:strathvision/profiles/clip_probe.dart';
 import 'package:strathvision/vision/pose_service.dart';
 
-const clipDir = String.fromEnvironment('CLIP_DIR');
 const refPath = String.fromEnvironment('REF');
 
 void main() {
@@ -27,6 +31,19 @@ void main() {
   testWidgets('BlazePose on device matches the reference and drives analysis',
       (tester) async {
     await tester.runAsync(() async {
+      var clipDir = const String.fromEnvironment('CLIP_DIR');
+      if (clipDir == 'android') {
+        clipDir = (await getExternalStorageDirectory())!.path;
+        // ignore: avoid_print
+        print('CLIPS_DIR $clipDir');
+        final end = DateTime.now().add(const Duration(seconds: 120));
+        while (!File('$clipDir/cleave_sideways.webm').existsSync() ||
+            File('$clipDir/cleave_sideways.webm').lengthSync() < 1900000) {
+          if (DateTime.now().isAfter(end)) break;
+          await Future<void>.delayed(const Duration(milliseconds: 500));
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+      }
       final info = await probeClip('$clipDir/cleave.webm');
       expect(info, isNotNull);
       final clip = ClipSource(
