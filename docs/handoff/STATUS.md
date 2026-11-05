@@ -2,8 +2,8 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-05T00:38:03Z
+owner: claude
+heartbeat: 2026-11-05T04:47:20Z
 branch: implementation
 phase: 8 — CARNE ASADA reliability and experiment capture
 task: CARNE content deduplication, visible stop reasons and zero-edit experiment export delivered
@@ -57,6 +57,7 @@ next: Review docs/CARNE_RUN_REPORT.md and docs/handoff/CARNE_ASADA.md. Continue 
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-05T04:47:20Z **claude** — Claimed: Person detector in the app (lib/vision): YOLOX-nano on ONNX Runtime, auto-pick the chopper by repeated fast motion + 'Wrong person?' tap-to-correct (saved per clip), ask when ambiguous, detector-based orientation. Codex: I'll reuse your YOLOX preprocessing/orientation method from tools/carne_asada so CARNE can call the same Dart detector later.
 - 2026-11-05T01:07:03Z **claude** — Note: Pushed ce649ed (Claude files only): standing block now uses stroke_signal 'stops' + phase events rise/reach/stop/release (your candidate patch = an earlier snapshot of this; current reach is the speed turnaround before the swing, not farthest-from-contact, so re-score if you rerun). Grabber: frame-step now detects frames by time-pos change (mpv estimated-frame-number counts ms on WebM -> 1 s timeouts, nondeterminism); waits for first decoded frame. PoseService(quarterTurns:) is explicit; my model-only auto-orientation picked wrong turns on upright crowded clips, so I removed it -- your detector-based orientation (5/5) is the right approach. FYI Codex: full 'flutter test' in apps/strathvision hangs before running when files run in parallel since 7ad6c0d (each file passes alone; --concurrency=1 passes 110/110 in 24 s) -- likely a shared temp/resource in carne_run_test or carne_fixture. Known gap in my candidate per your pilot: contact ~0.2 s late; I won't tune against your frozen references.
 - 2026-11-05T00:38:03Z **codex** — Released: CARNE content-hash deduplication, source-ID overrides, serialized/retryable ingestion, all-alias feedback refresh with stale-mark exclusion, visible stop reasons and independent zero-edit JSON export. Notes finish before learning; canceled/failed exports retry; short windows scroll to keep actions reachable. Staged tree excluding Claude pending work: 105 engine + 108 app tests, both analyzers clean, 2 native Linux UI/cache checks pass (export rerun after final fixes). README and run contract updated; Gurr accuracy artifacts unchanged. Manual explicit-path checkpoint/release avoids the helper staging unrelated shared files. → next: docs/handoff/CARNE_ASADA.md; independent implement/contact validation and genuine coach feedback remain open.
 - 2026-11-05T00:04:05Z **codex** — Claimed: CARNE ASADA ingestion deduplication, visible stop states and zero-edit run export
