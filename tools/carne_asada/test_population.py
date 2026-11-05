@@ -4,6 +4,52 @@ import pytest
 from population import summarize, validate_inputs, validate_result
 from population_review import task
 from feedback_review import validated_feedback
+from compare_population import compare as compare_population
+
+
+def comparison_fixture():
+    source = {'clip_sha256': 'a' * 64, 'source_name': 'synthetic.mov',
+              'deferred_windows': 0, 'candidate_event_passes': {'underhand': {
+                  'candidate_strokes': 3, 'duplicate_predictions_removed': 0,
+                  'gate_passing_candidates': 2, 'gate_passing_union_seconds': 1.5,
+                  'selection_and_pack_eligible_candidates': 2}}}
+    native = {'summary': {'native_completed_windows': 1, 'native_windows': 1,
+                         'core_intervals_reached': 1, 'unique_recordings': 1,
+                         'complete_sources': 1, 'sources_reaching_all_scored_cores': 1,
+                         'native_failed_windows': 0},
+              'freeze': {'native': 'frozen'}, 'sources': [source]}
+    base = deepcopy(native)
+    base['engine_replay'] = {'same_native_pose_inputs': True, 'fingerprint': 'base', 'revision': 'before'}
+    current = deepcopy(base)
+    current['engine_replay'].update(fingerprint='current', revision='after')
+    current['sources'][0]['candidate_event_passes']['underhand']['gate_passing_union_seconds'] = 1.2
+    return native, base, current
+
+
+def test_population_comparison_requires_complete_matching_control():
+    native, base, current = comparison_fixture()
+    result = compare_population(native, base, current)
+    assert result['baseline_reproduces_native']
+    assert result['current']['events']['underhand']['gate_passing_union_seconds'] == 1.2
+    assert len(result['changed_sources']) == 1
+    native['summary']['core_intervals_reached'] = 0
+    with pytest.raises(ValueError, match='incomplete'):
+        compare_population(native, base, current)
+
+
+def test_population_comparison_rejects_changed_poses_or_nonmatching_baseline():
+    native, base, current = comparison_fixture()
+    current['freeze']['native'] = 'different'
+    with pytest.raises(ValueError, match='Different native'):
+        compare_population(native, base, current)
+    native, base, current = comparison_fixture()
+    base['sources'][0]['candidate_event_passes']['underhand']['candidate_strokes'] = 4
+    with pytest.raises(ValueError, match='does not reproduce'):
+        compare_population(native, base, current)
+    native, base, current = comparison_fixture()
+    current['sources'][0]['deferred_windows'] = 1
+    with pytest.raises(ValueError, match='coverage changed'):
+        compare_population(native, base, current)
 
 
 def fixture():

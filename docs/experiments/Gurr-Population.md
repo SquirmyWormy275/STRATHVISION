@@ -70,3 +70,20 @@ The publisher rejects missing windows, mismatched native runtimes, gaps, duplica
 Saved native poses also run through two separate compiled pure-Dart engines: the matching base at `501466a` and the later fast-rhythm/springboard engine/pack at `d0d6f46`. The [replay tool](../../packages/analysis_engine/tool/population_replay.dart) checks pose provenance; the [driver](../../tools/carne_asada/replay_population.py) requires the base replay to reproduce native stroke spans and quality decisions before accepting its cache. Both executables and source/pack files have separate fingerprints.
 
 This comparison changes the engine/pack while retaining the same native pose observations. It does not re-run the later tracking changes. Candidate counts and interval-union coverage remain diagnostic measures, with genuine coaching effectiveness unvalidated. [Progress reader](../../tools/carne_asada/window_status.py) reports completed model windows and complete original sources without counting context as additional recordings.
+
+After both pinned replay executables have been built in `engine-replay-base/` and `engine-replay-current/`, with their original revisions recorded in `source-revision.txt`:
+
+```sh
+"$SV_PY" tools/carne_asada/replay_population.py --parent "$SV_POP" --follow
+"$SV_PY" tools/carne_asada/window_population.py publish --parent "$SV_POP" \
+  --engine-replay base --output '/path/to/private-analysis/base-results.json'
+"$SV_PY" tools/carne_asada/window_population.py publish --parent "$SV_POP" \
+  --engine-replay current --output '/path/to/private-analysis/current-results.json'
+"$SV_PY" tools/carne_asada/compare_population.py \
+  --native '/path/to/private-analysis/population-results.json' \
+  --base '/path/to/private-analysis/base-results.json' \
+  --current '/path/to/private-analysis/current-results.json' \
+  --output '/path/to/private-analysis/engine-comparison.json'
+```
+
+The comparison refuses incomplete population coverage, differing native inputs, or a base replay that does not reproduce the native source results. Its per-event durations use the union of retained intervals. Separate event stress-test passes overlap, so their durations cannot be added as unique footage.
