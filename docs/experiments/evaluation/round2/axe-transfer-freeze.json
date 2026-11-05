@@ -1,0 +1,11 @@
+{
+  "reference_sha256": "95297c2eba7f0cd1e425a95c182d2fbec83d5f3be1f7093a13b9b61bbcc903ff",
+  "model_sha256": "f4cdf9387b1140a0b59911a11cf4f55b442b2eb063d743d5e06807b49e458f98",
+  "metadata_sha256": "867ac8aa4ddc16a382b0f390ea032e5d3017652ba60fddd58d310dd3c2cbc0db",
+  "code_sha256": {
+    "axe_transfer.py": "979c5b172d8151852bb1e3689d72a95903720822e3a3957d93e482d7e859d6ad",
+    "axe_data.py": "48783795d8e95a78ee73a45255e1d92b704233420fae8135cd13eb62d4ef94d3",
+    "axe_detector.py": "380a278cc133fc63d1d6bf5deba3558d7600ffda34ac27e13c98f6d8fa12fe6e",
+    "footage.py": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8"
+  }
+}
