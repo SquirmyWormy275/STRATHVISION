@@ -2,12 +2,12 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-05T00:04:05Z
+owner: none
+heartbeat: 2026-11-05T00:38:03Z
 branch: implementation
-phase: 2 — Dual-Video Workspace
-task: Gurr accuracy pilot published; coaching/contact validation remains open
-next: Review docs/experiments/Gurr-Accuracy.md and the checked phase candidate patch; obtain genuine coach feedback and reserve fresh clips before further timing changes. Preserve pending shared app/engine work.
+phase: 8 — CARNE ASADA reliability and experiment capture
+task: CARNE content deduplication, visible stop reasons and zero-edit experiment export delivered
+next: Review docs/CARNE_RUN_REPORT.md and docs/handoff/CARNE_ASADA.md. Continue independent implement/contact validation and obtain genuine coach feedback; preserve Claude pending phase/rotation files.
 <!-- STATE:END -->
 
 ## Phase progress
@@ -34,7 +34,7 @@ next: Review docs/experiments/Gurr-Accuracy.md and the checked phase candidate p
 
 ## Blockers / questions for the human
 
-- **Pick a local speech transcriber** for voice notes (for example whisper.cpp). Until then, voice notes are saved without spoken labels.
+- **Local speech transcription remains open.** Voice input paths are recorded as awaiting transcription. The standalone experiment report does not copy audio files or bind spoken labels; the UI reports receipt rather than claiming audio was saved.
 - **Gurr coach-learning evidence remains open.** All five downloaded parts are verified and all 47 unique videos have real-pose coverage and no-feedback controls published in README. Coach-specific learning still needs confirmed athlete/event assignments, real coach marks and an independently validated implement track. See `docs/experiments/Gurr-Academy.md`; no improvement is claimed.
 
 - **The adapter compiler needs an Anthropic API key on the workbench.** Set `ANTHROPIC_API_KEY`. The default model is `claude-opus-5-5`. The provider and model are a human decision the docs don't make, so confirm or change them. The compile path is unit-tested against the Messages API request and response shape but has not been run live here.
@@ -57,6 +57,7 @@ next: Review docs/experiments/Gurr-Accuracy.md and the checked phase candidate p
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-05T00:38:03Z **codex** — Released: CARNE content-hash deduplication, source-ID overrides, serialized/retryable ingestion, all-alias feedback refresh with stale-mark exclusion, visible stop reasons and independent zero-edit JSON export. Notes finish before learning; canceled/failed exports retry; short windows scroll to keep actions reachable. Staged tree excluding Claude pending work: 105 engine + 108 app tests, both analyzers clean, 2 native Linux UI/cache checks pass (export rerun after final fixes). README and run contract updated; Gurr accuracy artifacts unchanged. Manual explicit-path checkpoint/release avoids the helper staging unrelated shared files. → next: docs/handoff/CARNE_ASADA.md; independent implement/contact validation and genuine coach feedback remain open.
 - 2026-11-05T00:04:05Z **codex** — Claimed: CARNE ASADA ingestion deduplication, visible stop states and zero-edit run export
 - 2026-11-04T23:47:01Z **codex** — Accuracy pilot complete: frozen references and source-disjoint test, target coverage 20/25 to 24/25; committed engine 0/15 contacts; wrist proxy failed (3 matches, 5 extras). Fresh three-source check of existing phase candidate: 3 matches, 1 extra, ~0.2 s delay; 108 candidate engine tests and 22 Python tests pass. Checked candidate patch and all results linked from docs/experiments/Gurr-Accuracy.md. Shared pending engine/app files preserved. Released scoped research work; genuine coach feedback and implement validation remain open.
 - 2026-11-04T23:22:30Z **codex** — Claimed: Gurr accuracy pilot in CARNE scope; preserve pending Claude pose changes (taking over from claude, last heartbeat 158 min ago)

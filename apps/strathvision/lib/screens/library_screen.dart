@@ -584,6 +584,7 @@ CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async => CarneContr
       bundle: wb.bundle,
       probe: probeClip,
       analyze: isolateStrokeAnalyzer(pack.analysisPack),
+      analysisMetadata: carneAnalysisMetadata(),
       marks: db.marksForPath,
       phaseLabel: pack.phaseLabel,
       metricLabel: pack.metricLabel,

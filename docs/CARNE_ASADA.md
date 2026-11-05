@@ -40,6 +40,15 @@ Max 5–10 accepted edits per session. Low-confidence or below-threshold clips i
 - `carne_asada/mixture_edits_vN.json` — research log + deltas (never required for inference).
 - Full versioning + soft revoke already defined for packages.
 
+## Input identity, stop states and experiment capture
+
+- Identify video content by streaming SHA-256. Renamed/copy duplicates share one source ID and add usable footage only once per session. Display names remain presentation only; Ignore and Use anyway address source IDs.
+- Serialize overlapping drops. A failed input is recorded and does not prevent the remaining batch from being processed. A failed analysis can be retried.
+- Re-dropping existing content refreshes marks from the observed source paths without re-analyzing or duplicating strokes. Mark IDs are deduplicated and stroke time intervals are half-open. Pose caching uses the content ID for CARNE so replacing a file cannot reuse the previous content's pose.
+- Show the current activity and the actual reason the loop stops: insufficient usable footage, waiting for feedback, no supported/improving proposal, hull rejection, or edit limit. Preserve all accepted/rejected/idle attempts in the experiment record.
+- Save experiment exports a standalone `carne_asada_run/1` JSON record after any input attempt, including failures and zero accepted edits. It never creates a coaching-profile version. Save as vN+1 remains a separate action requiring accepted edits.
+- Record source hashes/aliases, input outcomes, quality exclusions, settings, marks, overrides, loop outcomes and accepted edits. See [run record contract](CARNE_RUN_REPORT.md). Reported quality gates are not ground-truth accuracy or evidence of coaching improvement.
+
 ## Experiment Integration
 
 After working desktop build: upload all race and training footage of Matthew Gurr and Daniel Gurr. Run with priority = slope (then optionally others). Publish results in README (usable strokes, accepted edits, before/after residuals, exact explanations, hull compliance, raw logs).

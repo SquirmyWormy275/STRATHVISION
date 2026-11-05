@@ -343,15 +343,17 @@ class CarneSession {
   }
 
   /// "Use anyway" for every stroke of [clipName].
-  void useAnyway(String clipName) {
-    for (final s in pile.where((s) => s.clipName == clipName)) {
+  void useAnyway(String clipName, {String? clipId}) {
+    for (final s in pile.where((s) =>
+        clipId == null ? s.clipName == clipName : s.stroke.clipId == clipId)) {
       s.forced = true;
     }
   }
 
   /// "Ignore this clip".
-  void ignore(String clipName) {
-    for (final s in pile.where((s) => s.clipName == clipName)) {
+  void ignore(String clipName, {String? clipId}) {
+    for (final s in pile.where((s) =>
+        clipId == null ? s.clipName == clipName : s.stroke.clipId == clipId)) {
       s.ignored = true;
     }
   }

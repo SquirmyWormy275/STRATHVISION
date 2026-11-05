@@ -44,8 +44,12 @@ CARNE ASADA is the recursive weight-space editor for the phase-conditioned Gauss
 - Drop-zone playground: drag videos, packages, voice notes, or notes. Instant plain-language status.
 - Hard constraints: max 5–10 accepted edits per session, priority-attribute only, must stay inside coach hull (or soft personal pull), low-quality clips ignored until threshold, full versioning + soft revoke.
 - Every accepted edit produces a one-sentence explanation and is logged.
+- Videos use SHA-256 content IDs: copies and renames count once, while repeated drops refresh review marks. Same-named recordings remain independent.
+- The current stop reason stays visible, including insufficient usable footage and missing feedback. **Save experiment** exports inputs, settings, outcomes and loop attempts even when no edits were accepted; **Save as vN+1** is reserved for accepted edits. See the [experiment record format](docs/CARNE_RUN_REPORT.md).
 
 Status messages and edit explanations are specified in docs/DECISIONS.md.
+
+Application evidence: [controller/widget regression tests](apps/strathvision/test/carne_run_test.dart) cover duplicates, mark refresh, failures, stop states and export retries; [native Linux checks](apps/strathvision/integration_test/carne_run_flow_test.dart) save a zero-edit report and verify content-keyed pose caching. Export/UI fixtures are explicitly synthetic. The real-footage research results follow below.
 
 ## Experiment: CARNE ASADA on the Gurr Footage
 
@@ -89,14 +93,14 @@ Prerequisites:
 3. **Optional: marks.** Review clips in a workspace and add green/red **Slope** marks on strokes. CARNE ASADA binds marks from any review of the same file to the stroke at that time. Coach marks override athlete marks.
 4. **Feed CARNE ASADA.** Open the profile's **Workbench** (tune icon) → **CARNE ASADA**. Priority starts at slope (a text note `priority: spacing` or `priority: hinge` changes it before the first edit). Drop the whole set onto **Feed CARNE ASADA**. Record each status line.
 5. **Let it run.** Updates are tried automatically once usable footage passes Good (2 min), and **Look for an update** tries again. It stops at the session limit. **What did it just do?** lists every explanation, and **Undo** is one click.
-6. **Save as vN+1.** The package gets `carne_asada/mixture_edits_vN.json` holding the priority, usable minutes, the coach hull, and every edit (before/after values, objective before/after, explanation, time).
-7. **Publish** the numbers above from that file, plus the profile versions.
+6. **Save experiment**, including runs that stop without edits. The standalone JSON records source hashes, duplicate/error outcomes, settings, usable minutes, stop reason and loop attempts. If edits were accepted, **Save as vN+1** also writes the updated package with `carne_asada/mixture_edits_vN.json` (before/after values, objective, explanation and time).
+7. **Publish** the numbers above from the experiment record, plus any saved profile versions. Keep zero-edit outcomes in the results.
    - Usable strokes: the "Found N strokes. K are clean enough…" lines.
    - Accepted edits: the `edits` count.
    - Feedback-agreement objective: `objective_before` of the first edit against `objective_after` of the last. Measure physical residuals separately; these objective values are not angle errors.
    - Explanations: copy each `explanation` verbatim.
    - Hull compliance: every `after.center` lies within `hull`.
-   - Raw logs: attach the zip.
+   - Raw logs: attach the experiment JSON and any edited package.
 
 ## Repository map
 

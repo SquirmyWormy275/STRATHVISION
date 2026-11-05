@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:analysis_engine/analysis_engine.dart';
 import 'package:archive/archive.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart' hide ComparisonResult;
@@ -68,6 +69,7 @@ void main() {
         written = (profile: profile, research: research);
         return '/store/v${profile.version}.zip';
       },
+      fingerprint: (path) async => sha256.convert(utf8.encode(path)).toString(),
     );
     c.readText = (path) async => notes[path]!;
     return c;
@@ -145,7 +147,8 @@ void main() {
     await tap(tester, 'choose-files');
     expect(find.text(CarneCopy.belowThreshold), findsOneWidget);
     expect(c.session.usableSeconds, 0);
-    await tap(tester, 'use-anyway-dim');
+    final sourceId = c.session.pile.first.stroke.clipId;
+    await tap(tester, 'use-anyway-$sourceId');
     expect(c.session.usableSeconds, greaterThan(50));
 
     await c.drop(['/feed/n.txt', '/feed/coach.m4a', '/feed/readme.pdf']);
@@ -154,7 +157,7 @@ void main() {
     expect(texts, contains('Priority is hinge. Only hinge updates will be considered this session.'));
     expect(texts, contains('Ignoring dim.'));
     expect(c.session.usableSeconds, 0);
-    expect(texts, contains('Saved the voice note. Spoken labels need a transcriber on this computer.'));
+    expect(texts, contains('Received the voice note. Spoken labels need a transcriber on this computer.'));
     expect(texts, contains('Can’t use readme.pdf.'));
 
     // A coaching package for the same event widens the coach hull.
@@ -172,7 +175,7 @@ void main() {
         other));
     await tester.runAsync(() => c.drop([path!]));
     await tester.pumpAndSettle();
-    expect(c.feed.last.text, 'Added 1 coach strokes from Other · v1 to the coach hull.');
+    expect(c.feed.map((l) => l.text), contains('Added 1 coach strokes from Other · v1 to the coach hull.'));
     expect(c.session.hull['entry_slope']!.$2, -20.0);
     c.dispose();
   });

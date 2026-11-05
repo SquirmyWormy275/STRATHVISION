@@ -190,6 +190,8 @@ See docs/CARNE_ASADA.md for full specification.
 - **Undo and save.**
   - Undo removes the last accepted edit and restores its metric exactly.
   - **Save as vN+1** writes one new package version per session: the edited mixture in `profile.json`, plus `carne_asada/mixture_edits_vN.json`.
+  - **Save experiment** separately exports `carne_asada_run/1` JSON after any input attempt, even when there are no strokes or accepted edits. It never writes a profile version or changes the source package. Canceling or failing export leaves the run available to retry.
+- **Input identity and run status.** Video SHA-256 is the stable source identity within the pack/event session. Copies/renames cannot inflate the pile; same-named different files have independent Ignore/Use anyway controls. Repeat drops refresh genuine marks without recounting footage. Drops are serialized and individual input failures are retained without aborting the batch. The prominent status and run log expose every loop stop reason. Source-keyed pose caching prevents stale results when bytes change at an existing path. These additions follow [CARNE_RUN_REPORT.md](CARNE_RUN_REPORT.md).
 
 ## Phase 9 Drift, Health, Distribution Decisions
 

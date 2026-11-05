@@ -30,8 +30,8 @@ class PoseService {
       _model ??= BlazePose.load((await rootBundle.load(modelAsset)).buffer.asUint8List());
 
   /// The pose track for [clip] (cached per path and duration).
-  Future<PoseTrack> track(ClipSource clip, {void Function(double progress)? onProgress}) async {
-    final key = '${clip.path}|${clip.durationMs}|${clip.fps}';
+  Future<PoseTrack> track(ClipSource clip, {void Function(double progress)? onProgress, String? sourceKey}) async {
+    final key = '${sourceKey ?? clip.path}|${clip.durationMs}|${clip.fps}';
     final cached = _cache[key];
     if (cached != null) return cached;
     final model = await _load();
