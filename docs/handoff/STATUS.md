@@ -2,8 +2,8 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-04T23:47:01Z
+owner: codex
+heartbeat: 2026-11-05T00:04:05Z
 branch: implementation
 phase: 2 — Dual-Video Workspace
 task: Gurr accuracy pilot published; coaching/contact validation remains open
@@ -57,6 +57,7 @@ next: Review docs/experiments/Gurr-Accuracy.md and the checked phase candidate p
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-05T00:04:05Z **codex** — Claimed: CARNE ASADA ingestion deduplication, visible stop states and zero-edit run export
 - 2026-11-04T23:47:01Z **codex** — Accuracy pilot complete: frozen references and source-disjoint test, target coverage 20/25 to 24/25; committed engine 0/15 contacts; wrist proxy failed (3 matches, 5 extras). Fresh three-source check of existing phase candidate: 3 matches, 1 extra, ~0.2 s delay; 108 candidate engine tests and 22 Python tests pass. Checked candidate patch and all results linked from docs/experiments/Gurr-Accuracy.md. Shared pending engine/app files preserved. Released scoped research work; genuine coach feedback and implement validation remain open.
 - 2026-11-04T23:22:30Z **codex** — Claimed: Gurr accuracy pilot in CARNE scope; preserve pending Claude pose changes (taking over from claude, last heartbeat 158 min ago)
 - 2026-11-04T23:00:48Z **codex** — Reconciled all five replacement Gurr ZIPs: 48 MOV files, seven photos, one exact video duplicate; all 47 unique videos (7787.428656 s) processed. Expanded results and README compare against the preserved 12-video subset using frozen engine 5861e2f. Zero edits in no-feedback controls; nine Python + 105 snapshot engine tests pass. Claude working-tree changes untouched. See docs/handoff/CARNE_ASADA.md for artifacts and next steps.
