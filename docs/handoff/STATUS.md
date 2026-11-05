@@ -45,6 +45,10 @@ next: Continue native-population-20261105 bounded prepare7584/batches64797. Wait
 
 - **Confirm the pose model choice** (made by Claude when told not to stop): MediaPipe BlazePose GHUM 3D (Apache-2.0), on ONNX Runtime, on every platform (DECISIONS.md "Real Pose Decisions"). The implement is still inferred from the grip, not detected; a trained implement detector is the next accuracy step. Standing block (horizontal swing) still needs clean footage to validate. All five Gurr Academy ZIPs in `~/Projects/CARNE ASADA/` are now verified and extracted; the frozen-engine experiment is documented separately.
 
+- **Springboard event needs a coach** (added 2026-11-05 at the human's request, `timber/springboard`). Pocket cuts and top-block chopping are different swings but are summarized together; decide whether to measure them separately and what each measures. Its metrics are a placeholder (standing block + knees). Crowded, distant springboard clips (IMG_8010) need the athlete picked by hand.
+
+- **Field checks only the human can do:** run the app on a real Android phone (only the emulator is tested); film some competition chopping at 60 fps to test whether the filming tip helps (no 60 fps footage exists). Blurred competition strokes can pass as "usable" with wrong contacts (IMG_8014, `docs/experiments/Gurr-Pipeline-Findings.md`).
+
 - **Phase 1 Windows acceptance is open.** On a Windows PC: `cd apps/strathvision && flutter run -d windows`, then follow the "Phase 1 manual check" in apps/strathvision/README.md. iOS/macOS builds need a Mac.
 
 ## Environment notes
