@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T21:09:06Z
+heartbeat: 2026-11-05T21:43:14Z
 branch: implementation
 phase: 8 — additional novice/event footage training experiment
-task: New footage:55fresh videos;capture-group split36train/13val/6test frozen192c25c;144train+52valframes ready;engineering annotations/model fit in progress
-next: Read private analysis/new-footage-20261105/working-state.json. Finish49train/val source annotations; axe_faster.py smoke/fit and freeze beforeopening24testframes. Reportactualheldoutresults/README. Keepoldresults/reviewservers unchanged; no fabricatedcoachlabels.
+task: New55 footage split/engineering references complete;35visibletrain+3empty;GPU fit1000steps next;test24pixels stillclosed
+next: Run axe_faster.py fit with MLvenv and private new-footage-20261105/reference.json. Freeze selected model+metadata+code BEFORE testpixels. Then annotate6testvideos/24fixedframes, commit labels, test once, publishREADME/results. Keepoldreviewservers44597/45851 running.
 <!-- STATE:END -->
 
 ## Phase progress

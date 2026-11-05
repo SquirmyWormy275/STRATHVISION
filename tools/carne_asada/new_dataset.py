@@ -50,6 +50,9 @@ def prepare(parent, partition, freeze, workers, model=None):
         if model is None or sha256(model) != frozen['model_sha256']:
             raise ValueError('Actual model weights do not match the freeze')
     jobs = [(s, f) for s in plan['sources'] if s['split'] == partition for f in s['frames']]
+    for source in plan['sources']:
+        if source['split'] == partition and sha256(parent/'media'/source['relative_path']) != source['sha256']:
+            raise ValueError('Source pixels changed since ingestion')
     def one(job):
         source, frame = job
         path = parent / 'frames' / partition / (frame['frame_id'] + '.png')
@@ -93,6 +96,12 @@ def reference(parent, annotations, output):
     names = [r['member'] for r in plan['sources']]
     if len(set(names)) != len(names): raise ValueError('Use content IDs when source filenames collide')
     rows = []
+    extra_path = parent/'augmentation-annotations.json'
+    extras = json.loads(extra_path.read_text()) if extra_path.exists() else {}
+    extra_frames = {}
+    if extras:
+        for frame in json.loads((parent/'frames-training-extra.json').read_text())['frames']:
+            extra_frames[frame['frame_id']] = frame
     for source in plan['sources']:
         mark = marks.get(source['member']);roi = [0., 0., 1., 1.]
         if mark:
@@ -108,6 +117,14 @@ def reference(parent, annotations, output):
                 if not (roi[0] <= box[0] < box[2] <= roi[2] and roi[1] <= box[1] < box[3] <= roi[3]):
                     raise ValueError('Annotated head lies outside the broad athlete ROI')
             frames.append({'time_s': frame['time_s'], 'head_box': box, 'visibility': label['visibility']})
+        for frame_id, label in extras.items():
+            frame = extra_frames[frame_id]
+            if frame['clip_sha256'] != source['sha256']: continue
+            if source['split'] != 'train' or not mark: raise ValueError('Extra labels must belong to a reviewed training source')
+            x, y, r, bottom = label['head_box_px'];box = [x/w, y/h, r/w, bottom/h]
+            if not (roi[0] <= box[0] < box[2] <= roi[2] and roi[1] <= box[1] < box[3] <= roi[3]):
+                raise ValueError('Extra head lies outside the broad athlete ROI')
+            frames.append({'time_s': frame['time_s'], 'head_box': box, 'visibility': 'visible'})
         rows.append({'window_id': 'new-'+source['sha256'][:16], 'clip_sha256': source['sha256'],
                      'source_name': source['relative_path'], 'split': source['split'], 'start_s': 0.,
                      'duration_s': source['duration_s'], 'rotation_cw': 0, 'search_roi': roi, 'frames': frames})
@@ -115,8 +132,37 @@ def reference(parent, annotations, output):
               'reviewer': 'Codex visual engineering annotations; not coach judgments',
               'target': 'Selected athlete active axe head, conditional on a broad manually supplied ROI',
               'windows': rows}
+    if extras: result['training_augmentation_sha256'] = sha256(parent/'training-augmentation-plan.json')
     from axe_data import validate
     validate(result);write_json(output, result)
+
+
+def validate_plan(parent, document, fitting):
+    plan_path = parent / 'plan.json'
+    if document['source_plan_sha256'] != sha256(plan_path): raise ValueError('Source plan changed')
+    planned = {r['sha256']: r for r in json.loads(plan_path.read_text())['sources']}
+    extras = {}
+    if document.get('training_augmentation_sha256'):
+        path = parent/'training-augmentation-plan.json'
+        if document['training_augmentation_sha256'] != sha256(path): raise ValueError('Training augmentation plan changed')
+        augmented = json.loads(path.read_text())
+        if augmented['partition'] != 'train' or augmented['source_plan_sha256'] != sha256(plan_path):
+            raise ValueError('Invalid augmentation partition')
+        for frame in augmented['candidates']:
+            if planned[frame['clip_sha256']]['split'] != 'train': raise ValueError('Augmentation leaks into held-out sources')
+            extras.setdefault(frame['clip_sha256'], set()).add(frame['time_s'])
+    if len(document['windows']) != len(planned) or set(planned) != {r['clip_sha256'] for r in document['windows']}:
+        raise ValueError('Missing or unexpected source in annotations')
+    for row in document['windows']:
+        source = planned[row['clip_sha256']]
+        if row['split'] != source['split']: raise ValueError('Source crossed frozen split')
+        times = {f['time_s'] for f in row['frames']};base = {f['time_s'] for f in source['frames']}
+        allowed = base | (extras.get(row['clip_sha256'], set()) if source['split']=='train' else set())
+        if not base <= times <= allowed or len(times) != len(row['frames']):
+            raise ValueError('Temporal samples changed after the source plan')
+        if fitting and row['split'] != 'test' and any(f.get('visibility') == 'unreviewed' for f in row['frames']):
+            raise ValueError('Review all training/validation frames before fitting')
+
 
 
 def main():

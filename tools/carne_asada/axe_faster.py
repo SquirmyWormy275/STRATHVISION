@@ -16,6 +16,7 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from axe_data import validate
 from axe_detector import pixels, score
 from footage import sha256, write_json
+from new_dataset import validate_plan
 
 SETTINGS = {'seed': 365, 'steps': 1000, 'batch_size': 2, 'learning_rate': .002,
             'checkpoint_every': 200, 'momentum': .9, 'weight_decay': .0005,
@@ -26,11 +27,12 @@ SETTINGS = {'seed': 365, 'steps': 1000, 'batch_size': 2, 'learning_rate': .002,
 
 def code_hashes():
     return {name: sha256(Path(__file__).with_name(name)) for name in
-            ['axe_faster.py', 'axe_data.py', 'axe_detector.py', 'footage.py', 'new_dataset.py']}
+            ['axe_faster.py', 'axe_data.py', 'axe_detector.py', 'footage.py', 'new_dataset.py', 'mine_training.py']}
 
 
 def fit_reference(document):
-    subset = {'format': document['format'], 'windows': [r for r in document['windows'] if r['split'] != 'test']}
+    subset = {'format': document['format'], 'source_plan_sha256': document['source_plan_sha256'],
+              'training_augmentation_sha256': document.get('training_augmentation_sha256'), 'windows': [r for r in document['windows'] if r['split'] != 'test']}
     return hashlib.sha256(json.dumps(subset, sort_keys=True).encode()).hexdigest()
 
 
@@ -46,23 +48,11 @@ def build(parent):
     return model
 
 
-def validate_plan(parent, document, fitting):
-    plan_path = parent / 'plan.json'
-    if document['source_plan_sha256'] != sha256(plan_path): raise ValueError('Source plan changed')
-    planned = {r['sha256']: r for r in json.loads(plan_path.read_text())['sources']}
-    if set(planned) != {r['clip_sha256'] for r in document['windows']}:
-        raise ValueError('Missing or unexpected source in annotations')
-    for row in document['windows']:
-        source = planned[row['clip_sha256']]
-        if row['split'] != source['split']: raise ValueError('Source crossed frozen split')
-        if {f['time_s'] for f in row['frames']} != {f['time_s'] for f in source['frames']}:
-            raise ValueError('Temporal samples changed after the source plan')
-        if fitting and row['split'] != 'test' and any(f.get('visibility') == 'unreviewed' for f in row['frames']):
-            raise ValueError('Review all training/validation frames before fitting')
-
 
 def inputs(parent, document, partition):
     frames = json.loads((parent / ('frames-' + partition + '.json')).read_text())['frames']
+    if partition == 'train' and document.get('training_augmentation_sha256'):
+        frames += json.loads((parent/'frames-training-extra.json').read_text())['frames']
     lookup = {(r['clip_sha256'], r['time_s']): r for r in frames};rows = []
     for row in document['windows']:
         if row['split'] != partition: continue
@@ -154,11 +144,13 @@ def fit(parent, document, model_path, metadata_path, output):
                 'delta_sha256': sha256(model_path), 'state_scope': 'All tensors except frozen backbone.body',
                 'settings': SETTINGS, 'chosen_step': best[1]['step'], 'threshold': best[1]['threshold'],
                 'fit_reference_sha256': fit_reference(document), 'plan_sha256': sha256(parent/'plan.json'),
+                'training_augmentation_sha256': document.get('training_augmentation_sha256'),
                 'fit_sources': sorted({r['clip_sha256'] for r in document['windows'] if r['split'] != 'test'}),
                 'training_positive_frames': sum(bool(r['head_box']) for r in examples),
                 'training_empty_frames': sum(r['visibility'] == 'empty' for r in examples),
                 'training_unrated_frames': len(train_all)-len(examples), 'validation_history': history,
                 'training_frame_sha256': {r['window_id']+':'+str(r['time_s']): r['pixels_sha256'] for r in examples},
+                'validation_frame_sha256': {r['window_id']+':'+str(r['time_s']): r['pixels_sha256'] for r in validation},
                 'code_sha256': code_hashes(), 'torch': torch.__version__, 'torchvision': torchvision.__version__,
                 'device': device, 'elapsed_s': time.monotonic()-start, 'promoted_for_coaching': False}
     write_json(metadata_path, metadata)
@@ -171,7 +163,8 @@ def test(parent, document, model_path, metadata_path, freeze_path, output):
     metadata = json.loads(metadata_path.read_text());frozen = json.loads(freeze_path.read_text())
     expected = {'plan_sha256': sha256(parent/'plan.json'), 'model_sha256': sha256(model_path),
                 'metadata_sha256': sha256(metadata_path), 'code_sha256': code_hashes()}
-    if frozen != expected or metadata['fit_reference_sha256'] != fit_reference(document):
+    if (frozen != expected or metadata['fit_reference_sha256'] != fit_reference(document)
+            or metadata['code_sha256'] != code_hashes()):
         raise ValueError('Frozen model, fit labels, code or source plan changed')
     test_sources = {r['clip_sha256'] for r in document['windows'] if r['split'] == 'test'}
     if test_sources & set(metadata['fit_sources']): raise ValueError('Test source leaked into fitting')
