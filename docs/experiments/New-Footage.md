@@ -30,7 +30,7 @@ The new candidate uses a COCO-pretrained Faster R-CNN/ResNet-50 FPN v2 model wit
 
 All 144 baseline training and 52 validation frames have single-reviewer Codex visual engineering annotations. The [fit reference](evaluation/new-footage/fit-reference.json) records boxes, broad athlete regions and explicit visibility states. Box overlays were visually checked before fitting. These are coarse engineering references, not independent expert annotations.
 
-A separate [training-only candidate plan](evaluation/new-footage/training-augmentation-plan.json) samples six offsets (−0.6, −0.4, −0.2, +0.2, +0.4, +0.6 seconds) around the 55% point of each training video. It prepared 216 candidates; visual curation of five training-source sheets retained 11 additional clear-head examples from three sources. Candidate preparation does not change validation/test times. The fit uses **35 positive frames and three clearly empty frames**; 117 training frames remain unrated. Validation contains 26 visible heads and 26 unrated frames. There are no clearly empty validation frames, so this study cannot estimate general background false-alarm rates.
+A separate [training-only candidate plan](evaluation/new-footage/training-augmentation-plan.json) samples six offsets (−0.6, −0.4, −0.2, +0.2, +0.4, +0.6 seconds) around the 55% point of each training video. It prepared 216 candidates; visual curation of five training-source sheets retained 11 additional clear-head examples from three sources. Candidate preparation does not change validation/test times. All 36 training videos were surveyed at their four fixed times. Clear positive boxes came from 13 training videos; a fourteenth supplied the three clear empty frames. The fit uses **35 positive frames and three clearly empty frames**; 117 training frames remain unrated. Validation contains 26 visible heads and 26 unrated frames. There are no clearly empty validation frames, so this study cannot estimate general background false-alarm rates.
 
 The ResNet body stays frozen at its verified COCO weights. FPN, RPN and the two-class ROI heads train for 1,000 SGD steps, batch size two, seed 365, learning rate 0.002 with warmup and a final reduction. Small anchor sizes are 8/16/32/64/128 pixels. Images resize to minimum edge 640, maximum 1,024 after cropping the supplied region; training adds horizontal flips and brightness jitter. Only training examples contribute gradients. Validation chooses among steps 200/400/600/800/1000 and sets the score threshold by IoU ≥ 0.5 F1, retaining at most one head per frame. An incorrect retained box counts as both a false positive and a missed visible head. Occluded, blurred, uncertain and out-of-frame labels are excluded from localization scoring.
 
@@ -57,3 +57,26 @@ Record prior-source capture metadata with the same `ingest_archives.metadata()` 
 ```
 
 The source plan refuses replacement, and the test-image path requires a model freeze matching that plan. Raw footage and frame pixels are excluded from the repository.
+
+The committed references make the engineering labels reviewable without footage disclosure. To repeat fitting with the same private media and frozen plans, export the pixel-coordinate annotations with `new_dataset.py reference`, then run in the CUDA environment recorded in [`requirements-training.txt`](../../tools/carne_asada/requirements-training.txt):
+
+```sh
+SV_ML='/path/to/ml-venv/bin/python'
+"$SV_ML" tools/carne_asada/axe_faster.py fit --parent "$SV_NEW" \
+  --reference "$SV_NEW/reference.json" --model "$SV_NEW/models/axe-faster.pt" \
+  --metadata "$SV_NEW/models/axe-faster.json" --output "$SV_NEW/validation.json"
+```
+
+`fit` verifies the source plan, complete training/validation review, allowed temporal samples, prepared pixel hashes and ROI bounds. Additional temporal samples are restricted to the frozen training-only allowlist. Before exposing test pixels, save and commit `freeze.json` with `plan_sha256`, `model_sha256`, `metadata_sha256` and `code_sha256` from `axe_faster.code_hashes()`:
+
+```sh
+"$SV_PY" tools/carne_asada/new_dataset.py sample --parent "$SV_NEW" --partition test \
+  --freeze "$SV_NEW/freeze.json" --model "$SV_NEW/models/axe-faster.pt"
+# Review and commit held-out engineering labels before predictions.
+"$SV_ML" tools/carne_asada/axe_faster.py test --parent "$SV_NEW" \
+  --reference "$SV_NEW/reference.json" --model "$SV_NEW/models/axe-faster.pt" \
+  --metadata "$SV_NEW/models/axe-faster.json" --freeze "$SV_NEW/freeze.json" \
+  --output "$SV_NEW/test.json"
+```
+
+Test execution rejects changed weights, code, metadata, fitting annotations or source plans. It also requires reviewed test frames and a source-disjoint fit. Raw videos remain necessary for reproduction; public hashes and rectangles do not reconstruct the private footage.

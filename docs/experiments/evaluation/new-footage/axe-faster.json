@@ -1,0 +1,733 @@
+{
+  "format": "axe-faster-model/1",
+  "architecture": "TorchVision Faster R-CNN ResNet50 FPN v2",
+  "pretrained_url": "https://download.pytorch.org/models/fasterrcnn_resnet50_fpn_v2_coco-dd69338a.pth",
+  "pretrained_sha256": "dd69338a24b8d7381807e247652bdc356325bcbaf1cd3e092e00e0a1a58706bf",
+  "delta_sha256": "9357fc91c46f1073702c88ead3108cc30e9efb61004097ddacf3671cdde15277",
+  "state_scope": "All tensors except frozen backbone.body",
+  "settings": {
+    "seed": 365,
+    "steps": 1000,
+    "batch_size": 2,
+    "learning_rate": 0.002,
+    "checkpoint_every": 200,
+    "momentum": 0.9,
+    "weight_decay": 0.0005,
+    "frozen_resnet_body": true,
+    "min_size": 640,
+    "max_size": 1024,
+    "anchor_sizes": [
+      8,
+      16,
+      32,
+      64,
+      128
+    ],
+    "max_candidates_per_frame": 1,
+    "iou_threshold": 0.5,
+    "input": "manually supplied broad athlete search ROI"
+  },
+  "chosen_step": 800,
+  "threshold": 0.6178619265556335,
+  "fit_reference_sha256": "42d504a2994beb5e9d0ab3b801d88908e7cff531c16a25fb7eb8527293400b09",
+  "plan_sha256": "c5e44be106a4cb0639a1fea9a2c2d9641f4a0cf0f0cd539aa293492bcc24c1a6",
+  "training_augmentation_sha256": "f5ff02cd2c11d20b854d08d64c3a43f6f71b43e883976676f1943e594c4e3fe8",
+  "fit_sources": [
+    "0b4c687fa945bc2237baba76d7ab655cb9d666faa027a4561faba9bce3706735",
+    "0d8b17dc496319941b103adeaa680d131ed89807813f0d37f94ffb8a2a1c7f46",
+    "12ebecf00e57662a1e69110e8feb03d548629ddaabab78d7df0f7154cb25dcf1",
+    "15b65bbf8f065f20916224afd672b47f5babf2502c74ad7b9c6bb6f85ab493d9",
+    "17fe54bf0d602c7fa87c398969f06e8837d1fef9ad53c24abc17d35eb0836c77",
+    "1cc6a285695058f3958ad32854bcf5c2aa0605c2419beac81169dee0dd9ed6d3",
+    "2bd55ec7e7109b2710e103b4c4e8bd53d0644285d05ebb4e39500e5848cd95f3",
+    "2cb1e0af87133b3994f34b79632c2ddf2b18ff64db2e2d694e12b29190ccd02e",
+    "3a39c5ebca192537df305ef76b5ecdc45013ed5fd969d9c2547ace2f1cf2c3ee",
+    "3a92c06b1ab8feb47bf84953cd73f851a90b7655da6351211dcf37f671dd6134",
+    "3b5df6ceefab2a24e0d6ec88076a5fa3f32990c29f8cd58287ecfd4404348f72",
+    "40cc3090b4fd754025c44ec65c1d8e5859416309e5ddcb83071acdbe616f9bcc",
+    "4b6f6cd5d36c5e89f6cb6ce432e266f6c05e42197544dd1cf3a9fd9396aa7be7",
+    "4b997aa86adb6c397ab42ef8f6662c4b37799d0900071c615d30983372296daa",
+    "4dbfc28cf65e14264ec27ede7551632bf8980e9ae542f1577150846fefd4af7b",
+    "523286daac401b787d26b477c01403f5f23b44a10d8a13f915aad050add2232e",
+    "531ca1dc01fe47de8d8795358fd5042d7321f6b4bb191db9a6df38a684efc98b",
+    "567a7f38127f32b5f60332d234df229a71bf5bb19b638a0ac2d81b3e94f741af",
+    "666b615c3eb3089a796cccbd2a89c972e6a3b53a3cbbfcde37908a6585af9333",
+    "6dea0cbb51accac5caccdb28a54147a6b940a55bdf82f12c8e9f838fa1ff0f9c",
+    "7236946fe327ecb3006bc5c7a6c93feb0b306db09bc5f48ec7022d109719745e",
+    "7dfba56d440c3394c566ba2fb7a813cd4285c0459607a868e6a596f2a08e234d",
+    "87a18724d44a533609e40d974b85f768a350ecee90a709081e5a43baa242c2e1",
+    "88937e4720fa70a1960340c6de1c2a2984fadd6157ce608e886bc16652284beb",
+    "90f679a2b8cf64209f97e73d6b92f9c33ef0e6988a4eabe357d050fef2350701",
+    "97ec7f45425502182c76db6fea2747fec90dbf9a3d11333acbdaafc15d45d944",
+    "9f968f6801196a8ea3ee745fd1b4b221042c2c99f07631813f5f9180998a016b",
+    "a0f9280e4d913ff0530b96720995884bd75ca0b579de4c60a0d5f316e3ec8e0d",
+    "a7f716287ca122f966884e8962900bf67b7c6005a1cf64ee68c019c6d8a995d5",
+    "ac4bace4dbf62b2204fee39aa4eead1333210e3dcaaec0d2a0068cbb552309fe",
+    "bc5a3c2cae8b39ace418e1478617510132b5a19e3f5792f36456834d89a35726",
+    "c4fa96fb54727f5eeaecff6f7b48553653d2b95c76aaf22510fb98cc0fb32aff",
+    "ca26cc60bb73f6a590bd4824903fd24fa4b6a52c2bdf4c519a5c2f6f40eb8d49",
+    "cc95c6938041b133c7e01dbd4017e5d0e1358740dc4e92fa0eb8c5874223ff99",
+    "db72c9faa665ed315cd89d091a9e8640ee1c7b98e30ffcbcb5f92abb1ebdff52",
+    "dc7149c4d8b2cc1b974c6e2724eb82e387e55ffd0079b004b357c70e5d0f6fef",
+    "debd9dd6c8bc476d0404f9a0042908d54b2629050f53b577c7ae78d24fca47da",
+    "dfc62e949945a49d878f3e7e4eafc46f61f3d6bc60ea5b24c299f4511da431e6",
+    "e15330a34da333ebc770af1dda2e3972ac40691c8f6af044983562bbdee534cb",
+    "e470d7e49ed3680a64e802c5c51345784ab763dbc56a75bc9d170da5f24cbdfc",
+    "e5f15e12d394da0504ced92281b64c9998138de1aba4c87a4844a61ecc667707",
+    "e67e8e14ad447f9d6e4427aa2af4c2d79f38d8f5cf52975ab7e6a46a9755a8d4",
+    "e7d3081580e93ce51b87ecd2056287a3a400ef40f0a92319cfd9ad964d6cd9ad",
+    "e9b31fbe9633bb50d07599f6966cb7d0c7dcceea9f1d3a796d3af0de55c214f3",
+    "f08106dda0f7efbf8e43608386c0aed5abef1d78d8a3ea9c9a386c30c12fc6ec",
+    "f1c703ea5c2ae2602e9c5455dff53bc2f47fea594cb7ebdcf80780cd3b072dd6",
+    "f238ac4a597e7fad95d148181356c4a82c915782bbd19ebdefc8b636dc173df5",
+    "f89b6b96fdff10ce73ef15c2bc51a582b6f1e65d969be16d00e7cfd2ce1d6acb",
+    "f8f5c9851e396c35d6e65a6364ce82a141bf69ba506f0162e4491c412484bb10"
+  ],
+  "training_positive_frames": 35,
+  "training_empty_frames": 3,
+  "training_unrated_frames": 117,
+  "validation_history": [
+    {
+      "step": 200,
+      "threshold": 0.06936762481927872,
+      "metrics": {
+        "tp": 6,
+        "fp": 8,
+        "fn": 20,
+        "unrated_frames": 26,
+        "precision": 0.42857142857142855,
+        "recall": 0.23076923076923078,
+        "f1": 0.3,
+        "mean_matched_iou": 0.7053993260052086,
+        "windows": [
+          {
+            "window_id": "new-f1c703ea5c2ae260",
+            "tp": 2,
+            "fp": 0,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-cc95c6938041b133",
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-3b5df6ceefab2a24",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-debd9dd6c8bc476d",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-97ec7f4542550218",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-15b65bbf8f065f20",
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-4dbfc28cf65e1426",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-e470d7e49ed3680a",
+            "tp": 2,
+            "fp": 2,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-88937e4720fa70a1",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-87a18724d44a5336",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-523286daac401b78",
+            "tp": 1,
+            "fp": 2,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-4b997aa86adb6c39",
+            "tp": 0,
+            "fp": 2,
+            "fn": 4,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-7dfba56d440c3394",
+            "tp": 0,
+            "fp": 0,
+            "fn": 4,
+            "unrated": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": 400,
+      "threshold": 0.09309028089046478,
+      "metrics": {
+        "tp": 9,
+        "fp": 10,
+        "fn": 17,
+        "unrated_frames": 26,
+        "precision": 0.47368421052631576,
+        "recall": 0.34615384615384615,
+        "f1": 0.4,
+        "mean_matched_iou": 0.6717546387378037,
+        "windows": [
+          {
+            "window_id": "new-f1c703ea5c2ae260",
+            "tp": 3,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-cc95c6938041b133",
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-3b5df6ceefab2a24",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-debd9dd6c8bc476d",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-97ec7f4542550218",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-15b65bbf8f065f20",
+            "tp": 0,
+            "fp": 1,
+            "fn": 2,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-4dbfc28cf65e1426",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-e470d7e49ed3680a",
+            "tp": 2,
+            "fp": 2,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-88937e4720fa70a1",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-87a18724d44a5336",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-523286daac401b78",
+            "tp": 2,
+            "fp": 1,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-4b997aa86adb6c39",
+            "tp": 1,
+            "fp": 2,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-7dfba56d440c3394",
+            "tp": 0,
+            "fp": 2,
+            "fn": 4,
+            "unrated": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": 600,
+      "threshold": 0.6092413663864136,
+      "metrics": {
+        "tp": 6,
+        "fp": 1,
+        "fn": 20,
+        "unrated_frames": 26,
+        "precision": 0.8571428571428571,
+        "recall": 0.23076923076923078,
+        "f1": 0.36363636363636365,
+        "mean_matched_iou": 0.7096663656722679,
+        "windows": [
+          {
+            "window_id": "new-f1c703ea5c2ae260",
+            "tp": 1,
+            "fp": 0,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-cc95c6938041b133",
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-3b5df6ceefab2a24",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-debd9dd6c8bc476d",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-97ec7f4542550218",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-15b65bbf8f065f20",
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-4dbfc28cf65e1426",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-e470d7e49ed3680a",
+            "tp": 2,
+            "fp": 0,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-88937e4720fa70a1",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-87a18724d44a5336",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-523286daac401b78",
+            "tp": 1,
+            "fp": 0,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-4b997aa86adb6c39",
+            "tp": 1,
+            "fp": 0,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-7dfba56d440c3394",
+            "tp": 0,
+            "fp": 0,
+            "fn": 4,
+            "unrated": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": 800,
+      "threshold": 0.6178619265556335,
+      "metrics": {
+        "tp": 8,
+        "fp": 2,
+        "fn": 18,
+        "unrated_frames": 26,
+        "precision": 0.8,
+        "recall": 0.3076923076923077,
+        "f1": 0.4444444444444444,
+        "mean_matched_iou": 0.6799852628730297,
+        "windows": [
+          {
+            "window_id": "new-f1c703ea5c2ae260",
+            "tp": 1,
+            "fp": 0,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-cc95c6938041b133",
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-3b5df6ceefab2a24",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-debd9dd6c8bc476d",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-97ec7f4542550218",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-15b65bbf8f065f20",
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-4dbfc28cf65e1426",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-e470d7e49ed3680a",
+            "tp": 3,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-88937e4720fa70a1",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-87a18724d44a5336",
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-523286daac401b78",
+            "tp": 1,
+            "fp": 1,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-4b997aa86adb6c39",
+            "tp": 1,
+            "fp": 0,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-7dfba56d440c3394",
+            "tp": 0,
+            "fp": 1,
+            "fn": 4,
+            "unrated": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": 1000,
+      "threshold": 0.6014530658721924,
+      "metrics": {
+        "tp": 7,
+        "fp": 3,
+        "fn": 19,
+        "unrated_frames": 26,
+        "precision": 0.7,
+        "recall": 0.2692307692307692,
+        "f1": 0.3888888888888889,
+        "mean_matched_iou": 0.7016059934507302,
+        "windows": [
+          {
+            "window_id": "new-f1c703ea5c2ae260",
+            "tp": 1,
+            "fp": 0,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-cc95c6938041b133",
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-3b5df6ceefab2a24",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-debd9dd6c8bc476d",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-97ec7f4542550218",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-15b65bbf8f065f20",
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "unrated": 2
+          },
+          {
+            "window_id": "new-4dbfc28cf65e1426",
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-e470d7e49ed3680a",
+            "tp": 2,
+            "fp": 0,
+            "fn": 2,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-88937e4720fa70a1",
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "unrated": 4
+          },
+          {
+            "window_id": "new-87a18724d44a5336",
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "unrated": 3
+          },
+          {
+            "window_id": "new-523286daac401b78",
+            "tp": 1,
+            "fp": 1,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-4b997aa86adb6c39",
+            "tp": 1,
+            "fp": 0,
+            "fn": 3,
+            "unrated": 0
+          },
+          {
+            "window_id": "new-7dfba56d440c3394",
+            "tp": 0,
+            "fp": 1,
+            "fn": 4,
+            "unrated": 0
+          }
+        ]
+      }
+    }
+  ],
+  "training_frame_sha256": {
+    "new-f238ac4a597e7fad:8.3055": "7876412bf97a44ca05ca2387933c448207e82fef48ec19c819e2582101e183ee",
+    "new-f238ac4a597e7fad:19.3795": "25d43fc53725258cb0cff3870545fa78dbeea473148e9de2dfdadac394318792",
+    "new-f238ac4a597e7fad:30.4535": "ffc3f5231829de190cbd80c7568fedef3f54445441db28655e22ce35153915d0",
+    "new-666b615c3eb3089a:17.407845": "3f72ca30e3e6e184a895abce274b1194aa26dd20b933ff1769ee7a95a8213e11",
+    "new-e9b31fbe9633bb50:5.335252": "2dfc8ac253af5286fa229ef04bf3094733bf95bf8fdeddc84f0178a0cca16d1f",
+    "new-e9b31fbe9633bb50:19.56259": "5fa76e1b0c47b42b1fa5a510dff5227095ca2bfca5bfa90a45447167c066eeed",
+    "new-bc5a3c2cae8b39ac:6.803752": "7852edc51a46ff8b305542b7dcd3af1fdead9a1e4073f79a05ff38e70081bd20",
+    "new-bc5a3c2cae8b39ac:15.875421": "6a111068b7ec2750e2a5139edb3513b8de6d1b5e5dd7efc078f812f722c6a8fc",
+    "new-bc5a3c2cae8b39ac:24.94709": "69780a2b20813fc3ccf93c7c089a6ead2d41ebe67a4db148b5e36e79a5b279dd",
+    "new-7236946fe327ecb3:22.386833": "2cb9f93df08aa6bc46561fc5be9c829de751869107d0035cc47545f7d99a2e65",
+    "new-7236946fe327ecb3:30.5275": "b89076cb127a8af15ffff7fa532f1c790a54d5c887a6bb3ad7f0f6879c217327",
+    "new-3a39c5ebca192537:20.2455": "6518bf10a8f0ac7d121f3541861e6525243373865fdc7905429a3c817bc6cfde",
+    "new-3a39c5ebca192537:27.6075": "4e9c3a1fa2454d01ade7c791fe0593a60ca7a4e9821e2bfdf50f433ab23a1c39",
+    "new-ca26cc60bb73f6a5:5.962": "75ca33e8e2a12e067a8631fe02721b4e2ad5994a7ac79e1ddb2c0b1d1475c0cb",
+    "new-ca26cc60bb73f6a5:13.911333": "bce258fe2a34d1533d0fa614e04719890aa0f636d7ba97e6d5289520c5449b1b",
+    "new-ca26cc60bb73f6a5:21.860667": "4205e9bde4b217d702c2b7faf712a75b2f3fcfa8999ad68f7b7fb247b0e27ae1",
+    "new-ca26cc60bb73f6a5:21.260667": "aad1bd1dc7b5868a426b6055f6b4047013249a680580a28f7461e60887bcdc75",
+    "new-ca26cc60bb73f6a5:21.460667": "4906b48fc10d86198579de9b8cd86c50999a5d2306c6037b6be06ab800f5e4c8",
+    "new-ca26cc60bb73f6a5:21.660667": "6ae95adf6b640cd4200ad1f44a133abf3cdcdac0a7a86d813660cc34e09690ac",
+    "new-ca26cc60bb73f6a5:22.460667": "52ef4d638c32d660c1c993465a3e8fcc6e66ae9809cc08f1488db6880c5dcce1",
+    "new-1cc6a285695058f3:32.459583": "0f66b9430ca0cdd09dbf1c568ce1176d348ebc60643d8b6859200f75f79e3e3c",
+    "new-12ebecf00e57662a:29.807752": "17c705a628b051917eaf2c71e3a3a80c9cd92d211b730687562c0bbc942cccec",
+    "new-12ebecf00e57662a:149.038759": "810cc85c9836ba734d6aa58b19e79f2f0085ee9d6b1544c81ef524deab8cff50",
+    "new-db72c9faa665ed31:31.994417": "bb419d74aa954bdebae3c46f6fe4235005fccad199e76fec7b78dcb8699faac0",
+    "new-2bd55ec7e7109b27:69.25625": "25ed38a06f97bd972adf34f82faace0a4df2b1dc278a9bc9a67aaedcf030cfa2",
+    "new-e7d3081580e93ce5:16.410167": "c5d29c24cb1dc8603e18f1f62ad551cc27d128a459c940cc551fb4a2501525e5",
+    "new-e7d3081580e93ce5:22.3775": "9675b0c6e687cc4bca9be6e15bcc39582cad1969b6885f987d8dc93df88f39f8",
+    "new-e7d3081580e93ce5:16.610167": "3001a0bd40f7f0eda2cc97952929c2e2a57735f98686bd3ebe25ab655d526ca1",
+    "new-e7d3081580e93ce5:16.810167": "325d6cd28466e2fb6fc9df7c007fb3437473c536a0be02429a2df49f193e84f3",
+    "new-e67e8e14ad447f9d:83.66075": "0532c8b418c9a200c8e6842c2d206cda2fd45c71a3566513c94a96c406efcfc2",
+    "new-e67e8e14ad447f9d:306.756083": "689c7622c5edf848b55f00294a82ffb38848951d2a36eb789a39f30d65d67cfc",
+    "new-e67e8e14ad447f9d:418.30375": "2215ab64c464e18c404380e65ef8e635ba305c0e92f2e1638645f6c1f84191cf",
+    "new-c4fa96fb54727f5e:183.855833": "70c0795f0f11199cd211ce2d92b028575705fb792e505e07c0d8118ed1a00905",
+    "new-c4fa96fb54727f5e:183.455833": "190327600265b213a34c2e84b3e0fdf928f54764b3f9885e539633a8175846e1",
+    "new-c4fa96fb54727f5e:183.655833": "4b3843f0fbbac34c457f6e8d18db6ff08c62df04609a684ce1d69dbd8ab9c488",
+    "new-c4fa96fb54727f5e:184.055833": "a5a78b9ba8d1099ff601204d25141c2a87f131f9941b1c62da8c8f69450d27ad",
+    "new-c4fa96fb54727f5e:184.255833": "aac6d45fb5020dd37325a78a174a05f0b057a59f97457da81c8f30935722b3d0",
+    "new-c4fa96fb54727f5e:184.455833": "6a17010dc5f71781406774a85448a86f30c934a24c61a0267ca68cdb1dd3137b"
+  },
+  "validation_frame_sha256": {
+    "new-f1c703ea5c2ae260:3.49025": "ebfa58415a350708b9eee963c2bd599df8f915b6f24595ad7b99244d7fc900e6",
+    "new-f1c703ea5c2ae260:8.143917": "ffe87a2dc14c05d16628958da2deb516e9d68d81c608f5d25cfc1df6930cf47d",
+    "new-f1c703ea5c2ae260:12.797583": "823436defcb772ebd19da339e06fcf9f2d6a3b94ac0efbbc07cde34ded85da5e",
+    "new-f1c703ea5c2ae260:17.45125": "fc31c4fe483e09391d97a59d52bf21b28e0258d8d053b228ea4c4d9cf20953a6",
+    "new-cc95c6938041b133:7.750755": "7a014fe2486dcfc83e9e13988e779a12cf91668aad0d74c2ea6155bcd2ba46fe",
+    "new-cc95c6938041b133:18.085095": "2540b8d8842fbf6a7800f64ae721d18797f52ee29c7b3b83ccbd15d4af7b9298",
+    "new-cc95c6938041b133:28.419435": "92bde7341db12060cf825be711f26ed3b118c54b8049c9881363167d6acfd369",
+    "new-cc95c6938041b133:38.753775": "75b59554c182cdf67fe6a07932f2124f5545121dbb0d3dfde0d110fe7124681e",
+    "new-3b5df6ceefab2a24:5.38275": "83b8437aca8c069ef13e6629960efca95936bb424b22ef4ab9ebcc32869ef888",
+    "new-3b5df6ceefab2a24:12.55975": "825cd1cb83ebce412fc31f9f2abb23241a244c765da3c9b42a7f7851dea9882f",
+    "new-3b5df6ceefab2a24:19.73675": "1aef6b81ac4f5b40902b7bce84a65cc443ca22c69d809cf35cb696f1777c1af4",
+    "new-3b5df6ceefab2a24:26.91375": "81345263e47e5a10679b1b252a3d632c6f0e52759ec55f26b8c059fe9628bcd7",
+    "new-debd9dd6c8bc476d:3.900255": "9271f5d9e7df8453419893a0bebe5be75943e313e8660f2a70c819153a4d6dff",
+    "new-debd9dd6c8bc476d:9.100595": "3416cf477c7151dba38aecd30ea2abf39b4ea274db4d0204431463703a9ccd6c",
+    "new-debd9dd6c8bc476d:14.300935": "ea2da5bf5a6a8788e212e59a254fb61b847f654507eb2a9c78ea2a7a679b53fc",
+    "new-debd9dd6c8bc476d:19.501275": "1a0adbc5c74579191d77e59ebae92392ae8a130bb52cf5c24ff5364c7927fcdd",
+    "new-97ec7f4542550218:7.96075": "3f743d0d2634dfeea33ab9315b4361dbdaedb2f63b69f304155f5a7387d8347b",
+    "new-97ec7f4542550218:18.575083": "9ad80842c36df0e24449cf864fbf5ada8a634cf34d7b0ac5bc22c2dcec5cdea6",
+    "new-97ec7f4542550218:29.189417": "5f8a03c73c3e5bc0464ada086c54fefbe73f2fee2d0226ebf6f8a4ef0d3de4c1",
+    "new-97ec7f4542550218:39.80375": "0fd4a306184d27162679841b991da2e5d0d6d335ebe0c14b17d92984ff2862e3",
+    "new-15b65bbf8f065f20:26.840505": "72c24d1562df80190b9322f972f8a0d4ba54e68df23d704eec63bc5d7373c3a4",
+    "new-15b65bbf8f065f20:62.627845": "2482cb873e4777d5a04dc93cfb606ab88aa4dd93491e3b31f06fe41fd2f2bf56",
+    "new-15b65bbf8f065f20:98.415185": "5c52dbefb6181601730b05547ad44826d25502c2d4a72a287685878f368a3acb",
+    "new-15b65bbf8f065f20:134.202525": "cd5128edc0c988510ab595c04b74ca966c31f010c8a7445428f81b6aa796c07c",
+    "new-4dbfc28cf65e1426:15.31625": "0220efb5afc72b5cf6e0882ad252c1274e56b5c6cc230511216b71584081f21f",
+    "new-4dbfc28cf65e1426:35.737917": "5d6fc8934d12e6a0d2bf724e2e939e459c03ab3f268d17f4f37935531410f549",
+    "new-4dbfc28cf65e1426:56.159583": "3ddf1f5c511f1d4552e3bd5e37cd6f4736507e05c9ea2d34497632bb45b4cb2b",
+    "new-4dbfc28cf65e1426:76.58125": "cb67cb6b87a189b9356029d2ff5ceecefe0e73b872393caff08e3014a8dbc152",
+    "new-e470d7e49ed3680a:5.5955": "9113b77c0f2f7605998b66ec89074c2c31ab15f49412e117bbcfeff86d69be90",
+    "new-e470d7e49ed3680a:13.056167": "0f209dffdabd675eb78e7df4166e89fedf69bf95e6bdeed6e0a8193728c931e1",
+    "new-e470d7e49ed3680a:20.516833": "812261b163c120c7e2e034d7049f74de4272e1fed3de974f63cea016ddfa2b12",
+    "new-e470d7e49ed3680a:27.9775": "aa2a20c587a26db30aa39c2b7e61b0341c29db81bd3a6d8c48f6bf3eb0b1ba9d",
+    "new-88937e4720fa70a1:11.736": "88a9d2bfc5f542f88ed9183faba29ee4c49aa7913cb8c4ea72999111e00be773",
+    "new-88937e4720fa70a1:27.384": "3cd72597616cd1496c9dea56fd6c2bf4a12b08d7978925622cdd8e6ecf3d7ec5",
+    "new-88937e4720fa70a1:43.032": "453cae5d2cbaee201ca90199f904606f5b93e79c160f5c4954b7ec47d48adadc",
+    "new-88937e4720fa70a1:58.68": "e630b444fac48ce90a9ca54aecc82ae5ddfa4e9d4ae0a06b2acac61eb6d1073d",
+    "new-87a18724d44a5336:6.2955": "048a55544125de9c55d40669696333c951d77c672a05566215ee51085173ee33",
+    "new-87a18724d44a5336:14.6895": "8a9e90f32a906d2c5a2e69353a5fb4eafecb520f53ea9b277711d6df5a941693",
+    "new-87a18724d44a5336:23.0835": "9c4a8247be2164fdbc3c20d967d3ab85368792ba4e556863616c78c940a3e85e",
+    "new-87a18724d44a5336:31.4775": "bad1f3d30b4070203d7c61bd74bf784e938b0320f003d2a4564d0778a7b18e58",
+    "new-523286daac401b78:6.3055": "d6438c42660c221e0b4bb494947a3939ae1a11312b535fb81623f2e6effeb4dd",
+    "new-523286daac401b78:14.712833": "15dfd3a3ae988f04c55697823229e89603248b12c7e0271d4157fad634f14d40",
+    "new-523286daac401b78:23.120167": "f43b0c6abbe4bdf603c60547943fcfc87ec30f009459202d97ff3b4567ee92ac",
+    "new-523286daac401b78:31.5275": "120bfdbea41161339d9f0757de7142c3f93e368bd44b70a49d2925f93a582cf4",
+    "new-4b997aa86adb6c39:2.49025": "07131842034f9bdc20f4249b348786f9c53328c64c599d69d144ac0c3b5e1da6",
+    "new-4b997aa86adb6c39:5.810583": "1b009c4f4b23bbdaa3fff016faea98aa536c4c86f1d3c2934ef6bb3e43d501d1",
+    "new-4b997aa86adb6c39:9.130917": "dc00bdf67b23e04429034940a42f9679c65bf9807c61f468b484dc482b44ac9d",
+    "new-4b997aa86adb6c39:12.45125": "e472d9d2b572eb7e4d8f9b84d9a31ebac8e752bf5ad7d4bfe3f50faf2d8aa0a2",
+    "new-7dfba56d440c3394:5.030252": "d992d3bb44dc62296859b4f38e68564c8f4c1e379d4ab6ccb46e5785f25b9318",
+    "new-7dfba56d440c3394:11.737254": "3ffcb23276e1d1006bf655ca6f50a8e770ade07705bd5830bdeebc73a9af461c",
+    "new-7dfba56d440c3394:18.444256": "6bf1eb4f64c8f2648c88067b94ef10cd035ba7c741b9e2ea29ad6c83f65ade26",
+    "new-7dfba56d440c3394:25.151258": "46740c3f596f267af6151e5d8254f3ca822c600272f1e9ecfd7c1cc67110625a"
+  },
+  "code_sha256": {
+    "axe_faster.py": "efa62fcdab2a21690c26d7e7852e1a661f13d1f34ce121fb6c2255c02148aec6",
+    "axe_data.py": "48783795d8e95a78ee73a45255e1d92b704233420fae8135cd13eb62d4ef94d3",
+    "axe_detector.py": "380a278cc133fc63d1d6bf5deba3558d7600ffda34ac27e13c98f6d8fa12fe6e",
+    "footage.py": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8",
+    "new_dataset.py": "0ffa00b443009ed2ea96daf0d6a6a056842ab527707073ac53ceddaf4e84ea17",
+    "mine_training.py": "668ce11d3a443aaa13373faac926234dd142df84c3dd6b5501afe8e0b71421da"
+  },
+  "torch": "2.10.0+cu128",
+  "torchvision": "0.25.0+cu128",
+  "device": "cuda",
+  "elapsed_s": 340.20967914999346,
+  "promoted_for_coaching": false
+}

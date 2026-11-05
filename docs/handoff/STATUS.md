@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T21:43:14Z
+heartbeat: 2026-11-05T21:51:22Z
 branch: implementation
 phase: 8 — additional novice/event footage training experiment
-task: New55 footage split/engineering references complete;35visibletrain+3empty;GPU fit1000steps next;test24pixels stillclosed
-next: Run axe_faster.py fit with MLvenv and private new-footage-20261105/reference.json. Freeze selected model+metadata+code BEFORE testpixels. Then annotate6testvideos/24fixedframes, commit labels, test once, publishREADME/results. Keepoldreviewservers44597/45851 running.
+task: Actual1000step CUDA fitcomplete;step800selected,validation8TP2FP18FN;freezeweights beforetestpixels
+next: Frozenmodel docs/experiments/evaluation/new-footage/axe-faster.pt,json,freeze.json. Testpixels NOTyetopened. Run new_dataset sample test --freeze --model; annotate6sources24frames, commitreference BEFOREtestpredict. PublishactualresultREADME;sourcehashsession32657 pending.
 <!-- STATE:END -->
 
 ## Phase progress

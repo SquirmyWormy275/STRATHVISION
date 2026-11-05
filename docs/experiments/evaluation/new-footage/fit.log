@@ -1,0 +1,26 @@
+Device cuda training examples 38 positive 35
+step 50 loss 0.0541 seconds 16.3
+step 100 loss 0.0615 seconds 32.1
+step 150 loss 0.0087 seconds 47.6
+step 200 loss 0.0199 seconds 64.0
+Validation 200 {"tp": 6, "fp": 8, "fn": 20, "f1": 0.3}
+step 250 loss 0.0215 seconds 84.3
+step 300 loss 0.0209 seconds 100.1
+step 350 loss 0.0227 seconds 116.3
+step 400 loss 0.0205 seconds 132.4
+Validation 400 {"tp": 9, "fp": 10, "fn": 17, "f1": 0.4}
+step 450 loss 0.0246 seconds 152.3
+step 500 loss 0.0083 seconds 168.4
+step 550 loss 0.0189 seconds 184.4
+step 600 loss 0.0228 seconds 200.5
+Validation 600 {"tp": 6, "fp": 1, "fn": 20, "f1": 0.36363636363636365}
+step 650 loss 0.0159 seconds 220.3
+step 700 loss 0.0095 seconds 236.3
+step 750 loss 0.0227 seconds 252.4
+step 800 loss 0.0132 seconds 268.3
+Validation 800 {"tp": 8, "fp": 2, "fn": 18, "f1": 0.4444444444444444}
+step 850 loss 0.0165 seconds 288.3
+step 900 loss 0.0078 seconds 304.1
+step 950 loss 0.0206 seconds 320.2
+step 1000 loss 0.0026 seconds 336.1
+Validation 1000 {"tp": 7, "fp": 3, "fn": 19, "f1": 0.3888888888888889}
