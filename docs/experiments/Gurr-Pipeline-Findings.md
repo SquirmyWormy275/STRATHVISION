@@ -46,7 +46,7 @@ Evaluation harness: `apps/strathvision/integration_test/gurr_eval_test.dart`. It
   - **IMG_8010 is not usable automatically, before and after:** the auto-pick takes a distant figure at the far pole, and later the follower drifts to spectators near the camera (28 s, 90 s). Its stroke counts (27/21 before, 22/15 after) are not real chops. The user has to pick the athlete; the choppers are small and far.
   - Colour (torso hue histogram) did not separate athlete from judges on IMG_3925; not used.
 - **Regression check of the new tracking + cut (auto5, 20 s per clip):** training 64 usable (auto4: 58), no clip worse (IMG_3744 5 → 8, IMG_3692 2 → 4, IMG_0105 4 → 5). Competition: IMG_3869 2 → 11 of 14, IMG_3867 1 → 4 of 11, IMG_3923 2 → 3 of 5, IMG_8014 0 → 4 of 9. Underhand IMG_3862 1 of 1.
-  - **Not yet run with the new tracking:** IMG_8055, 8067, 7987, 7985. The runs were killed for low memory while a full CARNE population run used the machine.
+  - IMG_8055 4 → 5 of 6, IMG_8067 2 → 3 of 4, IMG_7987 1 → 1 of 1, IMG_7985 2 → 5 of 8. All eight competition clips: 14 → 36 usable (55 → 58 strokes found); no clip worse. IMG_8014's strokes are not checked on video.
 - **Filming tip:** shown when at least 3 strokes are found, under 60% measured, and the clip is under 50 fps. That 60 fps helps is not yet measured (no 60 fps footage).
 
 ## Not fixed
