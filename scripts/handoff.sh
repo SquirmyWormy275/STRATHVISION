@@ -2,15 +2,21 @@
 # Shared handoff tool for Claude Code and Codex. See AGENTS.md.
 #
 #   scripts/handoff.sh status
-#   scripts/handoff.sh claim      <claude|codex> "<what>"        [--force]
-#   scripts/handoff.sh checkpoint <claude|codex> "<done>" "<next>" [--phase "<p>"] [--task "<t>"]
-#   scripts/handoff.sh release    <claude|codex> "<summary>" "<next>"
+#   scripts/handoff.sh claim      <claude|codex> "<what>"        [--force] [--paths p1,p2]
+#   scripts/handoff.sh checkpoint <claude|codex> "<done>" "<next>" [--phase "<p>"] [--task "<t>"] [--paths p1,p2]
+#   scripts/handoff.sh release    <claude|codex> "<summary>" "<next>" [--paths p1,p2]
 #   scripts/handoff.sh note       <claude|codex> "<message>"
+#   scripts/handoff.sh heartbeat  <claude|codex> ["<note>"]     # keep-alive for long jobs
+#   scripts/handoff.sh processes  <claude|codex> "<desc>"       # record active long-running processes
 #   scripts/handoff.sh setup-github           # labels + pinned handoff issue (needs gh auth)
 #
 # Every write command updates docs/handoff/STATUS.md, commits, pushes, and
 # mirrors the entry to the GitHub handoff issue. Network steps degrade to
 # warnings, so local state is always written even when offline/unauthenticated.
+#
+# --paths: comma-separated paths (relative to repo root) to stage instead of
+# the whole tree. Always includes STATUS.md. Use this when the other agent
+# may have uncommitted work in the shared tree.
 set -euo pipefail
 
 ROOT="$(git -C "$(dirname "${BASH_SOURCE[0]}")" rev-parse --show-toplevel)"
@@ -101,11 +107,30 @@ $2
     || warn "could not comment on issue #$n"
 }
 
-commit_push() {  # commit_push <message> [all]
+# stage_and_commit <message> [paths-csv]
+# Always stages STATUS.md. If paths-csv is given, stages only those paths
+# (plus STATUS.md). Otherwise stages everything (legacy behaviour).
+stage_and_commit() {
+  local message="$1"
+  local paths_csv="${2:-}"
   cd "$ROOT"
-  if [[ "${2:-}" == all ]]; then git add -A; else git add "$STATUS"; fi
+  git add "$STATUS"
+  if [[ -n "$paths_csv" ]]; then
+    local IFS=','
+    for p in $paths_csv; do
+      p="${p// /}"
+      [[ -n "$p" ]] || continue
+      if [[ -e "$p" ]]; then
+        git add -- "$p"
+      else
+        warn "path not found, skipped: $p"
+      fi
+    done
+  else
+    git add -A
+  fi
   if git diff --cached --quiet; then return 0; fi
-  git commit -q -m "$1" || die "commit failed"
+  git commit -q -m "$message" || die "commit failed"
   local branch; branch=$(git rev-parse --abbrev-ref HEAD)
   git push -q -u origin "$branch" 2>/dev/null \
     || warn "push failed (not authenticated or offline); commit is local only. Push later with: git push -u origin $branch"
@@ -128,6 +153,10 @@ case "$cmd" in
     sed -n '/<!-- STATE:BEGIN -->/,/<!-- STATE:END -->/p' "$STATUS" | grep -v '<!--'
     hb=$(get_field heartbeat); age=$(minutes_since "$hb")
     echo "heartbeat age: ${age} min (stale after ${STALE_MINUTES})"
+    owned=$(get_field owned_paths)
+    [[ -n "$owned" ]] && echo "owned paths: $owned"
+    procs=$(get_field active_processes)
+    [[ -n "$procs" && "$procs" != "none" ]] && echo "active processes: $procs"
     echo "--- recent log"
     sed -n '/prepends entries below this line/,$p' "$STATUS" | sed 1d | head -5
     echo "--- recent commits"
@@ -141,8 +170,19 @@ case "$cmd" in
     ;;
 
   claim)
-    agent="${1:-}"; what="${2:-}"; force="${3:-}"; check_agent "$agent"
-    [[ -n "$what" ]] || die 'usage: claim <agent> "<what>" [--force]'
+    agent="${1:-}"; what="${2:-}"; shift 2 || true
+    force=""
+    PATHS_CSV=""; EXTRA_FIELDS=()
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --force) force="--force"; shift;;
+        --paths) PATHS_CSV="$2"; shift 2;;
+        --owned) EXTRA_FIELDS+=("owned_paths=$2"); shift 2;;
+        *) die "unknown option $1";;
+      esac
+    done
+    check_agent "$agent"
+    [[ -n "$what" ]] || die 'usage: claim <agent> "<what>" [--force] [--paths p1,p2] [--owned path/prefix]'
     sync_first
     owner=$(get_field owner); age=$(minutes_since "$(get_field heartbeat)")
     if [[ "$owner" != "$agent" && "$owner" != "none" && "$age" -lt "$STALE_MINUTES" && "$force" != "--force" ]]; then
@@ -150,26 +190,29 @@ case "$cmd" in
     fi
     takeover=""
     [[ "$owner" != "$agent" && "$owner" != "none" ]] && takeover=" (taking over from $owner, last heartbeat ${age} min ago)"
-    set_fields "owner=$agent" "heartbeat=$(now)"
+    set_fields "owner=$agent" "heartbeat=$(now)" ${EXTRA_FIELDS[@]+"${EXTRA_FIELDS[@]}"}
     log_entry "$agent" "Claimed: $what$takeover"
-    commit_push "handoff($agent): claim — $what"
+    stage_and_commit "handoff($agent): claim — $what" "$PATHS_CSV"
     post_issue "$agent" "🟢 **Claimed**: $what$takeover"
     ;;
 
   checkpoint)
     agent="${1:-}"; done_="${2:-}"; next="${3:-}"; check_agent "$agent"
-    [[ -n "$done_" && -n "$next" ]] || die 'usage: checkpoint <agent> "<done>" "<next>" [--phase P] [--task T]'
-    shift 3; extra=()
+    [[ -n "$done_" && -n "$next" ]] || die 'usage: checkpoint <agent> "<done>" "<next>" [--phase P] [--task T] [--paths p1,p2] [--owned path]'
+    shift 3
+    PATHS_CSV=""; EXTRA_FIELDS=()
     while [[ $# -gt 0 ]]; do
       case "$1" in
-        --phase) extra+=("phase=$2"); shift 2;;
-        --task)  extra+=("task=$2");  shift 2;;
+        --phase) EXTRA_FIELDS+=("phase=$2"); shift 2;;
+        --task)  EXTRA_FIELDS+=("task=$2");  shift 2;;
+        --paths) PATHS_CSV="$2"; shift 2;;
+        --owned) EXTRA_FIELDS+=("owned_paths=$2"); shift 2;;
         *) die "unknown option $1";;
       esac
     done
-    set_fields "owner=$agent" "heartbeat=$(now)" "next=$next" ${extra[@]+"${extra[@]}"}
+    set_fields "owner=$agent" "heartbeat=$(now)" "next=$next" ${EXTRA_FIELDS[@]+"${EXTRA_FIELDS[@]}"}
     log_entry "$agent" "$done_ → next: $next"
-    commit_push "checkpoint($agent): $done_" all
+    stage_and_commit "checkpoint($agent): $done_" "$PATHS_CSV"
     post_issue "$agent" "✅ **Checkpoint**: $done_
 
 **Next:** $next"
@@ -177,10 +220,18 @@ case "$cmd" in
 
   release)
     agent="${1:-}"; summary="${2:-}"; next="${3:-}"; check_agent "$agent"
-    [[ -n "$summary" && -n "$next" ]] || die 'usage: release <agent> "<summary>" "<next>"'
-    set_fields "owner=none" "heartbeat=$(now)" "next=$next"
+    [[ -n "$summary" && -n "$next" ]] || die 'usage: release <agent> "<summary>" "<next>" [--paths p1,p2]'
+    shift 3
+    PATHS_CSV=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --paths) PATHS_CSV="$2"; shift 2;;
+        *) die "unknown option $1";;
+      esac
+    done
+    set_fields "owner=none" "heartbeat=$(now)" "next=$next" "owned_paths=" "active_processes=none"
     log_entry "$agent" "Released: $summary → next: $next"
-    commit_push "handoff($agent): release — $summary" all
+    stage_and_commit "handoff($agent): release — $summary" "$PATHS_CSV"
     post_issue "$agent" "⏸️ **Released**: $summary
 
 **Next:** $next"
@@ -190,8 +241,30 @@ case "$cmd" in
     agent="${1:-}"; msg="${2:-}"; check_agent "$agent"
     [[ -n "$msg" ]] || die 'usage: note <agent> "<message>"'
     log_entry "$agent" "Note: $msg"
-    commit_push "handoff($agent): note"
+    stage_and_commit "handoff($agent): note"
     post_issue "$agent" "💬 $msg"
+    ;;
+
+  heartbeat)
+    agent="${1:-}"; note="${2:-}"; check_agent "$agent"
+    set_fields "owner=$agent" "heartbeat=$(now)"
+    if [[ -n "$note" ]]; then
+      log_entry "$agent" "Heartbeat: $note"
+      stage_and_commit "handoff($agent): heartbeat"
+      post_issue "$agent" "💓 $note"
+    else
+      # silent heartbeat: only update timestamp, still commit STATUS.md
+      stage_and_commit "handoff($agent): heartbeat"
+    fi
+    ;;
+
+  processes)
+    agent="${1:-}"; desc="${2:-}"; check_agent "$agent"
+    [[ -n "$desc" ]] || die 'usage: processes <agent> "<description of active long-running jobs>"'
+    set_fields "owner=$agent" "heartbeat=$(now)" "active_processes=$desc"
+    log_entry "$agent" "Active processes: $desc"
+    stage_and_commit "handoff($agent): processes"
+    post_issue "$agent" "⚙️ **Active processes**: $desc"
     ;;
 
   setup-github)
@@ -216,5 +289,5 @@ case "$cmd" in
     echo "handoff issue: #$n  https://github.com/$slug/issues/$n"
     ;;
 
-  *) die "unknown command '$cmd' (status|claim|checkpoint|release|note|setup-github)";;
+  *) die "unknown command '$cmd' (status|claim|checkpoint|release|note|heartbeat|processes|setup-github)";;
 esac

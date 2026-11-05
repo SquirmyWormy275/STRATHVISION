@@ -10,17 +10,32 @@ Two coding agents work on this repo: **Claude Code** and **Codex**. Either one c
 4. Claim the work: `scripts/handoff.sh claim <claude|codex> "<what you are picking up>"`.
    - If STATUS.md shows the other agent as owner with a heartbeat under **30 minutes** old, do not take over. That agent is probably still working. Pick an unrelated task or stop.
    - If the heartbeat is older than 30 minutes, assume the other agent hit a rate limit. Take over and say so in the claim message.
+   - Optional: `--owned path/prefix` records the area you are working in (shown by `status`).
 
 ## While working
 
 - **Checkpoint after every finished task or meaningful step:** `scripts/handoff.sh checkpoint <agent> "<what is done>" "<exact next step>"`. This commits and pushes your work along with the status update.
+- **Long-running jobs:** call `scripts/handoff.sh heartbeat <agent>` (or `heartbeat <agent> "<short note>"`) every 10–15 minutes so the 30-minute stale rule does not false-trigger. Record the jobs with `scripts/handoff.sh processes <agent> "<pids or description>"` so the other agent knows not to kill them or start competing heavy work.
 - You may be cut off at any moment, with no chance to write a final note. Your last checkpoint is your handoff, so keep it current.
-- Write the next step so a stranger can do it: file paths, command, expected result.
+- Write the next step so a stranger can do it. Prefer this shape:
+  ```
+  next: <command or file path> | expected: <result> | avoid: <files or processes>
+  ```
 - Never leave the branch broken across a checkpoint. If you're mid-change, checkpoint as `WIP:` with the exact failing test or step.
+
+### Safer staging on a shared tree
+
+The shared working tree can contain the other agent's uncommitted files. Prefer:
+
+```sh
+scripts/handoff.sh checkpoint <agent> "<done>" "<next>" --paths path1,path2,path3
+```
+
+`--paths` stages only the listed paths (plus STATUS.md) instead of `git add -A`. Use it whenever the other agent may have dirty files. Same flag works on `claim` and `release`.
 
 ## Stopping on purpose
 
-`scripts/handoff.sh release <agent> "<summary>" "<next step>"` clears the owner so the other agent can start immediately.
+`scripts/handoff.sh release <agent> "<summary>" "<next step>"` clears the owner (and owned_paths / active_processes) so the other agent can start immediately.
 
 ## Asking the other agent or the human
 
