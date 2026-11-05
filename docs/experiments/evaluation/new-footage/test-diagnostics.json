@@ -1,0 +1,247 @@
+{
+  "format": "axe-test-diagnostics/1",
+  "posthoc_descriptive_only": true,
+  "retained_unrated_candidates": 0,
+  "retained_total_candidates": 2,
+  "head_sizes_at_prepared_full_frame_resolution": {
+    "train": {
+      "visible": 35,
+      "median_width_px": 60,
+      "median_height_px": 49,
+      "min_width_px": 15,
+      "max_width_px": 162
+    },
+    "validation": {
+      "visible": 26,
+      "median_width_px": 85.5,
+      "median_height_px": 46.5,
+      "min_width_px": 18,
+      "max_width_px": 165
+    },
+    "test": {
+      "visible": 9,
+      "median_width_px": 28,
+      "median_height_px": 28,
+      "min_width_px": 8,
+      "max_width_px": 73
+    }
+  },
+  "frames": [
+    {
+      "source_name": "IMG_7950.MOV",
+      "window_id": "new-93ceb9ba6af631db",
+      "time_s": 7.358752,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.15224768221378326,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_7950.MOV",
+      "window_id": "new-93ceb9ba6af631db",
+      "time_s": 17.170421,
+      "visibility": "visible",
+      "retained": false,
+      "score": 0.20880435407161713,
+      "candidate_iou": 0.004831751889595927
+    },
+    {
+      "source_name": "IMG_7950.MOV",
+      "window_id": "new-93ceb9ba6af631db",
+      "time_s": 26.98209,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.34188154339790344,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_7950.MOV",
+      "window_id": "new-93ceb9ba6af631db",
+      "time_s": 36.793759,
+      "visibility": "visible",
+      "retained": false,
+      "score": 0.38442912697792053,
+      "candidate_iou": 0.0
+    },
+    {
+      "source_name": "IMG_3844.MOV",
+      "window_id": "new-67b1733586a2a1f6",
+      "time_s": 10.2905,
+      "visibility": "uncertain",
+      "retained": false,
+      "score": 0.46729353070259094,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_3844.MOV",
+      "window_id": "new-67b1733586a2a1f6",
+      "time_s": 24.011167,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.1510736495256424,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_3844.MOV",
+      "window_id": "new-67b1733586a2a1f6",
+      "time_s": 37.731833,
+      "visibility": "visible",
+      "retained": false,
+      "score": 0.43012362718582153,
+      "candidate_iou": 0.0
+    },
+    {
+      "source_name": "IMG_3844.MOV",
+      "window_id": "new-67b1733586a2a1f6",
+      "time_s": 51.4525,
+      "visibility": "out_of_frame",
+      "retained": false,
+      "score": 0.5398740172386169,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_3847.MOV",
+      "window_id": "new-c8009f33f3bf6371",
+      "time_s": 17.88175,
+      "visibility": "visible",
+      "retained": false,
+      "score": 0.11187949776649475,
+      "candidate_iou": 0.0
+    },
+    {
+      "source_name": "IMG_3847.MOV",
+      "window_id": "new-c8009f33f3bf6371",
+      "time_s": 41.724083,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.11137627065181732,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_3847.MOV",
+      "window_id": "new-c8009f33f3bf6371",
+      "time_s": 65.566417,
+      "visibility": "visible",
+      "retained": true,
+      "score": 0.8317198157310486,
+      "candidate_iou": 0.0
+    },
+    {
+      "source_name": "IMG_3847.MOV",
+      "window_id": "new-c8009f33f3bf6371",
+      "time_s": 89.40875,
+      "visibility": "visible",
+      "retained": true,
+      "score": 0.6804363131523132,
+      "candidate_iou": 0.627076140892633
+    },
+    {
+      "source_name": "IMG_4050.MOV",
+      "window_id": "new-34cd12fd8ec00100",
+      "time_s": 6.7605,
+      "visibility": "visible",
+      "retained": false,
+      "score": 0.07977179437875748,
+      "candidate_iou": 0.0
+    },
+    {
+      "source_name": "IMG_4050.MOV",
+      "window_id": "new-34cd12fd8ec00100",
+      "time_s": 15.7745,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.20102301239967346,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_4050.MOV",
+      "window_id": "new-34cd12fd8ec00100",
+      "time_s": 24.7885,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.1894494742155075,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_4050.MOV",
+      "window_id": "new-34cd12fd8ec00100",
+      "time_s": 33.8025,
+      "visibility": "visible",
+      "retained": false,
+      "score": 0.07586430013179779,
+      "candidate_iou": 0.35465538197497015
+    },
+    {
+      "source_name": "IMG_4052.MOV",
+      "window_id": "new-5a7fdd626218f68b",
+      "time_s": 8.865752,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.14284813404083252,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_4052.MOV",
+      "window_id": "new-5a7fdd626218f68b",
+      "time_s": 20.686754,
+      "visibility": "occluded",
+      "retained": false,
+      "score": null,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_4052.MOV",
+      "window_id": "new-5a7fdd626218f68b",
+      "time_s": 32.507756,
+      "visibility": "occluded",
+      "retained": false,
+      "score": null,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_4052.MOV",
+      "window_id": "new-5a7fdd626218f68b",
+      "time_s": 44.328758,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.0522734671831131,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_7949.MOV",
+      "window_id": "new-fab4fc4a5b8349d9",
+      "time_s": 7.4755,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.22283802926540375,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_7949.MOV",
+      "window_id": "new-fab4fc4a5b8349d9",
+      "time_s": 17.442833,
+      "visibility": "blurred",
+      "retained": false,
+      "score": 0.13712668418884277,
+      "candidate_iou": null
+    },
+    {
+      "source_name": "IMG_7949.MOV",
+      "window_id": "new-fab4fc4a5b8349d9",
+      "time_s": 27.410167,
+      "visibility": "visible",
+      "retained": false,
+      "score": 0.137223482131958,
+      "candidate_iou": 0.6010214639188264
+    },
+    {
+      "source_name": "IMG_7949.MOV",
+      "window_id": "new-fab4fc4a5b8349d9",
+      "time_s": 37.3775,
+      "visibility": "occluded",
+      "retained": false,
+      "score": 0.2643498182296753,
+      "candidate_iou": null
+    }
+  ]
+}

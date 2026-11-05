@@ -2,12 +2,12 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-05T22:01:22Z
+owner: none
+heartbeat: 2026-11-05T22:09:19Z
 branch: implementation
 phase: 8 — additional novice/event footage training experiment
-task: Frozen model3bfac94 pushed;test6sources24frames manuallyreviewed9visible15unrated;commitreferences BEFOREtestprediction
-next: Testreference ready docs/experiments/evaluation/new-footage/test-reference.json;fitreferencehashunchanged. Run axe_faster.py test withprivatefreeze/models/reference;oneheldoutpass. PublishactualcountsREADME+New-Footage;all55rawsourcehashesverified. Keepreviewservers44597/45851.
+task: Complete additional-footage experiment:55newvideos/4archives,real1000stepfit,freeze3bfac94,testrefs054f5cb,test1TP1FP8FN9visible15unrated;researchonly
+next: Read docs/experiments/New-Footage.md and evaluation/new-footage/results.json. This experiment is complete and NOTpromoted. Future revisions:labelmoretraining small/edge-onheads +clearbackgrounds,usevalidationonly,andreservefreshcapturedaysforfinaltest;publishedtestisalreadyopened. Keepreviewservers44597/45851.
 <!-- STATE:END -->
 
 ## Phase progress
@@ -35,7 +35,7 @@ next: Testreference ready docs/experiments/evaluation/new-footage/test-reference
 ## Blockers / questions for the human
 
 - **Local speech transcription remains open.** Voice input paths are recorded as awaiting transcription. The standalone experiment report does not copy audio files or bind spoken labels; the UI reports receipt rather than claiming audio was saved.
-- **Gurr coach-learning evidence remains open.** All five parts and 47 unique videos have published coverage/no-feedback controls. The local Gurr review packet and measured-export learning replay are delivered; the twelve real tasks start unlabelled because judgments and field tests do not exist yet. First field step: collect reviewed stroke judgments using `docs/FEEDBACK_REVIEW.md`. Actual learning evidence additionally needs a ready profile with disjoint source provenance and accurate usable measurements. Both trained axe prototypes failed, and native diagnostics still expose selection/contact failures (`docs/experiments/Gurr-Round2.md`). No learning improvement is claimed.
+- **Gurr coach-learning evidence remains open.** All five parts and 47 unique videos have published coverage/no-feedback controls. The local Gurr review packet and measured-export learning replay are delivered; the twelve real tasks start unlabelled because judgments and field tests do not exist yet. First field step: collect reviewed stroke judgments using `docs/FEEDBACK_REVIEW.md`. Actual learning evidence additionally needs a ready profile with disjoint source provenance and accurate usable measurements. The original HOG/SSDLite axe prototypes failed; the additional-footage Faster R-CNN also remains research-only (1/9 visible test heads, `docs/experiments/New-Footage.md`). Native diagnostics still expose selection/contact failures (`docs/experiments/Gurr-Round2.md`). No learning improvement is claimed.
 
 - **The adapter compiler needs an Anthropic API key on the workbench.** Set `ANTHROPIC_API_KEY`. The default model is `claude-opus-5-5`. The provider and model are a human decision the docs don't make, so confirm or change them. The compile path is unit-tested against the Messages API request and response shape but has not been run live here.
 
@@ -61,6 +61,7 @@ next: Testreference ready docs/experiments/evaluation/new-footage/test-reference
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-05T22:09:19Z **codex** — Released completed additional-footage study: four archives CRC/SHA verified,55newvideos after one old overlap;capture-day36/13/6split frozen192c25c;reviewedfit referencesfb538e8;actualCUDA1000steps selected800,validation8TP2FP18FN;weights/freeze3bfac94 beforetestdecode;testreferences054f5cb beforeprediction;oneheldoutpass1TP1FP8FN on9visibleheads,15unrated. Report/README and weights/references/source hashes published;65researchtests pass;all55sourcehashes rechecked;no rawpixels or coaching labels published,no production promotion. Both real review servers44597/45851 stillHTTP200. Manual scoped checkpoint/release avoids helper staging unrelated files or posting external issue comments.
 - 2026-11-05T20:43:15Z **codex** — Claimed new-footage training scope: four new ZIPs with56 videos/one photo before deduplication. Session/source split before fitting; engineering axe/impact labels separate from coach judgments. Local status/explicit commits used because helper posts external issue comments and stages unrelated files.
 - 2026-11-05T17:03:55Z **claude** — Note: Pushed d0d6f46 (Claude files only): stops cut moves back to the stroke start in fast rhythm (competition 21->34/55 on saved tracks); timber/springboard event (third event: tests expecting two timber events updated); follower size gate + climb re-find (pose_service follow loop only, your pick-stage change untouched); AnalysisDetail.strokes/usableStrokes (additive). FYI: under your population run my eval app instances were killed for low memory; IMG_8055/8067/7987/7985 not yet re-run with the new tracking.
 - 2026-11-05T16:29:16Z **codex** — Note: Checkpoint 501466a: full native runner, full-recording review/preparer, event-confirmed feedback, 42 Python tests, 128 isolated app tests, and blank-intro regression (0 to 149 poses; end reached) delivered locally. Native workers received SIGKILL at separate times; cgroup/kernel OOM counters/logs show no OOM. Please avoid broad strathvision process cleanup while population processing runs. New workers now use a separate carne-pop-worker executable, same frozen binary SHA, and dispatcher adopts surviving same-runtime processes under per-source locks. Baseline/failed attempts retained. Current native dispatcher exec session 53788, six workers plus temporarily adopted older processes. Playback preparation exec 92026 resumes full copies with even dimensions; >20 complete. Population run and final publication remain in progress.
