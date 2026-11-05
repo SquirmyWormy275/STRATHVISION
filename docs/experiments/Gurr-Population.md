@@ -62,7 +62,7 @@ Back in the original repository, freeze the native model/runtime and start bound
 
 Completed-source candidate navigation can be uploaded to the live review server through its candidate API. It atomically preserves saved judgments; browser refresh changes candidate metadata without clearing unsaved fields. The initial twelve-task packet remains intact.
 
-The publisher rejects missing windows, mismatched native runtimes, gaps, duplicate scored cores and incomplete source tails. Completed native calls, final-sample progress and core coverage are distinct fields. Full-population coverage without independent annotations is not a new held-out accuracy result. No reviewed coaching profile/feedback is supplied to this inference run, so no learning loop is executed.
+The publisher rejects missing windows, mismatched native runtimes, gaps and duplicate scored cores. It records failed calls and unreached core endpoints; the final comparison refuses incomplete coverage. Completed native calls, final-sample progress and core coverage are distinct fields. Full-population coverage without independent annotations is not a new held-out accuracy result. No reviewed coaching profile/feedback is supplied to this inference run, so no learning loop is executed.
 
 
 ## Controlled engine replay
