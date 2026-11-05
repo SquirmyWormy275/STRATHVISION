@@ -51,6 +51,10 @@ Max 5–10 accepted edits per session. Low-confidence or below-threshold clips i
 
 ## Experiment Integration
 
+Desktop competitor tracking uses the app's person detector and orientation handling. An uncertain competitor/orientation pauses the loop and offers the existing spatial picker in the feed. Before accepted edits, a correction reanalyzes that content, replaces its old measurements and preserves aliases without recounting footage. Marks on a previously analyzed competitor require a fresh review after correction. Choices are scoped to source content and recorded in the experiment; they are anonymous spatial selections, not named-athlete recognition.
+
+CARNE uses a separate desktop pose budget (30 Hz, up to 90,000 samples) to retain swing timing on the longest downloaded Gurr recording. This differs from the normal interactive review budget. Per-stroke measurements can be replayed with genuine feedback through the [local review/evaluation workflow](FEEDBACK_REVIEW.md); the readiness, quality, source-separation and learning bounds still apply.
+
 After working desktop build: upload all race and training footage of Matthew Gurr and Daniel Gurr. Run with priority = slope (then optionally others). Publish results in README (usable strokes, accepted edits, before/after residuals, exact explanations, hull compliance, raw logs).
 
 ## Non-Goals

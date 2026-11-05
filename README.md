@@ -51,6 +51,8 @@ Status messages and edit explanations are specified in docs/DECISIONS.md.
 
 Application evidence: [controller/widget regression tests](apps/strathvision/test/carne_run_test.dart) cover duplicates, mark refresh, failures, stop states and export retries; [native Linux checks](apps/strathvision/integration_test/carne_run_flow_test.dart) save a zero-edit report and verify content-keyed pose caching. Export/UI fixtures are explicitly synthetic. The real-footage research results follow below.
 
+Competitor tracking now offers correction inside CARNE and pauses when a selection is uncertain. Its desktop sampling budget preserves swing timing on long recordings. The [local feedback review workflow](docs/FEEDBACK_REVIEW.md) collects real stroke judgments and supports a source-disjoint learning replay; it is ready for field use, with coaching effectiveness still unvalidated.
+
 ## Experiment: CARNE ASADA on the Gurr Footage
 
 **All five downloaded ZIPs are verified, extracted and processed.** The `20261104T223331Z` export contains **48 video files and seven photos**. One video is an exact duplicate, leaving **47 unique videos, 2 h 9 min 47.4 s**, including recordings lasting 28:39, 17:55, 15:10 and 12:06. The [five-part inventory](docs/experiments/gurr-20261104-five-part-inventory.json) records archive hashes, folder coverage and the excluded duplicate.
@@ -80,6 +82,12 @@ A separate 80-second pilot uses ten source recordings, frozen visual references 
 Read the [evaluation protocol, frozen sources, test results and failures](docs/experiments/Gurr-Accuracy.md). These single-reviewer results measure a small tracking/timing pilot; they do not establish coaching accuracy or learning gains. A separate check of the existing standing-block phase candidate matched three contacts on fresh training footage, with one extra detection and about 0.2 s delay. Its tested patch and the limited follow-up evidence are included in the report; it remains experimental.
 
 The following protocol remains the planned coach-specific learning experiment once identity/event ground truth and genuine feedback are available.
+
+### Current engine and axe-detector follow-up
+
+The latest [round-2 report](docs/experiments/Gurr-Round2.md) pins the standing-block engine and publishes diagnostic replays: **1/15** contact matches with two extras on the original test, and **3/3** with one extra on the smaller follow-up. These already-opened references are comparisons, not a new holdout.
+
+Two image-only axe prototypes were trained and evaluated: a HOG/linear-SVM baseline and a COCO-pretrained SSDLite model with locally fitted detection heads. Both failed validation. Frozen test results were **0/16** visible axe heads for HOG and **0/8** on four newly reserved recordings for SSDLite. Uncertain/occluded frames were unrated. Code, coarse single-reviewer annotations, model coefficients/weights, source hashes and failures are published in the report. The axe prototypes remain research-only; the app still uses its disclosed grip proxy for implement measurements.
 
 ### How to run it
 

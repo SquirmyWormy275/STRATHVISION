@@ -22,6 +22,7 @@ import '../profiles/clip_probe.dart';
 import '../profiles/profile_export.dart';
 import '../workbench/claude_compiler.dart';
 import '../workbench/workbench_controller.dart';
+import '../workbench/carne_athletes.dart';
 import 'profile_builder_screen.dart';
 import '../profiles/inbox.dart';
 import '../profiles/package_exchange.dart';
@@ -578,12 +579,15 @@ typedef CarneFactory = Future<CarneController> Function(
 
 /// Production playground: strokes analyzed off the UI isolate, marks from
 /// every project on the same clip file, versions stored under app support.
-CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async => CarneController(
+CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async {
+  final athletes = CarneAthleteState();
+  return CarneController(
       pack: pack.analysisPack,
       attributes: [...pack.topAttributes, ...pack.moreAttributes],
       bundle: wb.bundle,
       probe: probeClip,
-      analyze: isolateStrokeAnalyzer(pack.analysisPack),
+      analyze: isolateStrokeAnalyzer(pack.analysisPack, athletes: athletes),
+      athletes: athletes,
       analysisMetadata: carneAnalysisMetadata(),
       marks: db.marksForPath,
       phaseLabel: pack.phaseLabel,
@@ -597,6 +601,7 @@ CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async => CarneContr
         return path;
       },
     );
+};
 
 Future<String?> pickInboxFolder() =>
     FilePicker.getDirectoryPath(dialogTitle: 'Choose a shared inbox folder');

@@ -6,6 +6,7 @@ import 'package:strathvision/profiles/clip_probe.dart';
 import 'package:strathvision/profiles/profile_package.dart';
 import 'package:strathvision/workbench/carne_controller.dart';
 import 'package:strathvision/workbench/carne_run.dart';
+import 'package:strathvision/workbench/carne_athletes.dart';
 
 /// Synthetic measurement fixtures for controller/UI tests, never research data.
 class CarneFixture {
@@ -56,6 +57,7 @@ class CarneFixture {
     MarksLookup? marks,
     ResearchWriter? write,
     ClipFingerprinter? fingerprint,
+    CarneAthleteState? athletes,
     DateTime Function()? clock,
     double confidence = .85,
   }) => CarneController(
@@ -70,6 +72,7 @@ class CarneFixture {
         (profile, patches, adapters, research) async =>
             throw StateError('Unexpected profile save'),
     fingerprint: fingerprint,
+    athletes: athletes,
     clock: clock ?? () => DateTime.utc(2026, 11, 4),
     phaseLabel: info.phaseLabel,
     metricLabel: info.metricLabel,

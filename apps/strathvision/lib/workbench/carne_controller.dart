@@ -10,8 +10,10 @@ import 'package:uuid/uuid.dart';
 import '../profiles/clip_probe.dart';
 import '../profiles/profile_package.dart';
 import '../vision/pose_service.dart';
+import '../vision/athlete.dart';
 import '../workspace/project.dart' show Mark;
 import 'carne_run.dart';
+import 'carne_athletes.dart';
 
 export 'carne_run.dart' show ExperimentWriter;
 
@@ -20,8 +22,10 @@ typedef StrokeAnalyzer = Future<List<StrokeDetail>> Function(ClipSource clip);
 Map<String, Object?> carneAnalysisMetadata() => {
   'provider': 'local_blazepose_with_gap_safe_stroke_analysis',
   'pose_model_asset': PoseService.modelAsset,
-  'sample_rate_limit': PoseService.instance.maxSampleRate,
-  'sample_budget': PoseService.instance.maxSamples,
+  'person_detector_asset': PoseService.detectorAsset,
+  'sample_rate_limit': carnePoseService.maxSampleRate,
+  'sample_budget': carnePoseService.maxSamples,
+  'ambiguous_competitor': 'requires_user_selection',
   'pose_gap_limit_s': .6,
   'implement': 'forearm_grip_proxy',
   'source_revision': const String.fromEnvironment(
@@ -32,10 +36,24 @@ Map<String, Object?> carneAnalysisMetadata() => {
 
 /// Production CARNE analysis uses real local pose and never bridges missing
 /// observations. Identity matching is separate and is not inferred here.
-StrokeAnalyzer isolateStrokeAnalyzer(AnalysisPack pack) => (clip) async {
-  final track = await PoseService.instance.track(clip, sourceKey: clip.clipId);
-  return Isolate.run(() => analyzeContinuousTrack(pack, clip, track));
-};
+StrokeAnalyzer isolateStrokeAnalyzer(
+  AnalysisPack pack, {
+  CarneAthleteState? athletes,
+}) {
+  final state = athletes ?? CarneAthleteState();
+  return (clip) async {
+    final result = await carnePoseService.trackAthlete(
+      clip,
+      sourceKey: clip.clipId,
+      target: state.targets[clip.clipId],
+    );
+    state.record(clip, result);
+    if (result.ambiguous || !result.orientationSure) {
+      throw CarneAthleteChoiceNeeded(clip, result);
+    }
+    return Isolate.run(() => analyzeContinuousTrack(pack, clip, result.track));
+  };
+}
 
 typedef MarksLookup = Future<List<Mark>> Function(String path);
 
@@ -49,11 +67,12 @@ typedef ResearchWriter = Future<String> Function(
 
 /// One line in the status feed.
 class FeedLine {
-  const FeedLine(this.text, {this.useAnywayClip});
+  const FeedLine(this.text, {this.useAnywayClip, this.athleteClip});
   final String text;
 
   /// Set on "below the usable threshold" lines: the clip "use anyway" adds.
   final String? useAnywayClip;
+  final String? athleteClip;
 }
 
 const _video = {'.mp4', '.mov', '.m4v', '.avi', '.mkv', '.webm'};
@@ -71,11 +90,13 @@ class CarneController extends ChangeNotifier {
     required this.marks,
     required this.write,
     ClipFingerprinter? fingerprint,
+    CarneAthleteState? athletes,
     this.analysisMetadata = const {'provider': 'unspecified'},
     this.phaseLabel,
     this.metricLabel,
     DateTime Function()? clock,
-  }) : _clock = clock ?? DateTime.now,
+  }) : athletes = athletes ?? CarneAthleteState(),
+       _clock = clock ?? DateTime.now,
        _fingerprint = fingerprint ?? hashVideoContent {
     startedAt = _clock().toUtc();
     session = CarneSession(
@@ -103,6 +124,9 @@ class CarneController extends ChangeNotifier {
   final DateTime Function() _clock;
   final ClipFingerprinter _fingerprint;
   final Map<String, Object?> analysisMetadata;
+  final CarneAthleteState athletes;
+  final Set<String> _pendingAthletes = {};
+  bool needsAthleteChoice(String id) => _pendingAthletes.contains(id);
   static const _uuid = Uuid();
 
   late final CarneSession session;
@@ -197,6 +221,17 @@ class CarneController extends ChangeNotifier {
           _inputs.add(input);
           try {
             await _ingest(path, input);
+          } on CarneAthleteChoiceNeeded catch (request) {
+            athletes.record(request.clip, request.result);
+            _pendingAthletes.add(request.clip.clipId);
+            input['status'] = 'awaiting_competitor';
+            input['athlete'] = athletes.metadata(request.clip.clipId);
+            feed.add(
+              FeedLine(
+                'Choose the competitor in ${p.basename(path)}.',
+                athleteClip: request.clip.clipId,
+              ),
+            );
           } catch (error) {
             input['status'] = 'failed';
             input['error'] = error.toString();
@@ -300,6 +335,7 @@ class CarneController extends ChangeNotifier {
         ..paths.add(path);
       final lines = session.addClip(name, strokes);
       _sources[id] = source;
+      _pendingAthletes.remove(id);
       await _refreshMarks(source, path, input);
       for (final l in lines) {
         feed.add(
@@ -317,6 +353,14 @@ class CarneController extends ChangeNotifier {
       input['status'] = 'analyzed';
       input.remove('stage');
       _lastClip = id;
+      if (athletes.found.containsKey(id)) {
+        feed.add(
+          FeedLine(
+            'Competitor tracked in ${p.basename(path)}.',
+            athleteClip: id,
+          ),
+        );
+      }
     } else if (ext == '.txt' || ext == '.md') {
       input['kind'] = 'text';
       await _note(await _readText(path));
@@ -445,8 +489,42 @@ class CarneController extends ChangeNotifier {
     _notify();
   }
 
+  Future<void> chooseAthlete(String id, AthleteTarget? target) async {
+    if (busy || !canChangeSettings) return;
+    final clip = athletes.clips[id];
+    if (clip == null) return;
+    if (target == null) {
+      athletes.targets.remove(id);
+    } else {
+      athletes.targets[id] = target;
+    }
+    final aliases = _sources[id]?.paths.toList() ?? [clip.path];
+    if (_sources.containsKey(id)) {
+      for (final path in aliases) {
+        _changedPaths[path] = _clock().toUtc();
+      }
+      feed.add(
+        const FeedLine(
+          'Competitor changed. Add new marks for the selected competitor.',
+        ),
+      );
+    }
+    // Corrections replace this source's measurements; they never add minutes.
+    session.pile.removeWhere((s) => s.stroke.clipId == id);
+    _sources.remove(id);
+    _changed();
+    await drop(aliases);
+  }
+
   /// Runs loop steps until nothing more is accepted (or the limit).
   void _tryUpdate() {
+    if (_pendingAthletes.isNotEmpty) {
+      _stop(
+        'choose competitor',
+        'Choose the competitor before this experiment can update.',
+      );
+      return;
+    }
     if (_sources.isEmpty &&
         _inputs.any(
           (i) => i['status'] == 'failed' || i['status'] == 'invalid_video',
@@ -600,6 +678,7 @@ class CarneController extends ChangeNotifier {
             'paths': source.paths.toList(),
             'duration_ms': source.info.durationMs,
             'fps': source.info.fps,
+            'athlete': athletes.metadata(source.clipId),
             'strokes': session.pile
                 .where((s) => s.stroke.clipId == source.clipId)
                 .length,
@@ -630,6 +709,9 @@ class CarneController extends ChangeNotifier {
             'fps': item.stroke.fps,
             'quality_passed': item.stroke.usable,
             'issues': [for (final issue in item.stroke.issues) issue.name],
+            'measurement': item.stroke.detail.outcome.toJson(),
+            'phase_pose_confidence': item.stroke.detail.phasePoseConfidence,
+            'implement_dropout_s': item.stroke.dropoutSeconds,
             'forced': item.forced,
             'ignored': item.ignored,
             'counts': item.counts,

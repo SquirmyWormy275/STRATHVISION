@@ -6,6 +6,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../workbench/carne_controller.dart';
+import '../vision/pose_service.dart' show PeopleLoader;
+import 'athlete_picker.dart';
 
 typedef AnyFilesPicker = Future<List<String>> Function();
 
@@ -36,12 +38,14 @@ class CarneScreen extends StatefulWidget {
     required this.title,
     this.pickFiles = pickAnyFiles,
     this.saveExperiment = saveExperimentFile,
+    this.loadPeople,
   });
 
   final CarneController controller;
   final String title;
   final AnyFilesPicker pickFiles;
   final ExperimentWriter saveExperiment;
+  final PeopleLoader? loadPeople;
 
   @override
   State<CarneScreen> createState() => _CarneScreenState();
@@ -211,6 +215,46 @@ class _CarneScreenState extends State<CarneScreen> {
                                         : () =>
                                               c.useAnyway(line.useAnywayClip!),
                                     child: const Text('Use anyway'),
+                                  ),
+                                if (line.athleteClip != null)
+                                  TextButton(
+                                    key: Key(
+                                      'choose-competitor-${line.athleteClip}',
+                                    ),
+                                    onPressed: c.busy || !c.canChangeSettings
+                                        ? null
+                                        : () async {
+                                            final id = line.athleteClip!;
+                                            final clip = c.athletes.clips[id];
+                                            final found = c.athletes.found[id];
+                                            if (clip == null || found == null) {
+                                              return;
+                                            }
+                                            final choice =
+                                                await showAthletePicker(
+                                                  context,
+                                                  clip: clip,
+                                                  found: found,
+                                                  load: widget.loadPeople,
+                                                  asking: c.needsAthleteChoice(
+                                                    id,
+                                                  ),
+                                                );
+                                            if (choice is FollowPerson) {
+                                              await c.chooseAthlete(
+                                                id,
+                                                choice.target,
+                                              );
+                                            } else if (choice
+                                                is FollowAutomatic) {
+                                              await c.chooseAthlete(id, null);
+                                            }
+                                          },
+                                    child: Text(
+                                      c.needsAthleteChoice(line.athleteClip!)
+                                          ? 'Choose competitor'
+                                          : 'Change competitor',
+                                    ),
                                   ),
                               ],
                             ),
