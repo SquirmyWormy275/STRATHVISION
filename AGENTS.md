@@ -18,6 +18,8 @@ Two coding agents work on this repo: **Claude Code** and **Codex**. Either one c
 - Write the next step so a stranger can do it: file paths, command, expected result.
 - Never leave the branch broken across a checkpoint. If you're mid-change, checkpoint as `WIP:` with the exact failing test or step.
 
+The useful heartbeat, owned-path and process-reporting ideas from `handoff-improvements` are incorporated with safer local defaults. `claim` and `checkpoint` accept `--owned "path prefixes"` as descriptive ownership (not staging). `processes <agent> "job IDs and purpose, or none"` records active work locally without committing or posting.
+
 Refresh ownership during long work with `scripts/handoff.sh heartbeat <agent>`; this makes no commit or network request. `status` is read-only by default; `HANDOFF_SYNC=1` enables fetch/fast-forward and `HANDOFF_READ_ISSUE=1` reads issue comments. Status/release never sweep up unrelated files.
 
 ## Stopping on purpose

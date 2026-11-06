@@ -138,12 +138,14 @@ void main() {
     }
 
     Future<void> tap(String key, {int after = 400}) async {
+      debugPrint('e2e tap: $key');
       await wait(tester, find.byKey(Key(key)));
       await tester.tap(find.byKey(Key(key)).first);
       await idle(tester, after);
     }
 
     Future<void> back() async {
+      debugPrint('e2e back');
       await tester.pageBack();
       await idle(tester, 600);
     }
@@ -254,6 +256,8 @@ void main() {
     });
     await wait(tester, find.text('Laptop Coach · v1'));
     await snap('library_with_synthetic_profile');
+
+    debugPrint('e2e synthetic package installed');
 
     // ---- Compare a clip with the profile --------------------------------
     await tap('open-workspace', after: 1000);

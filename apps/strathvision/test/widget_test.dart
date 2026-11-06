@@ -61,11 +61,18 @@ void main() {
     final path = File('test/fixtures/dummy_profile.json').absolute.path;
     await pumpApp(tester, path: path);
 
-    // File reads must run outside the fake-async zone.
+    // Keep pumping while real file I/O and Drift complete. A fixed delay
+    // races on CI, and awaiting a DB query without frames can deadlock a
+    // pending transaction in the widget test's fake-async zone.
     await tester.runAsync(() async {
       await tester.tap(find.byKey(const Key('import-profile')));
-      await Future<void>.delayed(const Duration(milliseconds: 200));
     });
+    final deadline = DateTime.now().add(const Duration(seconds: 10));
+    while (find.text('Dummy Coach · v1').evaluate().isEmpty) {
+      if (DateTime.now().isAfter(deadline)) fail('Profile import did not finish');
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 20)));
+      await tester.pump();
+    }
     await tester.pumpAndSettle();
 
     expect(find.text('Dummy Coach · v1'), findsOneWidget);

@@ -274,8 +274,10 @@ class LibraryScreen extends StatelessWidget {
         if (choice == null) return;
       }
       final msg = await applyImport(db, path, meta, choice, _store);
+      if (!context.mounted) return;
       messenger.showSnackBar(SnackBar(content: Text(msg)));
     } on AnalysisError catch (e) {
+      if (!context.mounted) return;
       final problems = (e.details['problems'] as List?)?.cast<String>();
       messenger.showSnackBar(
         SnackBar(

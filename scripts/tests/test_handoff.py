@@ -66,3 +66,10 @@ heartbeat: 2026-01-01T00:00:00Z
         self.assertEqual(self.handoff('heartbeat', 'codex').returncode, 0)
         self.assertEqual(self.git('rev-parse', 'HEAD'), before)
         self.assertNotEqual(self.handoff('heartbeat', 'claude').returncode, 0)
+
+    def test_process_record_requires_owner_and_does_not_commit(self):
+        before = self.git('rev-parse', 'HEAD')
+        self.assertEqual(self.handoff('processes', 'codex', 'test job 123').returncode, 0)
+        self.assertIn('active_processes: test job 123', self.handoff('status').stdout)
+        self.assertEqual(self.git('rev-parse', 'HEAD'), before)
+        self.assertNotEqual(self.handoff('processes', 'claude', 'none').returncode, 0)

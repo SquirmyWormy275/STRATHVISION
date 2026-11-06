@@ -2,7 +2,9 @@
 # Shared handoff tool for Claude Code and Codex. See AGENTS.md.
 #
 #   scripts/handoff.sh status
-#   scripts/handoff.sh claim      <claude|codex> "<what>"        [--force]
+#   scripts/handoff.sh claim      <claude|codex> "<what>" [--force] [--owned "paths"]
+#   scripts/handoff.sh heartbeat  <claude|codex>
+#   scripts/handoff.sh processes  <claude|codex> "<active jobs or none>"
 #   scripts/handoff.sh checkpoint <claude|codex> "<done>" "<next>" [--phase "<p>"] [--task "<t>"]
 #   scripts/handoff.sh release    <claude|codex> "<summary>" "<next>"
 #   scripts/handoff.sh note       <claude|codex> "<message>"
@@ -152,8 +154,16 @@ case "$cmd" in
     ;;
 
   claim)
-    agent="${1:-}"; what="${2:-}"; force="${3:-}"; check_agent "$agent"
-    [[ -n "$what" ]] || die 'usage: claim <agent> "<what>" [--force]'
+    agent="${1:-}"; what="${2:-}"; check_agent "$agent"
+    [[ -n "$what" ]] || die 'usage: claim <agent> "<what>" [--force] [--owned paths]'
+    shift 2; force=""; owned=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --force) force="--force"; shift;;
+        --owned) owned="$2"; shift 2;;
+        *) die "unknown option $1";;
+      esac
+    done
     sync_first
     owner=$(get_field owner); age=$(minutes_since "$(get_field heartbeat)")
     if [[ "$owner" != "$agent" && "$owner" != "none" && "$age" -lt "$STALE_MINUTES" && "$force" != "--force" ]]; then
@@ -161,10 +171,16 @@ case "$cmd" in
     fi
     takeover=""
     [[ "$owner" != "$agent" && "$owner" != "none" ]] && takeover=" (taking over from $owner, last heartbeat ${age} min ago)"
-    set_fields "owner=$agent" "heartbeat=$(now)"
+    set_fields "owner=$agent" "heartbeat=$(now)" "owned_paths=$owned"
     log_entry "$agent" "Claimed: $what$takeover"
     commit_push "handoff($agent): claim — $what"
     post_issue "$agent" "🟢 **Claimed**: $what$takeover"
+    ;;
+
+  processes)
+    agent="${1:-}"; desc="${2:-}"; check_agent "$agent"; check_owner "$agent"
+    [[ -n "$desc" ]] || die 'usage: processes <agent> "<active jobs or none>"'
+    set_fields "heartbeat=$(now)" "active_processes=$desc"
     ;;
 
   heartbeat)
@@ -181,6 +197,7 @@ case "$cmd" in
       case "$1" in
         --phase) extra+=("phase=$2"); shift 2;;
         --task)  extra+=("task=$2");  shift 2;;
+        --owned) extra+=("owned_paths=$2"); shift 2;;
         --paths)
           shift
           [[ $# -gt 0 ]] || die '--paths needs at least one path'
@@ -204,7 +221,7 @@ case "$cmd" in
     agent="${1:-}"; summary="${2:-}"; next="${3:-}"; check_agent "$agent"
     [[ -n "$summary" && -n "$next" ]] || die 'usage: release <agent> "<summary>" "<next>"'
     check_owner "$agent"
-    set_fields "owner=none" "heartbeat=$(now)" "next=$next"
+    set_fields "owner=none" "heartbeat=$(now)" "next=$next" "owned_paths=" "active_processes=none"
     log_entry "$agent" "Released: $summary → next: $next"
     commit_push "handoff($agent): release — $summary"
     post_issue "$agent" "⏸️ **Released**: $summary
@@ -242,5 +259,5 @@ case "$cmd" in
     echo "handoff issue: #$n  https://github.com/$slug/issues/$n"
     ;;
 
-  *) die "unknown command '$cmd' (status|claim|heartbeat|checkpoint|release|note|setup-github)";;
+  *) die "unknown command '$cmd' (status|claim|heartbeat|processes|checkpoint|release|note|setup-github)";;
 esac
