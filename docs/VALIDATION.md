@@ -15,10 +15,13 @@ From the repository root:
 (cd apps/strathvision && flutter pub get && flutter analyze && flutter test --coverage)
 python -m pip install -r tools/carne_asada/requirements.txt
 python -m pytest -q tools/carne_asada
+python -m unittest discover -s tools/datasets -v
 python -m unittest discover -s scripts/tests -v
 python scripts/check_links.py
 python scripts/coverage_summary.py packages/analysis_engine/coverage/lcov.info apps/strathvision/coverage/lcov.info
 ```
+
+The dataset suite needs Linux/POSIX and ffprobe/findmnt; install ffmpeg to run its real audiovisual test. It has no Python package dependencies.
 
 Use a separate Python environment for research requirements. Coverage is an executable-line baseline, excluding generated Dart; CI uploads LCOV and a summary. It is not a claim that every native path or model failure is tested. The link check covers relative file destinations, not web availability or heading anchors.
 

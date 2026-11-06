@@ -3,18 +3,22 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-06T08:22:31Z
+heartbeat: 2026-11-06T08:29:30Z
 branch: implementation
 phase: Inventory-first research
 task: Reusable sport-agnostic inventory and split safeguards
-next: Complete Seagate scan, record current aggregate inventory and historical exposure quarantine, then publish PR with research checks.
+next: Review PR 7; before any new model comparison, review recording/session provenance and exposure, obtain genuine labels, and freeze an independent evaluation protocol per docs/DATASETS.md.
 owned_paths: tools/datasets docs .github/workflows/research.yml README.md
-active_processes: Read-only inventory-20261106 Python scan of mounted Seagate; no model fitting
+active_processes: none; Seagate inventory completed, source signatures rechecked, PR 7 final documentation in progress
 <!-- STATE:END -->
 
 ## Current acceptance
 
 The audit repairs package containment/atomicity, feedback provenance, duplicate fitting inputs, failure recovery and confidence-aware ranking; adds PR/research/native CI and coverage; and replaces stale public navigation. See [validation](../VALIDATION.md) for observed results and [roadmap](../ROADMAP.md) for remaining work. Physical-device, coach/holdout and live-provider checks are still open. Local transcription is not implemented.
+
+## Inventory-first workstream acceptance
+
+The mounted Seagate scan on 2026-11-06 verified 438 video files / 436 unique payloads (62,500.223842 s), with all 468 path signatures unchanged. All 424 prior payloads remain; 12 are newly inventoried. The private provenance/split plan quarantines all 436 sources (424 conservatively opened, 12 unknown) pending reviewed recording/session evidence. See [dataset contracts](../DATASETS.md) and [results](../experiments/Inventory-20261106.md). PR #7 targets implementation. No new representation training or CARNE learning evaluation was performed.
 
 ## Historical phase progress
 
@@ -70,6 +74,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T08:29:30Z **codex** — Mounted Seagate inventory complete: 438 files, 436 unique videos, 17h21m; all 468 signatures unchanged; 436 sources quarantined; 30 dataset, 74 research and 5 handoff tests pass → next: Review PR 7; before any new model comparison, review recording/session provenance and exposure, obtain genuine labels, and freeze an independent evaluation protocol per docs/DATASETS.md.
 - 2026-11-06T08:22:31Z **codex** — Hardened directory traversal against replacement races and added executable split validation; 30 dataset tests pass → next: Complete Seagate scan, record current aggregate inventory and historical exposure quarantine, then publish PR with research checks.
 - 2026-11-06T08:19:19Z **codex** — Inventory and provenance/split tools implemented; 26 tests pass including real audiovisual metadata and original preservation → next: Finish read-only Seagate scan (session 81306), verify aggregate evidence, run all research checks and publish focused PR against implementation.
 - 2026-11-06T08:08:28Z **codex** — Claimed: Read-only sport-agnostic footage inventory, provenance and split safeguards

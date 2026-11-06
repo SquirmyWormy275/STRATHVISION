@@ -10,7 +10,7 @@ Requirements: Linux/POSIX, Python 3.10+, `ffprobe` and `findmnt`. There are no P
 
 ```sh
 python3 tools/datasets/inventory.py \
-  --root '/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA' \
+  --root "/run/media/$USER/Seagate Portable Drive/CARNE ASADA" \
   --expected-volume-uuid 72A448AAA44872A1 \
   --output research-data/my-inventory
 ```

@@ -1,0 +1,76 @@
+{
+  "complete": true,
+  "completed_utc": "2026-11-06T08:26:43.687452+00:00",
+  "executed_inventory_code_commit": "d420743",
+  "final_signature_verification": {
+    "checked_paths": 468,
+    "scan_errors": 0,
+    "unchanged_paths": 468,
+    "verification_tool_sha256": "570fb75fd33c7cd38a43e48e4c1e1a971382ccf379d700ac311607a49d854f45",
+    "verified_utc": "2026-11-06T08:27:33.836429+00:00"
+  },
+  "format": "footage-inventory-summary/1",
+  "inventory_sha256": "8e0f15b97f9dc97562649990dbc422f2786cab72d950deb0d595fa0c6109603e",
+  "limitations": [
+    "Metadata probe, not full decode or quality validation.",
+    "No sport or athlete/session labels inferred.",
+    "No new training, representation benchmark or CARNE ASADA evaluation.",
+    "Private manifests and original media are not published."
+  ],
+  "prior_snapshot": {
+    "manifest_sha256": "2e45b43eeacab94d1b72b5d139b9bef1181ab4737e5568c83015451a3f42f3da",
+    "matched_current_sources": 424,
+    "missing_prior_payloads": 0,
+    "new_payloads": 12,
+    "unique_sources": 424
+  },
+  "provenance": {
+    "exposure": {
+      "opened": 424,
+      "unknown": 12
+    },
+    "manifest_sha256": "3b380d1e0aa3558d00757742d52610acef6e290ec88af37e589d3becd582a6b9",
+    "policy": "Prior-study payloads conservatively marked opened; newly inventoried payloads remain unknown.",
+    "reviewed_session_sources": 0
+  },
+  "raw_media_published": false,
+  "source_access": {
+    "filesystem_type": "fuseblk",
+    "mounted_volume_uuid_verified": true,
+    "original_files_written": 0,
+    "read_only_file_access": true
+  },
+  "split": {
+    "groups": 436,
+    "plan_sha256": "93b7e8aeedea8523f2daf6a7646fb97f23f2786cb3655fc208ba3f8e8db6ff5c",
+    "sources": {
+      "quarantine": 436,
+      "test": 0,
+      "train": 0,
+      "validation": 0
+    },
+    "tool_sha256": "cd6dfa538e1c629ff862e7cbf3858fc026c2f3c38189c7fdde08929ef50d8d0e",
+    "validation": "recomputed from exact bound inventory and provenance"
+  },
+  "started_utc": "2026-11-06T08:14:47.104647+00:00",
+  "summary": {
+    "dispositions": {
+      "archive": 9,
+      "download_intermediate": 21,
+      "video": 438
+    },
+    "duplicate_files": 2,
+    "files": 468,
+    "states": {
+      "excluded": 30,
+      "verified": 438
+    },
+    "unique_audio_only": 0,
+    "unique_bytes": 53754657634,
+    "unique_sources": 436,
+    "unique_video_duration_s": 62500.223842,
+    "unique_videos": 436,
+    "videos_without_duration": 0
+  },
+  "tool_sha256": "47e37b4f92e867333cc573d82e6e5c41c4767c629b0e32370bce8dbe6dcc802e"
+}
