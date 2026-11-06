@@ -2,14 +2,14 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
+owner: none
 heartbeat: 2026-11-06T08:30:26Z
 branch: implementation
 phase: Inventory-first research
 task: Reusable sport-agnostic inventory and split safeguards
-next: Review PR 7 and use docs/DATASETS.md to review session provenance before freezing a new evaluation.
-owned_paths: tools/datasets docs .github/workflows/research.yml README.md
-active_processes: none; Seagate inventory completed, source signatures rechecked, PR 7 final documentation in progress
+next: Review PR 7. The 436-source private plan remains quarantined until recording/session provenance and exposure are reviewed; collect genuine labels and freeze comparison gates before representation or CARNE evaluation.
+owned_paths: 
+active_processes: none
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -74,6 +74,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T08:30:26Z **codex** — Released: Inventory-first workstream delivered in PR 7: source-preserving manifests, metadata, SHA-256 aliases, provenance and frozen split safeguards; 109 relevant local tests pass → next: Review PR 7. The 436-source private plan remains quarantined until recording/session provenance and exposure are reviewed; collect genuine labels and freeze comparison gates before representation or CARNE evaluation.
 - 2026-11-06T08:30:26Z **codex** — Published aggregate evidence and post-inventory representation assessment without private filenames or model promotion → next: Review PR 7 and use docs/DATASETS.md to review session provenance before freezing a new evaluation.
 - 2026-11-06T08:29:30Z **codex** — Mounted Seagate inventory complete: 438 files, 436 unique videos, 17h21m; all 468 signatures unchanged; 436 sources quarantined; 30 dataset, 74 research and 5 handoff tests pass → next: Review PR 7; before any new model comparison, review recording/session provenance and exposure, obtain genuine labels, and freeze an independent evaluation protocol per docs/DATASETS.md.
 - 2026-11-06T08:22:31Z **codex** — Hardened directory traversal against replacement races and added executable split validation; 30 dataset tests pass → next: Complete Seagate scan, record current aggregate inventory and historical exposure quarantine, then publish PR with research checks.
