@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-06T08:30:26Z
+owner: codex
+heartbeat: 2026-11-06T15:44:22Z
 branch: implementation
 phase: Inventory-first research
 task: Reusable sport-agnostic inventory and split safeguards
 next: Review PR 7. The 436-source private plan remains quarantined until recording/session provenance and exposure are reviewed; collect genuine labels and freeze comparison gates before representation or CARNE evaluation.
-owned_paths:
+owned_paths: tools/datasets docs .github/workflows README.md
 active_processes: none
 <!-- STATE:END -->
 
@@ -74,6 +74,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T15:44:22Z **codex** — Claimed: Prepare full release: integrate latest baseline fixes, pass all build gates, merge inventory and prepare verified distribution artifacts
 - 2026-11-06T08:30:26Z **codex** — Released: Inventory-first workstream delivered in PR 7: source-preserving manifests, metadata, SHA-256 aliases, provenance and frozen split safeguards; 109 relevant local tests pass → next: Review PR 7. The 436-source private plan remains quarantined until recording/session provenance and exposure are reviewed; collect genuine labels and freeze comparison gates before representation or CARNE evaluation.
 - 2026-11-06T08:30:26Z **codex** — Published aggregate evidence and post-inventory representation assessment without private filenames or model promotion → next: Review PR 7 and use docs/DATASETS.md to review session provenance before freezing a new evaluation.
 - 2026-11-06T08:29:30Z **codex** — Mounted Seagate inventory complete: 438 files, 436 unique videos, 17h21m; all 468 signatures unchanged; 436 sources quarantined; 30 dataset, 74 research and 5 handoff tests pass → next: Review PR 7; before any new model comparison, review recording/session provenance and exposure, obtain genuine labels, and freeze an independent evaluation protocol per docs/DATASETS.md.
