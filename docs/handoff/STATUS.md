@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-06T16:09:36Z
+owner: none
+heartbeat: 2026-11-06T16:12:11Z
 branch: implementation
 phase: Release packaging
 task: Verified release candidate
-next: Verify all five archives, record hashes/source/run, create draft v1.0.0-rc.1, then release ownership. Production signing and physical-device acceptance remain open.
-owned_paths: tools/datasets docs .github/workflows README.md
+next: Finish production signing using the user-provided Android/Apple setup, complete docs/VALIDATION.md physical-device acceptance, then publish the appropriate release. For research, review session provenance and freeze an independent protocol before model comparison.
+owned_paths:
 active_processes: none
 <!-- STATE:END -->
 
@@ -19,6 +19,12 @@ The audit repairs package containment/atomicity, feedback provenance, duplicate 
 ## Inventory-first workstream acceptance
 
 The mounted Seagate scan on 2026-11-06 verified 438 video files / 436 unique payloads (62,500.223842 s), with all 468 path signatures unchanged. All 424 prior payloads remain; 12 are newly inventoried. The private provenance/split plan quarantines all 436 sources (424 conservatively opened, 12 unknown) pending reviewed recording/session evidence. See [dataset contracts](../DATASETS.md) and [results](../experiments/Inventory-20261106.md). PR #7 merged into main as dae099b on 2026-11-06; all eight jobs passed on tested head cd994ca (run 42247210828). No new representation training or CARNE learning evaluation was performed.
+
+## Release candidate, 2026-11-06
+
+PR [#7](https://github.com/SquirmyWormy275/STRATHVISION/pull/7) is merged into main as `dae099b`. All eight jobs passed in [run 42247210828](https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/42247210828) for source `cd994ca`; the source, CI merge and final main merge share tree `c1619fe62493839e9cf851ddd1cd82aae4481630`. Local validation passed 376 tests, both analyzers, native Linux pose and synthetic training compatibility on CPU/CUDA. GitHub reported zero open dependency alerts after merge.
+
+[Draft v1.0.0-rc.1](https://github.com/SquirmyWormy275/STRATHVISION/releases/tag/untagged-ef1ea3dab0f8283a7000) contains all five platform packages from that successful run, `SHA256SUMS` and `release-manifest.json`. Archive integrity/required contents and all seven uploaded asset sizes/SHA-256 digests were verified. Local evidence is ignored under `research-data/release-v1.0.0-rc.1/`. The draft is deliberately a test release candidate: production signing, physical-device acceptance and independent coaching validation remain open. No public general release has been published.
 
 ## Historical phase progress
 
@@ -76,6 +82,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T16:12:11Z **codex** — Released: PR 7 merged; eight CI jobs green; draft v1.0.0-rc.1 uploaded with five verified packages, hashes and provenance; zero open dependency alerts → next: Finish production signing using the user-provided Android/Apple setup, complete docs/VALIDATION.md physical-device acceptance, then publish the appropriate release. For research, review session provenance and freeze an independent protocol before model comparison.
 - 2026-11-06T16:09:36Z **codex** — PR 7 merged to main as dae099b; all eight CI jobs passed for cd994ca, whose tree exactly matches main; release artifacts downloading → next: Verify all five archives, record hashes/source/run, create draft v1.0.0-rc.1, then release ownership. Production signing and physical-device acceptance remain open.
 - 2026-11-06T15:53:13Z **codex** — Release prep integrated main and native Linux fixes; 376 local tests pass, native pose passes, patched training environment passes CPU/CUDA compatibility → next: Wait for all eight jobs on PR 7 final head, merge into main when green, verify same-run artifacts/checksums and prepare a draft release. Production signing information remains pending.
 - 2026-11-06T15:44:22Z **codex** — Claimed: Prepare full release: integrate latest baseline fixes, pass all build gates, merge inventory and prepare verified distribution artifacts
