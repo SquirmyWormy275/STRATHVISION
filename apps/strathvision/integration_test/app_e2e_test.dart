@@ -297,7 +297,9 @@ void main() {
     // ---- Workbench: harness on coach clips ------------------------------
     await tap('workbench-$id', after: 1500);
     await tap('add-probe-clips', after: 500);
-    await wait(tester, find.text('1 clips'), seconds: 600);
+    await wait(tester, find.text('1 clips'), seconds: 120);
+    await wait(tester, find.byWidgetPredicate((w) =>
+        w is ButtonStyleButton && w.key == const Key('run-harness') && w.onPressed != null));
     await tap('run-harness', after: 1000);
     await wait(
       tester,

@@ -28,18 +28,17 @@ ClipEvaluator visionEvaluator(AnalysisPack pack, {TrainingTrackLoader? load}) =>
           reasons: const ['No person could be found in this clip.'],
         );
       }
-      return Isolate.run(
-        () => ProfileBuilder(
-          engine: AnalysisEngine(
-            pack: pack,
-            pose: PrecomputedPoseEstimator(track),
-            implement: const GripImplementTracker(),
-            phases: const EventPhaseDetector(),
-            perStroke: true,
-          ),
-        ).evaluate(clip, displayName: name),
-      );
+      return _evaluateTrack(pack, track, clip, name);
     };
+
+// Keep this closure outside visionEvaluator's scope: its loader may retain
+// a native database connection, which cannot cross an isolate boundary.
+Future<ClipQuality> _evaluateTrack(
+    AnalysisPack pack, PoseTrack track, ClipSource clip, String name) => Isolate.run(
+      () => ProfileBuilder(engine: AnalysisEngine(
+        pack: pack, pose: PrecomputedPoseEstimator(track),
+        implement: const GripImplementTracker(), phases: const EventPhaseDetector(),
+        perStroke: true)).evaluate(clip, displayName: name));
 
 /// Evaluates a reference clip on a background isolate (stand-in pose).
 ClipEvaluator isolateEvaluator(AnalysisPack pack) =>

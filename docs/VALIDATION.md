@@ -4,7 +4,7 @@ Software regression checks, compilation, device behavior and coaching validity a
 
 ## Audit run, 2026-11-06
 
-Local verification before publication: 112 engine tests, 142 app unit/widget tests, 74 Python tests and four isolated handoff tests passed. Analyzer checks were clean. Native Linux playback passed 4/4; native pose passed 1/1, including 2.1 cm median agreement with the same-model reference (not motion ground truth). Line coverage: engine 91.4%, app 80.1%, excluding generated Dart. CI artifacts provide subsequent per-commit measurements.
+Local verification before publication: 112 engine tests, 144 app unit/widget tests, 74 Python tests and five isolated handoff tests passed. Analyzer checks were clean. Native Linux playback passed 4/4, the full desktop workflow passed 1/1, and native pose passed 1/1, including 2.1 cm median agreement with the same-model reference (not motion ground truth). Line coverage: engine 91.4%, app 80.7%, excluding generated Dart. CI artifacts provide subsequent per-commit measurements.
 
 ## Automated checks
 
@@ -36,7 +36,7 @@ flutter test integration_test/real_pose_test.dart -d linux --dart-define=CLIP_DI
 
 CI uses Xvfb and software rendering. The first suite checks actual decoder positions, sync, stepping, slow playback, probing and lazy video initialization. The second checks native pose determinism, orientation, reference agreement and the analysis path. [Fixture attribution](../apps/strathvision/integration_test/assets/ATTRIBUTION.md) applies. Agreement with the same model's reference is not ground-truth motion accuracy.
 
-`app_e2e_test.dart` deliberately rejects copied reference footage, then installs the **synthetic** laptop package for comparison/trend/export screens. It no longer presents duplicated footage as a valid independent profile. Run it separately for broader desktop acceptance.
+`app_e2e_test.dart` deliberately rejects copied reference footage, then installs the **synthetic** laptop package for comparison/trend/export screens. It no longer presents duplicated footage as a valid independent profile. CI runs it alongside the focused native checks; it also remains useful as a local desktop acceptance run.
 
 ## Physical-device acceptance record
 

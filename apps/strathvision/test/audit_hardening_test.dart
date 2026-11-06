@@ -16,6 +16,7 @@ import 'package:strathvision/vision/athlete.dart';
 import 'package:strathvision/vision/pose_service.dart';
 import 'package:strathvision/vision/training_track.dart';
 import 'package:strathvision/workspace/project.dart';
+import 'package:strathvision/workbench/workbench_controller.dart';
 
 void main() {
   late Directory dir;
@@ -225,6 +226,21 @@ void main() {
     fail = false;
     await c.retryClip(c.clips.first);
     expect(c.usableCount, 2);
+  });
+
+  test('production training isolates do not capture the review database', () async {
+    const clip = ClipSource(clipId: 'synthetic', path: 'unused', durationMs: 6000, fps: 30);
+    final track = await const StubPoseEstimator(styleSeed: 42).estimate(clip);
+    Future<AthleteTrack> load(ClipSource _) async {
+      await db.allProfiles(); // Deliberately captures a nonsendable native DB.
+      return AthleteTrack(track: track,
+          target: const AthleteTarget(quarterTurns: 0, frame: 0, x: .5, y: .5),
+          ambiguous: false, orientationSure: true, candidatesFrame: 0, candidates: []);
+    }
+    expect(await visionEvaluator(placeholderPack.analysisPack, load: load)(clip, 'fixture'),
+        isA<ClipQuality>());
+    expect(await visionProbeAnalyzer(placeholderPack.analysisPack, load: load)(clip, {}, []),
+        isA<AnalysisDetail>());
   });
 
   test('uncertain athlete and orientation cannot enter fitting', () async {

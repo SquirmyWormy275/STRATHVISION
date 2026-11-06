@@ -2,12 +2,12 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-06T07:30:26Z
+owner: none
+heartbeat: 2026-11-06T07:50:49Z
 branch: implementation
 phase: Audit hardening and public baseline
-task: User-authorized audit repairs, CI, documentation and acceptance roadmap
-next: Finish native e2e and CI for audit PR; reconcile main after green checks. Remaining field acceptance is tracked in issues #2-#5 and docs/ROADMAP.md.
+task: Audit hardening implemented and locally verified; public baseline in PR #6
+next: Work from docs/ROADMAP.md and issues #2–#5: physical-device acceptance, independent coach/recording-session evidence, local transcription, and live provider validation. Do not promote research detectors without frozen gates.
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -68,6 +68,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T07:45:23Z **codex** — Audit hardening: local analyzers clean; 112 engine, 144 app, 74 Python and 5 handoff tests pass. Native decoder 4/4 and pose 1/1 pass. PR #6 reconciles main; issues #2–#5 track remaining acceptance. Isolate regression now covers database-backed athlete selection. Native desktop e2e passed after correcting async import/harness waits and the isolate boundary. Final platform checks and publication evidence are attached to PR #6.
 - 2026-11-06T00:12:18Z **codex** — Released the completed Seagate starting-snapshot study: 426 video files hashed/probed; 424 unique (102 known woodchopping and 322 new lifting), totaling 16 h 3 min. Nine archives and 15 download intermediates were excluded; no files deferred and all 426 final signatures unchanged. All 322 lifting sources sampled three times: 966 frames, zero decode failures, 827 person/407 multiple-person detections (unreviewed counts). Axe fit used 73 positives/three negatives: validation 11 TP, 11 FP, 15 FN; old test not reused. Barbell fit used 47 positives/nine negatives, frozen in 4496fa6 before test pixels; references committed in 3aa0d1e before predictions; frozen test: nine TP, two FP, six FN on 15 visible/one empty/eight unrated frames. README/report, weights, references, hashes and source ledger published; 74 research tests pass; both review servers return HTTP 200. Twelve later download candidates are listed separately. Raw media stays private; no coaching labels or production promotion. Scoped commits preserve the separate integration-review work.
 - 2026-11-05T23:21:58Z **codex** — Claimed user-authorized Seagate woodchopping and Olympic weightlifting research. Inventory stable sources before scope decisions; preserve opened holdouts, avoid treating download components as independent clips, and keep raw media private. Manual scoped commits avoid staging unrelated changes or posting issue comments.
 - 2026-11-05T22:09:19Z **codex** — Released completed additional-footage study: four archives CRC/SHA verified,55newvideos after one old overlap;capture-day36/13/6split frozen192c25c;reviewedfit referencesfb538e8;actualCUDA1000steps selected800,validation8TP2FP18FN;weights/freeze3bfac94 beforetestdecode;testreferences054f5cb beforeprediction;oneheldoutpass1TP1FP8FN on9visibleheads,15unrated. Report/README and weights/references/source hashes published;65researchtests pass;all55sourcehashes rechecked;no rawpixels or coaching labels published,no production promotion. Both real review servers44597/45851 stillHTTP200. Manual scoped checkpoint/release avoids helper staging unrelated files or posting external issue comments.

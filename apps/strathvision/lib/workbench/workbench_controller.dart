@@ -34,17 +34,18 @@ ProbeAnalyzer visionProbeAnalyzer(
       const {},
     );
   }
-  return Isolate.run(
-    () => AnalysisEngine(
-      pack: pack,
-      pose: PrecomputedPoseEstimator(track),
-      implement: const GripImplementTracker(),
-      phases: const EventPhaseDetector(),
-      heads: applyPatches(headsFor(pack), patches),
-      perStroke: true,
-    ).analyzeDetailed(clip, reference: reference),
-  );
+  return _analyzeTrack(pack, track, clip, reference, patches);
 };
+
+// A separate scope prevents the database-backed selection loader from being
+// captured by Isolate.run along with the transferable analysis inputs.
+Future<AnalysisDetail> _analyzeTrack(AnalysisPack pack, PoseTrack track,
+    ClipSource clip, Map<String, double> reference, List<SpecialistPatch> patches) =>
+    Isolate.run(() => AnalysisEngine(
+      pack: pack, pose: PrecomputedPoseEstimator(track),
+      implement: const GripImplementTracker(), phases: const EventPhaseDetector(),
+      heads: applyPatches(headsFor(pack), patches), perStroke: true,
+    ).analyzeDetailed(clip, reference: reference));
 
 ProbeAnalyzer isolateProbeAnalyzer(AnalysisPack pack) =>
     (clip, reference, patches) => Isolate.run(
