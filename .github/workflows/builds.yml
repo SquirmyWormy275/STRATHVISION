@@ -78,7 +78,9 @@ jobs:
 
   linux:
     needs: [test, research]
-    runs-on: ubuntu-latest
+    # Fixed native GTK/libmpv baseline; latest moved to Ubuntu 26.04, where
+    # headless decoder/pose runs intermittently stalled without an assertion.
+    runs-on: ubuntu-24.04
     env:
       LIBGL_ALWAYS_SOFTWARE: '1'
     steps:

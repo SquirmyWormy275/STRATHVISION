@@ -36,7 +36,7 @@ flutter test integration_test/real_player_test.dart -d linux --dart-define=CLIP_
 flutter test integration_test/real_pose_test.dart -d linux --dart-define=CLIP_DIR="$PWD/integration_test/assets" --dart-define=REF="$PWD/../../packages/analysis_engine/test/fixtures/cleave_pose.json"
 ```
 
-CI uses Xvfb and software rendering. The first suite checks actual decoder positions, sync, stepping, slow playback, probing and lazy video initialization. The second checks native pose determinism, orientation, reference agreement and the analysis path. [Fixture attribution](../apps/strathvision/integration_test/assets/ATTRIBUTION.md) applies. Agreement with the same model's reference is not ground-truth motion accuracy.
+CI uses Ubuntu 24.04, Xvfb and software rendering for a fixed GTK/libmpv baseline. Ubuntu 26.04 (`ubuntu-latest` during this audit) showed intermittent native decoder/pose timeouts; support for that combination remains unverified. Native steps have explicit time limits. The first suite checks actual decoder positions, sync, stepping, slow playback, probing and lazy video initialization. The second checks native pose determinism, orientation, reference agreement and the analysis path. [Fixture attribution](../apps/strathvision/integration_test/assets/ATTRIBUTION.md) applies. Agreement with the same model's reference is not ground-truth motion accuracy.
 
 `app_e2e_test.dart` deliberately rejects copied reference footage, then installs the **synthetic** laptop package for comparison/trend/export screens. It no longer presents duplicated footage as a valid independent profile. CI runs it alongside the focused native checks; it also remains useful as a local desktop acceptance run.
 
