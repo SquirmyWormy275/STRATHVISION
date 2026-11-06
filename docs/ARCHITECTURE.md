@@ -21,6 +21,7 @@ flowchart LR
 - [Vision](../apps/strathvision/lib/vision): person/athlete selection and BlazePose through ONNX Runtime. Training paths reject unresolved identity/orientation. Implement position is derived from grip/forearm geometry; no research detector is promoted.
 - [Analysis engine](../packages/analysis_engine/lib/src): stage interfaces, segmentation, metrics, profile gates, comparison and bounded edits. [Packs](../apps/strathvision/assets/packs) supply event definitions and weights.
 - [Package exchange](../apps/strathvision/lib/profiles/package_exchange.dart): generated private storage names, transactional metadata/extras, event-bound marks and content-based local-video matching.
+- [Dataset tooling](../tools/datasets): read-only, sport-agnostic inventories, exact-content aliases and reviewed recording/session split guards. These private research artifacts are separate from app packages; see [dataset contracts](DATASETS.md).
 - [Research tooling](../tools/carne_asada): private dataset preparation and evaluation. Published reports retain failed and zero-edit results.
 
 ## Device roles and transfer

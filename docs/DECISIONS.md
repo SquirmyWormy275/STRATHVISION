@@ -348,3 +348,9 @@ One-sentence edit explanations (exact style):
 ## Audit hardening decision — 2026-11-06
 
 The user authorized execution of the repository audit roadmap. The additive audit contract in INTERFACES.md governs package containment, content identity, event-bound mark transfer, fail-closed athlete selection, input recovery and confidence-aware delta ranking. Profile fitting is desktop-only; earlier statements allowing all coach fitting flows on phones are superseded. Model confidence is not physical uncertainty, so overall score semantics remain unchanged and ranking is versioned separately. No research detector is promoted by this work. Device acceptance and independent coach evidence stay open until observed.
+
+## Dataset inventory decision — 2026-11-06
+
+The user authorized an inventory-first research workstream independent of outstanding device acceptance. A sport-agnostic, standard-library Python tool under `tools/datasets` reads local originals without extraction, copying, conversion, inference or training. Existing experiment manifests and opened holdouts remain historical evidence. No sport, athlete, recording session, permission to redistribute, or coaching label is inferred from a folder or filename.
+
+Exact SHA-256 identity deduplicates bytes, not scenes. Reviewed recording/session groups, derivative parent hashes, conservative upload hints and prior split plans constrain transitive split groups. Unknown provenance quarantines the entire connected group. Previously opened or unknown-exposure sources cannot become a fresh test set. Baseline/learned/hybrid comparisons and CARNE ASADA learning are gated on completed inventory, reviewed provenance, genuine labels and a frozen evaluation protocol; this workstream does not promote a representation.

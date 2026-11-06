@@ -1,5 +1,11 @@
 # STRATHVISION Interfaces
 
+## Local research dataset contracts
+
+`footage-inventory/1`, `footage-provenance/1` and `footage-split/1` are separate research artifacts, not app profile packages. Their field definitions and runnable examples are specified in [DATASETS.md](DATASETS.md). Inventories retain every observed path disposition, stable SHA-256 aliases, media metadata, source signatures, tool/mount provenance and scan failures. Only successfully hashed/probed files unchanged at final verification become sources. Outputs must be outside the input tree, and existing output directories are never overwritten.
+
+Split plans bind the exact inventory and reviewed provenance bytes by SHA-256. All reviewed recording/session, parent and upload relationships form transitive groups; a group cannot cross train/validation/test/quarantine. Missing review quarantines a group. A fresh test group requires explicitly unseen exposure for every member. Prior frozen plans prohibit reassignment and carry group relationships forward. Validation recomputes the plan against the bound inputs rather than trusting a supplied success flag. These checks do not establish unrecorded real-world independence.
+
 Research image-space implement observations and reviewed feedback follow [AXE_OBSERVATIONS.md](AXE_OBSERVATIONS.md). These records do not replace metric-space `ImplementTrack` with uncalibrated 2D coordinates. Draft judgments remain unlabelled; test-source feedback cannot fit or select a model.
 
 ## Reproducible Gurr Academy experiments

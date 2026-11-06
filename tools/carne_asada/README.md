@@ -1,5 +1,7 @@
 # CARNE ASADA research tools
 
+For new local corpora, start with the [sport-agnostic dataset inventory](../../docs/DATASETS.md). These older experiment-specific ingestion commands remain for reproducing their frozen studies.
+
 These local tools measure video-analysis failures, train experimental axe and barbell detectors, and collect real feedback for the bounded CARNE learning loop. Original videos and per-frame outputs stay private. Published JSON records identify source content, splits, models, settings and failures.
 
 Start with the [Gurr results and project purpose](../../README.md#experiment-carne-asada-on-the-gurr-footage), then follow this sequence:

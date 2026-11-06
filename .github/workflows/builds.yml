@@ -53,6 +53,10 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.12', cache: pip, cache-dependency-path: tools/carne_asada/requirements.txt}
       - run: python -m pip install -r tools/carne_asada/requirements.txt
+      - name: Dataset media dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Read-only dataset and split safeguards
+        run: python -m unittest discover -s tools/datasets -v
       - run: python -m pytest -q tools/carne_asada
       - name: Handoff isolation and documentation links
         run: |
