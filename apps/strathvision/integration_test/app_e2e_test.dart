@@ -321,6 +321,7 @@ void main() {
     await back();
 
     await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
     await tester.runAsync(() async {
       await db.close();
       final d = Directory('${support!.path}/profiles');

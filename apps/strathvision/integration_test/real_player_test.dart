@@ -152,9 +152,13 @@ void main() {
     await waitUntil(tester,
         () => ((b.decoderPosition - a.decoderPosition).inMilliseconds - offset).abs() < 45);
 
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
     c.dispose();
-    await a.dispose();
-    await b.dispose();
+    await tester.runAsync(() async {
+      await a.dispose();
+      await b.dispose();
+    });
   });
 
   testWidgets('Analyze on a real clip returns a valid Metric Vector',
@@ -189,10 +193,14 @@ void main() {
     print('analyze: fps=${analysis.fps} phases=${v.phases.length} '
         'metrics=${v.metrics.length} residuals=${v.specialistResiduals}');
 
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
     analysis.dispose();
     c.dispose();
-    await a.dispose();
-    await b.dispose();
+    await tester.runAsync(() async {
+      await a.dispose();
+      await b.dispose();
+    });
   });
 
   testWidgets('headless probe reads duration and frame rate', (tester) async {
