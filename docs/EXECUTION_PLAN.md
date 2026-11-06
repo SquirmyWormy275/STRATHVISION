@@ -1,5 +1,17 @@
 # STRATHVISION Execution Plan
 
+## Authorized inventory-first research workstream (2026-11-06)
+
+The user explicitly requested this parallel research prerequisite; outstanding physical-device acceptance remains open and is not bypassed or relabeled complete.
+
+1. Read the current contracts and historical experiments; confirm local source availability and, for Seagate, the mounted volume UUID.
+2. Implement and test a read-only, sport-agnostic inventory: immutable outputs outside originals, streaming SHA-256 aliases, metadata, per-file failures and final change detection.
+3. Implement and test reviewed provenance and transitive split safeguards; unknown provenance stays quarantined, and previous holdouts cannot silently change partitions.
+4. Run the inventory when the volume is mounted; publish aggregate evidence and reproducible commands without private paths or footage.
+5. Only after inventory, assess the evidence for baseline versus learned/hybrid representations. Actual model/CARNE ASADA comparisons require reviewed groups, genuine labels and a frozen protocol. Report unmet gates explicitly.
+
+Acceptance: automated safety/metadata/deduplication/split tests, a real local run when accessible, source-change checks, public documentation and a focused PR. No changes to production scoring or sport packs are required.
+
 Strict, ordered tasks for implementation. Do not start a task until all acceptance criteria of the previous task are met. Do not invent features outside ARCHITECTURE.md, DECISIONS.md, INTERFACES.md, and CARNE_ASADA.md.
 
 If a requirement is ambiguous, stop and ask rather than inventing behavior.

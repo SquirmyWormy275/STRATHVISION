@@ -11,7 +11,8 @@ The engineering contribution is a complete path from video review to a versioned
 1. [Try the review workflow](docs/GETTING_STARTED.md): two bundled test clips, sync, slow motion, marks, and reopening a project.
 2. [Set up and run the app](apps/strathvision/README.md), or [download a test build](docs/DISTRIBUTION.md).
 3. [Understand the architecture](docs/ARCHITECTURE.md), then follow the [learning guide](docs/wiki/Home.md).
-4. [Inspect results and failures](docs/RESEARCH_STATUS.md), [validation](docs/VALIDATION.md), and the [prioritized roadmap](docs/ROADMAP.md).
+4. [Inventory local footage](docs/DATASETS.md), deduplicate originals and review session provenance before choosing a model.
+5. [Inspect results and failures](docs/RESEARCH_STATUS.md), [validation](docs/VALIDATION.md), and the [prioritized roadmap](docs/ROADMAP.md).
 
 ## What works, and what remains experimental
 
@@ -40,6 +41,7 @@ The latest full-duration study processed **47 recordings in 195 windows** with n
 | [apps/strathvision](apps/strathvision) | Flutter app, storage, native playback and pose integration |
 | [packages/analysis_engine](packages/analysis_engine) | Contracts, metrics, profile fitting, comparison and bounded updates |
 | [apps/strathvision/assets/packs](apps/strathvision/assets/packs) | Event definitions; Springboard remains provisional |
+| [tools/datasets](tools/datasets) | Sport-agnostic read-only inventory, private manifests and reviewed split safeguards |
 | [tools/carne_asada](tools/carne_asada) | Python ingestion, evaluation and private-feedback workflows |
 | [docs/experiments](docs/experiments) | Reproducible research reports and published aggregate results |
 | [.github/workflows/builds.yml](.github/workflows/builds.yml) | PR checks, test coverage reports, research tests, native Linux smoke and five platform builds |

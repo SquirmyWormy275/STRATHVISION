@@ -2,6 +2,10 @@
 
 These are prototype results, including failed experiments. The source-linked reports below preserve their original study boundaries. See the [roadmap](ROADMAP.md) for promotion criteria and [project introduction](../README.md) for the application.
 
+## Inventory before representation research
+
+The [November 6 dataset workstream](experiments/Inventory-20261106.md) adds sport-agnostic read-only inventories and reviewed recording/session split guards. Follow the [dataset guide](DATASETS.md) before fitting on a new corpus. Inventory completion does not establish labels, independent sessions or model improvement.
+
 ## CARNE ASADA (Desktop-Only Research Project)
 
 CARNE ASADA is the recursive weight-space editor for the phase-conditioned Gaussian mixture + residual exemplars. It is nested inside the app ecosystem but **not required** for the athlete-facing product.

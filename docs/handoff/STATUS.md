@@ -3,17 +3,22 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-06T08:08:28Z
+heartbeat: 2026-11-06T15:53:13Z
 branch: implementation
-phase: Audit hardening and public baseline
-task: Audit hardening implemented and locally verified; public baseline in PR #6
-next: Work from docs/ROADMAP.md and issues #2–#5: physical-device acceptance, independent coach/recording-session evidence, local transcription, and live provider validation. Do not promote research detectors without frozen gates.
-owned_paths: tools/datasets docs .github/workflows/research.yml README.md
+phase: Release preparation
+task: Final build gates and verified release artifacts
+next: Wait for all eight jobs on PR 7 final head, merge into main when green, verify same-run artifacts/checksums and prepare a draft release. Production signing information remains pending.
+owned_paths: tools/datasets docs .github/workflows README.md
+active_processes: none
 <!-- STATE:END -->
 
 ## Current acceptance
 
 The audit repairs package containment/atomicity, feedback provenance, duplicate fitting inputs, failure recovery and confidence-aware ranking; adds PR/research/native CI and coverage; and replaces stale public navigation. See [validation](../VALIDATION.md) for observed results and [roadmap](../ROADMAP.md) for remaining work. Physical-device, coach/holdout and live-provider checks are still open. Local transcription is not implemented.
+
+## Inventory-first workstream acceptance
+
+The mounted Seagate scan on 2026-11-06 verified 438 video files / 436 unique payloads (62,500.223842 s), with all 468 path signatures unchanged. All 424 prior payloads remain; 12 are newly inventoried. The private provenance/split plan quarantines all 436 sources (424 conservatively opened, 12 unknown) pending reviewed recording/session evidence. See [dataset contracts](../DATASETS.md) and [results](../experiments/Inventory-20261106.md). PR #7 targets implementation. No new representation training or CARNE learning evaluation was performed.
 
 ## Historical phase progress
 
@@ -69,6 +74,13 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T15:53:13Z **codex** — Release prep integrated main and native Linux fixes; 376 local tests pass, native pose passes, patched training environment passes CPU/CUDA compatibility → next: Wait for all eight jobs on PR 7 final head, merge into main when green, verify same-run artifacts/checksums and prepare a draft release. Production signing information remains pending.
+- 2026-11-06T15:44:22Z **codex** — Claimed: Prepare full release: integrate latest baseline fixes, pass all build gates, merge inventory and prepare verified distribution artifacts
+- 2026-11-06T08:30:26Z **codex** — Released: Inventory-first workstream delivered in PR 7: source-preserving manifests, metadata, SHA-256 aliases, provenance and frozen split safeguards; 109 relevant local tests pass → next: Review PR 7. The 436-source private plan remains quarantined until recording/session provenance and exposure are reviewed; collect genuine labels and freeze comparison gates before representation or CARNE evaluation.
+- 2026-11-06T08:30:26Z **codex** — Published aggregate evidence and post-inventory representation assessment without private filenames or model promotion → next: Review PR 7 and use docs/DATASETS.md to review session provenance before freezing a new evaluation.
+- 2026-11-06T08:29:30Z **codex** — Mounted Seagate inventory complete: 438 files, 436 unique videos, 17h21m; all 468 signatures unchanged; 436 sources quarantined; 30 dataset, 74 research and 5 handoff tests pass → next: Review PR 7; before any new model comparison, review recording/session provenance and exposure, obtain genuine labels, and freeze an independent evaluation protocol per docs/DATASETS.md.
+- 2026-11-06T08:22:31Z **codex** — Hardened directory traversal against replacement races and added executable split validation; 30 dataset tests pass → next: Complete Seagate scan, record current aggregate inventory and historical exposure quarantine, then publish PR with research checks.
+- 2026-11-06T08:19:19Z **codex** — Inventory and provenance/split tools implemented; 26 tests pass including real audiovisual metadata and original preservation → next: Finish read-only Seagate scan (session 81306), verify aggregate evidence, run all research checks and publish focused PR against implementation.
 - 2026-11-06T08:08:28Z **codex** — Claimed: Read-only sport-agnostic footage inventory, provenance and split safeguards
 - 2026-11-06T07:45:23Z **codex** — Audit hardening: local analyzers clean; 112 engine, 144 app, 74 Python and 5 handoff tests pass. Native decoder 4/4 and pose 1/1 pass. PR #6 reconciles main; issues #2–#5 track remaining acceptance. Isolate regression now covers database-backed athlete selection. Native desktop e2e passed after correcting async import/harness waits and the isolate boundary. Final platform checks and publication evidence are attached to PR #6.
 - 2026-11-06T00:12:18Z **codex** — Released the completed Seagate starting-snapshot study: 426 video files hashed/probed; 424 unique (102 known woodchopping and 322 new lifting), totaling 16 h 3 min. Nine archives and 15 download intermediates were excluded; no files deferred and all 426 final signatures unchanged. All 322 lifting sources sampled three times: 966 frames, zero decode failures, 827 person/407 multiple-person detections (unreviewed counts). Axe fit used 73 positives/three negatives: validation 11 TP, 11 FP, 15 FN; old test not reused. Barbell fit used 47 positives/nine negatives, frozen in 4496fa6 before test pixels; references committed in 3aa0d1e before predictions; frozen test: nine TP, two FP, six FN on 15 visible/one empty/eight unrated frames. README/report, weights, references, hashes and source ledger published; 74 research tests pass; both review servers return HTTP 200. Twelve later download candidates are listed separately. Raw media stays private; no coaching labels or production promotion. Scoped commits preserve the separate integration-review work.

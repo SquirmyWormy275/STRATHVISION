@@ -2,7 +2,13 @@
 
 The locked test-distribution paths (DECISIONS.md "Distribution"). No store, no accounts, no cloud.
 
-Every pull request to `main` or `implementation`, and every push to either branch runs `.github/workflows/builds.yml`. It runs Dart/Flutter and Python tests, reports line coverage, checks documentation links and handoff isolation, runs native decoder/pose smoke on Linux, and builds an Android APK, Linux, Windows and macOS zips, and an unsigned iOS app. Download them from the run's **Artifacts** on the Actions tab.
+Every pull request to `main` or `implementation`, and every push to `main` runs `.github/workflows/builds.yml`. It runs Dart/Flutter and Python tests, reports line coverage, checks documentation links and handoff isolation, runs native decoder/pose smoke on Linux, and builds an Android APK, Linux, Windows and macOS zips, and an unsigned iOS app. Download them from the run's **Artifacts** on the Actions tab.
+
+## Release preparation
+
+A distributable release must identify one source commit and one successful `builds` run containing all eight successful jobs: unit checks, research checks, training-dependency compatibility and the five platforms. Download all five platform artifacts from that same run, check their archive contents, and record SHA-256 checksums alongside the run URL and source commit. Never mix artifacts from different commits or call an unsigned iOS app an installable IPA.
+
+The repository currently provides test distribution: Android uses a debug signing key, macOS is unsigned, and iOS requires external signing/provisioning. A release candidate can package those artifacts with these limits clearly stated. General availability additionally requires stable production signing and the physical-device acceptance record in [VALIDATION.md](VALIDATION.md). Independent coaching/model validation remains a separate research gate.
 
 ## Android: APK sideload
 

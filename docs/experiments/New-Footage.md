@@ -112,3 +112,7 @@ cp docs/experiments/evaluation/new-footage/fit-reference.json "$SV_NEW/reference
 Use the published weights, metadata and freeze to reproduce the reported test; after test-frame preparation, copy `test-reference.json` over the private reference. A retraining run needs its own freeze. Training is seeded but is not promised byte-identical across CUDA devices/software; these opened test sources cannot become a fresh independent holdout.
 
 Test execution rejects changed weights, code, metadata, fitting annotations or source plans. It also requires reviewed test frames and a source-disjoint fit. Raw videos remain necessary for reproduction; public hashes and rectangles do not reconstruct the private footage.
+
+### Environment preservation
+
+The maintained training requirements have since received security updates. Exact historical pins remain in Git at `7367abb:tools/carne_asada/requirements-training.txt`; they are evidence, not a recommendation for new installations. Fits under the maintained environment require a new run record and do not inherit these frozen results.
