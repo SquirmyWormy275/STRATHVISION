@@ -1,94 +1,47 @@
 # STRATHVISION
 
-**Local-first athletic video analysis with inspectable style matching and weight-space programming.**
+**Review athletic technique locally. Compare clips, inspect measurements, and test whether bounded model updates help.**
 
-STRATHVISION is a dual-video workstation and pack-driven analysis engine for technique sports. The visual review tools are excellent on their own. The AI layer is constrained, versioned, fully inspectable, and includes local weight-space programming so models can actually improve from feedback.
+STRATHVISION is a Flutter prototype for athletes and coaches working with technique video. Its dual-video workspace works without AI: align two clips, play them together in slow motion, step through frames, and save feedback. Optional local analysis compares movement with a private reference profile and shows the measurements behind the score.
 
-This repository answers a research question while remaining a usable product.
+The engineering contribution is a complete path from video review to a versioned, inspectable analysis package: a cross-platform client, a shared Dart engine, declarative sport packs, and a desktop research workbench. CARNE ASADA investigates whether small, constrained model edits can improve agreement with genuine coaching feedback. **That learning benefit has not been established.**
 
-## Research Question
+## Start here
 
-**Can a local, evidence-bounded weight-space programming loop improve a sports technique model over time without full retraining, cloud infrastructure, or drifting outside coach-derived bounds?**
+1. [Try the review workflow](docs/GETTING_STARTED.md): two bundled test clips, sync, slow motion, marks, and reopening a project.
+2. [Set up and run the app](apps/strathvision/README.md), or [download a test build](docs/DISTRIBUTION.md).
+3. [Understand the architecture](docs/ARCHITECTURE.md), then follow the [learning guide](docs/wiki/Home.md).
+4. [Inspect results and failures](docs/RESEARCH_STATUS.md), [validation](docs/VALIDATION.md), and the [prioritized roadmap](docs/ROADMAP.md).
 
-Secondary claims tested by the system:
-- Sparse LLM-directed edits on specialist nets can fix concentrated failure modes faster than gradient steps on the same data.
-- Compile-once adapters for fuzzy decisions (usable footage, attribute priority, event classification) match or beat hand-written rules while staying fully local.
-- A constrained recursive loop (CARNE ASADA) on a phase-conditioned Gaussian mixture + residual exemplars can compound attribute-specific improvement from red/green + coach marks without context stuffing.
+## What works, and what remains experimental
 
-## What it is
+| Area | Current scope | Evidence and limits |
+|---|---|---|
+| Video review | Two players, sync, slow motion, stepping, mirror, saved projects and red/green marks | [Real-decoder checks](apps/strathvision/integration_test/real_player_test.dart); physical-device acceptance remains open |
+| Local analysis | Person selection, BlazePose/ONNX, phases, metrics and profile comparison | [Native pose test](apps/strathvision/integration_test/real_pose_test.dart); implement position is a **grip/forearm proxy**, not detected tool position |
+| Private profiles | Desktop fitting, quality gates, versioned file transfer, phone inference | [Builder](packages/analysis_engine/lib/src/builder.dart); renamed copies count once, but different files are not necessarily independent sessions |
+| Inspectable comparison | Score decomposition, confidence-aware ordering, warnings and historical results | [Comparison tests](packages/analysis_engine/test/compare_test.dart); confidence is heuristic, not calibrated uncertainty or a technique grade |
+| Research workbench | Specialist patches, optional adapter compilation, bounded CARNE ASADA updates | [Research records](docs/CARNE_RUN_REPORT.md); synthetic tests establish software behavior, not coaching improvement |
 
-- **Dual-video workspace** — independent scrub, set-sync-point, locked playback, mirror, variable speed, frame-accurate step. Usable without any analysis.
-- **Private coach/mentor profiles** — built from an athlete’s own reference footage on a laptop, consumed on phone. No public marketplace, no required accounts.
-- **Pack-driven style matching** — timber first, Olympic lifting second. The engine contains no domain-specific logic; packs supply phases, metrics, and weights.
-- **Inspectable AI + weight-space programming** — every match score produces ranked deltas. Specialist nets accept sparse patches. Fuzzy decisions compile once into local adapters. CARNE ASADA (desktop-only) recursively edits the style mixture under hard bounds.
-- **Cross-platform** — Flutter UI for iOS, Android, Windows, macOS, Linux. Rust core + Python for analysis and editing.
+The latest full-duration study processed **47 recordings in 195 windows** with no failed windows. Contact-timing diagnostics still matched only **2 of 15** annotated contacts. The committed population-review snapshot contains no coach judgments and establishes no learning improvement. Axe detectors failed validation; the barbell pilot remains research-only. Read the [study reports](docs/RESEARCH_STATUS.md) before using analysis as evidence about technique.
 
-## Device Roles
+## Design decisions worth inspecting
 
-- **Phone (iOS + Android)**: inference only. Loads coaching packages, runs specialist nets + compile-once adapters, dual-video UI, red/green, light updates. No weight editing.
-- **Desktop workbench (Windows, macOS, Linux)**: ingest, specialist-net harness, compile-once adapter generation, full CARNE ASADA research loop. Primary place for heavy work.
-
-Packages move between devices via local/wireless transfer (AirDrop, shared folder, QR, etc.). No required cloud.
-
-## Distribution for Testing
-
-- **Android**: release APK/AAB sideload.
-- **iOS**: ad-hoc provisioning (register device UDIDs, signed IPA + profile). Cap 100 devices.
-- **Desktop**: zip of the Flutter build. Unzip and run.
-- Coaching packages are ordinary files. Send them the same way you send videos.
-
-## CARNE ASADA (Desktop-Only Research Project)
-
-CARNE ASADA is the recursive weight-space editor for the phase-conditioned Gaussian mixture + residual exemplars. It is nested inside the app ecosystem but **not required** for the athlete-facing product.
-
-- Drop-zone playground: drag videos, packages, voice notes, or notes. Instant plain-language status.
-- Hard constraints: max 5–10 accepted edits per session, priority-attribute only, must stay inside coach hull (or soft personal pull), low-quality clips ignored until threshold, full versioning + soft revoke.
-- Every accepted edit produces a one-sentence explanation and is logged.
-
-Status messages and edit explanations are specified in docs/DECISIONS.md.
-
-## Experiment: CARNE ASADA on the Gurr Footage
-
-After a working desktop build exists, upload **all** race and training footage of Matthew Gurr and Daniel Gurr (every underhand, single buck, and standing block clip).
-
-Drop the entire set into the CARNE ASADA playground with priority set to slope (then optionally spacing and hinge). Let it run.
-
-Results published in this section:
-- Total usable strokes ingested per coach and per event
-- Number of accepted mixture edits
-- Before/after residual on the priority attribute
-- Exact one-sentence explanations for every accepted edit
-- Whether the final mixture stayed inside the original coach hull
-- Raw logs and versioned package for reproduction
-
-No cherry-picking. Date, footage count, and numbers go here.
+- **Local-first:** core review and inference require no account, cloud storage, or hosted model. Optional adapter compilation uses an explicitly configured external provider on desktop.
+- **One runtime:** Flutter hosts the UI; `packages/analysis_engine` is pure Dart on both desktop and phone. Python tools evaluate research datasets separately.
+- **Explainable failure:** rejected footage, ambiguous athletes and uncertain orientation stay visible. Fitting cannot silently accept an unresolved person selection.
+- **Portable evidence:** packages contain profiles and optional patches/adapters. Marks carry event and source-content identity; filenames cannot attach feedback to unrelated video.
+- **Separate research from product claims:** private footage stays outside Git. Reports publish methods, aggregate results, hashes and limitations, including zero-edit runs and failed models.
 
 ## Repository map
 
-| Document | Purpose |
-|----------|---------|
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Boundaries, invariants, device roles, weight-space layers |
-| [docs/DECISIONS.md](docs/DECISIONS.md) | Binding architectural decisions |
-| [docs/INTERFACES.md](docs/INTERFACES.md) | Exact schemas and contracts |
-| [docs/EXECUTION_PLAN.md](docs/EXECUTION_PLAN.md) | Gated, foolproof implementation plan |
-| [docs/CARNE_ASADA.md](docs/CARNE_ASADA.md) | Research project specification |
-| [docs/wiki/](docs/wiki/) | Longer-form explanations |
+| Path | Purpose |
+|---|---|
+| [apps/strathvision](apps/strathvision) | Flutter app, storage, native playback and pose integration |
+| [packages/analysis_engine](packages/analysis_engine) | Contracts, metrics, profile fitting, comparison and bounded updates |
+| [apps/strathvision/assets/packs](apps/strathvision/assets/packs) | Event definitions; Springboard remains provisional |
+| [tools/carne_asada](tools/carne_asada) | Python ingestion, evaluation and private-feedback workflows |
+| [docs/experiments](docs/experiments) | Reproducible research reports and published aggregate results |
+| [.github/workflows/builds.yml](.github/workflows/builds.yml) | PR checks, test coverage reports, research tests, native Linux smoke and five platform builds |
 
-## Current status
-
-Architecture, contracts, specialist net, CARNE ASADA, distribution, and execution plan are locked. Implementation has not started. The plan produces a usable dual-video product before any analysis or research code.
-
-## For reviewers
-
-1. Read the research question and invariants.
-2. Check that INTERFACES.md and DECISIONS.md define failure modes, quality gates, and bounds rather than only happy paths.
-3. Note that the first usable product is the dual-video workspace.
-4. CARNE ASADA is explicitly research and non-blocking.
-
-## Non-goals
-
-- Required accounts or cloud storage for core loop
-- Public coach marketplace or social features
-- Free-form generative coaching chat as the primary interface
-- Live multi-cam cloud streaming
-- CARNE ASADA on mobile
+This is a testable prototype, not a validated coaching product. Desktop fits and edits profiles; phones review, annotate and run installed packages. See [contribution guidance](CONTRIBUTING.md) and [model/media attribution](apps/strathvision/integration_test/assets/ATTRIBUTION.md).

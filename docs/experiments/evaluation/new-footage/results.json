@@ -1,0 +1,248 @@
+{
+  "format": "new-footage-results/1",
+  "archives": 4,
+  "supplied_unique_video_payloads": 56,
+  "supplied_photos": 1,
+  "previous_corpus_duplicates": 1,
+  "new_unique_videos": 55,
+  "supplied_duration_including_duplicate_s": 4914.657592,
+  "new_unique_duration_s": 4880.705925,
+  "baseline_samples_per_video": 4,
+  "training_burst_candidates_prepared": 216,
+  "training_burst_source_sheets_visually_curated": 5,
+  "training_burst_positive_frames_retained": 11,
+  "training_sources_with_positive_boxes": 13,
+  "training_sources_supplying_empty_examples": 1,
+  "training_positive_frames": 35,
+  "training_empty_frames": 3,
+  "training_unrated_frames": 117,
+  "split": {
+    "train": {
+      "sources": 36,
+      "annotated_frames": 155,
+      "visibility": {
+        "uncertain": 64,
+        "occluded": 37,
+        "blurred": 12,
+        "visible": 35,
+        "empty": 3,
+        "out_of_frame": 4
+      }
+    },
+    "validation": {
+      "sources": 13,
+      "annotated_frames": 52,
+      "visibility": {
+        "visible": 26,
+        "occluded": 16,
+        "uncertain": 3,
+        "out_of_frame": 6,
+        "blurred": 1
+      }
+    },
+    "test": {
+      "sources": 6,
+      "annotated_frames": 24,
+      "visibility": {
+        "occluded": 12,
+        "visible": 9,
+        "uncertain": 1,
+        "out_of_frame": 1,
+        "blurred": 1
+      }
+    }
+  },
+  "steps_trained": 1000,
+  "chosen_step": 800,
+  "threshold": 0.6178619265556335,
+  "fit_seconds": 340.20967914999346,
+  "model_bytes": 79044405,
+  "model_sha256": "9357fc91c46f1073702c88ead3108cc30e9efb61004097ddacf3671cdde15277",
+  "validation_metrics": {
+    "tp": 8,
+    "fp": 2,
+    "fn": 18,
+    "unrated_frames": 26,
+    "precision": 0.8,
+    "recall": 0.3076923076923077,
+    "f1": 0.4444444444444444,
+    "mean_matched_iou": 0.6799852628730297,
+    "windows": [
+      {
+        "window_id": "new-f1c703ea5c2ae260",
+        "tp": 1,
+        "fp": 0,
+        "fn": 3,
+        "unrated": 0
+      },
+      {
+        "window_id": "new-cc95c6938041b133",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "unrated": 2
+      },
+      {
+        "window_id": "new-3b5df6ceefab2a24",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unrated": 4
+      },
+      {
+        "window_id": "new-debd9dd6c8bc476d",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unrated": 4
+      },
+      {
+        "window_id": "new-97ec7f4542550218",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unrated": 4
+      },
+      {
+        "window_id": "new-15b65bbf8f065f20",
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "unrated": 2
+      },
+      {
+        "window_id": "new-4dbfc28cf65e1426",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "unrated": 3
+      },
+      {
+        "window_id": "new-e470d7e49ed3680a",
+        "tp": 3,
+        "fp": 0,
+        "fn": 1,
+        "unrated": 0
+      },
+      {
+        "window_id": "new-88937e4720fa70a1",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unrated": 4
+      },
+      {
+        "window_id": "new-87a18724d44a5336",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "unrated": 3
+      },
+      {
+        "window_id": "new-523286daac401b78",
+        "tp": 1,
+        "fp": 1,
+        "fn": 3,
+        "unrated": 0
+      },
+      {
+        "window_id": "new-4b997aa86adb6c39",
+        "tp": 1,
+        "fp": 0,
+        "fn": 3,
+        "unrated": 0
+      },
+      {
+        "window_id": "new-7dfba56d440c3394",
+        "tp": 0,
+        "fp": 1,
+        "fn": 4,
+        "unrated": 0
+      }
+    ]
+  },
+  "test_metrics": {
+    "tp": 1,
+    "fp": 1,
+    "fn": 8,
+    "unrated_frames": 15,
+    "precision": 0.5,
+    "recall": 0.1111111111111111,
+    "f1": 0.18181818181818182,
+    "mean_matched_iou": 0.627076140892633,
+    "windows": [
+      {
+        "window_id": "new-93ceb9ba6af631db",
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "unrated": 2
+      },
+      {
+        "window_id": "new-67b1733586a2a1f6",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "unrated": 3
+      },
+      {
+        "window_id": "new-c8009f33f3bf6371",
+        "tp": 1,
+        "fp": 1,
+        "fn": 2,
+        "unrated": 1
+      },
+      {
+        "window_id": "new-34cd12fd8ec00100",
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "unrated": 2
+      },
+      {
+        "window_id": "new-5a7fdd626218f68b",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unrated": 4
+      },
+      {
+        "window_id": "new-fab4fc4a5b8349d9",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "unrated": 3
+      }
+    ]
+  },
+  "retained_test_candidates_on_unrated_frames": 0,
+  "split_commit": "192c25c",
+  "fit_reference_commit": "fb538e8",
+  "model_freeze_commit": "3bfac94",
+  "test_reference_commit": "054f5cb",
+  "source_hash_recheck": {
+    "sources": 55,
+    "mismatches": 0
+  },
+  "test_tuning": false,
+  "named_identity_matching": false,
+  "athlete_roi_manually_supplied": true,
+  "coach_judgments_used": 0,
+  "promoted_to_production": false,
+  "research_tests_passed": 65,
+  "artifact_sha256": {
+    "source-plan.json": "c320ac2bff5103685fc0d2166ba8810f6650fb30904542b94236f51cd53a4d2e",
+    "training-augmentation-plan.json": "f5ff02cd2c11d20b854d08d64c3a43f6f71b43e883976676f1943e594c4e3fe8",
+    "fit-reference.json": "6492c4e118298584acdcebbb6eb9636faea2a735365c326ab286d4a7d79079e2",
+    "test-reference.json": "4caee5818a5cc247d1b8a8e977140aad9e8554f23d66b8652352520084b7e765",
+    "fit-image-hashes.json": "b8db100c5dc687d819ae3a827725a1b5043ea1065673bc2be78d3ef2f82476e7",
+    "test-image-hashes.json": "c04308a97dc459686257415f81e61aa2fbb087544ff635e90fa05308c6a68848",
+    "axe-faster.pt": "9357fc91c46f1073702c88ead3108cc30e9efb61004097ddacf3671cdde15277",
+    "axe-faster.json": "58fc46b179fc0b7b42d6167c18370bde169ef7eeeac5954f9150458232093592",
+    "freeze.json": "caebef89c33ad68e6f08015a1c927bffd3366e6da6f8edc7a3fa419a9f82121a",
+    "validation.json": "b6f94718060a8de10144f05200453b8fbb308b9f4fa98d5f5426cc23aba00b65",
+    "test.json": "244dca1c378841bc4a1bb73237d5b03234b8f85fe61bee5ea2f320e21f3c96fd",
+    "test-diagnostics.json": "7798ac86db1021b13662f977ff9708ff19957e966fa6133549c72761c621f843",
+    "archives.json": "82c044ac38efef0c99fed5654c711c24b39a14338c2bb6f4983c8cf80a46a2e2"
+  }
+}

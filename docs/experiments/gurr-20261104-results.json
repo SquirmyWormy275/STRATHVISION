@@ -1,0 +1,411 @@
+{
+  "format": "gurr-experiment/1",
+  "date": "2026-11-04",
+  "experiment": "anonymous multi-person ingestion and no-feedback control",
+  "clip_count": 12,
+  "duration_s": 1743.553568,
+  "sample_rate": 5,
+  "sampled_frames": 8718,
+  "frames_with_people": 6209,
+  "frames_with_multiple_people": 1608,
+  "person_detections": 10364,
+  "pose_samples": 7541,
+  "pipeline_elapsed_s": 402.29820626998844,
+  "named_athlete_profiles_built": 0,
+  "confirmed_coach_marks": 0,
+  "claimed_technique_improvement": false,
+  "events_are_candidate_passes": true,
+  "caveats": [
+    "Athlete identities and events await user confirmation.",
+    "Both event packs were stress-tested on every clip; counts are not ground-truth event counts.",
+    "Detector finds spectators as well as athletes. Tracks can fragment during occlusion or rotation.",
+    "Implement direction is a forearm/grip proxy, not a measured axe track.",
+    "No coach labels were generated. No technique-improvement claim is made.",
+    "Track-seconds may overlap across people and are not unique recording time."
+  ],
+  "aggregate": {
+    "underhand": {
+      "candidate_strokes": 151,
+      "usable_strokes": 26,
+      "usable_track_seconds": 223.23672114913927,
+      "no_feedback_accepted_edits": 0,
+      "source_clips": 8,
+      "control_idle_reasons": {
+        "below baseline": 8
+      },
+      "whole_corpus_control": {
+        "baseline_met": true,
+        "reason": "no marks",
+        "accepted_edits": 0,
+        "usable_track_seconds": 223.23672114913927
+      }
+    },
+    "standing_block": {
+      "candidate_strokes": 159,
+      "usable_strokes": 9,
+      "usable_track_seconds": 63.10902476433589,
+      "no_feedback_accepted_edits": 0,
+      "source_clips": 4,
+      "control_idle_reasons": {
+        "below baseline": 4
+      },
+      "whole_corpus_control": {
+        "baseline_met": false,
+        "reason": "below baseline",
+        "accepted_edits": 0,
+        "usable_track_seconds": 63.109024764335885
+      }
+    }
+  },
+  "clips": [
+    {
+      "source_name": "24-25/IMG_3691.MOV",
+      "sha256": "01f7dc6e371dd550cc0400b809111a14be7f86ae171b1403c7b023d95958a6b8",
+      "duration_s": 28.235,
+      "sampled_frames": 141,
+      "frames_with_multiple_people": 0,
+      "max_detected_people": 1,
+      "posed_tracks": 4,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 8,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 8
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 2,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 2
+          }
+        }
+      }
+    },
+    {
+      "source_name": "24-25/IMG_3694.MOV",
+      "sha256": "e4faf999f11510287fce02dfd9cc5d004c9ca85794e5b2c4ddc2dbdf2f348cdb",
+      "duration_s": 102.3417,
+      "sampled_frames": 512,
+      "frames_with_multiple_people": 111,
+      "max_detected_people": 3,
+      "posed_tracks": 4,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 11,
+          "usable_strokes": 6,
+          "usable_track_seconds": 70.84025515743757,
+          "rejections": {
+            "noPhases": 5
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 6,
+          "usable_strokes": 3,
+          "usable_track_seconds": 43.504250814332245,
+          "rejections": {
+            "noPhases": 3
+          }
+        }
+      }
+    },
+    {
+      "source_name": "24-25/IMG_3697.MOV",
+      "sha256": "57078bc27f2ae7c8cc4e16902254fdcf54c1e0e6da5835a98792b165b62a6396",
+      "duration_s": 108.1767,
+      "sampled_frames": 541,
+      "frames_with_multiple_people": 3,
+      "max_detected_people": 2,
+      "posed_tracks": 22,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 4,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 4
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 1,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 1
+          }
+        }
+      }
+    },
+    {
+      "source_name": "24-25/IMG_3711.MOV",
+      "sha256": "19adfeb1e2b4a08e5744c98cacb1b809e19658f011411b84058cafbfe8e46c2e",
+      "duration_s": 82.385011,
+      "sampled_frames": 412,
+      "frames_with_multiple_people": 4,
+      "max_detected_people": 2,
+      "posed_tracks": 2,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 18,
+          "usable_strokes": 3,
+          "usable_track_seconds": 19.837747875354108,
+          "rejections": {
+            "noPhases": 15
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 22,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 22
+          }
+        }
+      }
+    },
+    {
+      "source_name": "24-25/IMG_3712.MOV",
+      "sha256": "85747d5d5dd2c30465369f3acd1b80063429a256c8c8ff3d3a3926a8dcefc077",
+      "duration_s": 38.72,
+      "sampled_frames": 194,
+      "frames_with_multiple_people": 0,
+      "max_detected_people": 1,
+      "posed_tracks": 2,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 14,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 14
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 25,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 25
+          }
+        }
+      }
+    },
+    {
+      "source_name": "24-25/IMG_3715.MOV",
+      "sha256": "977fefcd2639830cf4eaa41991d7fff3b8e57751c7dad340d13fef038cdef525",
+      "duration_s": 114.8767,
+      "sampled_frames": 574,
+      "frames_with_multiple_people": 0,
+      "max_detected_people": 1,
+      "posed_tracks": 2,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 16,
+          "usable_strokes": 6,
+          "usable_track_seconds": 56.00487521764364,
+          "rejections": {
+            "noPhases": 10
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 15,
+          "usable_strokes": 2,
+          "usable_track_seconds": 5.500478816018573,
+          "rejections": {
+            "noPhases": 13
+          }
+        }
+      }
+    },
+    {
+      "source_name": "24-25/IMG_3745.MOV",
+      "sha256": "082e2f4cca234f294b509b7dccfe65edde618561f126af76adabb3d2c17a7a3d",
+      "duration_s": 47.3917,
+      "sampled_frames": 237,
+      "frames_with_multiple_people": 5,
+      "max_detected_people": 2,
+      "posed_tracks": 4,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 16,
+          "usable_strokes": 3,
+          "usable_track_seconds": 11.6065306122449,
+          "rejections": {
+            "noPhases": 13
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 11,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 11
+          }
+        }
+      }
+    },
+    {
+      "source_name": "24-25/IMG_3746.MOV",
+      "sha256": "67a35e240f82ae59ea831b382a4ae3c6afa0badde1c8416506b94c221101ee00",
+      "duration_s": 910.0517,
+      "sampled_frames": 4550,
+      "frames_with_multiple_people": 93,
+      "max_detected_people": 3,
+      "posed_tracks": 198,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 12,
+          "usable_strokes": 2,
+          "usable_track_seconds": 12.23447604918373,
+          "rejections": {
+            "noPhases": 10
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 15,
+          "usable_strokes": 2,
+          "usable_track_seconds": 7.600709916114143,
+          "rejections": {
+            "noPhases": 13
+          }
+        }
+      }
+    },
+    {
+      "source_name": "Competition/3-Board/IMG_7993.MOV",
+      "sha256": "41171b31d1d431b5eefc38ea8dc6271d8ec570159d43e302c19659dcdc5197b2",
+      "duration_s": 181.398345,
+      "sampled_frames": 907,
+      "frames_with_multiple_people": 752,
+      "max_detected_people": 7,
+      "posed_tracks": 175,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 23,
+          "usable_strokes": 3,
+          "usable_track_seconds": 16.842618128332415,
+          "rejections": {
+            "noPhases": 18,
+            "implementDropout": 2
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 37,
+          "usable_strokes": 2,
+          "usable_track_seconds": 6.503585217870932,
+          "rejections": {
+            "noPhases": 35
+          }
+        }
+      }
+    },
+    {
+      "source_name": "Competition/IMG_8055.MOV",
+      "sha256": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+      "duration_s": 32.0017,
+      "sampled_frames": 160,
+      "frames_with_multiple_people": 160,
+      "max_detected_people": 8,
+      "posed_tracks": 33,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 9,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "implementDropout": 1,
+            "noPhases": 8
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 8,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "implementDropout": 1,
+            "noPhases": 7
+          }
+        }
+      }
+    },
+    {
+      "source_name": "Competition/IMG_8065.MOV",
+      "sha256": "72a809451b1ad03f9ab9db6b6b8fb4f0d35cb4b0c1806003a16429670bf4f80e",
+      "duration_s": 62.838345,
+      "sampled_frames": 314,
+      "frames_with_multiple_people": 313,
+      "max_detected_people": 8,
+      "posed_tracks": 65,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 14,
+          "usable_strokes": 2,
+          "usable_track_seconds": 13.234737400530502,
+          "rejections": {
+            "noPhases": 12
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 15,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 15
+          }
+        }
+      }
+    },
+    {
+      "source_name": "Competition/IMG_8067.MOV",
+      "sha256": "bb758d669ebeec6309502335bb6ff282954e57a58819d73f7351353bf1ece303",
+      "duration_s": 35.136667,
+      "sampled_frames": 176,
+      "frames_with_multiple_people": 167,
+      "max_detected_people": 7,
+      "posed_tracks": 67,
+      "candidate_events": {
+        "underhand": {
+          "candidate_strokes": 6,
+          "usable_strokes": 1,
+          "usable_track_seconds": 22.635480708412395,
+          "rejections": {
+            "noPhases": 5
+          }
+        },
+        "standing_block": {
+          "candidate_strokes": 2,
+          "usable_strokes": 0,
+          "usable_track_seconds": 0.0,
+          "rejections": {
+            "noPhases": 2
+          }
+        }
+      }
+    }
+  ],
+  "engine_sources_sha256": {
+    "tools/carne_asada/footage.py": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8",
+    "packages/analysis_engine/tool/gurr_experiment.dart": "99978bff81d803c7b51fdd303ffe442cd137fa1971eb9dcf4035f62dff289d5b",
+    "packages/analysis_engine/lib/src/track_analysis.dart": "2c6228814d872f69314f229747d2d7f98074d20f5106eedcd759da7bdbae739a",
+    "packages/analysis_engine/lib/src/carne.dart": "a22186d243c2b75ae0a101e9b00825dbc1f9f539054547f7563764c8e5c163b4",
+    "packages/analysis_engine/lib/src/scoring.dart": "def3ec20a3d1749571f73cc8318b68535e7c802af46e7870aab1e8136282e08d",
+    "apps/strathvision/assets/packs/timber.json": "1dd96247682045444b701c7eed4e42101e0b925ff3df23596e7df5ba8c351bee"
+  },
+  "detector_sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
+  "pose_sha256": "f6dfd4312367811d8775f7141de3aacbf1de08b5208eb425d2cc1e9640b10793",
+  "pipeline_sha256": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8",
+  "corpus_scope": {
+    "collection": "Gurr Academy",
+    "collection_complete": false,
+    "scope": "one locally available archive part; not the full collection",
+    "archive_name": "Gurr Academy -20261104T203933Z-1-001.zip",
+    "archive_bytes": 1937869862,
+    "archive_sha256": "b32a71f0a4712373b69ec311a6a9f655ef7f25b29c66dd5c9326f752b2cdaef7",
+    "archive_entries": 15,
+    "archive_video_entries": 12,
+    "remaining_source": "User reports substantially more footage; full source location requested."
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "format": "gurr-late-entry-regression/1",
+  "fixture": "14s blank intro followed by licensed cleave; no coaching judgments",
+  "passed": true,
+  "change_commit": "36d02c8",
+  "before": {
+    "duration_s": 19.0,
+    "pose_samples": 0,
+    "full_span_reached": false,
+    "last_progress_fraction": 0.631578947368421
+  },
+  "after": {
+    "duration_s": 19.0,
+    "pose_samples": 149,
+    "full_span_reached": true,
+    "last_progress_fraction": 1.0,
+    "production_deferred": true
+  },
+  "before_binary_sha256": "3049fba2ca3efbf27fbdf548ffa82f0ccdccf962c31dee9be3dbe8af127ed4b3",
+  "after_binary_sha256": "3049fba2ca3efbf27fbdf548ffa82f0ccdccf962c31dee9be3dbe8af127ed4b3",
+  "claimed_coaching_evidence": false
+}

@@ -1,0 +1,90 @@
+{
+  "format": "axe-source-selection/1",
+  "selection": "First six unused source hashes in each of 24-25 and Competition; alternating train/validation/test; all prior timing pilot/follow-up hashes excluded.",
+  "sources": [
+    {
+      "source_name": "24-25/IMG_3691.MOV",
+      "clip_sha256": "01f7dc6e371dd550cc0400b809111a14be7f86ae171b1403c7b023d95958a6b8",
+      "split": "train",
+      "duration_s": 28.235,
+      "fps": 29.996458505489315
+    },
+    {
+      "source_name": "24-25/IMG_3699.MOV",
+      "clip_sha256": "07d9db34891c9e5641c852116c8d5ddcbb320d56e1cc42cb2a0b530973febe3a",
+      "split": "validation",
+      "duration_s": 254.423333,
+      "fps": 29.997248680021485
+    },
+    {
+      "source_name": "24-25/IMG_3745.MOV",
+      "clip_sha256": "082e2f4cca234f294b509b7dccfe65edde618561f126af76adabb3d2c17a7a3d",
+      "split": "test",
+      "duration_s": 47.3917,
+      "fps": 29.983119988746658
+    },
+    {
+      "source_name": "24-25/IMG_3747.MOV",
+      "clip_sha256": "0aeb3e3b6845c0a13257b394fbf08828d834d5ab0a4db426881e279b623c6d6d",
+      "split": "train",
+      "duration_s": 1718.928333,
+      "fps": 29.99717847457282
+    },
+    {
+      "source_name": "24-25/IMG_3698.MOV",
+      "clip_sha256": "0bf90eaeff75c653806315740e556c062721647da19d825ea472fadc688c04de",
+      "split": "validation",
+      "duration_s": 1074.925,
+      "fps": 29.985347814963834
+    },
+    {
+      "source_name": "24-25/IMG_3697.MOV",
+      "clip_sha256": "57078bc27f2ae7c8cc4e16902254fdcf54c1e0e6da5835a98792b165b62a6396",
+      "split": "test",
+      "duration_s": 108.1767,
+      "fps": 29.99722675869719
+    },
+    {
+      "source_name": "Competition/IMG_3868.MOV",
+      "clip_sha256": "1012fc4a0ff4ed3c283cc08f694ee66a75ead4d52070344c4cf18b40e66e5b77",
+      "split": "train",
+      "duration_s": 67.7717,
+      "fps": 29.997048986818807
+    },
+    {
+      "source_name": "Competition/IMG_8023.MOV",
+      "clip_sha256": "1ce5459a599cee1ebf4422bba4cc4865c3bd289421e4b06cda6825ad1ac801a6",
+      "split": "validation",
+      "duration_s": 71.605,
+      "fps": 29.98324178381901
+    },
+    {
+      "source_name": "Competition/IMG_7998.MOV",
+      "clip_sha256": "2305e17f557c8e30a5b9d5977d4495d98f4e86e9891b004f7aa6b0ed13e156c9",
+      "split": "test",
+      "duration_s": 32.268345,
+      "fps": 29.996901146575766
+    },
+    {
+      "source_name": "Competition/IMG_8014.MOV",
+      "clip_sha256": "2751b0ff512cf38c19219eeb79234941d08e46a240f4ce02df67ac27588b8738",
+      "split": "train",
+      "duration_s": 26.548333,
+      "fps": 29.9830497834139
+    },
+    {
+      "source_name": "Competition/IMG_3864.MOV",
+      "clip_sha256": "2b08026ae931171f68d85b2e92b4b84b3fe9a8778a88a729f4f2400debcb9394",
+      "split": "validation",
+      "duration_s": 39.603333,
+      "fps": 29.9974749600202
+    },
+    {
+      "source_name": "Competition/IMG_8069.MOV",
+      "clip_sha256": "3022ab3ede7feb0d15a16271c12f8a38b22bc4dcbc8daac39586638a7730f927",
+      "split": "test",
+      "duration_s": 30.77,
+      "fps": 29.996750081247967
+    }
+  ]
+}

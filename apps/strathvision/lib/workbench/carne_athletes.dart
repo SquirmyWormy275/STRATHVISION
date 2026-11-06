@@ -1,0 +1,84 @@
+import 'package:analysis_engine/analysis_engine.dart';
+
+import '../vision/athlete.dart';
+import '../vision/pose_service.dart';
+
+/// Desktop ingestion must retain swing timing on long recordings. The normal
+/// review budget of 1,800 samples would thin a 28-minute source below 2 Hz.
+final carnePoseService = PoseService(maxSampleRate: 30, maxSamples: 90000);
+
+class CarneAthleteState {
+  final Map<String, AthleteTarget> targets = {};
+  final Map<String, AthleteTrack> found = {};
+  final Map<String, ClipSource> clips = {};
+
+  void record(ClipSource clip, AthleteTrack result) {
+    clips[clip.clipId] = clip;
+    found[clip.clipId] = result;
+  }
+
+  Map<String, Object?>? metadata(String clipId) {
+    final result = found[clipId];
+    if (result == null) return null;
+    return {
+      'selection': targets.containsKey(clipId) ? 'user' : 'automatic',
+      'target': result.target?.toJson(),
+      'ambiguous': result.ambiguous,
+      'orientation_sure': result.orientationSure,
+      'candidate_frame': result.candidatesFrame,
+      'candidate_count': result.candidates.length,
+    };
+  }
+}
+
+class CarneAthleteChoiceNeeded implements Exception {
+  const CarneAthleteChoiceNeeded(this.clip, this.result);
+  final ClipSource clip;
+  final AthleteTrack result;
+}
+
+typedef CarneTrackLoader = Future<AthleteTrack> Function(
+  ClipSource clip,
+  AthleteTarget? target,
+);
+
+Future<AthleteTrack> loadCarneTrack(
+  ClipSource clip,
+  CarneAthleteState state, {
+  CarneTrackLoader? load,
+}) async {
+  final loader =
+      load ??
+      (source, target) => carnePoseService.trackAthlete(
+        source,
+        sourceKey: source.clipId,
+        target: target,
+      );
+  var target = state.targets[clip.clipId];
+  // Ask after the short selection window, rather than finishing a long
+  // recording before revealing that its competitor was ambiguous.
+  if (target == null && clip.durationMs > 4000) {
+    final preview = ClipSource(
+      clipId: clip.clipId,
+      path: clip.path,
+      durationMs: 4000,
+      fps: clip.fps,
+    );
+    final found = await loader(preview, null);
+    state.record(clip, found);
+    // A genuinely empty opening is not a competitor-choice failure. The
+    // full tracker can find an athlete who enters later in the recording.
+    final empty = found.target == null && found.candidates.isEmpty &&
+        found.track.frames.isEmpty;
+    if (!empty && (found.ambiguous || !found.orientationSure || found.target == null)) {
+      throw CarneAthleteChoiceNeeded(clip, found);
+    }
+    target = found.target;
+  }
+  final found = await loader(clip, target);
+  state.record(clip, found);
+  if (found.ambiguous || !found.orientationSure || found.target == null) {
+    throw CarneAthleteChoiceNeeded(clip, found);
+  }
+  return found;
+}

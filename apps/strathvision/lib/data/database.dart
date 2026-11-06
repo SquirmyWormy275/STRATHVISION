@@ -1,0 +1,223 @@
+import 'dart:convert';
+
+import 'package:drift/drift.dart';
+import 'package:drift_flutter/drift_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'package:analysis_engine/analysis_engine.dart' show ComparisonResult;
+
+import '../profiles/profile_package.dart';
+import '../workspace/project.dart';
+import '../workspace/workspace_controller.dart';
+
+part 'database.g.dart';
+
+/// Installed profile metadata. Phase 1 stores metadata only.
+@DataClassName('ProfileRow')
+class Profiles extends Table {
+  TextColumn get profileId => text()();
+  IntColumn get version => integer()();
+  TextColumn get coachName => text()();
+  TextColumn get packId => text()();
+  TextColumn get eventId => text()();
+  TextColumn get metricSchemaVersion => text()();
+  DateTimeColumn get createdAt => dateTime()();
+  IntColumn get sourceClipCount => integer()();
+  IntColumn get metricCount => integer()();
+  BoolColumn get minClipsMet => boolean()();
+  BoolColumn get selfConsistencyPassed => boolean()();
+  TextColumn get sourcePath => text()();
+  DateTimeColumn get importedAt => dateTime()();
+
+  // Profile versions are non-mutating: each (id, version) is its own row.
+  @override
+  Set<Column> get primaryKey => {profileId, version};
+}
+
+/// Projects stored as the exact INTERFACES.md Project JSON.
+@DataClassName('ProjectRow')
+class ProjectRows extends Table {
+  TextColumn get projectId => text()();
+  TextColumn get name => text()();
+  TextColumn get json => text()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {projectId};
+}
+
+/// Comparison Results kept for later drift (Phase 5 task 4). `json` is the
+/// exact INTERFACES.md Comparison Result.
+@DataClassName('ComparisonRow')
+class ComparisonRows extends Table {
+  TextColumn get resultId => text()();
+  TextColumn get projectId => text()();
+  TextColumn get clipId => text()();
+  TextColumn get profileId => text()();
+  IntColumn get profileVersion => integer()();
+  RealColumn get overallScore => real()();
+  TextColumn get json => text()();
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {resultId};
+}
+
+/// Small app settings (for example the active pack/event).
+@DataClassName('SettingRow')
+class Settings extends Table {
+  TextColumn get key => text()();
+  TextColumn get value => text()();
+
+  @override
+  Set<Column> get primaryKey => {key};
+}
+
+@DriftDatabase(tables: [Profiles, ProjectRows, ComparisonRows, Settings])
+class AppDatabase extends _$AppDatabase implements ProjectStore {
+  AppDatabase([QueryExecutor? executor])
+      : super(executor ??
+            driftDatabase(
+              name: 'strathvision',
+              native: const DriftNativeOptions(
+                databaseDirectory: getApplicationSupportDirectory,
+              ),
+            ));
+
+  @override
+  int get schemaVersion => 4;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) => m.createAll(),
+        onUpgrade: (m, from, to) async {
+          if (from < 2) await m.createTable(projectRows);
+          if (from < 3) await m.createTable(comparisonRows);
+          if (from < 4) await m.createTable(settings);
+        },
+      );
+
+  // ---- projects -----------------------------------------------------------
+
+  @override
+  Future<void> saveProject(Project project) =>
+      into(projectRows).insertOnConflictUpdate(ProjectRowsCompanion.insert(
+        projectId: project.projectId,
+        name: project.name,
+        json: jsonEncode(project.toJson()),
+        updatedAt: DateTime.now(),
+      ));
+
+  Future<Project?> loadProject(String projectId) async {
+    final row = await (select(projectRows)
+          ..where((t) => t.projectId.equals(projectId)))
+        .getSingleOrNull();
+    return row == null
+        ? null
+        : Project.fromJson(jsonDecode(row.json) as Map<String, Object?>);
+  }
+
+  Stream<List<ProjectRow>> watchProjects() => (select(projectRows)
+        ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
+      .watch();
+
+  /// Every red/green mark, across projects, on clips at [path].
+  Future<List<Mark>> marksForPath(String path, {
+    String? packId, String? eventId, String? sourceSha256,
+  }) async {
+    final out = <Mark>[];
+    for (final row in await select(projectRows).get()) {
+      final project = Project.fromJson(jsonDecode(row.json) as Map<String, Object?>);
+      final ids = {for (final c in project.clips) if (c.path == path) c.clipId};
+      out.addAll(project.marks.where((m) => ids.contains(m.clipId) &&
+          (packId == null || m.packId == packId) &&
+          (eventId == null || m.eventId == eventId) &&
+          (sourceSha256 == null || m.sourceSha256 == sourceSha256)));
+    }
+    return out;
+  }
+
+  // ---- settings -----------------------------------------------------------
+
+  static const activeEventKey = 'active_event';
+
+  Future<void> setSetting(String key, String value) => into(settings)
+      .insertOnConflictUpdate(SettingsCompanion.insert(key: key, value: value));
+
+  Stream<String?> watchSetting(String key) =>
+      (select(settings)..where((t) => t.key.equals(key)))
+          .watchSingleOrNull()
+          .map((r) => r?.value);
+
+  // ---- comparison results -------------------------------------------------
+
+  Future<void> saveComparison(
+          {required String projectId,
+          required ComparisonResult result,
+          DateTime? at}) =>
+      into(comparisonRows).insertOnConflictUpdate(ComparisonRowsCompanion.insert(
+        resultId: result.resultId,
+        projectId: projectId,
+        clipId: result.clipId,
+        profileId: result.profileId,
+        profileVersion: result.profileVersion,
+        overallScore: result.overallScore,
+        json: jsonEncode(result.toJson()),
+        createdAt: at ?? DateTime.now(),
+      ));
+
+  /// Stored results for one profile, oldest first (the drift series).
+  Future<List<ComparisonRow>> comparisonsForProfile(String profileId) =>
+      (select(comparisonRows)
+            ..where((t) => t.profileId.equals(profileId))
+            ..orderBy([(t) => OrderingTerm.asc(t.createdAt)]))
+          .get();
+
+  // ---- profiles -----------------------------------------------------------
+
+  Future<List<ProfileRow>> allProfiles() => (select(profiles)
+        ..orderBy([
+          (t) => OrderingTerm.desc(t.importedAt),
+          (t) => OrderingTerm.desc(t.version),
+        ]))
+      .get();
+
+  Stream<List<ProfileRow>> watchProfiles() => (select(profiles)
+        ..orderBy([
+          (t) => OrderingTerm.desc(t.importedAt),
+          (t) => OrderingTerm.desc(t.version),
+        ]))
+      .watch();
+
+  /// Stores imported metadata. Re-importing the same id + version replaces the
+  /// earlier row (the replace/keep/merge choice arrives with real packages).
+  Future<void> saveProfile(ProfileMetadata m, String sourcePath,
+      {DateTime? importedAt, bool replace = true}) async {
+    final row = ProfilesCompanion.insert(
+      profileId: m.profileId,
+      version: m.version,
+      coachName: m.coachName,
+      packId: m.packId,
+      eventId: m.eventId,
+      metricSchemaVersion: m.metricSchemaVersion,
+      createdAt: m.createdAt,
+      sourceClipCount: m.sourceClipCount,
+      metricCount: m.metricCount,
+      minClipsMet: m.minClipsMet,
+      selfConsistencyPassed: m.selfConsistencyPassed,
+      sourcePath: sourcePath,
+      importedAt: importedAt ?? DateTime.now(),
+    );
+    if (replace) {
+      await into(profiles).insertOnConflictUpdate(row);
+    } else {
+      await into(profiles).insert(row);
+    }
+  }
+
+  Future<void> removeProfile(String profileId, int version) =>
+      (delete(profiles)
+            ..where(
+                (t) => t.profileId.equals(profileId) & t.version.equals(version)))
+          .go();
+}

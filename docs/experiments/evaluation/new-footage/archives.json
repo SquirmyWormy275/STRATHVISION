@@ -1,0 +1,546 @@
+{
+  "format": "verified-footage-archives/1",
+  "archives": [
+    {
+      "name": "2526.zip",
+      "sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+      "bytes": 1335915634,
+      "members": [
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "att.-Jtrlv3_EM5z7xXCvFGlgrbx5l2Wm-FtAOfP0s4dass.mp4",
+          "sha256": "f89b6b96fdff10ce73ef15c2bc51a582b6f1e65d969be16d00e7cfd2ce1d6acb",
+          "relative_path": "2526-09d1bfa0/att.-Jtrlv3_EM5z7xXCvFGlgrbx5l2Wm-FtAOfP0s4dass.mp4",
+          "bytes": 13593430,
+          "crc32": "a41ec588"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_8031.MOV",
+          "sha256": "f1c703ea5c2ae2602e9c5455dff53bc2f47fea594cb7ebdcf80780cd3b072dd6",
+          "relative_path": "2526-09d1bfa0/IMG_8031.MOV",
+          "bytes": 26349817,
+          "crc32": "93b34235"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_7971.MOV",
+          "sha256": "bc5a3c2cae8b39ace418e1478617510132b5a19e3f5792f36456834d89a35726",
+          "relative_path": "2526-09d1bfa0/IMG_7971.MOV",
+          "bytes": 50514045,
+          "crc32": "9ebfafed"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_1247.MOV",
+          "sha256": "567a7f38127f32b5f60332d234df229a71bf5bb19b638a0ac2d81b3e94f741af",
+          "relative_path": "2526-09d1bfa0/IMG_1247.MOV",
+          "bytes": 37980779,
+          "crc32": "4de084ef"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_8004.MOV",
+          "sha256": "4b6f6cd5d36c5e89f6cb6ce432e266f6c05e42197544dd1cf3a9fd9396aa7be7",
+          "relative_path": "2526-09d1bfa0/IMG_8004.MOV",
+          "bytes": 81695104,
+          "crc32": "981fc7fa"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_7970.MOV",
+          "sha256": "e9b31fbe9633bb50d07599f6966cb7d0c7dcceea9f1d3a796d3af0de55c214f3",
+          "relative_path": "2526-09d1bfa0/IMG_7970.MOV",
+          "bytes": 40016324,
+          "crc32": "08fe7363"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_7992.MOV",
+          "sha256": "e5f15e12d394da0504ced92281b64c9998138de1aba4c87a4844a61ecc667707",
+          "relative_path": "2526-09d1bfa0/IMG_7992.MOV",
+          "bytes": 43025423,
+          "crc32": "e1f2b23a"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_7950.MOV",
+          "sha256": "93ceb9ba6af631dba7fcde717fc5233562c6d89ec7dc6a1a1c128568b1edaa2f",
+          "relative_path": "2526-09d1bfa0/IMG_7950.MOV",
+          "bytes": 54494259,
+          "crc32": "2392c7ce"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_8013.MOV",
+          "sha256": "7236946fe327ecb3006bc5c7a6c93feb0b306db09bc5f48ec7022d109719745e",
+          "relative_path": "2526-09d1bfa0/IMG_8013.MOV",
+          "bytes": 53648995,
+          "crc32": "359f2dbe"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_7962.MOV",
+          "sha256": "666b615c3eb3089a796cccbd2a89c972e6a3b53a3cbbfcde37908a6585af9333",
+          "relative_path": "2526-09d1bfa0/IMG_7962.MOV",
+          "bytes": 55096809,
+          "crc32": "3d4cc99e"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_7979.MOV",
+          "sha256": "dc7149c4d8b2cc1b974c6e2724eb82e387e55ffd0079b004b357c70e5d0f6fef",
+          "relative_path": "2526-09d1bfa0/IMG_7979.MOV",
+          "bytes": 64499703,
+          "crc32": "a6932826"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_7961.MOV",
+          "sha256": "f238ac4a597e7fad95d148181356c4a82c915782bbd19ebdefc8b636dc173df5",
+          "relative_path": "2526-09d1bfa0/IMG_7961.MOV",
+          "bytes": 61400635,
+          "crc32": "f54f9860"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_7988.MOV",
+          "sha256": "40cc3090b4fd754025c44ec65c1d8e5859416309e5ddcb83071acdbe616f9bcc",
+          "relative_path": "2526-09d1bfa0/IMG_7988.MOV",
+          "bytes": 133409070,
+          "crc32": "cde37636"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_8064.MOV",
+          "sha256": "e15330a34da333ebc770af1dda2e3972ac40691c8f6af044983562bbdee534cb",
+          "relative_path": "2526-09d1bfa0/IMG_8064.MOV",
+          "bytes": 76525486,
+          "crc32": "6248de8d"
+        },
+        {
+          "archive": "2526.zip",
+          "archive_sha256": "09d1bfa07c4b2d8a5cc1885a9b2ab2e8f141971a921498fcbac8c178f34d6181",
+          "member": "IMG_7972.MOV",
+          "sha256": "a7f716287ca122f966884e8962900bf67b7c6005a1cf64ee68c019c6d8a995d5",
+          "relative_path": "2526-09d1bfa0/IMG_7972.MOV",
+          "bytes": 543459342,
+          "crc32": "a5f7c075"
+        }
+      ]
+    },
+    {
+      "name": "drive-download-20261105T201450Z-1-001.zip",
+      "sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+      "bytes": 2080203439,
+      "members": [
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3828.MOV",
+          "sha256": "ca26cc60bb73f6a590bd4824903fd24fa4b6a52c2bdf4c519a5c2f6f40eb8d49",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3828.MOV",
+          "bytes": 43691123,
+          "crc32": "d570dd16"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3825.MOV",
+          "sha256": "3a39c5ebca192537df305ef76b5ecdc45013ed5fd969d9c2547ace2f1cf2c3ee",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3825.MOV",
+          "bytes": 40507583,
+          "crc32": "aa22fca3"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3728.MOV",
+          "sha256": "debd9dd6c8bc476d0404f9a0042908d54b2629050f53b577c7ae78d24fca47da",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3728.MOV",
+          "bytes": 29055268,
+          "crc32": "e9d41e16"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3822.MOV",
+          "sha256": "87a18724d44a533609e40d974b85f768a350ecee90a709081e5a43baa242c2e1",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3822.MOV",
+          "bytes": 45999085,
+          "crc32": "59340614"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3872.MOV",
+          "sha256": "ac4bace4dbf62b2204fee39aa4eead1333210e3dcaaec0d2a0068cbb552309fe",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3872.MOV",
+          "bytes": 76053333,
+          "crc32": "79eec690"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3725.MOV",
+          "sha256": "3b5df6ceefab2a24e0d6ec88076a5fa3f32990c29f8cd58287ecfd4404348f72",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3725.MOV",
+          "bytes": 39640319,
+          "crc32": "00ebdd0d"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3819.MOV",
+          "sha256": "e470d7e49ed3680a64e802c5c51345784ab763dbc56a75bc9d170da5f24cbdfc",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3819.MOV",
+          "bytes": 41272119,
+          "crc32": "3da33924"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_4050.MOV",
+          "sha256": "34cd12fd8ec0010070cc7422e878466ad2f90ea63e6537ba5c5d375d677abd9d",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_4050.MOV",
+          "bytes": 50084866,
+          "crc32": "3c933a0b"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3844.MOV",
+          "sha256": "67b1733586a2a1f6c5051700f55fca6eff270af8aa43df0b06b317c09cd124b3",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3844.MOV",
+          "bytes": 76189703,
+          "crc32": "ff559d52"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3821.MOV",
+          "sha256": "88937e4720fa70a1960340c6de1c2a2984fadd6157ce608e886bc16652284beb",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3821.MOV",
+          "bytes": 86465560,
+          "crc32": "4740e7b3"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3948.MOV",
+          "sha256": "90f679a2b8cf64209f97e73d6b92f9c33ef0e6988a4eabe357d050fef2350701",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3948.MOV",
+          "bytes": 82375797,
+          "crc32": "495afc0b"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3731.MOV",
+          "sha256": "4dbfc28cf65e14264ec27ede7551632bf8980e9ae542f1577150846fefd4af7b",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3731.MOV",
+          "bytes": 112733687,
+          "crc32": "565858d6"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3724.MOV",
+          "sha256": "cc95c6938041b133c7e01dbd4017e5d0e1358740dc4e92fa0eb8c5874223ff99",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3724.MOV",
+          "bytes": 58823356,
+          "crc32": "60c5c9f1"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3921.MOV",
+          "sha256": "db72c9faa665ed315cd89d091a9e8640ee1c7b98e30ffcbcb5f92abb1ebdff52",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3921.MOV",
+          "bytes": 64615675,
+          "crc32": "46f6bab6"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3836.MOV",
+          "sha256": "1cc6a285695058f3958ad32854bcf5c2aa0605c2419beac81169dee0dd9ed6d3",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3836.MOV",
+          "bytes": 103203699,
+          "crc32": "1cc18aaa"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3926.MOV",
+          "sha256": "17fe54bf0d602c7fa87c398969f06e8837d1fef9ad53c24abc17d35eb0836c77",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3926.MOV",
+          "bytes": 70978340,
+          "crc32": "4a0ea763"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3919.MOV",
+          "sha256": "6dea0cbb51accac5caccdb28a54147a6b940a55bdf82f12c8e9f838fa1ff0f9c",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3919.MOV",
+          "bytes": 84852302,
+          "crc32": "deaead3c"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3929.MOV",
+          "sha256": "2bd55ec7e7109b2710e103b4c4e8bd53d0644285d05ebb4e39500e5848cd95f3",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3929.MOV",
+          "bytes": 102335895,
+          "crc32": "75a02729"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3922.MOV",
+          "sha256": "9f968f6801196a8ea3ee745fd1b4b221042c2c99f07631813f5f9180998a016b",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3922.MOV",
+          "bytes": 96936619,
+          "crc32": "9577ef74"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3871.MOV",
+          "sha256": "dfc62e949945a49d878f3e7e4eafc46f61f3d6bc60ea5b24c299f4511da431e6",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3871.MOV",
+          "bytes": 97511532,
+          "crc32": "24d202ff"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3729.MOV",
+          "sha256": "97ec7f45425502182c76db6fea2747fec90dbf9a3d11333acbdaafc15d45d944",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3729.MOV",
+          "bytes": 60670849,
+          "crc32": "6b386ab5"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_4052.MOV",
+          "sha256": "5a7fdd626218f68b032f9bd3944ba46b86f17094fafab428660f6c506611bb69",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_4052.MOV",
+          "bytes": 65654443,
+          "crc32": "5e622acd"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3847.MOV",
+          "sha256": "c8009f33f3bf63712bc27c6a97c38dbff5c2648b16c60cde18b5c8074770d430",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3847.MOV",
+          "bytes": 132363719,
+          "crc32": "8bd4dbd3"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3730.MOV",
+          "sha256": "15b65bbf8f065f20916224afd672b47f5babf2502c74ad7b9c6bb6f85ab493d9",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3730.MOV",
+          "bytes": 198339083,
+          "crc32": "c143edd5"
+        },
+        {
+          "archive": "drive-download-20261105T201450Z-1-001.zip",
+          "archive_sha256": "4ae6b7be05972339452e3ac8acf3a3592f263dcd1ed4f19c0cd0c14ef54538cb",
+          "member": "IMG_3837.MOV",
+          "sha256": "12ebecf00e57662a1e69110e8feb03d548629ddaabab78d7df0f7154cb25dcf1",
+          "relative_path": "drive-download-20261105T201450Z-1-001-4ae6b7be/IMG_3837.MOV",
+          "bytes": 219528087,
+          "crc32": "6aeb351f"
+        }
+      ]
+    },
+    {
+      "name": "drive-download-20261105T201648Z-1-002.zip",
+      "sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+      "bytes": 1503670301,
+      "members": [
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8002.JPG",
+          "sha256": "2bdc6c5f4bb5fc6d436f1aaf6b7bc47d50288f56851c881bfc4f9d91fb3d08d6",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8002.JPG",
+          "bytes": 2645800,
+          "crc32": "d6691a5d"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8032.MOV",
+          "sha256": "4b997aa86adb6c397ab42ef8f6662c4b37799d0900071c615d30983372296daa",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8032.MOV",
+          "bytes": 18877709,
+          "crc32": "d9b13290"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_7969.MOV",
+          "sha256": "e7d3081580e93ce51b87ecd2056287a3a400ef40f0a92319cfd9ad964d6cd9ad",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_7969.MOV",
+          "bytes": 33359753,
+          "crc32": "ad9c57ab"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8072.MOV",
+          "sha256": "3a92c06b1ab8feb47bf84953cd73f851a90b7655da6351211dcf37f671dd6134",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8072.MOV",
+          "bytes": 73665176,
+          "crc32": "6bc7a66e"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8033.MOV",
+          "sha256": "7dfba56d440c3394c566ba2fb7a813cd4285c0459607a868e6a596f2a08e234d",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8033.MOV",
+          "bytes": 37448996,
+          "crc32": "13cdf751"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8024.MOV",
+          "sha256": "473aa852d6c92a991a75d494577b794a6b97aaf169abf4219b9eab21b0ad3e5e",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8024.MOV",
+          "bytes": 37791553,
+          "crc32": "e3a2d47e"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8068.MOV",
+          "sha256": "0d8b17dc496319941b103adeaa680d131ed89807813f0d37f94ffb8a2a1c7f46",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8068.MOV",
+          "bytes": 107008089,
+          "crc32": "38b79760"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_7978.MOV",
+          "sha256": "f08106dda0f7efbf8e43608386c0aed5abef1d78d8a3ea9c9a386c30c12fc6ec",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_7978.MOV",
+          "bytes": 81344881,
+          "crc32": "11b48653"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8071.MOV",
+          "sha256": "a0f9280e4d913ff0530b96720995884bd75ca0b579de4c60a0d5f316e3ec8e0d",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8071.MOV",
+          "bytes": 112368435,
+          "crc32": "cc1a4b7c"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8030.MOV",
+          "sha256": "523286daac401b787d26b477c01403f5f23b44a10d8a13f915aad050add2232e",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8030.MOV",
+          "bytes": 47721925,
+          "crc32": "3bbd2d6e"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8021.MOV",
+          "sha256": "2cb1e0af87133b3994f34b79632c2ddf2b18ff64db2e2d694e12b29190ccd02e",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8021.MOV",
+          "bytes": 84424935,
+          "crc32": "e393c974"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_8054.MOV",
+          "sha256": "0b4c687fa945bc2237baba76d7ab655cb9d666faa027a4561faba9bce3706735",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_8054.MOV",
+          "bytes": 70296752,
+          "crc32": "87dd689e"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_7949.MOV",
+          "sha256": "fab4fc4a5b8349d943d38c63e39af35135160e125b528a8730aadd9e5ebd9c16",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_7949.MOV",
+          "bytes": 55201490,
+          "crc32": "553a7226"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_7960.MOV",
+          "sha256": "531ca1dc01fe47de8d8795358fd5042d7321f6b4bb191db9a6df38a684efc98b",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_7960.MOV",
+          "bytes": 126190681,
+          "crc32": "07134e4e"
+        },
+        {
+          "archive": "drive-download-20261105T201648Z-1-002.zip",
+          "archive_sha256": "8439f6b4bf3e144912373841e4f3db31ca76e5e14933bae0e59954d7399e9555",
+          "member": "IMG_7973.MOV",
+          "sha256": "e67e8e14ad447f9d6e4427aa2af4c2d79f38d8f5cf52975ab7e6a46a9755a8d4",
+          "relative_path": "drive-download-20261105T201648Z-1-002-8439f6b4/IMG_7973.MOV",
+          "bytes": 615092279,
+          "crc32": "78b6cad9"
+        }
+      ]
+    },
+    {
+      "name": "you.zip",
+      "sha256": "47d2d56f64515121d3832c8085d1b4b36dde30589c96567b72c998bc7e2429d8",
+      "bytes": 547052309,
+      "members": [
+        {
+          "archive": "you.zip",
+          "archive_sha256": "47d2d56f64515121d3832c8085d1b4b36dde30589c96567b72c998bc7e2429d8",
+          "member": "IMG_3835.MOV",
+          "sha256": "f8f5c9851e396c35d6e65a6364ce82a141bf69ba506f0162e4491c412484bb10",
+          "relative_path": "you-47d2d56f/IMG_3835.MOV",
+          "bytes": 177863585,
+          "crc32": "959749d1"
+        },
+        {
+          "archive": "you.zip",
+          "archive_sha256": "47d2d56f64515121d3832c8085d1b4b36dde30589c96567b72c998bc7e2429d8",
+          "member": "IMG_3833.MOV",
+          "sha256": "c4fa96fb54727f5eeaecff6f7b48553653d2b95c76aaf22510fb98cc0fb32aff",
+          "relative_path": "you-47d2d56f/IMG_3833.MOV",
+          "bytes": 369104921,
+          "crc32": "9bd8833e"
+        }
+      ]
+    }
+  ]
+}

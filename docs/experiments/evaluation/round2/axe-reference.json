@@ -1,0 +1,1067 @@
+{
+  "format": "axe-reference/1",
+  "reviewer": "Codex visual review; not independent coach signoff",
+  "windows": [
+    {
+      "window_id": "train-img_3691",
+      "source_name": "24-25/IMG_3691.MOV",
+      "clip_sha256": "01f7dc6e371dd550cc0400b809111a14be7f86ae171b1403c7b023d95958a6b8",
+      "split": "train",
+      "start_s": 2,
+      "duration_s": 8,
+      "fps": 29.996458505489315,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.48,
+        0.48
+      ],
+      "search_roi": [
+        0.12,
+        0.18,
+        0.88,
+        0.77
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": [
+            0.401485,
+            0.448378,
+            0.457782,
+            0.484354
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": [
+            0.468018,
+            0.444061,
+            0.529432,
+            0.477159
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": [
+            0.478253,
+            0.408805,
+            0.539668,
+            0.443341
+          ],
+          "visibility": "visible",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "validation-img_3699",
+      "source_name": "24-25/IMG_3699.MOV",
+      "clip_sha256": "07d9db34891c9e5641c852116c8d5ddcbb320d56e1cc42cb2a0b530973febe3a",
+      "split": "validation",
+      "start_s": 120,
+      "duration_s": 8,
+      "fps": 29.997248680021485,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.68,
+        0.5
+      ],
+      "search_roi": [
+        0.35,
+        0.1,
+        0.94,
+        0.95
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": [
+            0.434606,
+            0.454512,
+            0.466115,
+            0.504268
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": [
+            0.534383,
+            0.511524,
+            0.567059,
+            0.563354
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": [
+            0.527965,
+            0.544695,
+            0.559473,
+            0.600671
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "test-img_3745",
+      "source_name": "24-25/IMG_3745.MOV",
+      "clip_sha256": "082e2f4cca234f294b509b7dccfe65edde618561f126af76adabb3d2c17a7a3d",
+      "split": "test",
+      "start_s": 8,
+      "duration_s": 8,
+      "fps": 29.983119988746658,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.46,
+        0.48
+      ],
+      "search_roi": [
+        0.1,
+        0.2,
+        0.9,
+        0.78
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": [
+            0.611967,
+            0.427756,
+            0.664799,
+            0.456049
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": [
+            0.335228,
+            0.488585,
+            0.393092,
+            0.519707
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": [
+            0.623288,
+            0.492829,
+            0.683668,
+            0.512634
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": [
+            0.326423,
+            0.502024,
+            0.386802,
+            0.534561
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": [
+            0.600646,
+            0.422098,
+            0.655994,
+            0.444732
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": [
+            0.615741,
+            0.42139,
+            0.666057,
+            0.448268
+          ],
+          "visibility": "visible",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "train-img_3747",
+      "source_name": "24-25/IMG_3747.MOV",
+      "clip_sha256": "0aeb3e3b6845c0a13257b394fbf08828d834d5ab0a4db426881e279b623c6d6d",
+      "split": "train",
+      "start_s": 80,
+      "duration_s": 8,
+      "fps": 29.99717847457282,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.43,
+        0.5
+      ],
+      "search_roi": [
+        0.1,
+        0.12,
+        0.68,
+        0.93
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": [
+            0.310874,
+            0.442024,
+            0.34417,
+            0.513146
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": [
+            0.436289,
+            0.609951,
+            0.474025,
+            0.685024
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": [
+            0.429075,
+            0.609951,
+            0.463481,
+            0.677122
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": [
+            0.285902,
+            0.529939,
+            0.320308,
+            0.599085
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": [
+            0.497332,
+            0.593159,
+            0.532848,
+            0.674159
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": [
+            0.204882,
+            0.413378,
+            0.243728,
+            0.46672
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "validation-img_3698",
+      "source_name": "24-25/IMG_3698.MOV",
+      "clip_sha256": "0bf90eaeff75c653806315740e556c062721647da19d825ea472fadc688c04de",
+      "split": "validation",
+      "start_s": 210,
+      "duration_s": 8,
+      "fps": 29.985347814963834,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.33,
+        0.51
+      ],
+      "search_roi": [
+        0.43,
+        0.05,
+        0.98,
+        0.95
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": [
+            0.663369,
+            0.371585,
+            0.70782,
+            0.422073
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": [
+            0.522607,
+            0.524146,
+            0.55471,
+            0.59
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": [
+            0.536806,
+            0.512073,
+            0.572614,
+            0.575732
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": [
+            0.665838,
+            0.327683,
+            0.71029,
+            0.382561
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "test-img_3697",
+      "source_name": "24-25/IMG_3697.MOV",
+      "clip_sha256": "57078bc27f2ae7c8cc4e16902254fdcf54c1e0e6da5835a98792b165b62a6396",
+      "split": "test",
+      "start_s": 18,
+      "duration_s": 8,
+      "fps": 29.99722675869719,
+      "event_id": "standing_block",
+      "rotation_cw": 270,
+      "seed_raw": [
+        0.52,
+        0.52
+      ],
+      "search_roi": [
+        0.12,
+        0.12,
+        0.95,
+        0.96
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": [
+            0.234817,
+            0.398334,
+            0.279083,
+            0.442671
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": [
+            0.438167,
+            0.621248,
+            0.4769,
+            0.702531
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": [
+            0.645667,
+            0.442671,
+            0.6844,
+            0.491933
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": [
+            0.407733,
+            0.670511,
+            0.454767,
+            0.751794
+          ],
+          "visibility": "visible",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "train-img_3868",
+      "source_name": "Competition/IMG_3868.MOV",
+      "clip_sha256": "1012fc4a0ff4ed3c283cc08f694ee66a75ead4d52070344c4cf18b40e66e5b77",
+      "split": "train",
+      "start_s": 10,
+      "duration_s": 8,
+      "fps": 29.997048986818807,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.61,
+        0.55
+      ],
+      "search_roi": [
+        0.3,
+        0.25,
+        0.9,
+        0.78
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": [
+            0.747157,
+            0.39478,
+            0.804632,
+            0.412878
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "validation-img_8023",
+      "source_name": "Competition/IMG_8023.MOV",
+      "clip_sha256": "1ce5459a599cee1ebf4422bba4cc4865c3bd289421e4b06cda6825ad1ac801a6",
+      "split": "validation",
+      "start_s": 12,
+      "duration_s": 8,
+      "fps": 29.98324178381901,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.6,
+        0.54
+      ],
+      "search_roi": [
+        0.35,
+        0.3,
+        0.86,
+        0.74
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "test-img_7998",
+      "source_name": "Competition/IMG_7998.MOV",
+      "clip_sha256": "2305e17f557c8e30a5b9d5977d4495d98f4e86e9891b004f7aa6b0ed13e156c9",
+      "split": "test",
+      "start_s": 5,
+      "duration_s": 8,
+      "fps": 29.996901146575766,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.55,
+        0.59
+      ],
+      "search_roi": [
+        0.3,
+        0.35,
+        0.86,
+        0.82
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "train-img_8014",
+      "source_name": "Competition/IMG_8014.MOV",
+      "clip_sha256": "2751b0ff512cf38c19219eeb79234941d08e46a240f4ce02df67ac27588b8738",
+      "split": "train",
+      "start_s": 3,
+      "duration_s": 8,
+      "fps": 29.9830497834139,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.45,
+        0.55
+      ],
+      "search_roi": [
+        0.15,
+        0.28,
+        0.9,
+        0.85
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": [],
+      "annotation_note": "Selected foreground competitor hides the head in these sampled frames; no positive/negative patches trained from this source."
+    },
+    {
+      "window_id": "validation-img_3864",
+      "source_name": "Competition/IMG_3864.MOV",
+      "clip_sha256": "2b08026ae931171f68d85b2e92b4b84b3fe9a8778a88a729f4f2400debcb9394",
+      "split": "validation",
+      "start_s": 6,
+      "duration_s": 8,
+      "fps": 29.9974749600202,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.54,
+        0.54
+      ],
+      "search_roi": [
+        0.25,
+        0.35,
+        0.87,
+        0.82
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": [
+            0.433224,
+            0.530549,
+            0.469869,
+            0.556915
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": [
+            0.43526,
+            0.553476,
+            0.471904,
+            0.577549
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    },
+    {
+      "window_id": "test-img_8069",
+      "source_name": "Competition/IMG_8069.MOV",
+      "clip_sha256": "3022ab3ede7feb0d15a16271c12f8a38b22bc4dcbc8daac39586638a7730f927",
+      "split": "test",
+      "start_s": 3,
+      "duration_s": 8,
+      "fps": 29.996750081247967,
+      "event_id": "standing_block",
+      "rotation_cw": 0,
+      "seed_raw": [
+        0.6,
+        0.56
+      ],
+      "search_roi": [
+        0.25,
+        0.35,
+        0.88,
+        0.84
+      ],
+      "frames": [
+        {
+          "time_s": 0.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 1.25,
+          "head_box": null,
+          "visibility": "uncertain",
+          "grip": null
+        },
+        {
+          "time_s": 2.25,
+          "head_box": [
+            0.548437,
+            0.650573,
+            0.593043,
+            0.680451
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 3.25,
+          "head_box": [
+            0.621718,
+            0.642207,
+            0.668448,
+            0.672085
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 4.25,
+          "head_box": [
+            0.640835,
+            0.562732,
+            0.691813,
+            0.584244
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 5.25,
+          "head_box": [
+            0.613222,
+            0.586037,
+            0.6642,
+            0.608744
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 6.25,
+          "head_box": [
+            0.561181,
+            0.653561,
+            0.605787,
+            0.682244
+          ],
+          "visibility": "visible",
+          "grip": null
+        },
+        {
+          "time_s": 7.25,
+          "head_box": [
+            0.552685,
+            0.67328,
+            0.597291,
+            0.703159
+          ],
+          "visibility": "visible",
+          "grip": null
+        }
+      ],
+      "contact_intervals_s": null,
+      "ignored_intervals_s": []
+    }
+  ],
+  "limitations": [
+    "Single Codex visual reviewer; no independent annotation signoff.",
+    "Boxes are coarse visual image-space references, reviewed as extracted patches before fitting.",
+    "Fixed initial search regions; detection scores apply to visibly localizable heads in these regions.",
+    "Uncertain/occluded/blurred samples are unrated, not empty negative examples.",
+    "All twelve selected windows are standing block; this set does not establish underhand generalization.",
+    "One training source and some competition windows have no confidently localizable sampled heads.",
+    "The original timing pilot and this object-localization benchmark measure different tasks."
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "format": "axe-transfer-model/1",
+  "architecture": "TorchVision ssdlite320_mobilenet_v3_large",
+  "pretrained_url": "https://download.pytorch.org/models/ssdlite320_mobilenet_v3_large_coco-a79551df.pth",
+  "pretrained_sha256": "a79551df90c79834bcd3bb3845ef9d966b5449a3a9b2833ae8404778ca5d65d2",
+  "state_sha256": "f4cdf9387b1140a0b59911a11cf4f55b442b2eb063d743d5e06807b49e458f98",
+  "settings": {
+    "seed": 365,
+    "steps": 400,
+    "batch_size": 4,
+    "learning_rate": 0.001,
+    "frozen_backbone": true,
+    "train_crop_px": [
+      64,
+      96,
+      128,
+      192,
+      256
+    ],
+    "inference_tiles_px": [
+      128,
+      256
+    ],
+    "iou_threshold": 0.5,
+    "max_candidates_per_frame": 1
+  },
+  "threshold": 0.9393446574211121,
+  "fit_reference_sha256": "70f486244c437fce85dfcc2e4dca70f61105b2c92cbc8c3d2b2a95453beaadcc",
+  "fit_sources": [
+    "01f7dc6e371dd550cc0400b809111a14be7f86ae171b1403c7b023d95958a6b8",
+    "07d9db34891c9e5641c852116c8d5ddcbb320d56e1cc42cb2a0b530973febe3a",
+    "0aeb3e3b6845c0a13257b394fbf08828d834d5ab0a4db426881e279b623c6d6d",
+    "0bf90eaeff75c653806315740e556c062721647da19d825ea472fadc688c04de",
+    "1012fc4a0ff4ed3c283cc08f694ee66a75ead4d52070344c4cf18b40e66e5b77",
+    "1ce5459a599cee1ebf4422bba4cc4865c3bd289421e4b06cda6825ad1ac801a6",
+    "2751b0ff512cf38c19219eeb79234941d08e46a240f4ce02df67ac27588b8738",
+    "2b08026ae931171f68d85b2e92b4b84b3fe9a8778a88a729f4f2400debcb9394"
+  ],
+  "training_frame_sha256": {
+    "train-img_3691:0.25": "0b0529515dcff2ff844c1255f27658a68e436220cb13ea77caaa9781f917be50",
+    "train-img_3691:6.25": "c14c7b0074606900cf3782707705c15b34227291a535be6b6cab2a46a182653c",
+    "train-img_3691:7.25": "8d34cc6a811b9d12563ae1a9288ab2f7ba8c4c0ebcf397d0f426bdcd4da47de0",
+    "train-img_3747:0.25": "9e67e38de9dedf2f07c59f7133d73e67e5025e1707ece593c4b537326ec28024",
+    "train-img_3747:1.25": "fea6bbea0bd7c1ed93c6cacb9097770aafb21b1eb19845f4c806249e53a7a3a4",
+    "train-img_3747:2.25": "cb4f6cf4a6adaf2b933f82692dd8c871936c931522efc4741b6b90c672f28cd6",
+    "train-img_3747:3.25": "ae78c8618e1adb78e904a66cfa07310a4cc26da616a54a9c202f7fbbb022088c",
+    "train-img_3747:4.25": "eb191dbde956440369309c796c4f4629f35639f72f0ee5f3c3ef57b8b64eedf1",
+    "train-img_3747:5.25": "20b776f7ffdfbd83bfa39403fafc990f41467150e13f249ecd7e60f51be0d77e",
+    "train-img_3868:4.25": "c8b247871aa7ae27ef1fbd8b96fba1cfee44adb32ea48838e287adc24f17d796"
+  },
+  "code_sha256": {
+    "axe_transfer.py": "979c5b172d8151852bb1e3689d72a95903720822e3a3957d93e482d7e859d6ad",
+    "axe_data.py": "48783795d8e95a78ee73a45255e1d92b704233420fae8135cd13eb62d4ef94d3",
+    "axe_detector.py": "380a278cc133fc63d1d6bf5deba3558d7600ffda34ac27e13c98f6d8fa12fe6e",
+    "footage.py": "3a919afcab859a6ee8c0367546d774f11b64c8887089e213aaaeee2cd45d48a8"
+  },
+  "device": "cuda",
+  "torch": "2.10.0+cu128",
+  "torchvision": "0.25.0+cu128",
+  "unique_positive_frames": 10,
+  "final_training_loss": 2.6613969802856445,
+  "training_elapsed_s": 13.736773566997726,
+  "promoted_for_coaching": false
+}

@@ -1,0 +1,1928 @@
+{
+  "format": "barbell-reference/1",
+  "source_plan_sha256": "1997cab5a151237cbb0054c2bfae76d03ba48828e94741b1f6b95b4962d683fc",
+  "target": "Foreground demonstration barbell, including shaft and attached plates; one box, full-frame inference",
+  "reviewer": "Codex visual engineering references; no coaching labels",
+  "windows": [
+    {
+      "window_id": "barbell-fb7ced0a96b876e4",
+      "clip_sha256": "fb7ced0a96b876e48f0efec36e1edf4b1f98be912105b8adf868f688f68fbc96",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/-sM5af2545M - Dial in Your Squat \uff5c Olympic Weightlifting Squat Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 230.24907,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 80.587174,
+          "barbell_box": null,
+          "visibility": "empty"
+        },
+        {
+          "time_s": 149.661895,
+          "barbell_box": null,
+          "visibility": "empty"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-a0008cefd6b908fa",
+      "clip_sha256": "a0008cefd6b908fa8a0757d1befba0c5a376c3d2a374e7b1cbb5f4c529ef3aa4",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/im1XWpMAlZY - Tipping Forward in the Pull.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 201.456327,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 70.509714,
+          "barbell_box": [
+            0.36,
+            0.32555555555555554,
+            0.614375,
+            0.5444444444444444
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 130.946613,
+          "barbell_box": [
+            0.348125,
+            0.6622222222222223,
+            0.67375,
+            1.0
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-fef2f954046bfd7c",
+      "clip_sha256": "fef2f954046bfd7ceec8a3e205f95635edfc030e67995d4cda387e00303deedd",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/_mgM1KtA48M - Avoid Crashing - Turn Your Cleans into Front Squats.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 75.162993,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 26.307048,
+          "barbell_box": [
+            0.338125,
+            0.35444444444444445,
+            0.64125,
+            0.6666666666666666
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 48.855945,
+          "barbell_box": [
+            0.3,
+            0.36333333333333334,
+            0.654375,
+            0.6666666666666666
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-2724a2a098b3ad6e",
+      "clip_sha256": "2724a2a098b3ad6e056ba75caa6f1026f048f193040d8315d41da288968aa1b9",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/Hz0FDyNCyrE - Better Bracing\uff1a Expand Your Ribs Sideways.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 66.52517,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 23.28381,
+          "barbell_box": [
+            0.21375,
+            0.2833333333333333,
+            0.95125,
+            0.3388888888888889
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 43.241361,
+          "barbell_box": [
+            0.2175,
+            0.28444444444444444,
+            0.939375,
+            0.33555555555555555
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-81bcb9ec20ed83cb",
+      "clip_sha256": "81bcb9ec20ed83cb6c08dcfe1a179ae2e09b800ca069b25faf08ca25d58e3220",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/8tG3JFzDAOA - What Do the Arms Do in the Snatch\uff1f \uff5c Olympic Weightlifting Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 95.619773,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 33.466921,
+          "barbell_box": [
+            0.3475,
+            0.46,
+            0.721875,
+            0.7955555555555556
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 62.152852,
+          "barbell_box": [
+            0.209375,
+            0.26666666666666666,
+            0.73125,
+            0.5611111111111111
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-346f75c8f920316a",
+      "clip_sha256": "346f75c8f920316af378f5e6491473a02d4aa96ae250c28a351ff2c4c691ce01",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/CnZ2-c_fP1U - Pause Squats for Olympic Weightlifting.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 105.256054,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 36.839619,
+          "barbell_box": [
+            0.238125,
+            0.1111111111111111,
+            0.65375,
+            0.4022222222222222
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 68.416435,
+          "barbell_box": [
+            0.34375,
+            0.2588888888888889,
+            0.69875,
+            0.5288888888888889
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-8f0895f20030584b",
+      "clip_sha256": "8f0895f20030584b3e60263fcc4d766b524628752676b3c330b354cdf21c87a1",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/E1yJ0SOmd1A - Bar Position for the Jerk Rack.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 40.565261,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 14.197841,
+          "barbell_box": [
+            0.235,
+            0.2222222222222222,
+            0.69875,
+            0.6022222222222222
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 26.36742,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-9363f671af98d3be",
+      "clip_sha256": "9363f671af98d3be6edf03648af0107b0c6d4e9c6758c14c41f57ed2001cbf30",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/AQUvwDpU8d8 - Floppy Pulls Make Sloppy Lifts - Snatch & Clean.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 48.529705,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 16.985397,
+          "barbell_box": [
+            0.265625,
+            0.3977777777777778,
+            0.64875,
+            0.7588888888888888
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 31.544308,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-c28a43c33d684050",
+      "clip_sha256": "c28a43c33d6840508bfdc8fb386cc97bc913a9d0d7af1691e07cb34593e18c24",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/nBpRbvtJ2qk - Jerk Dip Depth.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 52.221678,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 18.277587,
+          "barbell_box": [
+            0.0,
+            0.12444444444444444,
+            0.5625,
+            0.66
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 33.944091,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-69399aa7263ec521",
+      "clip_sha256": "69399aa7263ec52173ce2e188762c3cd8eee0d41825d9d7ea11b60cc183317f4",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/vx7RSDmHAQQ - Snatch & Clean Pull\uff1a Extension vs. Drive vs. Pull.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 57.167528,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 20.008635,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        },
+        {
+          "time_s": 37.158893,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-517c9a40abf481e5",
+      "clip_sha256": "517c9a40abf481e5f58d239fdf2f61b54aad870d42795cbc86cd716c6d2e23bc",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/n_uzi0aWBmg - Leg Drive vs Leg Extension in the Snatch & Clean.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 79.063946,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 27.672381,
+          "barbell_box": null,
+          "visibility": "empty"
+        },
+        {
+          "time_s": 51.391565,
+          "barbell_box": [
+            0.376875,
+            0.3788888888888889,
+            0.68125,
+            0.6522222222222223
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-4f88f733a7a8ee6d",
+      "clip_sha256": "4f88f733a7a8ee6d8f064c8e98e1dfa1171f9d53ec723dae68715c773726c00a",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/yeVujzme86w - Stop Collapsing in the Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 134.327438,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 47.014603,
+          "barbell_box": [
+            0.325625,
+            0.6688888888888889,
+            0.6725,
+            1.0
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 87.312835,
+          "barbell_box": null,
+          "visibility": "occluded"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-fa32ad9426e7cc82",
+      "clip_sha256": "fa32ad9426e7cc82472237743cf32ada24b7fed369e802614b33f11d736fba1c",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/dfVWkhUaw7s - Keep Elevating the Bar in the Snatch Turnover.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 96.595011,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 33.808254,
+          "barbell_box": [
+            0.3225,
+            0.0,
+            0.868125,
+            0.31777777777777777
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 62.786757,
+          "barbell_box": [
+            0.136875,
+            0.15222222222222223,
+            0.61875,
+            0.5455555555555556
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-84c7b5bc36a0c311",
+      "clip_sha256": "84c7b5bc36a0c311f23535f51874739d82b451845a7bedb7b2d1d7bdb48e2109",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/t8QGgK8vREk - Are You Over The Bar\uff1f \uff5c Snatch & Clean Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 78.204807,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 27.371682,
+          "barbell_box": [
+            0.3625,
+            0.39111111111111113,
+            0.769375,
+            0.7788888888888889
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 50.833125,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-80ffac4a20f1850e",
+      "clip_sha256": "80ffac4a20f1850e795492cfae83ab5ee3a8f5fbff3d5bf4d2bae0ddd8f268ee",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/4lVhS5k7fvY - Lower Abs for Better Jerks.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 50.085442,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 17.529905,
+          "barbell_box": [
+            0.34,
+            0.16333333333333333,
+            0.615625,
+            0.4411111111111111
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 32.555537,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-8e03cb12b1c1d916",
+      "clip_sha256": "8e03cb12b1c1d9163247b3d29b1b04be0230bd4d416c0bdce5c3432e7273b5a6",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/xNJwxfxiBew - Find Your Pulling Stance for the Snatch & Clean.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 98.034649,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 34.312127,
+          "barbell_box": [
+            0.18,
+            0.46444444444444444,
+            0.80625,
+            0.5077777777777778
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 63.722522,
+          "barbell_box": [
+            0.229375,
+            0.5566666666666666,
+            0.665,
+            1.0
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-133ffab0e89994d5",
+      "clip_sha256": "133ffab0e89994d5f394a423b8e1002e6d85d9526476084a7c1716ca0dd9edce",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/T6aT-sL48Ew - Make Deadlifts Useful for Olympic Weightlifting.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 101.355102,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 35.474286,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        },
+        {
+          "time_s": 65.880816,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-3884e3de99384e67",
+      "clip_sha256": "3884e3de99384e67435f8959aa0ac4f3cc7db6a4b4cb11cd069bc01a8c4b5975",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/PQkkYo83AhE - Lifting Vs. Sliding The Feet in the Snatch & Clean.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 102.678639,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 35.937524,
+          "barbell_box": [
+            0.29125,
+            0.03222222222222222,
+            0.666875,
+            0.4211111111111111
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 66.741115,
+          "barbell_box": [
+            0.184375,
+            0.06,
+            0.7875,
+            0.4177777777777778
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-dba4df2c485e9e1f",
+      "clip_sha256": "dba4df2c485e9e1fd97a9eb3484d9ea167027281acaaaa5a839d922e52e1f59b",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/6JdErP7Rn6Q - Pulling Posture for the Snatch & Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 122.206621,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 42.772317,
+          "barbell_box": null,
+          "visibility": "blurred"
+        },
+        {
+          "time_s": 79.434304,
+          "barbell_box": [
+            0.26125,
+            0.6233333333333333,
+            0.74375,
+            0.9755555555555555
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-2860f7611d585990",
+      "clip_sha256": "2860f7611d58599028706778b5acea61f96f3b560888993982d19938b30f5eea",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/NGtExNRv7K4 - Power vs Squat vs Split Jerk\uff1a Which Should You Use\uff1f.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 161.680544,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 56.58819,
+          "barbell_box": [
+            0.27375,
+            0.21555555555555556,
+            0.66375,
+            0.4888888888888889
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 105.092354,
+          "barbell_box": [
+            0.37375,
+            0.008888888888888889,
+            0.675625,
+            0.30777777777777776
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-445703b6d3a60c4c",
+      "clip_sha256": "445703b6d3a60c4c8d530b84595bee33d07dcbee0dbdf1839463a633fbcaa506",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/zpZOlqsaiNE - Power Position in Snatch & Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 132.841361,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 46.494476,
+          "barbell_box": [
+            0.370625,
+            0.43222222222222223,
+            0.7725,
+            0.8344444444444444
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 86.346885,
+          "barbell_box": null,
+          "visibility": "blurred"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-b08d81078a2c9d22",
+      "clip_sha256": "b08d81078a2c9d22cde8246496bc38bbffe63e8f95538e3a4bbcad95b92d1c17",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/V-KJfr6ae1s - Finish The Pull \uff5c Snatch & Clean Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 138.41415,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 48.444952,
+          "barbell_box": [
+            0.3775,
+            0.4088888888888889,
+            0.72,
+            0.7233333333333334
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 89.969198,
+          "barbell_box": [
+            0.35125,
+            0.4388888888888889,
+            0.7125,
+            0.69
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-d2966c8a2280a4e8",
+      "clip_sha256": "d2966c8a2280a4e870095292e7beefe94d9fd9fe4201d5ae9978f8ca09b7258c",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/lzhh5irGK0E - Moving the Feet in the Snatch & Clean.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 112.036281,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 39.212698,
+          "barbell_box": [
+            0.12,
+            0.07555555555555556,
+            0.771875,
+            0.4888888888888889
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 72.823583,
+          "barbell_box": [
+            0.184375,
+            0.0,
+            0.78125,
+            0.3433333333333333
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-62c9ded5e9fdf5c8",
+      "clip_sha256": "62c9ded5e9fdf5c8821ec9ce5f6e2f47048da384a46ab22afffdec1d52a2cc2f",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/7EaRI9utO68 - Full Grip in the Clean Turnover\uff1f \uff5c Olympic Weightlifting Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 143.22068,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 50.127238,
+          "barbell_box": [
+            0.361875,
+            0.3988888888888889,
+            0.75,
+            0.6677777777777778
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 93.093442,
+          "barbell_box": [
+            0.22,
+            0.13444444444444445,
+            0.803125,
+            0.5644444444444444
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-7283b804f423a55a",
+      "clip_sha256": "7283b804f423a55a1c7b74e20c0fe746bc52a42709908d8248d1f73ec6badcb5",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/euq5wJJ2t3I - Olympic Weightlifting Self-Correction Tools.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 254.606803,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 89.112381,
+          "barbell_box": [
+            0.37625,
+            0.47333333333333333,
+            0.74625,
+            0.5833333333333334
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 165.494422,
+          "barbell_box": null,
+          "visibility": "out_of_frame"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-31297e0fde11175a",
+      "clip_sha256": "31297e0fde11175a055fbbf98c9a5bd92c89b108d81da7bd1c3ad9ebac1dc893",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/hF2SlVSWy5s - Jerk Dip & Drive Technical Styles - Strength vs. Elastic.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 111.618322,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 39.066413,
+          "barbell_box": [
+            0.2225,
+            0.0,
+            0.756875,
+            0.36666666666666664
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 72.551909,
+          "barbell_box": [
+            0.42125,
+            0.0,
+            0.785625,
+            0.2922222222222222
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-ceaaa2f4d278896a",
+      "clip_sha256": "ceaaa2f4d278896a12f52328ca05213aabfc9320cef0e95f785bbe3cfc568993",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/oa4o1Qjo55s - Simplest Way to a Better Overhead Position.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 62.066939,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 21.723429,
+          "barbell_box": [
+            0.375,
+            0.17777777777777778,
+            0.726875,
+            0.39444444444444443
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 40.34351,
+          "barbell_box": [
+            0.3875,
+            0.0,
+            0.66125,
+            0.22444444444444445
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-9db8370bb555f2a4",
+      "clip_sha256": "9db8370bb555f2a4e6d4f61b8505381926b182a4888a27399b290cd6d0155c07",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/5NleQRu_hvY - How to Stay Over the Bar in the Snatch & Clean.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 117.65551,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 41.179429,
+          "barbell_box": [
+            0.384375,
+            0.4722222222222222,
+            0.70625,
+            0.6366666666666667
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 76.476082,
+          "barbell_box": [
+            0.2875,
+            0.6111111111111112,
+            0.760625,
+            0.9277777777777778
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-1908951bd929b5dd",
+      "clip_sha256": "1908951bd929b5dd76217f7c8331e5faef7583a5202eb8d6bb01939d1d2f1211",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/A4whHErmWAU - Efficiency & Foot Movement in the Snatch & Clean - Lift vs Shuffle.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 360.559456,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 126.19581,
+          "barbell_box": null,
+          "visibility": "empty"
+        },
+        {
+          "time_s": 234.363646,
+          "barbell_box": null,
+          "visibility": "empty"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-499a607cb37ad800",
+      "clip_sha256": "499a607cb37ad8007defff7369079023b41d4de1118d2ad173db98e1311472e3",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/wjD1_6uLCkk - Stronger Jerk Dip = More Drive Power.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 86.006712,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 30.102349,
+          "barbell_box": [
+            0.29125,
+            0.08888888888888889,
+            0.800625,
+            0.38
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 55.904363,
+          "barbell_box": [
+            0.405625,
+            0.13444444444444445,
+            0.674375,
+            0.37
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-7c1e763354e6bae0",
+      "clip_sha256": "7c1e763354e6bae01d43119eb4fc6ec82f9b35fc0bcae7817a8afc240a7976b5",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/R-mOBUraB9E - How to Safely Miss Snatches Backward.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 72.515918,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 25.380571,
+          "barbell_box": [
+            0.529375,
+            0.6688888888888889,
+            0.744375,
+            1.0
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 47.135347,
+          "barbell_box": [
+            0.2425,
+            0.29,
+            0.556875,
+            0.48777777777777775
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-5fb710687f0b6a5f",
+      "clip_sha256": "5fb710687f0b6a5f76b5e39be1a5a48398c8e537cba55dbd294b89244de28d5e",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/4RwcRgTpBpY - Don't Push The Bar Forward with the Shins - Snatch & Clean.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 62.438458,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 21.85346,
+          "barbell_box": [
+            0.3675,
+            0.5033333333333333,
+            0.698125,
+            0.8977777777777778
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 40.584998,
+          "barbell_box": [
+            0.33,
+            0.5533333333333333,
+            0.7425,
+            0.9644444444444444
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-c416e38f2b075d0b",
+      "clip_sha256": "c416e38f2b075d0bf5f7d41aa07498767bcdba0cd8b208f2a737cc492777a53c",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/s82-kiwLDg8 - How to Find Your Split Jerk Stance \uff5c Olympic Weightlifting Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 71.93542,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 25.177397,
+          "barbell_box": null,
+          "visibility": "empty"
+        },
+        {
+          "time_s": 46.758023,
+          "barbell_box": null,
+          "visibility": "empty"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-73b61f7ce29b9e6e",
+      "clip_sha256": "73b61f7ce29b9e6ec4ba8ee04128e51120bb5ab893bd653902a3d2203215b585",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/gQN5Fy5TaJs - Head Movement in the Jerk \uff5c Olympic Weightlifting Technique.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 96.153832,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 33.653841,
+          "barbell_box": null,
+          "visibility": "out_of_frame"
+        },
+        {
+          "time_s": 62.499991,
+          "barbell_box": null,
+          "visibility": "out_of_frame"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-f6bda561036aebc5",
+      "clip_sha256": "f6bda561036aebc5f893e149d80c6c17ad4c4ed89310976d1c26b82c7003d14b",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/bUiFessanXs - Everything You Need to Fix Your Jerk Split Position.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 194.258141,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 67.990349,
+          "barbell_box": null,
+          "visibility": "empty"
+        },
+        {
+          "time_s": 126.267792,
+          "barbell_box": null,
+          "visibility": "empty"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-ab8455f52b87ac64",
+      "clip_sha256": "ab8455f52b87ac64a853a06bc8d1583b964817131a2fc4535b7f2db1cc43977a",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/5ug9VmULols - No Thigh Gap\uff1a Push The Bar Back with The Lats.mp4",
+      "split": "train",
+      "start_s": 0.0,
+      "duration_s": 92.02068,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 32.207238,
+          "barbell_box": [
+            0.28,
+            0.3333333333333333,
+            0.69,
+            0.9855555555555555
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 59.813442,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-327f6f856e732d8b",
+      "clip_sha256": "327f6f856e732d8bea82d1a04b0e3f3507a9157c7df8a5b6ce96cbdde7a0dcd0",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/ngmjKLYfhQ4 - How to Re-Rack \u29f8 Lower Jerks.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 70.077823,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 24.527238,
+          "barbell_box": [
+            0.400625,
+            0.0,
+            0.801875,
+            0.27444444444444444
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 45.550585,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-6e6dbcc92d8b95c4",
+      "clip_sha256": "6e6dbcc92d8b95c4f3342e3bb1f5223a0ae9a1aae5e529451ad8f96cf1ca535d",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/cOmiTlek4EE - Back Foot Hits First in the Split Jerk.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 95.828753,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 33.540064,
+          "barbell_box": null,
+          "visibility": "out_of_frame"
+        },
+        {
+          "time_s": 62.288689,
+          "barbell_box": null,
+          "visibility": "out_of_frame"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-6c0e5be78f19af8c",
+      "clip_sha256": "6c0e5be78f19af8caccb8bf25f5b3dfa85ce93c55d8e5967cc0a202e3fa1e31c",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/8kS5pt5wrJg - Pause in The Power Receiving Position \uff5c Olympic Weightlifting Technique.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 60.070023,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 21.024508,
+          "barbell_box": [
+            0.241875,
+            0.0,
+            0.733125,
+            0.20222222222222222
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 39.045515,
+          "barbell_box": [
+            0.343125,
+            0.0,
+            0.71875,
+            0.23444444444444446
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-4697da732853c30b",
+      "clip_sha256": "4697da732853c30bd5d149a883f471385805da1fbd2d053e5b5064cbb5cab53c",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/1BmuOvt5434 - The Missing Piece of the Clean Turnover.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 127.593651,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 44.657778,
+          "barbell_box": [
+            0.28,
+            0.23,
+            0.645,
+            0.27666666666666667
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 82.935873,
+          "barbell_box": null,
+          "visibility": "occluded"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-3b4329ef4e9106ef",
+      "clip_sha256": "3b4329ef4e9106eff1a717ae1dbd50edb6ba284bc5616d616efd967476162c6f",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/shacMSdSyIg - Unstable Split Jerk\uff1f Use This Technique Primer.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 90.372063,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 31.630222,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        },
+        {
+          "time_s": 58.741841,
+          "barbell_box": [
+            0.3975,
+            0.052222222222222225,
+            0.645625,
+            0.2866666666666667
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-4d3ff92f804391bd",
+      "clip_sha256": "4d3ff92f804391bd25db23e86f25c01450d5c561546a5401087ffcba6f00195f",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/PgmjWQm9D9Y - The Jerk\uff1a Scapular Protraction to Retraction \uff5c Olympic Weightlifting.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 81.385941,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 28.485079,
+          "barbell_box": [
+            0.2925,
+            0.17777777777777778,
+            0.97125,
+            0.91
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 52.900862,
+          "barbell_box": [
+            0.11375,
+            0.0,
+            1.0,
+            0.5844444444444444
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-aad8de54b6a321f9",
+      "clip_sha256": "aad8de54b6a321f986ee53b6b2b35d76b6eec7a70cacae8982d7f5a718a90cf2",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/8v6CI6Of7G8 - Pull Under Harder Does NOT Mean Receiving Lower \uff5c Snatch & Clean Technique.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 102.21424,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 35.774984,
+          "barbell_box": [
+            0.07125,
+            0.03777777777777778,
+            0.690625,
+            0.44222222222222224
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 66.439256,
+          "barbell_box": [
+            0.3725,
+            0.27111111111111114,
+            0.703125,
+            0.57
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-f3964c213a486b1c",
+      "clip_sha256": "f3964c213a486b1c100a9599fb35d8c895a80ea79061e91b0129292412598f60",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/KqZrD80z7zM - Neutral Spine or Pervert Hips\uff1f Neutral is NOT Straight!.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 80.341043,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 28.119365,
+          "barbell_box": null,
+          "visibility": "empty"
+        },
+        {
+          "time_s": 52.221678,
+          "barbell_box": null,
+          "visibility": "empty"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-35b2181424aadb90",
+      "clip_sha256": "35b2181424aadb90dcf470e5060408c17e504bc0c7a3941011e8f716660bd181",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/ZuiCAVQHljY - Blocks vs. Hang Lifts \uff5c Snatch & Clean.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 157.013333,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 54.954667,
+          "barbell_box": [
+            0.30125,
+            0.5133333333333333,
+            0.635625,
+            0.7855555555555556
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 102.058666,
+          "barbell_box": [
+            0.221875,
+            0.4311111111111111,
+            0.71625,
+            0.7
+          ],
+          "visibility": "visible"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-66553147d8f5118c",
+      "clip_sha256": "66553147d8f5118c4815342ee415bc674d3a8178a12f183452b99aa5d3e82d56",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/MXJXLqi-XLo - Jerk Rack Position - Relax Your Grip.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 49.504943,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 17.32673,
+          "barbell_box": [
+            0.26875,
+            0.14666666666666667,
+            0.8875,
+            0.9877777777777778
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 32.178213,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-30c19b376848b7d6",
+      "clip_sha256": "30c19b376848b7d659569facf1c037093ff660ad7db1508c594e6c7b28af5a96",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/AVVAIHlN-sA - Snatch & Clean Hang Positions \uff5c Olympic Weightlifting.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 89.582585,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 31.353905,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        },
+        {
+          "time_s": 58.22868,
+          "barbell_box": null,
+          "visibility": "uncertain"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-2d52157282d9c85a",
+      "clip_sha256": "2d52157282d9c85a61f16607f399d0512444422661e8dbfd9a4d02d6771a656d",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/JPT-t-p2L-c - Hand & Wrist Position in the Snatch & Jerk.mp4",
+      "split": "validation",
+      "start_s": 0.0,
+      "duration_s": 96.362812,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 33.726984,
+          "barbell_box": [
+            0.076875,
+            0.0,
+            1.0,
+            0.5388888888888889
+          ],
+          "visibility": "visible"
+        },
+        {
+          "time_s": 62.635828,
+          "barbell_box": null,
+          "visibility": "out_of_frame"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-4dc170ebb2767b2b",
+      "clip_sha256": "4dc170ebb2767b2b82ef1f12e9f47b1435e6fb0ba54bd3f4378cac831a10f897",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/5SxVx_bO5n4 - Push The Knees Back in the Pull\uff1f \uff5c Snatch & Clean Technique.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 94.574875,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 33.101206,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 61.473669,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-e18153f381c8f090",
+      "clip_sha256": "e18153f381c8f0901f9bb855bdbd1aebb4d68e8faa9d22a11f62bbe76bb5cd3f",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/Ot9oody896I - Leg Drive Not Jumping - Snatch & Clean.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 57.283628,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 20.04927,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 37.234358,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-784c0b6161fbb2cb",
+      "clip_sha256": "784c0b6161fbb2cb0cfb2ec4c86448fa2f3f30d3cf88a969c65364cf63a2dce2",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/8906XVfDOGU - Land on Flat Feet in the Snatch & Clean.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 88.050068,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 30.817524,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 57.232544,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-6b7e4b1754f0c54c",
+      "clip_sha256": "6b7e4b1754f0c54cccfffe1174d046c4e8dd5aeb5b13475d3a448b87b51bd635",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/wuRosR_UjMQ - Overhead Position - Avoid Excessive Forward Lean.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 62.763537,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 21.967238,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 40.796299,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-f446beec4920aadd",
+      "clip_sha256": "f446beec4920aaddc7b025ca43b5575ca8c06da5b96a075a113fbb3e2c74a0d1",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/rQoykixtu8g - 3 Ways to Instantly Strengthen Your Pull \uff5c Olympic Weightlifting.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 141.455964,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 49.509587,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 91.946377,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-5a86b742c71a6b2f",
+      "clip_sha256": "5a86b742c71a6b2fd23bcc1988b8f611fbc6ef102778c5c033d402a3a9462afd",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/pd_43mSZhxo - Positions for Tall & Long-Legged Athletes \uff5c Olympic Weightlifting.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 149.188209,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 52.215873,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 96.972336,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-d3b5175cc7edac55",
+      "clip_sha256": "d3b5175cc7edac554f045689a6859f291078212e1392c2469c3c3abb372b97c2",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/OhJ_zO8JgtM - Arms in Snatch & Clean Pulls - Guide & Slide.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 45.97551,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 16.091428,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 29.884082,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-757041647d1acbb9",
+      "clip_sha256": "757041647d1acbb9f2ad9a87350154a9bc082b1254701a80a2263306a58bd687",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/9ApKFVIWg-s - Should You Use a Dynamic Start in the Olympic lifts\uff1f.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 90.627483,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 31.719619,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 58.907864,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-92e0881f9a7e6f94",
+      "clip_sha256": "92e0881f9a7e6f94a840180f46e0a9b17c4373eddbaa2a6dbad981fdd476e7ab",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/_4x2Zp89KOk - Locking Your Elbows in the Snatch & Clean.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 56.772789,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 19.870476,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 36.902313,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-cace8bc320de2f40",
+      "clip_sha256": "cace8bc320de2f40dc9e95066b70002f165e1c43ee020d29f9b7deee6f800c85",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/Rjheh8HwqkU - Slow Lockout in Jerk or Snatch\uff1f.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 84.776054,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 29.671619,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 55.104435,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-ba6f825ceb942a28",
+      "clip_sha256": "ba6f825ceb942a289967af2b416cfc6e7bd5f06859ddb330d5901b26e63286a8",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/6JHxmVqApMI - Jerk Rack Position.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 84.822494,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 29.687873,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 55.134621,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    },
+    {
+      "window_id": "barbell-a98cfd980b3a3673",
+      "clip_sha256": "a98cfd980b3a36731d3c95e21e340c78eadac40f63667a1bc2272ada76b86592",
+      "source_name": "Olympic Weightlifting/Catalyst Athletics/Instructional/ZhKAMKaIxcU - Hold The Bar Overhead with the Upper Back.mp4",
+      "split": "test",
+      "start_s": 0.0,
+      "duration_s": 51.4322,
+      "rotation_cw": 0,
+      "search_roi": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "frames": [
+        {
+          "time_s": 18.00127,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        },
+        {
+          "time_s": 33.43093,
+          "barbell_box": null,
+          "visibility": "unreviewed"
+        }
+      ]
+    }
+  ]
+}

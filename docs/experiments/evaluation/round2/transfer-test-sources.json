@@ -1,0 +1,34 @@
+{
+  "format": "axe-source-selection/1",
+  "selection": "First two source hashes from each 24-25 and Competition remaining after all 25 earlier pilot/axe source hashes are excluded. These are the pretrained prototype holdout; original axe test is opened and not reused as a fresh test.",
+  "sources": [
+    {
+      "source_name": "24-25/IMG_3744.MOV",
+      "clip_sha256": "57df8c8ce6a051cc7a07bf39d8778cf8aceaa24f2a1473d85af37d2160558ccb",
+      "duration_s": 48.626667,
+      "fps": 29.983548121743897,
+      "split": "test"
+    },
+    {
+      "source_name": "24-25/IMG_3746.MOV",
+      "clip_sha256": "67a35e240f82ae59ea831b382a4ae3c6afa0badde1c8416506b94c221101ee00",
+      "duration_s": 910.0517,
+      "fps": 29.997197961287913,
+      "split": "test"
+    },
+    {
+      "source_name": "Competition/IMG_8062.MOV",
+      "clip_sha256": "3c73c92c205b14ec829173b4f74f18647f6c039cfbf8a5270bd9e5fa5eb52d99",
+      "duration_s": 53.771667,
+      "fps": 29.9972104268047,
+      "split": "test"
+    },
+    {
+      "source_name": "Competition/IMG_8024.MOV",
+      "clip_sha256": "473aa852d6c92a991a75d494577b794a6b97aaf169abf4219b9eab21b0ad3e5e",
+      "duration_s": 33.951667,
+      "fps": 29.983800500711798,
+      "split": "test"
+    }
+  ]
+}

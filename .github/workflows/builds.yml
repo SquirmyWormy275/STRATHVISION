@@ -1,0 +1,161 @@
+# Test builds for every locked distribution path (docs/DISTRIBUTION.md):
+# Android APK, desktop zips (Linux, Windows, macOS), and an unsigned iOS
+# build that is signed ad hoc on a Mac. Artifacts attach to each run.
+name: builds
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main, implementation]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: builds-${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: '3.47.9'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - name: Engine tests
+        working-directory: packages/analysis_engine
+        run: |
+          dart pub get
+          dart analyze --fatal-infos
+          dart test --coverage=coverage
+          dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib
+      - name: App tests
+        working-directory: apps/strathvision
+        run: flutter pub get && flutter analyze && flutter test --coverage
+      - name: Coverage summary
+        run: python3 scripts/coverage_summary.py packages/analysis_engine/coverage/lcov.info apps/strathvision/coverage/lcov.info >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-coverage
+          path: |
+            packages/analysis_engine/coverage/lcov.info
+            apps/strathvision/coverage/lcov.info
+
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12', cache: pip, cache-dependency-path: tools/carne_asada/requirements.txt}
+      - run: python -m pip install -r tools/carne_asada/requirements.txt
+      - run: python -m pytest -q tools/carne_asada
+      - name: Handoff isolation and documentation links
+        run: |
+          python -m unittest discover -s scripts/tests -v
+          python scripts/check_links.py
+
+
+  android:
+    needs: [test, research]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - working-directory: apps/strathvision
+        run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: strathvision-android-apk
+          path: apps/strathvision/build/app/outputs/flutter-apk/app-release.apk
+
+  linux:
+    needs: [test, research]
+    # Fixed native GTK/libmpv baseline; latest moved to Ubuntu 26.04, where
+    # headless decoder/pose runs intermittently stalled without an assertion.
+    runs-on: ubuntu-24.04
+    env:
+      LIBGL_ALWAYS_SOFTWARE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: System libraries
+        timeout-minutes: 8
+        run: |
+          # The hosted Azure mirror stalled at ~35 KB/s during validation.
+          # Keep signed Ubuntu packages, but use the primary HTTPS archive.
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            printf '%s\n' 'https://archive.ubuntu.com/ubuntu' | sudo tee /etc/apt/apt-mirrors.txt
+          fi
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install --no-install-recommends -y clang cmake ninja-build pkg-config libgtk-3-dev libmpv-dev xvfb xauth
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - name: Real Linux decoder
+        timeout-minutes: 10
+        working-directory: apps/strathvision
+        run: xvfb-run -a flutter test integration_test/real_player_test.dart -d linux --reporter expanded --dart-define=CLIP_DIR="$PWD/integration_test/assets"
+      - name: Real Linux pose extraction
+        timeout-minutes: 15
+        working-directory: apps/strathvision
+        run: xvfb-run -a flutter test integration_test/real_pose_test.dart -d linux --reporter expanded --dart-define=CLIP_DIR="$PWD/integration_test/assets" --dart-define=REF="$PWD/../../packages/analysis_engine/test/fixtures/cleave_pose.json"
+      - name: Full Linux desktop workflow
+        timeout-minutes: 15
+        working-directory: apps/strathvision
+        run: xvfb-run -a flutter test integration_test/app_e2e_test.dart -d linux --reporter expanded --dart-define=CLIP_DIR="$PWD/integration_test/assets"
+      - working-directory: apps/strathvision
+        run: |
+          flutter build linux --release
+          cd build/linux/x64/release/bundle && zip -r ../../../../../strathvision-linux-x64.zip .
+      - uses: actions/upload-artifact@v4
+        with: { name: strathvision-linux-x64, path: apps/strathvision/strathvision-linux-x64.zip }
+
+  windows:
+    needs: [test, research]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - working-directory: apps/strathvision
+        shell: pwsh
+        run: |
+          flutter build windows --release
+          Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath strathvision-windows-x64.zip
+      - uses: actions/upload-artifact@v4
+        with: { name: strathvision-windows-x64, path: apps/strathvision/strathvision-windows-x64.zip }
+
+  macos:
+    needs: [test, research]
+    runs-on: macos-15-intel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - working-directory: apps/strathvision
+        run: |
+          flutter build macos --release
+          ditto -c -k --keepParent build/macos/Build/Products/Release/strathvision.app strathvision-macos.zip
+      - uses: actions/upload-artifact@v4
+        with: { name: strathvision-macos, path: apps/strathvision/strathvision-macos.zip }
+
+  ios:
+    needs: [test, research]
+    runs-on: macos-15-intel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+      - name: Unsigned build (sign ad hoc on a Mac, see docs/DISTRIBUTION.md)
+        working-directory: apps/strathvision
+        run: |
+          flutter build ios --release --no-codesign
+          ditto -c -k --keepParent build/ios/iphoneos/Runner.app strathvision-ios-unsigned.zip
+      - uses: actions/upload-artifact@v4
+        with: { name: strathvision-ios-unsigned, path: apps/strathvision/strathvision-ios-unsigned.zip }

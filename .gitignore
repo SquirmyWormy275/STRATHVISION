@@ -1,0 +1,7 @@
+# Private footage and derived person-level research data stay outside the repo.
+.venv/
+**/__pycache__/
+.pytest_cache/
+research-data/
+
+**/coverage/

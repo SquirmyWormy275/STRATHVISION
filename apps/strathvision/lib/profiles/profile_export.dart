@@ -1,0 +1,73 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:analysis_engine/analysis_engine.dart';
+import 'package:archive/archive.dart';
+import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
+
+/// Zip bytes for a profile package: `profile.json`, plus the empty
+/// `specialist_patches/` and `adapters/` directories (INTERFACES.md).
+///
+/// [patches] and [adapters] (file name → contents) go into
+/// `specialist_patches/` and `adapters/`.
+Uint8List zipProfilePackage(
+  Profile profile, {
+  Map<String, String> patches = const {},
+  Map<String, String> adapters = const {},
+  Map<String, String> research = const {},
+}) {
+  final archive = Archive();
+  final entries = {
+    ...profile.packageEntries(),
+    for (final e in patches.entries) 'specialist_patches/${e.key}': e.value,
+    for (final e in adapters.entries) 'adapters/${e.key}': e.value,
+    if (research.isNotEmpty) 'carne_asada/': null,
+    for (final e in research.entries) 'carne_asada/${e.key}': e.value,
+  };
+  for (final e in entries.entries) {
+    final content = e.value;
+    archive.add(
+      content == null
+          ? ArchiveFile.directory(e.key)
+          : ArchiveFile.bytes(e.key, utf8.encode(content)),
+    );
+  }
+  return Uint8List.fromList(ZipEncoder().encode(archive));
+}
+
+/// File name for a package: `<coach>_v<version>.zip`, filesystem-safe.
+String packageFileName(Profile profile) {
+  final slug = profile.coachName
+      .trim()
+      .replaceAll(RegExp(r'[^A-Za-z0-9]+'), '_')
+      .replaceAll(RegExp(r'^_+|_+$'), '');
+  return '${slug.isEmpty ? 'profile' : slug}_v${profile.version}.zip';
+}
+
+/// Writes the package into [dir] (the app's own profile store) and returns
+/// its path.
+///
+/// [research] goes into `carne_asada/` (desktop research records; phones
+/// never read it).
+Future<String> storeProfilePackage(
+  Profile profile,
+  Directory dir, {
+  Map<String, String> patches = const {},
+  Map<String, String> adapters = const {},
+  Map<String, String> research = const {},
+}) async {
+  await dir.create(recursive: true);
+  final path = p.join(dir.path, '${const Uuid().v4()}.zip');
+  await File(path).writeAsBytes(
+    zipProfilePackage(
+      profile,
+      patches: patches,
+      adapters: adapters,
+      research: research,
+    ),
+    flush: true,
+  );
+  return path;
+}

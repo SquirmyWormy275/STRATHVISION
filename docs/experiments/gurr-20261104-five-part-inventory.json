@@ -1,0 +1,108 @@
+{
+  "format": "gurr-export-inventory/1",
+  "date": "2026-11-04",
+  "collection_complete": false,
+  "scope": "all five parts of the user-supplied Google Drive export 20261104T223331Z; remote folder listing not independently verified",
+  "downloaded_export_complete": true,
+  "expected_archive_parts": 5,
+  "verified_archive_parts": 5,
+  "archive_verification": "All 55 file entries extracted and ZIP CRC checked; archive and member SHA-256 recorded.",
+  "archives": [
+    {
+      "name": "Gurr Academy -20261104T223331Z-1-001.zip",
+      "bytes": 2005123147,
+      "sha256": "90314a20fa341e09192f7af298ea4db72f6172d8a74dc109c53eac823f9ac65e",
+      "files": 15
+    },
+    {
+      "name": "Gurr Academy -20261104T223331Z-1-002.zip",
+      "bytes": 1906452013,
+      "sha256": "5fbf3934c88494f5c9a3110a3eaceddb97ff8b02b7eb8928fcbed4d76c422707",
+      "files": 15
+    },
+    {
+      "name": "Gurr Academy -20261104T223331Z-1-003.zip",
+      "bytes": 2113653030,
+      "sha256": "2dff1d5dbea793aeb4a72c0b3a4ce81c3aa47e75da3e5aea3dba198e17586f9c",
+      "files": 9
+    },
+    {
+      "name": "Gurr Academy -20261104T223331Z-1-004.zip",
+      "bytes": 1998179373,
+      "sha256": "ed8efa962364bf9e4c3db0f43c478f92a7d2925f55ab7c5c98603c22e040168e",
+      "files": 15
+    },
+    {
+      "name": "Gurr Academy -20261104T223331Z-1-005.zip",
+      "bytes": 422887720,
+      "sha256": "74230e7b7fc3684c2773a5997391dd8ff813754f1ca98f40131108cee1bf4fdb",
+      "files": 1
+    }
+  ],
+  "video_file_count": 48,
+  "unique_video_count": 47,
+  "photo_file_count": 7,
+  "video_file_duration_s": 7819.430356,
+  "unique_video_duration_s": 7787.428656,
+  "duplicate_files": [
+    {
+      "relative_path": "Competition/IMG_8055(1).MOV",
+      "sha256": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+      "duplicate_of": "Competition/IMG_8055.MOV"
+    }
+  ],
+  "folders": {
+    "24-25": {
+      "video_files": 20,
+      "unique_videos": 20,
+      "video_file_duration_s": 5239.475187999999,
+      "unique_duration_s": 5239.475187999999
+    },
+    "Competition/3-Board": {
+      "video_files": 4,
+      "unique_videos": 4,
+      "video_file_duration_s": 779.1550119999999,
+      "unique_duration_s": 779.1550119999999
+    },
+    "Competition": {
+      "video_files": 23,
+      "unique_videos": 22,
+      "video_file_duration_s": 1075.165156,
+      "unique_duration_s": 1043.163456
+    },
+    "Training/25-26": {
+      "video_files": 1,
+      "unique_videos": 1,
+      "video_file_duration_s": 725.635,
+      "unique_duration_s": 725.635
+    }
+  },
+  "longest_videos": [
+    {
+      "source_name": "24-25/IMG_3747.MOV",
+      "sha256": "0aeb3e3b6845c0a13257b394fbf08828d834d5ab0a4db426881e279b623c6d6d",
+      "duration_s": 1718.928333
+    },
+    {
+      "source_name": "24-25/IMG_3698.MOV",
+      "sha256": "0bf90eaeff75c653806315740e556c062721647da19d825ea472fadc688c04de",
+      "duration_s": 1074.925
+    },
+    {
+      "source_name": "24-25/IMG_3746.MOV",
+      "sha256": "67a35e240f82ae59ea831b382a4ae3c6afa0badde1c8416506b94c221101ee00",
+      "duration_s": 910.0517
+    },
+    {
+      "source_name": "Training/25-26/Gurr 30DEC25.mov",
+      "sha256": "d9f2a45e65fec1bfbbdc898ea0afd53802d6d23da52881b1fd78551532cc4683",
+      "duration_s": 725.635
+    },
+    {
+      "source_name": "Competition/3-Board/IMG_8010.MOV",
+      "sha256": "7b6b23bebb38ab55e940d5ff82df72afdcb8d1e43742274cb2048fda1898421c",
+      "duration_s": 304.261667
+    }
+  ],
+  "raw_footage_published": false
+}

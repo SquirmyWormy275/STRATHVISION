@@ -1,0 +1,450 @@
+{
+  "format": "seagate-study/1",
+  "published_utc": "2026-11-06T00:11:16.712264+00:00",
+  "snapshot_utc": "2026-11-05T23:23:41.761558+00:00",
+  "later_arrivals": {
+    "checked_utc": "2026-11-06T00:09:41.400225+00:00",
+    "starting_snapshot_utc": "2026-11-05T23:23:41.761558+00:00",
+    "later_completed_video_candidates": 12,
+    "content_deduplication_performed": false,
+    "included_in_frozen_study": false,
+    "later_relative_paths": [
+      "Olympic Weightlifting/Catalyst Athletics/Instructional/G8IDYxaBuec - Bar Contact in the Clean\uff1a How to Keep The Bar Close.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Instructional/V6nroUgRhM0 - Get Out of Your Cleans Faster & Easier.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/cJPNNaLZ3CU - Commentary 17\uff1a Riser Deadlift with Slow Eccentric with Commentary by Greg Everett.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/ciYjKfZQQ_o - Commentary 13\uff1a Feet Moving Back, Cutting the Pull Short with Commentary by Greg Everett.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/6Ut2HBA64fE - Commentary 9\uff1a Snatch Pull & Snatch Deadlift with Commentary by Greg Everett.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/Y5f0V6-IGZU - Commentary 14\uff1a Clean & Confidence in Snatch with Commentary by Greg Everett.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/xuDg1mNoDrc - Commentary 6\uff1a Push Press Behind the Neck & Clean Turnover with Commentary by Greg Everett.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/ke2Eob0Bec8 - Commentary 15\uff1a Dip Snatch, Jerk Dip, Pull Weights with Commentary by Greg Everett.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/gb_ArlJBHKg - Commentary 7\uff1a Good Mornings & Spotting Squats with Commentary by Greg Everett.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/FF8F9uC44nQ - Commentary 11\uff1a Clean & Clean Pull Speed with Commentary by Greg Everett.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/ws8MBSpeu7A - Commentary 10\uff1a Pause Squat & Box Jumps with Commentary by Greg Everett.mp4",
+      "Olympic Weightlifting/Catalyst Athletics/Training with Coach Commentary/2aqCS28uPjw - Commentary 8\uff1a Hang Snatch & Jerk with Commentary by Greg Everett.mp4"
+    ]
+  },
+  "final_stability_check": {
+    "checked_utc": "2026-11-06T00:09:19.703172+00:00",
+    "verified_files_rechecked": 426,
+    "signature_changes": []
+  },
+  "library": {
+    "summary": {
+      "files": 450,
+      "dispositions": {
+        "candidate_video": 426,
+        "archive": 9,
+        "download_intermediate": 15
+      },
+      "verified_video_files": 426,
+      "unique_video_payloads": 424,
+      "duplicate_video_files": 2,
+      "previously_inventoried_unique": 102,
+      "new_unique": 322,
+      "unique_duration_s": 57790.752639,
+      "unique_bytes": 51730715054,
+      "deferred": 0,
+      "sports": {
+        "olympic_weightlifting": {
+          "unique": 322,
+          "new": 322
+        },
+        "woodchopping": {
+          "unique": 102,
+          "new": 0
+        }
+      }
+    },
+    "by_sport": {
+      "olympic_weightlifting": {
+        "unique": 322,
+        "duration_s": 45122.618058,
+        "bytes": 37915167420,
+        "new_unique": 322
+      },
+      "woodchopping": {
+        "unique": 102,
+        "duration_s": 12668.134581,
+        "bytes": 13815547634,
+        "new_unique": 0
+      }
+    },
+    "lifting_categories": {
+      "Instructional": 286,
+      "Technique Review": 9,
+      "Training with Coach Commentary": 27
+    }
+  },
+  "sample_audit": {
+    "format": "library-sample-audit/1",
+    "inventory_sha256": "35751b26a38dc05515a335afa8db0cbc232eed65a5c8c62dd715ddfdb1acbdea",
+    "detector_sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
+    "sampling_fractions": [
+      0.1,
+      0.5,
+      0.9
+    ],
+    "source_count": 322,
+    "detector": "YOLOX Nano COCO person",
+    "score_threshold": 0.4,
+    "code_sha256": "89944d64ce0fb0edd11feeddee7a5e9d67ab9c67cafe3c3722af026f4d271065",
+    "complete": 322,
+    "failed": 0,
+    "reserved": 0,
+    "sampled_frames": 966,
+    "frames_with_people": 827,
+    "frames_with_multiple_people": 407,
+    "accuracy_claim": false,
+    "full_duration_inference": false
+  },
+  "axe": {
+    "training_positive": 73,
+    "training_empty": 3,
+    "chosen_step": 600,
+    "validation": {
+      "tp": 11,
+      "fp": 11,
+      "fn": 15,
+      "unrated_frames": 26,
+      "precision": 0.5,
+      "recall": 0.4230769230769231,
+      "f1": 0.4583333333333333,
+      "mean_matched_iou": 0.6862332109733851,
+      "windows": [
+        {
+          "window_id": "new-f1c703ea5c2ae260",
+          "tp": 3,
+          "fp": 0,
+          "fn": 1,
+          "unrated": 0
+        },
+        {
+          "window_id": "new-cc95c6938041b133",
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "unrated": 2
+        },
+        {
+          "window_id": "new-3b5df6ceefab2a24",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 4
+        },
+        {
+          "window_id": "new-debd9dd6c8bc476d",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 4
+        },
+        {
+          "window_id": "new-97ec7f4542550218",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 4
+        },
+        {
+          "window_id": "new-15b65bbf8f065f20",
+          "tp": 1,
+          "fp": 1,
+          "fn": 1,
+          "unrated": 2
+        },
+        {
+          "window_id": "new-4dbfc28cf65e1426",
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "unrated": 3
+        },
+        {
+          "window_id": "new-e470d7e49ed3680a",
+          "tp": 2,
+          "fp": 2,
+          "fn": 2,
+          "unrated": 0
+        },
+        {
+          "window_id": "new-88937e4720fa70a1",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 4
+        },
+        {
+          "window_id": "new-87a18724d44a5336",
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "unrated": 3
+        },
+        {
+          "window_id": "new-523286daac401b78",
+          "tp": 2,
+          "fp": 2,
+          "fn": 2,
+          "unrated": 0
+        },
+        {
+          "window_id": "new-4b997aa86adb6c39",
+          "tp": 2,
+          "fp": 0,
+          "fn": 2,
+          "unrated": 0
+        },
+        {
+          "window_id": "new-7dfba56d440c3394",
+          "tp": 0,
+          "fp": 4,
+          "fn": 4,
+          "unrated": 0
+        }
+      ]
+    },
+    "test_reused": false,
+    "promoted": false
+  },
+  "barbell": {
+    "source_split": {
+      "train": 36,
+      "validation": 12,
+      "test": 12
+    },
+    "training_positive": 47,
+    "training_empty": 9,
+    "chosen_step": 600,
+    "validation": {
+      "tp": 8,
+      "fp": 3,
+      "fn": 5,
+      "unrated_frames": 9,
+      "precision": 0.7272727272727273,
+      "recall": 0.6153846153846154,
+      "f1": 0.6666666666666666,
+      "mean_matched_iou": 0.788003998705403,
+      "windows": [
+        {
+          "window_id": "barbell-327f6f856e732d8b",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-6e6dbcc92d8b95c4",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 2
+        },
+        {
+          "window_id": "barbell-6c0e5be78f19af8c",
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 0
+        },
+        {
+          "window_id": "barbell-4697da732853c30b",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-3b4329ef4e9106ef",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-4d3ff92f804391bd",
+          "tp": 0,
+          "fp": 2,
+          "fn": 2,
+          "unrated": 0
+        },
+        {
+          "window_id": "barbell-aad8de54b6a321f9",
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 0
+        },
+        {
+          "window_id": "barbell-f3964c213a486b1c",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 0
+        },
+        {
+          "window_id": "barbell-35b2181424aadb90",
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 0
+        },
+        {
+          "window_id": "barbell-66553147d8f5118c",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-30c19b376848b7d6",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 2
+        },
+        {
+          "window_id": "barbell-2d52157282d9c85a",
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "unrated": 1
+        }
+      ]
+    },
+    "test": {
+      "tp": 9,
+      "fp": 2,
+      "fn": 6,
+      "unrated_frames": 8,
+      "precision": 0.8181818181818182,
+      "recall": 0.6,
+      "f1": 0.6923076923076923,
+      "mean_matched_iou": 0.7217333584336654,
+      "windows": [
+        {
+          "window_id": "barbell-4dc170ebb2767b2b",
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "unrated": 0
+        },
+        {
+          "window_id": "barbell-e18153f381c8f090",
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-784c0b6161fbb2cb",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-6b7e4b1754f0c54c",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-f446beec4920aadd",
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 0
+        },
+        {
+          "window_id": "barbell-5a86b742c71a6b2f",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 0
+        },
+        {
+          "window_id": "barbell-d3b5175cc7edac55",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-757041647d1acbb9",
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 0
+        },
+        {
+          "window_id": "barbell-92e0881f9a7e6f94",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-cace8bc320de2f40",
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-ba6f825ceb942a28",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "unrated": 1
+        },
+        {
+          "window_id": "barbell-a98cfd980b3a3673",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "unrated": 1
+        }
+      ]
+    },
+    "freeze_commit": "4496fa6",
+    "test_references_commit": "3aa0d1e",
+    "promoted": false
+  },
+  "tests": {
+    "suite": "tools/carne_asada",
+    "passed": 74
+  },
+  "limitations": [
+    "Snapshot excludes later arrivals and downloader intermediates.",
+    "Library audit samples three frames per lifting source; it is not full-duration decoding or accuracy.",
+    "Engineering references are approximate and single-reviewer.",
+    "Barbell partitions separate uploads, not verified recording sessions or athletes; edited demonstrations may repeat.",
+    "No coaching judgments, named-athlete identification, coaching improvement or production detector promotion."
+  ],
+  "artifacts_sha256": {
+    "axe/axe-faster.json": "963c3a28d1d9ac806ef8a9788dc609d658511cc39e1deda912f07f934d1f549a",
+    "axe/axe-faster.pt": "336dc82e57dd64c6784c980a24efa6e18303f2599b562688134ca8460d149b7d",
+    "axe/fit-image-hashes.json": "84e3e60916d2d55a01bd7e53825be7d3745e24b43f2adf9832a0a1e57dd54eac",
+    "axe/fit-reference.json": "6f21a4e06c3178f65bd9f2401b34abc93a2f05f6053777d513535b35b7b5e81c",
+    "axe/fit.log": "48e294eb5a23dc325de9d4db64f519764e78cc33dc93b0b7a4ed6275b1c6ee52",
+    "axe/validation.json": "af26bc579cb095e698af0d90a5ee1820b7b320dc18222386716cef341aaf9b06",
+    "final-stability-check.json": "a689aec2a7875e68566c3753f944a8c96c1e17dbfe7286fbda1bf308b0daaca7",
+    "later-arrivals.json": "e00fa28007bb39887fadb2b6c697e7bbd251ac5641fefcdf12dc9a929a8cc374",
+    "library-audit.json": "b9c32b2b77442beb2a82415f95533bbf77203dd9f96117fea46dd5d861db3c70",
+    "library-inventory.json": "2e45b43eeacab94d1b72b5d139b9bef1181ab4737e5568c83015451a3f42f3da",
+    "weightlifting/barbell.json": "d1120dff2c475fa1b10dedb0032fa67e8a85879c95dbeb3ecb9492a19ce9d594",
+    "weightlifting/barbell.pt": "eff730bdfc5ba9a508b7eaf6bc963737d347f0af8aac9a07805b1a5fbb220fb2",
+    "weightlifting/fit-image-hashes.json": "0db415c4ad5bd9f75b135a21db83fae411144eac61cd64a1eb348c0391c66320",
+    "weightlifting/fit-reference.json": "6b0e4353f94d6ac9d8ecbd06a5601a53c65072a3e66e6c5e62a5ddba10326755",
+    "weightlifting/fit.log": "b81a9a2f154936d57bc321a86334dc514e8766e6dac25ab22fdf97a7b46abfe8",
+    "weightlifting/freeze.json": "a667fba66a31f6582707b24dbc3fd90e0c9d5a64aac4ec1e7f82db0a7084a177",
+    "weightlifting/plan.json": "1997cab5a151237cbb0054c2bfae76d03ba48828e94741b1f6b95b4962d683fc",
+    "weightlifting/selection.json": "1e09fb095fa027fafe4379de59e63f79771f301e627059ea4e4b8f6386962a0d",
+    "weightlifting/test-image-hashes.json": "0d50ad54302eceaa5c9025de3c7d0ab825a12acef98e6d5409e3f8e0d4d00a3c",
+    "weightlifting/test-reference.json": "026232bc466a1b916754933de753d964c87c774a3c25352063fa35d29f92b463",
+    "weightlifting/test.json": "d0ba3ea58461ec229e31fb81a54eef18d5ef718e87b31ba984f33d22bdc58ecb",
+    "weightlifting/validation.json": "30d3725f59bb04d4eed20e6d7026c464a37bd05abb8726099912e6289edb709b"
+  }
+}

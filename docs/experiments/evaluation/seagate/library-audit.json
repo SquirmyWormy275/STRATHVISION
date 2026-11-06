@@ -1,0 +1,7752 @@
+{
+  "format": "library-sample-audit/1",
+  "inventory_sha256": "35751b26a38dc05515a335afa8db0cbc232eed65a5c8c62dd715ddfdb1acbdea",
+  "detector_sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
+  "sampling_fractions": [
+    0.1,
+    0.5,
+    0.9
+  ],
+  "source_count": 322,
+  "detector": "YOLOX Nano COCO person",
+  "score_threshold": 0.4,
+  "code_sha256": "89944d64ce0fb0edd11feeddee7a5e9d67ab9c67cafe3c3722af026f4d271065",
+  "complete": 322,
+  "failed": 0,
+  "reserved": 0,
+  "sampled_frames": 966,
+  "frames_with_people": 827,
+  "frames_with_multiple_people": 407,
+  "accuracy_claim": false,
+  "full_duration_inference": false,
+  "sources": [
+    {
+      "clip_sha256": "dd130308a53777edc39080b72396537482f10d4990bb767b4ada26e566e4cec6",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.048798,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 30.243991,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 54.439184,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "ba7926d65eb14052e284d01333493c4165505c163f7c0c2928f0a9bc94ab263c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.738467,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 63.692335,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 114.646204,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e1bb10783763adbedb6d086a8395dd76f93a0af79494bc75607af835a4f44cde",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.312744,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 41.563719,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 74.814694,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "fb7ced0a96b876e48f0efec36e1edf4b1f98be912105b8adf868f688f68fbc96",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 23.024907,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 115.124535,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 207.224163,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "ffdadd3f9d974014a2e0339fa2d0cb16e7606bff248dfa2c9c56db8922ac23a5",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.623093,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 23.115465,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 41.607837,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "48cfa2f82d1e01f10ad88ffdaf03631af060f10e608d6662cc61c11fc98b8731",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.613043,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 33.065216,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 59.517388,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f1be5aa66fd751a232747e1cfee4812cf908ac319248e86723248d3662b0bd56",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.262422,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.312109,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 56.361796,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4697da732853c30bd5d149a883f471385805da1fbd2d053e5b5064cbb5cab53c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.759365,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 63.796825,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 114.834286,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5c54d7d7277473dd577a59a82a9f2343a25425787a9a86c43dbd1ebefb542a38",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.657161,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 33.285805,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 59.914449,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a6d148ba6706c1a38644d457980509d8698b5afd99af5c84e6594e1dd77e1d8a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 14.986159,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 74.930793,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 134.875428,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f215716d0ce8b43accebabf0dee1ce5c4183c51ae62f61f6d0af0e97432d5379",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.325134,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.625669,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 83.926204,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e167905c17df2b16ae1f4e3c045397744066449bec58a05ec3ea3359ffc27d2e",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.654857,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 48.274285,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 86.893714,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "fe9214253ca1f9837e7fbfa6ccc1ad6bc4e8219c991d400a1fb9f99599cde9d4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 16.061243,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 80.306213,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 144.551183,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "92054bf0d604225a4336abbcd45273afe6b66deec800ef7fbb30db71d4f2c6e5",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.796499,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 48.982495,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 88.16849,
+          "width": 960,
+          "height": 540,
+          "people": 10
+        }
+      ]
+    },
+    {
+      "clip_sha256": "da0a31acb6020c676bdf548dbb59db99f1e4f370ab6214dd9542c7d78f948efc",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.586721,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 27.933605,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 50.28049,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9f33c2c22ad96e872089371ca9b8c57ea988c6c9c0c6fe406c2026ad06e4e998",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.781787,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 43.908934,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 79.036081,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e24136e58a603fb7414675747f8322c5d16cf19f51f535ee0b4974ef4a92b0b1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.024816,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 40.124082,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 72.223347,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "ec4320ca9ded0b66a7cb06155132adf4d2400d5dc25c8a7a4f7bf579f5925174",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.813533,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 54.067664,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 97.321796,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5c8d7c33c0d7f87c94278eea2a54d48dd2f4578be4d45e39a546e910e0278435",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.045714,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 40.228572,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 72.411429,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "10534e2e71f542d7ab4b757c03c6dba6a944ca33e7808c1d0883ad2c326814dc",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.181152,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 30.905759,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 55.630367,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5fb710687f0b6a5f76b5e39be1a5a48398c8e537cba55dbd294b89244de28d5e",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.243846,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.219229,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 56.194612,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "2ae77b03d41fb1643a408e8303e397fbf0d3152bcf7e258561727b2425eabe88",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.656399,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 43.281996,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 77.907592,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "80ffac4a20f1850e795492cfae83ab5ee3a8f5fbff3d5bf4d2bae0ddd8f268ee",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.008544,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 25.042721,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 45.076898,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5b98b8fd1bde902c5578caa005365ef6c8457a93110edfcbf09ac4bb909438b9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.10917,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 30.545851,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 54.982531,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9db8370bb555f2a4e6d4f61b8505381926b182a4888a27399b290cd6d0155c07",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.765551,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 58.827755,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 105.889959,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4dc170ebb2767b2b82ef1f12e9f47b1435e6fb0ba54bd3f4378cac831a10f897",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.457488,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 47.287438,
+          "width": 960,
+          "height": 540,
+          "people": 8
+        },
+        {
+          "time_s": 85.117388,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "fb259e9539f71efb5ddad0e953fb5238b53d3f23433be911281c0222a43c5691",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.758549,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 28.792744,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.826939,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a98e3ffee0f80a4361e6ba7ee9cea938d09d0921cbe410e513faa0ef8c56356e",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.814277,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 29.071383,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 52.328489,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "40db86828b6e95910d640593564b393b42a9eae902da8e45cb22b5245971f992",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.10995,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 35.549751,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 63.989551,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "ab8455f52b87ac64a853a06bc8d1583b964817131a2fc4535b7f2db1cc43977a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.202068,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.01034,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 82.818612,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "24f241f630be59e6bfaffa322838e19b1ea405c3126ecf77494390386571f86f",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.419537,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 27.097687,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 48.775837,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5ad2ec29303fe576e0f528bb9347e1aa6f028b0e386786aed87626c702feaa51",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.472962,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 42.364807,
+          "width": 960,
+          "height": 540,
+          "people": 7
+        },
+        {
+          "time_s": 76.256653,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "ba6f825ceb942a289967af2b416cfc6e7bd5f06859ddb330d5901b26e63286a8",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.482249,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 42.411247,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 76.340245,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "dba4df2c485e9e1fd97a9eb3484d9ea167027281acaaaa5a839d922e52e1f59b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.220662,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 61.10331,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 109.985959,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "bddd81d4e5105ebd0205ae4dbc60a444f38fc4e82b7b0c4e8016cd3f8518680f",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 20.34068,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 101.703401,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 183.066123,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "62c9ded5e9fdf5c8821ec9ce5f6e2f47048da384a46ab22afffdec1d52a2cc2f",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 14.322068,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 71.61034,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 128.898612,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5048e70125b9e168128e8ba579b36668ef67f8eaf3cf4328ca5b67ec08005612",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.606875,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 53.034377,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 95.461878,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "65b5f6f25e0ebfcd6f0ae5224805bb9e7017d0e9df86cbdd4a558649ed022ba3",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.257016,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 41.28508,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 74.313143,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "cde04801b83110b8251233210fee8c3dcff3fca8bf59af3171472a90d79d8821",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.897869,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 29.489342,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 53.080816,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "784c0b6161fbb2cb0cfb2ec4c86448fa2f3f30d3cf88a969c65364cf63a2dce2",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.805007,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 44.025034,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 79.245061,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e09474b702b3abb626a07028ecd6d1488174f72cda630676179eafa8f0ad6e36",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.003937,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 55.019683,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 99.035429,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a49239f197cf9fc90cb6213a9f7f264f62aff42e5d87daae4a41d3eb9f6428e0",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.06273,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 30.313651,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 54.564572,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "31c7cb003499fd5c62e829f9b5909cd1547410c6d9fe6613ba11e47281782ec5",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.022476,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 25.112381,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 45.202286,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6c0e5be78f19af8caccb8bf25f5b3dfa85ce93c55d8e5967cc0a202e3fa1e31c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.007002,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 30.035011,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 54.063021,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f05370a978de390834fba3b34f805a60990ecf4d1ce8bfb95d0c4e2b967866f8",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 26.092263,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 130.461315,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 234.830367,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "81bcb9ec20ed83cb6c08dcfe1a179ae2e09b800ca069b25faf08ca25d58e3220",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.561977,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 47.809886,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 86.057796,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "aad8de54b6a321f986ee53b6b2b35d76b6eec7a70cacae8982d7f5a718a90cf2",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.221424,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 51.10712,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 91.992816,
+          "width": 960,
+          "height": 540,
+          "people": 8
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6ccd5f431e056927641247fc2a4bf22b6bb7f4718442a5f1e346d132ddc0faad",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.482231,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 27.411157,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 49.340082,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f6a3dfa9e7ac99bb9bad24b19ace028f2b8a77cc9f577edf39784819393b2de1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.654077,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 43.270386,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 77.886694,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e79bf57ba70aa51f462473f17a3e67f7fa7d14b118a72774156c9b9c16d3a0d9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.693533,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 28.467665,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 51.241796,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "757041647d1acbb9f2ad9a87350154a9bc082b1254701a80a2263306a58bd687",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.062748,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 45.313741,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 81.564735,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "73de8535ed8b0a85b0e2f7d38b40983acd966331714f969d0714750853771941",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.269388,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.346939,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 56.42449,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "fbe03c308d5c35e2a124186e6b76550bebe1f31442668c9e9696f890b44b5f8b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.376998,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.884988,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 93.392979,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1908951bd929b5dd76217f7c8331e5faef7583a5202eb8d6bb01939d1d2f1211",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 36.055946,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 180.279728,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 324.50351,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "62109dd190d4d8192fe89a92627622b8f56b64a19a0868e826ed582b8fa80e52",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.004717,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 60.023583,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 108.042449,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9363f671af98d3be6edf03648af0107b0c6d4e9c6758c14c41f57ed2001cbf30",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.852971,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 24.264852,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 43.676735,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "30c19b376848b7d659569facf1c037093ff660ad7db1508c594e6c7b28af5a96",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.958258,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 44.791292,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 80.624326,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "b14532eb07fd450af981b5227f772b30eeb71c37bd96c3f7f4ee75cd26eb90f7",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.259338,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 41.296689,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 74.334041,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "17475169be60d7ec2c5e91593d11b49240c82da923a8b39eed931f2299eec858",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.113832,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 45.569161,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 82.02449,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "cb033b47c92be1ccca22856d2054f0dfc997686b85d966578f03d7a677d43599",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.888599,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 44.442993,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 79.997387,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "fd2bea4f657ae7d899acb44e4c189c1b758ea22d5e53caffc8540371b29261df",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 69.703982,
+          "width": 960,
+          "height": 540,
+          "people": 8
+        },
+        {
+          "time_s": 348.519909,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 627.335837,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "346f75c8f920316af378f5e6491473a02d4aa96ae250c28a351ff2c4c691ce01",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.525605,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 52.628027,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 94.730449,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c2d294d30ef7d0fa0bb7448200f25c5f475905239bb0552fa6d9a6e55048cc46",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.436571,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 32.182857,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 57.929143,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1f53da91f2e9ec3f353f1653230f78d91b2da9c639cd5be42b6e1674b0b1b200",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.292608,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.463038,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 56.633469,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d99a3d6710d357e8c40cc0a7118cbf3c8a072e3dfd3079b1d96e95027bc6e46b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.793379,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 28.966894,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 52.140408,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "8f0895f20030584b3e60263fcc4d766b524628752676b3c330b354cdf21c87a1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.056526,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 20.28263,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 36.508735,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7b65280c59a948d8fd1c2d3bba6ea79a9f314c7a37788a566b7af63324cee72e",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.127002,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 55.635011,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 100.143021,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c2335366eb8df6e03e244d8052f788612dcf9a23a15c10d9d68ede19b8ae9d94",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 23.134041,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 115.670204,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 208.206367,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "55055055c48f5051715b0d0b88ed5e981ec222ded13c4f6e327e5f84a0f9c9bf",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.392472,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.962359,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 84.532245,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9826960be569aca123999134e214b55104d93a611d502ead19a9a4ac114ff783",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 16.005515,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 80.027574,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 144.049632,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "b50266d147ce85101cfcd15cfc49586e324371a1bf8a059202b1464e9da24549",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.071274,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 55.356372,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 99.64147,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "b9e8954515129093c9715ffd0692da7c7be0ba358b615a7c631666f09360e851",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.47142,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 47.357098,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 85.242776,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "b7ebed63f2351d18d28d346128550dff9ef04a87aca209d87e1e79617a8a0c15",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.517079,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 42.585397,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 76.653715,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c131d2a6876d89f5dffa79f0c5168821c168c63fc76fbed721bca98cf4b64209",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 15.032599,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 75.162993,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 135.293387,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e6c9db6fd6c0daea6390a152aaeeb12c7163eb91d7cfe9dccabc1cb8fda6d1e4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.429624,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 47.148118,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 84.866612,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d872a2d9fef977ed03c9345db49828ae0d728afb5688762d775f61feaed4ab42",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.221406,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 36.10703,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 64.992653,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6c370f11e6dd58520c78aab7d55d318c34c6231c27be1852fb47643523a08217",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 17.224562,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 86.122812,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 155.021062,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c9ae70032e506b0e3f4acc3cda94e50a84ae4d3d0de821eeb7565f081719bec7",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.541097,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 62.705487,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 112.869878,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "11d253add390bd6cfa3cf2acd0997f744fb843b315a37376603a5ad33dcedd62",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.835175,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 29.175873,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 52.516571,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c34aacf9a70df544cdeb7c4016d92be38dca6382c1215aa4f39261fbedd7ea8e",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.912599,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 49.562993,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 89.213387,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "3fd60cb12bb68e435dde57e7ebc73b69dbc15b36eddc6dfe9d1ded8146a29e3b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.711329,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 23.556644,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 42.401959,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a79bea49e4e67b51db94d43fa7309283608578f57cc7c04e71c1489e34b98ce0",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.431946,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 47.159728,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 84.88751,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e71757af53d5851dd75cac528b0250b5497502b16e7f1980c040ec37f6c2b889",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.18351,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 60.917551,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 109.651592,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "28957fdbe25f791ac41cff0181f6bfb8b57c27d436ad8e7709dbca4966fc5492",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.869279,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 69.346395,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 124.82351,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "2724a2a098b3ad6e056ba75caa6f1026f048f193040d8315d41da288968aa1b9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.652517,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 33.262585,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 59.872653,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "138f91eb5a55f051ded9b907ee8c8c027b7a38e3ffe0016a2265ae45d1453098",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.663365,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 43.316826,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 77.970286,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6aeb17a5a2cb004581612b80108fd056e01da0717ea1b64e991f71b0015d1b2d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.176508,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 30.88254,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 55.588571,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6e5dfa7e42888f25fc58df161806e1cfe4627c7e9d1e5ccde8829b52dafc85e9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.465215,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 37.326077,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 67.186939,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "2d52157282d9c85a61f16607f399d0512444422661e8dbfd9a4d02d6771a656d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.636281,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 48.181406,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 86.726531,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6ec3aaad3fb81491b011bb743fca0430f30c1d5eff7d697cfd9c31ded30e9a06",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.407946,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 42.039728,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 75.67151,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c3281e920f13c9c1dc472443cfa8c3ddcdb20d0d170364b66934f667ec20793c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.349896,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 41.749479,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 75.149061,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "23d32d45dcb9492f53f103871f9aaab9527584cc27bd2f99808dc107973fd844",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.111492,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 30.557461,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 55.003429,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f3964c213a486b1c100a9599fb35d8c895a80ea79061e91b0129292412598f60",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.034104,
+          "width": 960,
+          "height": 540,
+          "people": 8
+        },
+        {
+          "time_s": 40.170521,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 72.306939,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "efd2b0670c63190b9056372185e83738d3b024902ec65c0fcafcf0101f03ffa3",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.21522,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 41.0761,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 73.93698,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "ac6b6f09649ad6b766aa6ea92074042a2734e9ed889878d0b045c3fd5e2ee570",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 16.743909,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 83.719547,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 150.695184,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "11ad94e584a4fc9d1ec417c87c614a635c832e653baa3b21e99b8c5fcd1bdf21",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.485352,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 47.426758,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 85.368164,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "87c4a74a3cacd64d08ab83b2d24c6fb6ec5a3749e9f98fd1658c4dd723db9e36",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 16.10536,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 80.526803,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 144.948245,
+          "width": 960,
+          "height": 540,
+          "people": 12
+        }
+      ]
+    },
+    {
+      "clip_sha256": "de80d94687126a75ef069bc995b5e0a9b82cf131427acd79ececfcd4595b1710",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.338268,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 26.691338,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 48.044408,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "cf576ad5827cd263ae7f88e571941771c7c5536b9a1eeed2b514bd45f855e77a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.694313,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 33.471564,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 60.248816,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1fc87f7e6782aa1a61142453ab32f5fcd97b8fb9e3d27b05d157ea8b9f1ac4b4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.531011,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 42.655057,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 76.779102,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "66553147d8f5118c4815342ee415bc674d3a8178a12f183452b99aa5d3e82d56",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.950494,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 24.752471,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 44.554449,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "b2964af2f78c6fb3ac4d6b19369fad52a0eedacb0e18991b60928a66b5b8b97c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.894023,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 49.470113,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 89.046204,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "0260315e116c000e614c0c7f6f162774c13e51c81409d69c0865c65e37ae696f",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 15.322848,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 76.61424,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 137.905633,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "066570c8ae30f9eb2bad359c50e346f95add0aa6659509bb91d2a089345d073d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.952816,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 24.764081,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 44.575347,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "40abb7f7a92d43fae90f96b807abcaacb24d6413a71167a541c464147cc3f7d7",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.244626,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 36.223129,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 65.201633,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "2860f7611d58599028706778b5acea61f96f3b560888993982d19938b30f5eea",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 16.168054,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 80.840272,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 145.51249,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5459512e1eb05f12d2449f94a79dab7e02fa7b841ef903dcfcae3bab02fb6b72",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.621569,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 43.107846,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 77.594123,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "030b20d695bf55c73c644f96be64a40b88d82479c5870b03e981bf56f8a08c66",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.866939,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 54.334694,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 97.802449,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9b6b55e1485234da392adeb56fe896564cf6a5b064a91aeaf07cafc064291dcf",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.133188,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 50.665941,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 91.198694,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "18f871ea1bcc4ae10a5c00f1f21d3955c4ac9d4b2007f64b31ad59c9f475f816",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.750077,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 63.750386,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 114.750694,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "b4048ada0b7a47a5973264b7248ccd45710804dfb033a86389d986de4b12eb14",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.01707,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 35.085352,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 63.153633,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5485d55a64685b0e96ff60c73f0ae24ef706859f2423925e1c22264d57eeb0b8",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 18.68742,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 93.437097,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 168.186775,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d3b5175cc7edac554f045689a6859f291078212e1392c2469c3c3abb372b97c2",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.597551,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 22.987755,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 41.377959,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e18153f381c8f0901f9bb855bdbd1aebb4d68e8faa9d22a11f62bbe76bb5cd3f",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.728363,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 28.641814,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 51.555265,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "614b36458a944863951a8e25db735257493c59dc9c0b933886ea0e7ec2820870",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 17.064345,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 85.321724,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 153.579102,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "58123d9992d106693e75b672e2567cf86b5c7c0164c3693554367a06ad350939",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.428825,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 27.144127,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 48.859429,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1a01855e0bd244ac439f4287a68cbe55add0bfcc4681c3d60569dd384941637b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.29415,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 26.470748,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 47.647347,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "3884e3de99384e67435f8959aa0ac4f3cc7db6a4b4cb11cd069bc01a8c4b5975",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.267864,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 51.33932,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 92.410775,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "58a9f2d3d47c37db1d1e770498d7d37fa4285228bcc8e5fa99432d3fb969b338",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.849107,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 29.245533,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 52.641959,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "63fe891a0b97dd332b88d6f927b966f550486638b665fa160fb647de5312a61c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.34293,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 41.714649,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 75.086367,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5c59ff60db2a30c0f82675436e92bb0933e5abb753206fe55eeb0cd2816dfacd",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.719075,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 28.595374,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.471673,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4d3ff92f804391bd25db23e86f25c01450d5c561546a5401087ffcba6f00195f",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.138594,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 40.692971,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 73.247347,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "35736b4f6ce6d87cf0edf9f7e1825b89a0876c57dcdd1b1c6f73b750620c872d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.109188,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 45.545941,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 81.982694,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a4a631de0d4299e074f6e76e35f1e110ece578863e817621e83332248d651691",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.97063,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 34.853152,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 62.735674,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e7899623f61054bf60f879a010170e7d2f35ddbecdeee4a819de1c4c7546a654",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.563519,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 42.817597,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 77.071674,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f5f0d399aef47d36c46faa64f1f818a3a36359b142f45c0eb69f62d2f0ef1968",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.469896,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 67.349479,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 121.229061,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7c1e763354e6bae01d43119eb4fc6ec82f9b35fc0bcae7817a8afc240a7976b5",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.251592,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 36.257959,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 65.264326,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "b7b483e86eb519b99296c3720ff4a42df744715349f688c6b569a715833587cc",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 14.001633,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 70.008163,
+          "width": 960,
+          "height": 540,
+          "people": 8
+        },
+        {
+          "time_s": 126.014694,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9331a2ae174e4154c55e7f52fabd4ca32ab83f2309c876b0c2ea46a607b99092",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.799583,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 38.997914,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 70.196245,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "cace8bc320de2f40dc9e95066b70002f165e1c43ee020d29f9b7deee6f800c85",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.477605,
+          "width": 960,
+          "height": 540,
+          "people": 7
+        },
+        {
+          "time_s": 42.388027,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 76.298449,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "96816e4d2222d3371b178e9ca8cc3ea9d3cc3b32ddede4597f63530e7f51d128",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 21.276444,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 106.382222,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 191.488,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "88dd877de55da1a81a329b12a3c170912a0d1fe2b126bc79d19a51486afb2bd0",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.676499,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 23.382494,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 42.08849,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d1c2aee5083d00eef238f40acaa5c806fbd716deb9f0daefe754aa83689af16c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 14.17346,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 70.867301,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 127.561143,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4dc9d883bfd99037a70acc70ef3f9080af5ac4b03ceedfdcecc1c8eadc2049b2",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.052698,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 55.263492,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 99.474286,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "71697db205af4d6c5c276321cb01052b6e8cd199ae15939ab0d817cdacb9b8ac",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.41259,
+          "width": 960,
+          "height": 540,
+          "people": 7
+        },
+        {
+          "time_s": 42.062948,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 75.713306,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "72bd807ec196c2a1526fc96e900295215b66affb704f40c467e58773abb355b1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.206712,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 46.03356,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 82.860408,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "133ffab0e89994d5f394a423b8e1002e6d85d9526476084a7c1716ca0dd9edce",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.13551,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 50.677551,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 91.219592,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "bfbfcda65c446cac47af9cda6d7301a8e3700c5a13d10a9c47abfb7e58ecfb70",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.445079,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 27.225397,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 49.005715,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "46df9daef10614a87fcdf035c5aafb0fc4ed7bce76ae3bbef1b62068cc7fcdb1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.411846,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 67.059229,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 120.706612,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a39edc7d6286ce6e7139f28d0a14e2dd4e7ea767240a231ea4f72f100d62b905",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.872326,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 29.361632,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 52.850938,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d9a68a5407c3af3f3f340b354fcec772a0e7eb77d8f8b25dee2082c7e2eb360a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.574349,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 37.871746,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 68.169143,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4478a7866bbc9ce685f862eec2169cbc8ebd51415e561ea23899af488083b55b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.023274,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 45.116372,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 81.20947,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "30fba71cd92d5f330d71bcd915b39b480f6196f0653c12cfcbf342abb09ba96a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.13785,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 65.689251,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 118.240653,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a2b39d1c73dbc165843771399365232c89daaf342eaff93bc503b0b652e731ba",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.372336,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 36.861678,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 66.35102,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "b08d81078a2c9d22cde8246496bc38bbffe63e8f95538e3a4bbcad95b92d1c17",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.841415,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 69.207075,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 124.572735,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "36770a33070be0dfc61157d275e78f6dfb279337be16ac6eafa9afdc794311c2",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.927274,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 24.636372,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 44.34547,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e42d26971650d4230b7f76f7d99abc6da4ba961e718c0e900b3c8b502538a0f3",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.377778,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 56.888889,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 102.4,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "19de04f6bad9b46fdb7858a878a96ec3a002bd474ee6622fffa40a24d1ee3a6f",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 54.878041,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 274.390204,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 493.902367,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1b157bb07cfc1eb149b36180012dd5d6b5b174ffae837e8f699c5f44f918dbe4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 22.214531,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 111.072653,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 199.930775,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a943292ceed51bff66378bfa4b301f33e06eabc46ceb734a7fbc5482308d0622",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.120798,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 45.603991,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 82.087184,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "196c824ab74498bc6d1653aeffd8aa12ed93d65b8e0c536a6353ba1f36a55088",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.182712,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 40.91356,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 73.644408,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "28158002d4ee3189e6f138593184276d4115117a36da9ea2042b9fae78222218",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.070513,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 65.352563,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 117.634613,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e9e52dc859d512fa93d849076f6eeaf6f9a2075fe4f5b4e76fb4ab5d31ba0624",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.196626,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 25.98313,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.769633,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "8990d87a6b246d2686479c5e6f4de156cc35a36d002608607ed3be1a681c1fc7",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.210594,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 56.052971,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 100.895347,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f18ba8605c5df110458fffdc7e0a8617135db43bcf3217f5351cd8bba0271214",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.678839,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 38.394195,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 69.109551,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "861bd813082bca0567a5aee90357eb1cc5dd686c3eb6f4a0556684760ddb15e5",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.21678,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.0839,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 91.95102,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d4ce35690eedaa927bcf549317eed0ef692b2a3ccfbc83d6b1be740bbf49012b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.066594,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 25.33297,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 45.599347,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5d7296aceae50c5b679f02f0e1fdf40f98cb03f5a2134303d316701a017d2afc",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 17.31512,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 86.575601,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 155.836082,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "b1086648e95a4e7b2b164c09a5c1e28f9b00c81c8b17e8f6b690df7c1b1ca8ea",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 14.907211,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 74.536055,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 134.164898,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "bda48126ada79303f4f71fbb64edd569531411cc50b89474e8d609c2a53f538d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.572789,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 27.863945,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 50.155102,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1ec390cd74496b7f54842065adf4060d7c006ce4ab04c95ee28b57402e9b5fbe",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.991528,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 34.957642,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 62.923755,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "730f0f071b3cf115d0e4cd564098569b3d0be39fb761e67a81d7956c4ce4c69a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.757007,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 33.785034,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 60.813061,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a98cfd980b3a36731d3c95e21e340c78eadac40f63667a1bc2272ada76b86592",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.14322,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 25.7161,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.28898,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "36fe5a00f02b10f2e92e30867852f11f6bf2610d1a295da27f1f424e469630f3",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.239202,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.196009,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 56.152816,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4f5e8e4297179027017ba0efc2430dddbb575ebd77f6657576f7db1b190fb2c7",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.748535,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 68.742676,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 123.736816,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7a7bb987a5537a5a6cac1afabd3be6196be6416b1c0910de296755d9cc07cf40",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.304254,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 61.52127,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 110.738286,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4d8b441bac90af0a6b85f31cc871ebf785910c3e10a7d058d2929a1f88fc3038",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.024816,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 40.124082,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 72.223347,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "3ba2c8972d53ffe333a08c3e5e2877310ccd8b72a47e78467b442812926b704d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.668009,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 43.340046,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 78.012082,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "35b2181424aadb90dcf470e5060408c17e504bc0c7a3941011e8f716660bd181",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 15.701333,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 78.506666,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 141.312,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "92e0881f9a7e6f94a840180f46e0a9b17c4373eddbaa2a6dbad981fdd476e7ab",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.677279,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 28.386395,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.09551,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6c720f1c1ccd84d3f5f41ab586f5cab4bbcf31bf15a6e07fb9d552eed996026d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.896327,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 34.481633,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 62.066939,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "97851d32768ff4ac7ca0cdf496511c3eca05b9d6d270740d7dcd97cd80b12c3d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.449742,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 42.248708,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 76.047674,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "fef2f954046bfd7ceec8a3e205f95635edfc030e67995d4cda387e00303deedd",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.516299,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 37.581497,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 67.646694,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9ac76b56f63b48cacb3115dda3ff03806084f56dc2e71f6ee3c7b8c07050227c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.654077,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 43.270386,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 77.886694,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "bdfdfcb87e9d35749ce0660cd1ca57ead5a3f1be32326e117bdbb499fed745fe",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.110712,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 25.55356,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 45.996408,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "0747d96fde27dd9aa1cb390d4e9f7cd482ac62021d36d7e87ad34dc7b2134a76",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 16.46527,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 82.326349,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 148.187428,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "af85259bbc80e02076da90932b9177ea80a096c58671d6904e27a34de434432a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.565859,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 57.829297,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 104.092735,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7e1b131d0547de23dbee6d023e8a2afbeab3d4472cbd9563809deb8790e0af98",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.947447,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 64.737234,
+          "width": 960,
+          "height": 540,
+          "people": 8
+        },
+        {
+          "time_s": 116.52702,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "641547f8a7dfc35cc232cd7ba2a0a481035d298d4ed62c59984013dad2dd1c4d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.537977,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 42.689887,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 76.841796,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "63556fb87a67e89fd44efd59bc6e0e84996a253853eaeba87b2b7b38fa02669b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.327438,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.637188,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 56.946938,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a74472c05062f0dcf9ab4f6a8e6e0e04446cf42c62624e0d35eebb3afb40636a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.455946,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 52.279728,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 94.10351,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f45886796190956951796128ec0f12b1be6d37d5c2348222206194fe714522c0",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 52.881125,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 264.405623,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 475.930122,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1246d614b9fbd23fe658503925dfd3b482c70f1fdde088145a27f2eb25577301",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.754721,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 63.773606,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 114.79249,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f6bda561036aebc5f893e149d80c6c17ad4c4ed89310976d1c26b82c7003d14b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 19.425814,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 97.12907,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 174.832327,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a724b5b54687f72c0bcccf8699eb6f85f48779613edc0a061e3e6a19c82d11df",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.488472,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 67.442358,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 121.396245,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "22e3e487355b77c5fbce96515c2c93982ca2b9f81ce9cc1abb2523d63e3a60d3",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.410268,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 42.051338,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 75.692408,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5ce5fbb7001b26edd2b8958f056bcb5b37cc81ecca7eeb6a6de02db395980f3c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.978376,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 39.891882,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 71.805388,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6e6dbcc92d8b95c4f3342e3bb1f5223a0ae9a1aae5e529451ad8f96cf1ca535d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.582875,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 47.914377,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 86.245878,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "45c4d8adf7eb2e9ad48e4716dd4bf57c3037bbc501856b668ee5225c46e7589d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 14.398694,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 71.99347,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 129.588245,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "efa7da268d61835e5dd546cf80d4ee6f43e0fa39e49a8fb20b80c9a42fa5ba74",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.787193,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 33.935963,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 61.084734,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "59a932ae3e7a46955a119facf8e53846fbeaa601663297558ee40e0ba1688672",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.082884,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 55.414422,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 99.74596,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "fa32ad9426e7cc82472237743cf32ada24b7fed369e802614b33f11d736fba1c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.659501,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 48.297505,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 86.93551,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "99d5cfbd26f8256f15bffda26623e55ab2801fcd5ea528ea898cad9e8453eb67",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.17805,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 25.890249,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.602449,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e3523d3fb59858f0bd5baa119d0f912e91fd4cf7fa03a071990b2b12086c5761",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.909479,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 29.547393,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 53.185307,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d289077cb2d4fc218a794c1c89686e6ef56b4bb517c6abe9ad4bfc201c0bd16c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.362268,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.811338,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 57.260408,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "8de8d3ed978d7c28e675d3968936349ce0ea3b9df1500706918707e9113965b6",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 15.685079,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 78.425397,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 141.165715,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6783edf7e24c5d035b0954ff60736d3068a17a2f11984604a8e3a53f1176b6cb",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.641723,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 68.208617,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 122.775511,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "8ed2bc839064deb3521181a0a29ca5bd2e0f36ae33cb3d09ab3aa4b3141c7ea1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 23.67971,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 118.398549,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 213.117388,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7283b804f423a55a1c7b74e20c0fe746bc52a42709908d8248d1f73ec6badcb5",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 25.46068,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 127.303402,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 229.146123,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1913c06adbbdb5135caacd7a0beea0ae54364f50cba76cce991280753f5beb96",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.310422,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 41.552109,
+          "width": 960,
+          "height": 540,
+          "people": 7
+        },
+        {
+          "time_s": 74.793796,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "eee430217feee52415e3852ac9accb3474348fd347c000548a8b6480d53e8cd1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.876209,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 39.381043,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 70.885877,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9027df007153fefb1158bc83a440e50677695f2d4796a00c83828c7b804fe195",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.964463,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 54.822313,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 98.680163,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "12f86394080a1bf79bb77f79c4ecb7d9c50878fe47b003bdb5d9a9b71f29bd2e",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.122358,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 55.611792,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 100.101225,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "73b61f7ce29b9e6ec4ba8ee04128e51120bb5ab893bd653902a3d2203215b585",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.615383,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 48.076916,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 86.538449,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a54eafac87a09644b05bade33cca6fa89f63369816d0286ee721af6cfc543782",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.19356,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 50.967801,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 91.742041,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "31297e0fde11175a055fbbf98c9a5bd92c89b108d81da7bd1c3ad9ebac1dc893",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.161832,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 55.809161,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 100.45649,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "2e063241d82f6171cb5fe99ead07c43a1c9d67987948bc4cc5239bf4a2276cd9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.305016,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.525079,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 92.745143,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "730e5cfa0a790f71a5db1ffa7c5f85eecf1844277d77b567b056b50a8dddd1c7",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.955157,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 39.775782,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 71.596408,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7f3cb9486219970f94a9f2189dec6df53de15eb8534c618fd37da7578272dd9a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.686567,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 28.432834,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.179102,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a0008cefd6b908fa8a0757d1befba0c5a376c3d2a374e7b1cbb5f4c529ef3aa4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 20.145633,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 100.728163,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 181.310694,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1fbc0f5c1ca8b600b8b429cc512d5332200293dd970358806a56b55df67a0ebd",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.503909,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 32.519546,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 58.535184,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "bb32bef5f41b9793d16fd594900bd3e47edf1086c3e36e984e2dce59b6068775",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.992345,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 69.961724,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 125.931102,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "3a0d0f471e1ec19273ab3e9583b170e8bfe19dc5413e30c9cb20b3ea5e78de23",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.2361,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 26.180499,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 47.124898,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7a023a1b6ba5e78f184329949d5760356ddde97b8a0a59ada7f784450c18f183",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.585197,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 47.925987,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 86.266776,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "0c515b0f9390e2e661e29c8dafdf35ca139665929367b4917707ba0731550a22",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.545723,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 47.728617,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 85.911511,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "bdd81bbca1c0fff28b1397ee53ffb41d1aae0f7bb73332d5e40a9f0e84e1e1f0",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.94897,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 44.744853,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 80.540734,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "466fa9922ec55ba3e4b6426462747bd4b25e674db316ad2ba35e20fc47f0b54b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.362286,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.811428,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 84.260571,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "fd4593587c6dcac1201e9130d9695a407c77f944f41221abcc8e05af386ed82b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.480707,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 47.403537,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 85.326368,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d2966c8a2280a4e870095292e7beefe94d9fd9fe4201d5ae9978f8ca09b7258c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.203628,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 56.018141,
+          "width": 960,
+          "height": 540,
+          "people": 8
+        },
+        {
+          "time_s": 100.832653,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "0f019bde23b49da4e7ecd5b71de56dd249918a1e4754700444b645aeab224dc9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.278694,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 46.39347,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 83.508245,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "871a6bedfdf35327e2879fc4145f5f7e2ef061002f538e618b18e5249033835b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 17.401034,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 87.00517,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 156.609306,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a2e78e922692f2ddc472677ffe43afec4f48895076fd355a2e0b62a8f821a0e4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.364626,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 61.82313,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 111.281633,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "521cf82928881cf3da32a098b32919cfb94a5ef83a7931c286a0ca59ffb22536",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.426503,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 27.132517,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 48.838531,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "49aff4a8d3e10f5e1112863b73ab91a89766055e559ce95cbea34a849996b3f2",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.917986,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 24.589932,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 44.261878,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "771d39c1f843ec5a93c14a0c2f8690e397f15e52cbdf6abb18a6e86b78ea48ee",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.623873,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 28.119365,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 50.614857,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4a34c4f834fc886fbcebf86d743c244461eeffa65d4408d607720142c6989fa4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.777143,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 43.885714,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 78.994286,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c28a43c33d6840508bfdc8fb386cc97bc913a9d0d7af1691e07cb34593e18c24",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.222168,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 26.110839,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.99951,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "eecee610e3ba40c7614b0dc7187993faeaa9f25b1f7a3e2055439fbfeec697e9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.737669,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 43.688344,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 78.63902,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "517c9a40abf481e5f58d239fdf2f61b54aad870d42795cbc86cd716c6d2e23bc",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.906395,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 39.531973,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 71.157551,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "327f6f856e732d8bea82d1a04b0e3f3507a9157c7df8a5b6ce96cbdde7a0dcd0",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.007782,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 35.038911,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 63.070041,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6ce97826c75ec02e7f7d75670c08552a04e0f4ea0cbfc0351837a95283551ef5",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.921125,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 59.605624,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 107.290122,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e2489fb9fc1b9da44a7c2557c89432bb340f98da1cd1209921eb47552283c773",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.304998,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 36.524988,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 65.744979,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "ef78dc41d965113e3063ac80cc6fd45a889d0262bb37d52c8e12e4099521df8a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 23.83064,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 119.153198,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 214.475756,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "ceaaa2f4d278896a12f52328ca05213aabfc9320cef0e95f785bbe3cfc568993",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.206694,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.033469,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 55.860245,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c9f1eb74836b16ad7699531f4d2295c54aba6790a8f5f64e8f21327f8db722bd",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.909479,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 29.547393,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 53.185307,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d02d459eb8271a735df19ea6db8ad7da324584affb1e3946da3ca8c953f839bd",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 15.952109,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 79.760544,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 143.568979,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "600c3a3c1ec664961c7872a08ce2010df076bdfbe5db02a65a10e6c9170b96f2",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.613043,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 33.065216,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 59.517388,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5a86b742c71a6b2fd23bcc1988b8f611fbc6ef102778c5c033d402a3a9462afd",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 14.918821,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 74.594105,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 134.269388,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "20d8fb45623310bc381ab9c9d9a2cfe81aad355ba336fb8b252effa49eb800cb",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.157188,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 55.785941,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 100.414694,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "828235f2ca66d45122c7d9aaec32080106a9344b1433886a89035c3729b87c28",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.12,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 25.6,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.08,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "0a0c82639979550402691c6e882c83f77a98bcf31b1b30dc73c4402beaf51359",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 15.903347,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 79.516734,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 143.130122,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "63fbec858b752a111b4afddd761cba6c4c92b460409ce6230a18297d0e1263c9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.746159,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 23.730794,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 42.715428,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4d3665477ebd48f63ee8eb4808dc738c1d15aeeb54d3b5cca9ebcbbb69d7b7a7",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.901769,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 54.508843,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 98.115918,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f446beec4920aaddc7b025ca43b5575ca8c06da5b96a075a113fbb3e2c74a0d1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 14.145596,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 70.727982,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 127.310368,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "dc8f5e6fca861e00910e758c776c8f740f6132d102397d2b0ca9d9125a65e9dd",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 18.097633,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 90.488163,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 162.878694,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c416e38f2b075d0bf5f7d41aa07498767bcdba0cd8b208f2a737cc492777a53c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.193542,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 35.96771,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 64.741878,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "3b4329ef4e9106eff1a717ae1dbd50edb6ba284bc5616d616efd967476162c6f",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.037206,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 45.186031,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 81.334857,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "31f856a77c7525de21e61a731a6a575bb2caaeaa349ca83afe33c6733ababdfc",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.438113,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 27.190567,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 48.943021,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "84c7b5bc36a0c311f23535f51874739d82b451845a7bedb7b2d1d7bdb48e2109",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.820481,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 39.102404,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 70.384326,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "567417eead77baaea13d4b1c365b2c5ddb800a38cccce14840cd7912248ca33e",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 28.042739,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 140.213696,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 252.384653,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "cbda835734dc10c1a6c2d1b9f0e5f58644a448f4098d81e00ae9ccba13400d3e",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.788009,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 68.940045,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 124.092082,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "0e4e10fe3975d4caa27a06f74d6ef969a5faf8174fdbb5011482a897404419c4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.337524,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.687619,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 93.037714,
+          "width": 960,
+          "height": 540,
+          "people": 8
+        }
+      ]
+    },
+    {
+      "clip_sha256": "bbc741f1a95d2d33819078727224477ad49147112e2b05e0ce47d3bb786e98a1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.610721,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 33.053606,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 59.49649,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5379616710290897629c5da8c76a36dcedea2b7f7d944c8db8f5274cb2ef56ad",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.284118,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.420589,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 92.557061,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "62b70e6f4fffe921ad4d25f60e7db2dd94a78c1c2167642e25637e5bf60a0a56",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 16.318984,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 81.594921,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 146.870857,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "bd066327718a87d0c3ad25bffa9dc740c99a9d316b55740877b3487d64bffbdf",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.257796,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.28898,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 83.320163,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "cfc6a2e491c0b81da306e62b14e27423f7a577d6d9806c953620631c386a3494",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 4.904054,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 24.520272,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 44.13649,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "3c28ed9638d7473279243e081e882c3aa2ed16ca01fd9e89019ba27fea3c4f10",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.639383,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 53.196916,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 95.754449,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "615f5290fb51a1a9060e00b786336b1c514aad3a0282e98473946acae8655ca8",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.329778,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 46.648889,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 83.968,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "dd267acc447f0b2c9d41daa754b42698bf4e037e372b43f2e03a984f7c27dd20",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.289524,
+          "width": 960,
+          "height": 540,
+          "people": 7
+        },
+        {
+          "time_s": 41.447619,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 74.605714,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e5915473acab6bf3fb4330916202a485394f5834ad909687f1ba8bdae9d3aac3",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 15.109224,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 75.546122,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 135.983021,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "28f4a8778b35925e116606e5c9ac78e270601cd7f66360a8f222b5adb102e0b6",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 11.633197,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 58.165987,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 104.698776,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "14e4feb40ece23f58621b4bde5eaaaa1b536284fcf3e2139c51eb086be5d436c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.98224,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 34.911202,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 62.840164,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "69399aa7263ec52173ce2e188762c3cd8eee0d41825d9d7ea11b60cc183317f4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.716753,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 28.583764,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 51.450775,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "60a1215897a377aebb201678daf363b08a67ab69210be6294a6652ecfa4ab403",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.308862,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.544308,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 56.779755,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "8f7eda5c7f50bfe8fcd2c69c38181e10fa35f9f75bf4da9cfdcc751439b71c80",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 24.935909,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 124.679547,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 224.423184,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "0e117e97e0da20c99a82acc6c6c96bc6b5c3c9ced1e5cd6e5a32bce1448ddf53",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.368472,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 41.842359,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 75.316245,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4674698a0d1423344913becaeb50b36e75c5b17c52b69000ebba84d4f6db413b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.228372,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 36.14186,
+          "width": 960,
+          "height": 540,
+          "people": 6
+        },
+        {
+          "time_s": 65.055347,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "499a607cb37ad8007defff7369079023b41d4de1118d2ad173db98e1311472e3",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.600671,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 43.003356,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 77.406041,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "6b7e4b1754f0c54cccfffe1174d046c4e8dd5aeb5b13475d3a448b87b51bd635",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.276354,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 31.381768,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 56.487183,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7ec81447fec83da87628f11edfa77f61ef2de8937ec1f3f85f8b3b660c6b1061",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.882413,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 49.412064,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 88.941714,
+          "width": 960,
+          "height": 540,
+          "people": 9
+        }
+      ]
+    },
+    {
+      "clip_sha256": "bc4011c289d458d7c74f0c2d455d5e152a7441d6978a77c17acf0fdfa1b26a19",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 6.95902,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 34.795102,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 62.631184,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c0b7111678fec56dd0f973861b945d33f8996737b89fbeae9033d55667623e30",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.732245,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 38.661225,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 69.590204,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "058c377058ac0676daf11faff1a94284636888c1461bb8a70a335fc6c9229c80",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.716009,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 53.580045,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 96.444082,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "8e03cb12b1c1d9163247b3d29b1b04be0230bd4d416c0bdce5c3432e7273b5a6",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.803465,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 49.017325,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 88.231184,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "2a5545cb1ed3dc5306a435cd63db9131c601f69e440d85ce72fdfd2f67088440",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.3561,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 51.780499,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 93.204898,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7edba85d96fd16f70d72357c54a42ec454e4b4ae0e29697df7b0d369cca85584",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 7.736889,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 38.684444,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 69.632,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "47567caaee736f5a30c2d7c6f3af21ba12439b57a84f8b6b78ddba623fdac004",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 10.709043,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 53.545215,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 96.381388,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7f9ac751414740d30d9ed121c67bad3ca4413c147b888e97913520c7c525ea5a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 9.842939,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 49.214694,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 88.586449,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "08a8c897e8359a92d0aa5a9c0187e12cde4b8cdd96d3c878badbd8db2daed03c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.654077,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 43.270386,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 77.886694,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "c216b1d459f0aafda15d77980e7eb10708b0c22331148eed522acd12cfc95a6b",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 63.931501,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 319.657506,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 575.38351,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4f88f733a7a8ee6d8f064c8e98e1dfa1171f9d53ec723dae68715c773726c00a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.432744,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 67.163719,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 120.894694,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4c817c45a261620d1abafc6fff78695ec30c66b0c0ee1a5b7fb70751c4d6c7df",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 12.796517,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 63.982585,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 115.168653,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "2892dbcf5ae64d7972d0808810074f7ccca7f054d4e6b0a08d67f525324fd27d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 5.579755,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 27.898775,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 50.217796,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        }
+      ]
+    },
+    {
+      "clip_sha256": "445703b6d3a60c4c8d530b84595bee33d07dcbee0dbdf1839463a633fbcaa506",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 13.284136,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        },
+        {
+          "time_s": 66.420681,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 119.557225,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f737217c72aeeaf31da966ceed9debf3f649f625aab28841af013f28e350b1d4",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 8.164136,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 40.820681,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 73.477225,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d9c2d0a5762634758bcd5224eb04abee64bcf16ec1d8063495672f02d36946e1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 47.763447,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 238.817233,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 429.87102,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "39972f6a9157752f0c33ade15b0f6ddaef7f0bb3efaef91c200826acf82dd815",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 27.956825,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 139.784127,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 251.611429,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1ad403431038344133a51d05799c77b66b0ec6980fc558ed41972f9683e80ba9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 25.056653,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 125.283265,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 225.509878,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f015b40401841c37cd725c9ba369d3967c3fd9e8c23b7f9b926e440ffe0cdeba",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 43.920544,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 219.602721,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 395.284898,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "aa430fa96fe174ac362ede689ebd884f1884425ce010d9480f21ee1d35acfb1c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 32.80283,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 164.01415,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 295.225469,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "1f57b8f46f25426f964acb09b1b5c6488d0dd1f16050542b503c0ae4845de711",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 29.64956,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 148.247801,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 266.846041,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "5fb91c0c32c67eb7d82288c8fbc10668a3b0b0956db4fbe09175c2489f66a898",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 63.439238,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 317.196191,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 570.953143,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "8f7f207c71ff5b7101cf2901daa40ce9b6aad65f33f375118b462f1951ff2401",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 39.99405,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 199.970249,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 359.946449,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "4eb63464d55087a883ef5f77bb90fa573823df1116837f5bd42f6fda370509ab",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 19.061261,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 95.306304,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 171.551347,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9dc7f8b3e550ebb7a27152c947dabe53b44be78825bd15576d20f0a0587c0d36",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 41.066812,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 205.334059,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 369.601306,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "f38448908a592be83922866631a1d4579c35e8c176ca6f3a498c1092623f371f",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 40.423619,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 202.118095,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 363.812571,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "abf7e206cbacdb1f23c3ef399173cc729241a13150d36e1d43ece745e386435d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 44.561415,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 222.807075,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 401.052735,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "72cb06c70239b0181dd4b6f4c7f7e83826fbef45f798c6ad9bb10bc11e796b13",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 39.859374,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 199.296871,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 358.734367,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "a92819b1bedef7f5b3a1b1fccbd336f40bfe7df8b4659ebf52295ec74369c3ab",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 40.349315,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 201.746576,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 363.143837,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "9f1cc61e20c769b8809941e461b1b40c3275084a4c2a52421abc1792b16dfe93",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 35.194485,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 175.972427,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 316.750368,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7327044cb7ca77312d4eaa7f99f72efacc2d4c47f5ec90e20b9dfe6e18e95ed9",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 37.193723,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 185.968617,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 334.743511,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e6623df52c563f76f6aea0f14207d328295354e86684153a74618edd446b7c90",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 45.90585,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 229.529251,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 413.152653,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "90f13431745fe185532191b3d233f8475fa3b00f8a0d96952e7a56b5a1ceeb6c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 45.752599,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 228.762993,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 411.773387,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "54accbfd0c2f4921166fbe7e98a777f4d62a899be246fcb1c871195ad787a4d7",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 37.832272,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 189.161361,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 340.490449,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "dc602e00a00498efc6795d6b9c520e59b804d99f155d366f8d960dcab9f84c6a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 42.422857,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        },
+        {
+          "time_s": 212.114285,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 381.805714,
+          "width": 960,
+          "height": 540,
+          "people": 5
+        }
+      ]
+    },
+    {
+      "clip_sha256": "06dcc85c2dd3662494f64599edb782fd0e6e2fed631afe64f236a27c06a274de",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 45.374113,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 226.870567,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 408.367021,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "cf3676cd79f598532711dd921c9ed9a0530314e54392b2dcb51b428fdffc76f6",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 48.752617,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 243.763084,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 438.773551,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "fa52de9a261d624b1d101e73d6443385fbf2a4e283c3952c9b11099176f935e5",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 46.99951,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 234.997551,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 422.995592,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "de757d948d2072648717b9947cbbe53d966cd8fd9913365d42eccbb4d062e340",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 49.114848,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 245.574241,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 442.033633,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "39b7d41b7b894d018f8d743ae138c2f20609a31a137e246643fd7e9f9d39a9a6",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 41.605515,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 208.027573,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 374.449632,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "2c0dce2c80c009bf3819244567fa64c0fa466395a1b1b70acfd80f00719d7206",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 46.365605,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 231.828027,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 417.290449,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "faf0d7974ccb790750d6aa5a9a191bbe06ff3f4429811b365667c3cc5677b93a",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 36.334585,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 181.672925,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 327.011265,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "0356a5c5742962e5a28c06f1b4b6e0ad20506524e84b418231681ca51a470400",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 37.249451,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 186.247256,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 335.245061,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "d4a24886f14138a6b54ada9f0611f92d9ffbb996811b3268fd3e12e9459296b6",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 41.292045,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 206.460227,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 371.628409,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "395c08a1f04729ea388dced680b64d259785cf6fd14ffb3b2921f8277451b30d",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 44.909714,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 224.548572,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        },
+        {
+          "time_s": 404.187429,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    },
+    {
+      "clip_sha256": "31ea4fcccaa04381f7bb564745c61deb4fce8f5cd03c6a47883e591693878633",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 43.340045,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 216.700227,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 390.060409,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        }
+      ]
+    },
+    {
+      "clip_sha256": "13a0d6fd9cf7a874da395212a50ed589410f9151239b80794ebb0e820ffa1bd1",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 39.771138,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 198.855692,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 357.940245,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "30dc1e0abbafcf02653c4f338ad10d43e631ad0fdf2bb5acb6d3f670ff606178",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 42.443755,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 212.218775,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 381.993796,
+          "width": 960,
+          "height": 540,
+          "people": 2
+        }
+      ]
+    },
+    {
+      "clip_sha256": "ea778acbed5e97626f9995c8fda8e2e491628c4a55bafceb5397e7fa6acf6e5c",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 39.80829,
+          "width": 960,
+          "height": 540,
+          "people": 4
+        },
+        {
+          "time_s": 199.041451,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 358.274612,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "7490c8d00f5d0f33ecaf7efc53ec9b7658e3f39fab75ab2f1be7e0703be367d7",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 41.250249,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 206.251247,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 371.252245,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        }
+      ]
+    },
+    {
+      "clip_sha256": "e06ea9ea17f5823ee989a4dabaf1a9e08d33df917322e0ad472f79cf8d90fb72",
+      "state": "complete",
+      "samples": [
+        {
+          "time_s": 38.617107,
+          "width": 960,
+          "height": 540,
+          "people": 1
+        },
+        {
+          "time_s": 193.085533,
+          "width": 960,
+          "height": 540,
+          "people": 3
+        },
+        {
+          "time_s": 347.553959,
+          "width": 960,
+          "height": 540,
+          "people": 0
+        }
+      ]
+    }
+  ]
+}

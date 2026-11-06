@@ -1,0 +1,2057 @@
+{
+  "format": "barbell-plan/1",
+  "sources": [
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/-sM5af2545M - Dial in Your Squat \uff5c Olympic Weightlifting Squat Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 47494481,
+        "mtime_ns": 1793916641966537700
+      },
+      "state": "verified",
+      "sha256": "fb7ced0a96b876e48f0efec36e1edf4b1f98be912105b8adf868f688f68fbc96",
+      "duration_s": 230.24907,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:-sM5af2545M",
+      "split": "train",
+      "group": "youtube:-sM5af2545M",
+      "member": "-sM5af2545M - Dial in Your Squat \uff5c Olympic Weightlifting Squat Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "fb7ced0a96b876e4-0",
+          "time_s": 80.587174
+        },
+        {
+          "frame_id": "fb7ced0a96b876e4-1",
+          "time_s": 149.661895
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/im1XWpMAlZY - Tipping Forward in the Pull.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 380686239,
+        "mtime_ns": 1793913228550567100
+      },
+      "state": "verified",
+      "sha256": "a0008cefd6b908fa8a0757d1befba0c5a376c3d2a374e7b1cbb5f4c529ef3aa4",
+      "duration_s": 201.456327,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "vp9",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:im1XWpMAlZY",
+      "split": "train",
+      "group": "youtube:im1XWpMAlZY",
+      "member": "im1XWpMAlZY - Tipping Forward in the Pull.mp4",
+      "frames": [
+        {
+          "frame_id": "a0008cefd6b908fa-0",
+          "time_s": 70.509714
+        },
+        {
+          "frame_id": "a0008cefd6b908fa-1",
+          "time_s": 130.946613
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/_mgM1KtA48M - Avoid Crashing - Turn Your Cleans into Front Squats.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 131875829,
+        "mtime_ns": 1793912492189251100
+      },
+      "state": "verified",
+      "sha256": "fef2f954046bfd7ceec8a3e205f95635edfc030e67995d4cda387e00303deedd",
+      "duration_s": 75.162993,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:_mgM1KtA48M",
+      "split": "train",
+      "group": "youtube:_mgM1KtA48M",
+      "member": "_mgM1KtA48M - Avoid Crashing - Turn Your Cleans into Front Squats.mp4",
+      "frames": [
+        {
+          "frame_id": "fef2f954046bfd7c-0",
+          "time_s": 26.307048
+        },
+        {
+          "frame_id": "fef2f954046bfd7c-1",
+          "time_s": 48.855945
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/Hz0FDyNCyrE - Better Bracing\uff1a Expand Your Ribs Sideways.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 74614709,
+        "mtime_ns": 1793912020099124100
+      },
+      "state": "verified",
+      "sha256": "2724a2a098b3ad6e056ba75caa6f1026f048f193040d8315d41da288968aa1b9",
+      "duration_s": 66.52517,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:Hz0FDyNCyrE",
+      "split": "train",
+      "group": "youtube:Hz0FDyNCyrE",
+      "member": "Hz0FDyNCyrE - Better Bracing\uff1a Expand Your Ribs Sideways.mp4",
+      "frames": [
+        {
+          "frame_id": "2724a2a098b3ad6e-0",
+          "time_s": 23.28381
+        },
+        {
+          "frame_id": "2724a2a098b3ad6e-1",
+          "time_s": 43.241361
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/8tG3JFzDAOA - What Do the Arms Do in the Snatch\uff1f \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 33112392,
+        "mtime_ns": 1793916465025131700
+      },
+      "state": "verified",
+      "sha256": "81bcb9ec20ed83cb6c08dcfe1a179ae2e09b800ca069b25faf08ca25d58e3220",
+      "duration_s": 95.619773,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:8tG3JFzDAOA",
+      "split": "train",
+      "group": "youtube:8tG3JFzDAOA",
+      "member": "8tG3JFzDAOA - What Do the Arms Do in the Snatch\uff1f \uff5c Olympic Weightlifting Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "81bcb9ec20ed83cb-0",
+          "time_s": 33.466921
+        },
+        {
+          "frame_id": "81bcb9ec20ed83cb-1",
+          "time_s": 62.152852
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/CnZ2-c_fP1U - Pause Squats for Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 221330764,
+        "mtime_ns": 1793915648423667900
+      },
+      "state": "verified",
+      "sha256": "346f75c8f920316af378f5e6491473a02d4aa96ae250c28a351ff2c4c691ce01",
+      "duration_s": 105.256054,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:CnZ2-c_fP1U",
+      "split": "train",
+      "group": "youtube:CnZ2-c_fP1U",
+      "member": "CnZ2-c_fP1U - Pause Squats for Olympic Weightlifting.mp4",
+      "frames": [
+        {
+          "frame_id": "346f75c8f920316a-0",
+          "time_s": 36.839619
+        },
+        {
+          "frame_id": "346f75c8f920316a-1",
+          "time_s": 68.416435
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/E1yJ0SOmd1A - Bar Position for the Jerk Rack.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 60461601,
+        "mtime_ns": 1793912145009015700
+      },
+      "state": "verified",
+      "sha256": "8f0895f20030584b3e60263fcc4d766b524628752676b3c330b354cdf21c87a1",
+      "duration_s": 40.565261,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:E1yJ0SOmd1A",
+      "split": "train",
+      "group": "youtube:E1yJ0SOmd1A",
+      "member": "E1yJ0SOmd1A - Bar Position for the Jerk Rack.mp4",
+      "frames": [
+        {
+          "frame_id": "8f0895f20030584b-0",
+          "time_s": 14.197841
+        },
+        {
+          "frame_id": "8f0895f20030584b-1",
+          "time_s": 26.36742
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/AQUvwDpU8d8 - Floppy Pulls Make Sloppy Lifts - Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 84808630,
+        "mtime_ns": 1793913478724750200
+      },
+      "state": "verified",
+      "sha256": "9363f671af98d3be6edf03648af0107b0c6d4e9c6758c14c41f57ed2001cbf30",
+      "duration_s": 48.529705,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:AQUvwDpU8d8",
+      "split": "train",
+      "group": "youtube:AQUvwDpU8d8",
+      "member": "AQUvwDpU8d8 - Floppy Pulls Make Sloppy Lifts - Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "9363f671af98d3be-0",
+          "time_s": 16.985397
+        },
+        {
+          "frame_id": "9363f671af98d3be-1",
+          "time_s": 31.544308
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/nBpRbvtJ2qk - Jerk Dip Depth.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 95679784,
+        "mtime_ns": 1793913274985451600
+      },
+      "state": "verified",
+      "sha256": "c28a43c33d6840508bfdc8fb386cc97bc913a9d0d7af1691e07cb34593e18c24",
+      "duration_s": 52.221678,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:nBpRbvtJ2qk",
+      "split": "train",
+      "group": "youtube:nBpRbvtJ2qk",
+      "member": "nBpRbvtJ2qk - Jerk Dip Depth.mp4",
+      "frames": [
+        {
+          "frame_id": "c28a43c33d684050-0",
+          "time_s": 18.277587
+        },
+        {
+          "frame_id": "c28a43c33d684050-1",
+          "time_s": 33.944091
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/vx7RSDmHAQQ - Snatch & Clean Pull\uff1a Extension vs. Drive vs. Pull.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 98751526,
+        "mtime_ns": 1793913568352200000
+      },
+      "state": "verified",
+      "sha256": "69399aa7263ec52173ce2e188762c3cd8eee0d41825d9d7ea11b60cc183317f4",
+      "duration_s": 57.167528,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:vx7RSDmHAQQ",
+      "split": "train",
+      "group": "youtube:vx7RSDmHAQQ",
+      "member": "vx7RSDmHAQQ - Snatch & Clean Pull\uff1a Extension vs. Drive vs. Pull.mp4",
+      "frames": [
+        {
+          "frame_id": "69399aa7263ec521-0",
+          "time_s": 20.008635
+        },
+        {
+          "frame_id": "69399aa7263ec521-1",
+          "time_s": 37.158893
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/n_uzi0aWBmg - Leg Drive vs Leg Extension in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 123802449,
+        "mtime_ns": 1793913413460282800
+      },
+      "state": "verified",
+      "sha256": "517c9a40abf481e5f58d239fdf2f61b54aad870d42795cbc86cd716c6d2e23bc",
+      "duration_s": 79.063946,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:n_uzi0aWBmg",
+      "split": "train",
+      "group": "youtube:n_uzi0aWBmg",
+      "member": "n_uzi0aWBmg - Leg Drive vs Leg Extension in the Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "517c9a40abf481e5-0",
+          "time_s": 27.672381
+        },
+        {
+          "frame_id": "517c9a40abf481e5-1",
+          "time_s": 51.391565
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/yeVujzme86w - Stop Collapsing in the Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 71793028,
+        "mtime_ns": 1793916540622665800
+      },
+      "state": "verified",
+      "sha256": "4f88f733a7a8ee6d8f064c8e98e1dfa1171f9d53ec723dae68715c773726c00a",
+      "duration_s": 134.327438,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:yeVujzme86w",
+      "split": "train",
+      "group": "youtube:yeVujzme86w",
+      "member": "yeVujzme86w - Stop Collapsing in the Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "4f88f733a7a8ee6d-0",
+          "time_s": 47.014603
+        },
+        {
+          "frame_id": "4f88f733a7a8ee6d-1",
+          "time_s": 87.312835
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/dfVWkhUaw7s - Keep Elevating the Bar in the Snatch Turnover.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 46577998,
+        "mtime_ns": 1793917110272335700
+      },
+      "state": "verified",
+      "sha256": "fa32ad9426e7cc82472237743cf32ada24b7fed369e802614b33f11d736fba1c",
+      "duration_s": 96.595011,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:dfVWkhUaw7s",
+      "split": "train",
+      "group": "youtube:dfVWkhUaw7s",
+      "member": "dfVWkhUaw7s - Keep Elevating the Bar in the Snatch Turnover.mp4",
+      "frames": [
+        {
+          "frame_id": "fa32ad9426e7cc82-0",
+          "time_s": 33.808254
+        },
+        {
+          "frame_id": "fa32ad9426e7cc82-1",
+          "time_s": 62.786757
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/t8QGgK8vREk - Are You Over The Bar\uff1f \uff5c Snatch & Clean Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 29951664,
+        "mtime_ns": 1793916694072535000
+      },
+      "state": "verified",
+      "sha256": "84c7b5bc36a0c311f23535f51874739d82b451845a7bedb7b2d1d7bdb48e2109",
+      "duration_s": 78.204807,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:t8QGgK8vREk",
+      "split": "train",
+      "group": "youtube:t8QGgK8vREk",
+      "member": "t8QGgK8vREk - Are You Over The Bar\uff1f \uff5c Snatch & Clean Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "84c7b5bc36a0c311-0",
+          "time_s": 27.371682
+        },
+        {
+          "frame_id": "84c7b5bc36a0c311-1",
+          "time_s": 50.833125
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/4lVhS5k7fvY - Lower Abs for Better Jerks.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 84535129,
+        "mtime_ns": 1793913551441615500
+      },
+      "state": "verified",
+      "sha256": "80ffac4a20f1850e795492cfae83ab5ee3a8f5fbff3d5bf4d2bae0ddd8f268ee",
+      "duration_s": 50.085442,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:4lVhS5k7fvY",
+      "split": "train",
+      "group": "youtube:4lVhS5k7fvY",
+      "member": "4lVhS5k7fvY - Lower Abs for Better Jerks.mp4",
+      "frames": [
+        {
+          "frame_id": "80ffac4a20f1850e-0",
+          "time_s": 17.529905
+        },
+        {
+          "frame_id": "80ffac4a20f1850e-1",
+          "time_s": 32.555537
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/xNJwxfxiBew - Find Your Pulling Stance for the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 40595926,
+        "mtime_ns": 1793917035374939200
+      },
+      "state": "verified",
+      "sha256": "8e03cb12b1c1d9163247b3d29b1b04be0230bd4d416c0bdce5c3432e7273b5a6",
+      "duration_s": 98.034649,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:xNJwxfxiBew",
+      "split": "train",
+      "group": "youtube:xNJwxfxiBew",
+      "member": "xNJwxfxiBew - Find Your Pulling Stance for the Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "8e03cb12b1c1d916-0",
+          "time_s": 34.312127
+        },
+        {
+          "frame_id": "8e03cb12b1c1d916-1",
+          "time_s": 63.722522
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/T6aT-sL48Ew - Make Deadlifts Useful for Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 155696629,
+        "mtime_ns": 1793916005259489500
+      },
+      "state": "verified",
+      "sha256": "133ffab0e89994d5f394a423b8e1002e6d85d9526476084a7c1716ca0dd9edce",
+      "duration_s": 101.355102,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:T6aT-sL48Ew",
+      "split": "train",
+      "group": "youtube:T6aT-sL48Ew",
+      "member": "T6aT-sL48Ew - Make Deadlifts Useful for Olympic Weightlifting.mp4",
+      "frames": [
+        {
+          "frame_id": "133ffab0e89994d5-0",
+          "time_s": 35.474286
+        },
+        {
+          "frame_id": "133ffab0e89994d5-1",
+          "time_s": 65.880816
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/PQkkYo83AhE - Lifting Vs. Sliding The Feet in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 47976822,
+        "mtime_ns": 1793917122681334000
+      },
+      "state": "verified",
+      "sha256": "3884e3de99384e67435f8959aa0ac4f3cc7db6a4b4cb11cd069bc01a8c4b5975",
+      "duration_s": 102.678639,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:PQkkYo83AhE",
+      "split": "train",
+      "group": "youtube:PQkkYo83AhE",
+      "member": "PQkkYo83AhE - Lifting Vs. Sliding The Feet in the Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "3884e3de99384e67-0",
+          "time_s": 35.937524
+        },
+        {
+          "frame_id": "3884e3de99384e67-1",
+          "time_s": 66.741115
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/6JdErP7Rn6Q - Pulling Posture for the Snatch & Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 56180296,
+        "mtime_ns": 1793916502161842500
+      },
+      "state": "verified",
+      "sha256": "dba4df2c485e9e1fd97a9eb3484d9ea167027281acaaaa5a839d922e52e1f59b",
+      "duration_s": 122.206621,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:6JdErP7Rn6Q",
+      "split": "train",
+      "group": "youtube:6JdErP7Rn6Q",
+      "member": "6JdErP7Rn6Q - Pulling Posture for the Snatch & Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "dba4df2c485e9e1f-0",
+          "time_s": 42.772317
+        },
+        {
+          "frame_id": "dba4df2c485e9e1f-1",
+          "time_s": 79.434304
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/NGtExNRv7K4 - Power vs Squat vs Split Jerk\uff1a Which Should You Use\uff1f.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 71000242,
+        "mtime_ns": 1793916351585012900
+      },
+      "state": "verified",
+      "sha256": "2860f7611d58599028706778b5acea61f96f3b560888993982d19938b30f5eea",
+      "duration_s": 161.680544,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:NGtExNRv7K4",
+      "split": "train",
+      "group": "youtube:NGtExNRv7K4",
+      "member": "NGtExNRv7K4 - Power vs Squat vs Split Jerk\uff1a Which Should You Use\uff1f.mp4",
+      "frames": [
+        {
+          "frame_id": "2860f7611d585990-0",
+          "time_s": 56.58819
+        },
+        {
+          "frame_id": "2860f7611d585990-1",
+          "time_s": 105.092354
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/zpZOlqsaiNE - Power Position in Snatch & Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 52107917,
+        "mtime_ns": 1793916263994122500
+      },
+      "state": "verified",
+      "sha256": "445703b6d3a60c4c8d530b84595bee33d07dcbee0dbdf1839463a633fbcaa506",
+      "duration_s": 132.841361,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:zpZOlqsaiNE",
+      "split": "train",
+      "group": "youtube:zpZOlqsaiNE",
+      "member": "zpZOlqsaiNE - Power Position in Snatch & Clean \uff5c Olympic Weightlifting Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "445703b6d3a60c4c-0",
+          "time_s": 46.494476
+        },
+        {
+          "frame_id": "445703b6d3a60c4c-1",
+          "time_s": 86.346885
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/V-KJfr6ae1s - Finish The Pull \uff5c Snatch & Clean Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 46805973,
+        "mtime_ns": 1793916462883104300
+      },
+      "state": "verified",
+      "sha256": "b08d81078a2c9d22cde8246496bc38bbffe63e8f95538e3a4bbcad95b92d1c17",
+      "duration_s": 138.41415,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:V-KJfr6ae1s",
+      "split": "train",
+      "group": "youtube:V-KJfr6ae1s",
+      "member": "V-KJfr6ae1s - Finish The Pull \uff5c Snatch & Clean Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "b08d81078a2c9d22-0",
+          "time_s": 48.444952
+        },
+        {
+          "frame_id": "b08d81078a2c9d22-1",
+          "time_s": 89.969198
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/lzhh5irGK0E - Moving the Feet in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 47281791,
+        "mtime_ns": 1793916800586183700
+      },
+      "state": "verified",
+      "sha256": "d2966c8a2280a4e870095292e7beefe94d9fd9fe4201d5ae9978f8ca09b7258c",
+      "duration_s": 112.036281,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:lzhh5irGK0E",
+      "split": "train",
+      "group": "youtube:lzhh5irGK0E",
+      "member": "lzhh5irGK0E - Moving the Feet in the Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "d2966c8a2280a4e8-0",
+          "time_s": 39.212698
+        },
+        {
+          "frame_id": "d2966c8a2280a4e8-1",
+          "time_s": 72.823583
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/7EaRI9utO68 - Full Grip in the Clean Turnover\uff1f \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 49958723,
+        "mtime_ns": 1793916338794933500
+      },
+      "state": "verified",
+      "sha256": "62c9ded5e9fdf5c8821ec9ce5f6e2f47048da384a46ab22afffdec1d52a2cc2f",
+      "duration_s": 143.22068,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:7EaRI9utO68",
+      "split": "train",
+      "group": "youtube:7EaRI9utO68",
+      "member": "7EaRI9utO68 - Full Grip in the Clean Turnover\uff1f \uff5c Olympic Weightlifting Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "62c9ded5e9fdf5c8-0",
+          "time_s": 50.127238
+        },
+        {
+          "frame_id": "62c9ded5e9fdf5c8-1",
+          "time_s": 93.093442
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/euq5wJJ2t3I - Olympic Weightlifting Self-Correction Tools.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 116587129,
+        "mtime_ns": 1793916745835715000
+      },
+      "state": "verified",
+      "sha256": "7283b804f423a55a1c7b74e20c0fe746bc52a42709908d8248d1f73ec6badcb5",
+      "duration_s": 254.606803,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:euq5wJJ2t3I",
+      "split": "train",
+      "group": "youtube:euq5wJJ2t3I",
+      "member": "euq5wJJ2t3I - Olympic Weightlifting Self-Correction Tools.mp4",
+      "frames": [
+        {
+          "frame_id": "7283b804f423a55a-0",
+          "time_s": 89.112381
+        },
+        {
+          "frame_id": "7283b804f423a55a-1",
+          "time_s": 165.494422
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/hF2SlVSWy5s - Jerk Dip & Drive Technical Styles - Strength vs. Elastic.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 52977714,
+        "mtime_ns": 1793917042193042000
+      },
+      "state": "verified",
+      "sha256": "31297e0fde11175a055fbbf98c9a5bd92c89b108d81da7bd1c3ad9ebac1dc893",
+      "duration_s": 111.618322,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:hF2SlVSWy5s",
+      "split": "train",
+      "group": "youtube:hF2SlVSWy5s",
+      "member": "hF2SlVSWy5s - Jerk Dip & Drive Technical Styles - Strength vs. Elastic.mp4",
+      "frames": [
+        {
+          "frame_id": "31297e0fde11175a-0",
+          "time_s": 39.066413
+        },
+        {
+          "frame_id": "31297e0fde11175a-1",
+          "time_s": 72.551909
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/oa4o1Qjo55s - Simplest Way to a Better Overhead Position.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 94665206,
+        "mtime_ns": 1793912447212177500
+      },
+      "state": "verified",
+      "sha256": "ceaaa2f4d278896a12f52328ca05213aabfc9320cef0e95f785bbe3cfc568993",
+      "duration_s": 62.066939,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:oa4o1Qjo55s",
+      "split": "train",
+      "group": "youtube:oa4o1Qjo55s",
+      "member": "oa4o1Qjo55s - Simplest Way to a Better Overhead Position.mp4",
+      "frames": [
+        {
+          "frame_id": "ceaaa2f4d278896a-0",
+          "time_s": 21.723429
+        },
+        {
+          "frame_id": "ceaaa2f4d278896a-1",
+          "time_s": 40.34351
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/5NleQRu_hvY - How to Stay Over the Bar in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 60036620,
+        "mtime_ns": 1793917121019202400
+      },
+      "state": "verified",
+      "sha256": "9db8370bb555f2a4e6d4f61b8505381926b182a4888a27399b290cd6d0155c07",
+      "duration_s": 117.65551,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:5NleQRu_hvY",
+      "split": "train",
+      "group": "youtube:5NleQRu_hvY",
+      "member": "5NleQRu_hvY - How to Stay Over the Bar in the Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "9db8370bb555f2a4-0",
+          "time_s": 41.179429
+        },
+        {
+          "frame_id": "9db8370bb555f2a4-1",
+          "time_s": 76.476082
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/A4whHErmWAU - Efficiency & Foot Movement in the Snatch & Clean - Lift vs Shuffle.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 226477442,
+        "mtime_ns": 1793911981005173600
+      },
+      "state": "verified",
+      "sha256": "1908951bd929b5dd76217f7c8331e5faef7583a5202eb8d6bb01939d1d2f1211",
+      "duration_s": 360.559456,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:A4whHErmWAU",
+      "split": "train",
+      "group": "youtube:A4whHErmWAU",
+      "member": "A4whHErmWAU - Efficiency & Foot Movement in the Snatch & Clean - Lift vs Shuffle.mp4",
+      "frames": [
+        {
+          "frame_id": "1908951bd929b5dd-0",
+          "time_s": 126.19581
+        },
+        {
+          "frame_id": "1908951bd929b5dd-1",
+          "time_s": 234.363646
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/wjD1_6uLCkk - Stronger Jerk Dip = More Drive Power.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 164559015,
+        "mtime_ns": 1793913779562200300
+      },
+      "state": "verified",
+      "sha256": "499a607cb37ad8007defff7369079023b41d4de1118d2ad173db98e1311472e3",
+      "duration_s": 86.006712,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:wjD1_6uLCkk",
+      "split": "train",
+      "group": "youtube:wjD1_6uLCkk",
+      "member": "wjD1_6uLCkk - Stronger Jerk Dip = More Drive Power.mp4",
+      "frames": [
+        {
+          "frame_id": "499a607cb37ad800-0",
+          "time_s": 30.102349
+        },
+        {
+          "frame_id": "499a607cb37ad800-1",
+          "time_s": 55.904363
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/R-mOBUraB9E - How to Safely Miss Snatches Backward.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 133927567,
+        "mtime_ns": 1793913882329415500
+      },
+      "state": "verified",
+      "sha256": "7c1e763354e6bae01d43119eb4fc6ec82f9b35fc0bcae7817a8afc240a7976b5",
+      "duration_s": 72.515918,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:R-mOBUraB9E",
+      "split": "train",
+      "group": "youtube:R-mOBUraB9E",
+      "member": "R-mOBUraB9E - How to Safely Miss Snatches Backward.mp4",
+      "frames": [
+        {
+          "frame_id": "7c1e763354e6bae0-0",
+          "time_s": 25.380571
+        },
+        {
+          "frame_id": "7c1e763354e6bae0-1",
+          "time_s": 47.135347
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/4RwcRgTpBpY - Don't Push The Bar Forward with the Shins - Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 89099661,
+        "mtime_ns": 1793912631922313900
+      },
+      "state": "verified",
+      "sha256": "5fb710687f0b6a5f76b5e39be1a5a48398c8e537cba55dbd294b89244de28d5e",
+      "duration_s": 62.438458,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:4RwcRgTpBpY",
+      "split": "train",
+      "group": "youtube:4RwcRgTpBpY",
+      "member": "4RwcRgTpBpY - Don't Push The Bar Forward with the Shins - Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "5fb710687f0b6a5f-0",
+          "time_s": 21.85346
+        },
+        {
+          "frame_id": "5fb710687f0b6a5f-1",
+          "time_s": 40.584998
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/s82-kiwLDg8 - How to Find Your Split Jerk Stance \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 28750384,
+        "mtime_ns": 1793916692623178000
+      },
+      "state": "verified",
+      "sha256": "c416e38f2b075d0bf5f7d41aa07498767bcdba0cd8b208f2a737cc492777a53c",
+      "duration_s": 71.93542,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:s82-kiwLDg8",
+      "split": "train",
+      "group": "youtube:s82-kiwLDg8",
+      "member": "s82-kiwLDg8 - How to Find Your Split Jerk Stance \uff5c Olympic Weightlifting Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "c416e38f2b075d0b-0",
+          "time_s": 25.177397
+        },
+        {
+          "frame_id": "c416e38f2b075d0b-1",
+          "time_s": 46.758023
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/gQN5Fy5TaJs - Head Movement in the Jerk \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 40647752,
+        "mtime_ns": 1793916228628327100
+      },
+      "state": "verified",
+      "sha256": "73b61f7ce29b9e6ec4ba8ee04128e51120bb5ab893bd653902a3d2203215b585",
+      "duration_s": 96.153832,
+      "fps": 23.976023976023978,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:gQN5Fy5TaJs",
+      "split": "train",
+      "group": "youtube:gQN5Fy5TaJs",
+      "member": "gQN5Fy5TaJs - Head Movement in the Jerk \uff5c Olympic Weightlifting Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "73b61f7ce29b9e6e-0",
+          "time_s": 33.653841
+        },
+        {
+          "frame_id": "73b61f7ce29b9e6e-1",
+          "time_s": 62.499991
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/bUiFessanXs - Everything You Need to Fix Your Jerk Split Position.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 234508593,
+        "mtime_ns": 1793911836170617100
+      },
+      "state": "verified",
+      "sha256": "f6bda561036aebc5f893e149d80c6c17ad4c4ed89310976d1c26b82c7003d14b",
+      "duration_s": 194.258141,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:bUiFessanXs",
+      "split": "train",
+      "group": "youtube:bUiFessanXs",
+      "member": "bUiFessanXs - Everything You Need to Fix Your Jerk Split Position.mp4",
+      "frames": [
+        {
+          "frame_id": "f6bda561036aebc5-0",
+          "time_s": 67.990349
+        },
+        {
+          "frame_id": "f6bda561036aebc5-1",
+          "time_s": 126.267792
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/5ug9VmULols - No Thigh Gap\uff1a Push The Bar Back with The Lats.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 143737325,
+        "mtime_ns": 1793914755309951500
+      },
+      "state": "verified",
+      "sha256": "ab8455f52b87ac64a853a06bc8d1583b964817131a2fc4535b7f2db1cc43977a",
+      "duration_s": 92.02068,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:5ug9VmULols",
+      "split": "train",
+      "group": "youtube:5ug9VmULols",
+      "member": "5ug9VmULols - No Thigh Gap\uff1a Push The Bar Back with The Lats.mp4",
+      "frames": [
+        {
+          "frame_id": "ab8455f52b87ac64-0",
+          "time_s": 32.207238
+        },
+        {
+          "frame_id": "ab8455f52b87ac64-1",
+          "time_s": 59.813442
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/ngmjKLYfhQ4 - How to Re-Rack \u29f8 Lower Jerks.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 21559434,
+        "mtime_ns": 1793916264513557100
+      },
+      "state": "verified",
+      "sha256": "327f6f856e732d8bea82d1a04b0e3f3507a9157c7df8a5b6ce96cbdde7a0dcd0",
+      "duration_s": 70.077823,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:ngmjKLYfhQ4",
+      "split": "validation",
+      "group": "youtube:ngmjKLYfhQ4",
+      "member": "ngmjKLYfhQ4 - How to Re-Rack \u29f8 Lower Jerks.mp4",
+      "frames": [
+        {
+          "frame_id": "327f6f856e732d8b-0",
+          "time_s": 24.527238
+        },
+        {
+          "frame_id": "327f6f856e732d8b-1",
+          "time_s": 45.550585
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/cOmiTlek4EE - Back Foot Hits First in the Split Jerk.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 43463978,
+        "mtime_ns": 1793917186343372300
+      },
+      "state": "verified",
+      "sha256": "6e6dbcc92d8b95c4f3342e3bb1f5223a0ae9a1aae5e529451ad8f96cf1ca535d",
+      "duration_s": 95.828753,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:cOmiTlek4EE",
+      "split": "validation",
+      "group": "youtube:cOmiTlek4EE",
+      "member": "cOmiTlek4EE - Back Foot Hits First in the Split Jerk.mp4",
+      "frames": [
+        {
+          "frame_id": "6e6dbcc92d8b95c4-0",
+          "time_s": 33.540064
+        },
+        {
+          "frame_id": "6e6dbcc92d8b95c4-1",
+          "time_s": 62.288689
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/8kS5pt5wrJg - Pause in The Power Receiving Position \uff5c Olympic Weightlifting Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 30533730,
+        "mtime_ns": 1793916237630317600
+      },
+      "state": "verified",
+      "sha256": "6c0e5be78f19af8caccb8bf25f5b3dfa85ce93c55d8e5967cc0a202e3fa1e31c",
+      "duration_s": 60.070023,
+      "fps": 23.976023976023978,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:8kS5pt5wrJg",
+      "split": "validation",
+      "group": "youtube:8kS5pt5wrJg",
+      "member": "8kS5pt5wrJg - Pause in The Power Receiving Position \uff5c Olympic Weightlifting Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "6c0e5be78f19af8c-0",
+          "time_s": 21.024508
+        },
+        {
+          "frame_id": "6c0e5be78f19af8c-1",
+          "time_s": 39.045515
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/1BmuOvt5434 - The Missing Piece of the Clean Turnover.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 201652512,
+        "mtime_ns": 1793913819016790300
+      },
+      "state": "verified",
+      "sha256": "4697da732853c30bd5d149a883f471385805da1fbd2d053e5b5064cbb5cab53c",
+      "duration_s": 127.593651,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:1BmuOvt5434",
+      "split": "validation",
+      "group": "youtube:1BmuOvt5434",
+      "member": "1BmuOvt5434 - The Missing Piece of the Clean Turnover.mp4",
+      "frames": [
+        {
+          "frame_id": "4697da732853c30b-0",
+          "time_s": 44.657778
+        },
+        {
+          "frame_id": "4697da732853c30b-1",
+          "time_s": 82.935873
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/shacMSdSyIg - Unstable Split Jerk\uff1f Use This Technique Primer.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 147317290,
+        "mtime_ns": 1793911773245624700
+      },
+      "state": "verified",
+      "sha256": "3b4329ef4e9106eff1a717ae1dbd50edb6ba284bc5616d616efd967476162c6f",
+      "duration_s": 90.372063,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:shacMSdSyIg",
+      "split": "validation",
+      "group": "youtube:shacMSdSyIg",
+      "member": "shacMSdSyIg - Unstable Split Jerk\uff1f Use This Technique Primer.mp4",
+      "frames": [
+        {
+          "frame_id": "3b4329ef4e9106ef-0",
+          "time_s": 31.630222
+        },
+        {
+          "frame_id": "3b4329ef4e9106ef-1",
+          "time_s": 58.741841
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/PgmjWQm9D9Y - The Jerk\uff1a Scapular Protraction to Retraction \uff5c Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 118019623,
+        "mtime_ns": 1793914915598246500
+      },
+      "state": "verified",
+      "sha256": "4d3ff92f804391bd25db23e86f25c01450d5c561546a5401087ffcba6f00195f",
+      "duration_s": 81.385941,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:PgmjWQm9D9Y",
+      "split": "validation",
+      "group": "youtube:PgmjWQm9D9Y",
+      "member": "PgmjWQm9D9Y - The Jerk\uff1a Scapular Protraction to Retraction \uff5c Olympic Weightlifting.mp4",
+      "frames": [
+        {
+          "frame_id": "4d3ff92f804391bd-0",
+          "time_s": 28.485079
+        },
+        {
+          "frame_id": "4d3ff92f804391bd-1",
+          "time_s": 52.900862
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/8v6CI6Of7G8 - Pull Under Harder Does NOT Mean Receiving Lower \uff5c Snatch & Clean Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 47017035,
+        "mtime_ns": 1793916691313271000
+      },
+      "state": "verified",
+      "sha256": "aad8de54b6a321f986ee53b6b2b35d76b6eec7a70cacae8982d7f5a718a90cf2",
+      "duration_s": 102.21424,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:8v6CI6Of7G8",
+      "split": "validation",
+      "group": "youtube:8v6CI6Of7G8",
+      "member": "8v6CI6Of7G8 - Pull Under Harder Does NOT Mean Receiving Lower \uff5c Snatch & Clean Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "aad8de54b6a321f9-0",
+          "time_s": 35.774984
+        },
+        {
+          "frame_id": "aad8de54b6a321f9-1",
+          "time_s": 66.439256
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/KqZrD80z7zM - Neutral Spine or Pervert Hips\uff1f Neutral is NOT Straight!.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 25245437,
+        "mtime_ns": 1793916795977511600
+      },
+      "state": "verified",
+      "sha256": "f3964c213a486b1c100a9599fb35d8c895a80ea79061e91b0129292412598f60",
+      "duration_s": 80.341043,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:KqZrD80z7zM",
+      "split": "validation",
+      "group": "youtube:KqZrD80z7zM",
+      "member": "KqZrD80z7zM - Neutral Spine or Pervert Hips\uff1f Neutral is NOT Straight!.mp4",
+      "frames": [
+        {
+          "frame_id": "f3964c213a486b1c-0",
+          "time_s": 28.119365
+        },
+        {
+          "frame_id": "f3964c213a486b1c-1",
+          "time_s": 52.221678
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/ZuiCAVQHljY - Blocks vs. Hang Lifts \uff5c Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 95791348,
+        "mtime_ns": 1793916509526539300
+      },
+      "state": "verified",
+      "sha256": "35b2181424aadb90dcf470e5060408c17e504bc0c7a3941011e8f716660bd181",
+      "duration_s": 157.013333,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:ZuiCAVQHljY",
+      "split": "validation",
+      "group": "youtube:ZuiCAVQHljY",
+      "member": "ZuiCAVQHljY - Blocks vs. Hang Lifts \uff5c Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "35b2181424aadb90-0",
+          "time_s": 54.954667
+        },
+        {
+          "frame_id": "35b2181424aadb90-1",
+          "time_s": 102.058666
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/MXJXLqi-XLo - Jerk Rack Position - Relax Your Grip.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 65329593,
+        "mtime_ns": 1793913514900243200
+      },
+      "state": "verified",
+      "sha256": "66553147d8f5118c4815342ee415bc674d3a8178a12f183452b99aa5d3e82d56",
+      "duration_s": 49.504943,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:MXJXLqi-XLo",
+      "split": "validation",
+      "group": "youtube:MXJXLqi-XLo",
+      "member": "MXJXLqi-XLo - Jerk Rack Position - Relax Your Grip.mp4",
+      "frames": [
+        {
+          "frame_id": "66553147d8f5118c-0",
+          "time_s": 17.32673
+        },
+        {
+          "frame_id": "66553147d8f5118c-1",
+          "time_s": 32.178213
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/AVVAIHlN-sA - Snatch & Clean Hang Positions \uff5c Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 134205522,
+        "mtime_ns": 1793916047245326500
+      },
+      "state": "verified",
+      "sha256": "30c19b376848b7d659569facf1c037093ff660ad7db1508c594e6c7b28af5a96",
+      "duration_s": 89.582585,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:AVVAIHlN-sA",
+      "split": "validation",
+      "group": "youtube:AVVAIHlN-sA",
+      "member": "AVVAIHlN-sA - Snatch & Clean Hang Positions \uff5c Olympic Weightlifting.mp4",
+      "frames": [
+        {
+          "frame_id": "30c19b376848b7d6-0",
+          "time_s": 31.353905
+        },
+        {
+          "frame_id": "30c19b376848b7d6-1",
+          "time_s": 58.22868
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/JPT-t-p2L-c - Hand & Wrist Position in the Snatch & Jerk.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 45358682,
+        "mtime_ns": 1793917074698448800
+      },
+      "state": "verified",
+      "sha256": "2d52157282d9c85a61f16607f399d0512444422661e8dbfd9a4d02d6771a656d",
+      "duration_s": 96.362812,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:JPT-t-p2L-c",
+      "split": "validation",
+      "group": "youtube:JPT-t-p2L-c",
+      "member": "JPT-t-p2L-c - Hand & Wrist Position in the Snatch & Jerk.mp4",
+      "frames": [
+        {
+          "frame_id": "2d52157282d9c85a-0",
+          "time_s": 33.726984
+        },
+        {
+          "frame_id": "2d52157282d9c85a-1",
+          "time_s": 62.635828
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/5SxVx_bO5n4 - Push The Knees Back in the Pull\uff1f \uff5c Snatch & Clean Technique.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 34341992,
+        "mtime_ns": 1793916717791334600
+      },
+      "state": "verified",
+      "sha256": "4dc170ebb2767b2b82ef1f12e9f47b1435e6fb0ba54bd3f4378cac831a10f897",
+      "duration_s": 94.574875,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:5SxVx_bO5n4",
+      "split": "test",
+      "group": "youtube:5SxVx_bO5n4",
+      "member": "5SxVx_bO5n4 - Push The Knees Back in the Pull\uff1f \uff5c Snatch & Clean Technique.mp4",
+      "frames": [
+        {
+          "frame_id": "4dc170ebb2767b2b-0",
+          "time_s": 33.101206
+        },
+        {
+          "frame_id": "4dc170ebb2767b2b-1",
+          "time_s": 61.473669
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/Ot9oody896I - Leg Drive Not Jumping - Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 101445018,
+        "mtime_ns": 1793912360542074400
+      },
+      "state": "verified",
+      "sha256": "e18153f381c8f0901f9bb855bdbd1aebb4d68e8faa9d22a11f62bbe76bb5cd3f",
+      "duration_s": 57.283628,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:Ot9oody896I",
+      "split": "test",
+      "group": "youtube:Ot9oody896I",
+      "member": "Ot9oody896I - Leg Drive Not Jumping - Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "e18153f381c8f090-0",
+          "time_s": 20.04927
+        },
+        {
+          "frame_id": "e18153f381c8f090-1",
+          "time_s": 37.234358
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/8906XVfDOGU - Land on Flat Feet in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 40973833,
+        "mtime_ns": 1793916872011503400
+      },
+      "state": "verified",
+      "sha256": "784c0b6161fbb2cb0cfb2ec4c86448fa2f3f30d3cf88a969c65364cf63a2dce2",
+      "duration_s": 88.050068,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:8906XVfDOGU",
+      "split": "test",
+      "group": "youtube:8906XVfDOGU",
+      "member": "8906XVfDOGU - Land on Flat Feet in the Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "784c0b6161fbb2cb-0",
+          "time_s": 30.817524
+        },
+        {
+          "frame_id": "784c0b6161fbb2cb-1",
+          "time_s": 57.232544
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/wuRosR_UjMQ - Overhead Position - Avoid Excessive Forward Lean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 72210526,
+        "mtime_ns": 1793912687499462100
+      },
+      "state": "verified",
+      "sha256": "6b7e4b1754f0c54cccfffe1174d046c4e8dd5aeb5b13475d3a448b87b51bd635",
+      "duration_s": 62.763537,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:wuRosR_UjMQ",
+      "split": "test",
+      "group": "youtube:wuRosR_UjMQ",
+      "member": "wuRosR_UjMQ - Overhead Position - Avoid Excessive Forward Lean.mp4",
+      "frames": [
+        {
+          "frame_id": "6b7e4b1754f0c54c-0",
+          "time_s": 21.967238
+        },
+        {
+          "frame_id": "6b7e4b1754f0c54c-1",
+          "time_s": 40.796299
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/rQoykixtu8g - 3 Ways to Instantly Strengthen Your Pull \uff5c Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 79548757,
+        "mtime_ns": 1793916426480535000
+      },
+      "state": "verified",
+      "sha256": "f446beec4920aaddc7b025ca43b5575ca8c06da5b96a075a113fbb3e2c74a0d1",
+      "duration_s": 141.455964,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:rQoykixtu8g",
+      "split": "test",
+      "group": "youtube:rQoykixtu8g",
+      "member": "rQoykixtu8g - 3 Ways to Instantly Strengthen Your Pull \uff5c Olympic Weightlifting.mp4",
+      "frames": [
+        {
+          "frame_id": "f446beec4920aadd-0",
+          "time_s": 49.509587
+        },
+        {
+          "frame_id": "f446beec4920aadd-1",
+          "time_s": 91.946377
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/pd_43mSZhxo - Positions for Tall & Long-Legged Athletes \uff5c Olympic Weightlifting.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 155557274,
+        "mtime_ns": 1793914931061469700
+      },
+      "state": "verified",
+      "sha256": "5a86b742c71a6b2fd23bcc1988b8f611fbc6ef102778c5c033d402a3a9462afd",
+      "duration_s": 149.188209,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:pd_43mSZhxo",
+      "split": "test",
+      "group": "youtube:pd_43mSZhxo",
+      "member": "pd_43mSZhxo - Positions for Tall & Long-Legged Athletes \uff5c Olympic Weightlifting.mp4",
+      "frames": [
+        {
+          "frame_id": "5a86b742c71a6b2f-0",
+          "time_s": 52.215873
+        },
+        {
+          "frame_id": "5a86b742c71a6b2f-1",
+          "time_s": 96.972336
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/OhJ_zO8JgtM - Arms in Snatch & Clean Pulls - Guide & Slide.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 96211916,
+        "mtime_ns": 1793912409094381800
+      },
+      "state": "verified",
+      "sha256": "d3b5175cc7edac554f045689a6859f291078212e1392c2469c3c3abb372b97c2",
+      "duration_s": 45.97551,
+      "fps": 60.00087115602405,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "vp9",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:OhJ_zO8JgtM",
+      "split": "test",
+      "group": "youtube:OhJ_zO8JgtM",
+      "member": "OhJ_zO8JgtM - Arms in Snatch & Clean Pulls - Guide & Slide.mp4",
+      "frames": [
+        {
+          "frame_id": "d3b5175cc7edac55-0",
+          "time_s": 16.091428
+        },
+        {
+          "frame_id": "d3b5175cc7edac55-1",
+          "time_s": 29.884082
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/9ApKFVIWg-s - Should You Use a Dynamic Start in the Olympic lifts\uff1f.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 204154249,
+        "mtime_ns": 1793916902057381300
+      },
+      "state": "verified",
+      "sha256": "757041647d1acbb9f2ad9a87350154a9bc082b1254701a80a2263306a58bd687",
+      "duration_s": 90.627483,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:9ApKFVIWg-s",
+      "split": "test",
+      "group": "youtube:9ApKFVIWg-s",
+      "member": "9ApKFVIWg-s - Should You Use a Dynamic Start in the Olympic lifts\uff1f.mp4",
+      "frames": [
+        {
+          "frame_id": "757041647d1acbb9-0",
+          "time_s": 31.719619
+        },
+        {
+          "frame_id": "757041647d1acbb9-1",
+          "time_s": 58.907864
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/_4x2Zp89KOk - Locking Your Elbows in the Snatch & Clean.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 23821524,
+        "mtime_ns": 1793917187210691900
+      },
+      "state": "verified",
+      "sha256": "92e0881f9a7e6f94a840180f46e0a9b17c4373eddbaa2a6dbad981fdd476e7ab",
+      "duration_s": 56.772789,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:_4x2Zp89KOk",
+      "split": "test",
+      "group": "youtube:_4x2Zp89KOk",
+      "member": "_4x2Zp89KOk - Locking Your Elbows in the Snatch & Clean.mp4",
+      "frames": [
+        {
+          "frame_id": "92e0881f9a7e6f94-0",
+          "time_s": 19.870476
+        },
+        {
+          "frame_id": "92e0881f9a7e6f94-1",
+          "time_s": 36.902313
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/Rjheh8HwqkU - Slow Lockout in Jerk or Snatch\uff1f.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 19973808,
+        "mtime_ns": 1793916914116371300
+      },
+      "state": "verified",
+      "sha256": "cace8bc320de2f40dc9e95066b70002f165e1c43ee020d29f9b7deee6f800c85",
+      "duration_s": 84.776054,
+      "fps": 60.0,
+      "width": 1280,
+      "height": 720,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:Rjheh8HwqkU",
+      "split": "test",
+      "group": "youtube:Rjheh8HwqkU",
+      "member": "Rjheh8HwqkU - Slow Lockout in Jerk or Snatch\uff1f.mp4",
+      "frames": [
+        {
+          "frame_id": "cace8bc320de2f40-0",
+          "time_s": 29.671619
+        },
+        {
+          "frame_id": "cace8bc320de2f40-1",
+          "time_s": 55.104435
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/6JHxmVqApMI - Jerk Rack Position.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 32794210,
+        "mtime_ns": 1793916834489518400
+      },
+      "state": "verified",
+      "sha256": "ba6f825ceb942a289967af2b416cfc6e7bd5f06859ddb330d5901b26e63286a8",
+      "duration_s": 84.822494,
+      "fps": 60.0,
+      "width": 1920,
+      "height": 1080,
+      "rotation": 0,
+      "codec": "h264",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:6JHxmVqApMI",
+      "split": "test",
+      "group": "youtube:6JHxmVqApMI",
+      "member": "6JHxmVqApMI - Jerk Rack Position.mp4",
+      "frames": [
+        {
+          "frame_id": "ba6f825ceb942a28-0",
+          "time_s": 29.687873
+        },
+        {
+          "frame_id": "ba6f825ceb942a28-1",
+          "time_s": 55.134621
+        }
+      ]
+    },
+    {
+      "relative_path": "Olympic Weightlifting/Catalyst Athletics/Instructional/ZhKAMKaIxcU - Hold The Bar Overhead with the Upper Back.mp4",
+      "sport": "olympic_weightlifting",
+      "disposition": "candidate_video",
+      "signature": {
+        "bytes": 65273941,
+        "mtime_ns": 1793913584745906800
+      },
+      "state": "verified",
+      "sha256": "a98cfd980b3a36731d3c95e21e340c78eadac40f63667a1bc2272ada76b86592",
+      "duration_s": 51.4322,
+      "fps": 60.0,
+      "width": 3840,
+      "height": 2160,
+      "rotation": 0,
+      "codec": "av1",
+      "color_transfer": "bt709",
+      "audio_streams": 1,
+      "previously_inventoried": false,
+      "source_group": "youtube:ZhKAMKaIxcU",
+      "split": "test",
+      "group": "youtube:ZhKAMKaIxcU",
+      "member": "ZhKAMKaIxcU - Hold The Bar Overhead with the Upper Back.mp4",
+      "frames": [
+        {
+          "frame_id": "a98cfd980b3a3673-0",
+          "time_s": 18.00127
+        },
+        {
+          "frame_id": "a98cfd980b3a3673-1",
+          "time_s": 33.43093
+        }
+      ]
+    }
+  ],
+  "selection_sha256": "ab86716509da158a9e36493011bedf430fbca5a896e25957695763904fc7c873",
+  "inventory_sha256": "edaf6fdefa1c33fdecece4dbe4644f14f2c92b5d6cd85a3793928d83c6345e1a",
+  "sampling_fractions": [
+    0.35,
+    0.65
+  ],
+  "target": "Foreground demonstration barbell, including shaft and attached plates; one box, full-frame inference",
+  "limitations": [
+    "Upload-disjoint, not verified session/athlete independent.",
+    "Edited demonstrations may reuse scenes across different uploads.",
+    "Instructional pilot; not a representative competition benchmark."
+  ]
+}
