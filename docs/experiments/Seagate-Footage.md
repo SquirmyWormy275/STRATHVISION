@@ -2,6 +2,23 @@
 
 This study uses the private Seagate library to expand engineering supervision and evaluate implement localization. Raw video, frames, contact sheets and voice recordings stay private. The earlier [55-video experiment](New-Footage.md) and [47-video Gurr population run](Gurr-Population.md) remain unchanged.
 
+## Library inventory and population coverage
+
+The snapshot began at **2026-11-05 23:23:41 UTC** (15:23 Pacific). All 426 completed-video candidates were hashed to EOF and probed successfully. Two byte-identical aliases leave **424 unique videos, 16 h 3 min 11 s**. Nine original ZIP archives and 15 download intermediates were preserved and excluded from video counts. A final size/mtime check found no change in any of the 426 verified files.
+
+| Corpus | Unique videos | Duration | New payloads versus the earlier studies |
+|---|---:|---:|---:|
+| Woodchopping | 102 | 3 h 31 min 8 s | 0 |
+| Olympic weightlifting | 322 | 12 h 32 min 3 s | 322 |
+
+The woodchopping files reproduce the earlier 47-video Gurr and 55-video additional-footage corpora. Their new contribution here is the expanded training annotation pass, not additional independent recordings. The lifting snapshot contains 286 Instructional uploads, nine Technique Review uploads and 27 Training with Coach Commentary uploads. Titles and commentary are source context, not automatically accepted technique labels. One existing woodchopping clip reports about 60 fps; most report about 30 fps, and encoded frame rate alone does not establish useful swing detail.
+
+The automated lifting audit covered **all 322 sources at 10%, 50% and 90% of duration: 966 frames, zero decode failures**. YOLOX Nano at score threshold 0.4 found at least one person in 827 frames and multiple people in 407. These are unreviewed detection counts, including possible false positives and edited scenes; they do not establish tracking accuracy, athlete identity or full-duration coverage. The audit was kept away from reserved test payloads, including filename aliases, until the barbell model was frozen.
+
+See the [source inventory](evaluation/seagate/library-inventory.json), [per-source sample ledger](evaluation/seagate/library-audit.json), [final stability check](evaluation/seagate/final-stability-check.json) and [combined results with artifact hashes](evaluation/seagate/results.json). Original footage, extracted pixels, contact sheets and audio remain private.
+
+Downloads continued independently during the run. A closing directory listing found [12 later completed-video candidates](evaluation/seagate/later-arrivals.json); these are listed separately and have not been deduplicated or included in this frozen snapshot. The reproducible completion claim is for the starting snapshot.
+
 ## Protocol frozen before fitting
 
 The library inventory hashes completed video files to EOF, probes media streams, records aliases and compares content hashes with both previous corpora. Downloader fragments, temporary merge outputs and archives are not counted as additional completed videos. A file changed during verification is deferred. This is a dated snapshot while another downloader may continue adding footage; it is not a full-duration decode claim.
@@ -29,7 +46,7 @@ The real CUDA fit completed 1,000 steps; validation selected step 600 and score 
 
 Expanded supervision increased recall while introducing many more incorrect boxes at the independently selected validation thresholds. The 1.4 percentage-point F1 increase is exploratory, not an independently tested improvement. Correlated neighboring frames do not equal new recording sessions. No old-test re-score or app promotion was performed. The conditional athlete ROI and lack of clear empty validation frames still limit the claim.
 
-The [weights](evaluation/seagate/axe/axe-faster.pt), [training metadata and checkpoint history](evaluation/seagate/axe/axe-faster.json), [validation predictions](evaluation/seagate/axe/validation.json), and [fit log](evaluation/seagate/axe/fit.log) preserve the result. The separate weightlifting result follows below; library verification is still running.
+The [weights](evaluation/seagate/axe/axe-faster.pt), [training metadata and checkpoint history](evaluation/seagate/axe/axe-faster.json), [validation predictions](evaluation/seagate/axe/validation.json), and [fit log](evaluation/seagate/axe/fit.log) preserve the result. The separate weightlifting result follows below.
 
 
 ## Barbell pilot frozen before fitting

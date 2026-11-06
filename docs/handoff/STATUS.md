@@ -2,12 +2,12 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-06T00:08:14Z
+owner: none
+heartbeat: 2026-11-06T00:12:18Z
 branch: implementation
 phase: 8 — Seagate multi-sport footage research
-task: Inventory all Seagate sources, exclude partial downloads and duplicates, expand axe training labels, and establish a separate weightlifting experiment
-next: Axe and frozen barbell results complete (barbell9TP2FP6FN;15visible/8unrated),published ccc1ecb;74tests pass. Inventory36202 is finishing426candidates; automatic audit39184 resumes to final inventory. Run private seagate-20261105/publish_results.py after both finish; verify/report full counts, update README/status, push and release.
+task: Completed the Seagate snapshot inventory, expanded axe study and separate weightlifting pilot
+next: Seagate starting-snapshot study complete; see docs/experiments/Seagate-Footage.md and evaluation/seagate/results.json. Twelve later download candidates are listed separately for a future ingestion pass. Future research: independent recording-session barbell holdout, thin-bar/negative axe examples, and genuine field feedback; no model promotion.
 <!-- STATE:END -->
 
 ## Phase progress
@@ -47,7 +47,7 @@ next: Axe and frozen barbell results complete (barbell9TP2FP6FN;15visible/8unrat
 
 - **Springboard event needs a coach** (added 2026-11-05 at the human's request, `timber/springboard`). Pocket cuts and top-block chopping are different swings but are summarized together; decide whether to measure them separately and what each measures. Its metrics are a placeholder (standing block + knees). Crowded, distant springboard clips (IMG_8010) need the athlete picked by hand.
 
-- **Field checks only the human can do:** run the app on a real Android phone (only the emulator is tested); film some competition chopping at 60 fps to test whether the filming tip helps (no 60 fps footage exists). Blurred competition strokes can pass as "usable" with wrong contacts (IMG_8014, `docs/experiments/Gurr-Pipeline-Findings.md`).
+- **Field checks only the human can do:** run the app on a real Android phone (only the emulator is tested); film some competition chopping at 60 fps to test whether the filming tip helps (the Seagate inventory found one existing clip reporting about 60 fps; useful competition timing at that rate remains unvalidated). Blurred competition strokes can pass as "usable" with wrong contacts (IMG_8014, `docs/experiments/Gurr-Pipeline-Findings.md`).
 
 - **Phase 1 Windows acceptance is open.** On a Windows PC: `cd apps/strathvision && flutter run -d windows`, then follow the "Phase 1 manual check" in apps/strathvision/README.md. iOS/macOS builds need a Mac.
 
@@ -61,6 +61,7 @@ next: Axe and frozen barbell results complete (barbell9TP2FP6FN;15visible/8unrat
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T00:12:18Z **codex** — Released the completed Seagate starting-snapshot study: 426 video files hashed/probed; 424 unique (102 known woodchopping and 322 new lifting), totaling 16 h 3 min. Nine archives and 15 download intermediates were excluded; no files deferred and all 426 final signatures unchanged. All 322 lifting sources sampled three times: 966 frames, zero decode failures, 827 person/407 multiple-person detections (unreviewed counts). Axe fit used 73 positives/three negatives: validation 11 TP, 11 FP, 15 FN; old test not reused. Barbell fit used 47 positives/nine negatives, frozen in 4496fa6 before test pixels; references committed in 3aa0d1e before predictions; frozen test: nine TP, two FP, six FN on 15 visible/one empty/eight unrated frames. README/report, weights, references, hashes and source ledger published; 74 research tests pass; both review servers return HTTP 200. Twelve later download candidates are listed separately. Raw media stays private; no coaching labels or production promotion. Scoped commits preserve the separate integration-review work.
 - 2026-11-05T23:21:58Z **codex** — Claimed user-authorized Seagate woodchopping and Olympic weightlifting research. Inventory stable sources before scope decisions; preserve opened holdouts, avoid treating download components as independent clips, and keep raw media private. Manual scoped commits avoid staging unrelated changes or posting issue comments.
 - 2026-11-05T22:09:19Z **codex** — Released completed additional-footage study: four archives CRC/SHA verified,55newvideos after one old overlap;capture-day36/13/6split frozen192c25c;reviewedfit referencesfb538e8;actualCUDA1000steps selected800,validation8TP2FP18FN;weights/freeze3bfac94 beforetestdecode;testreferences054f5cb beforeprediction;oneheldoutpass1TP1FP8FN on9visibleheads,15unrated. Report/README and weights/references/source hashes published;65researchtests pass;all55sourcehashes rechecked;no rawpixels or coaching labels published,no production promotion. Both real review servers44597/45851 stillHTTP200. Manual scoped checkpoint/release avoids helper staging unrelated files or posting external issue comments.
 - 2026-11-05T20:43:15Z **codex** — Claimed new-footage training scope: four new ZIPs with56 videos/one photo before deduplication. Session/source split before fitting; engineering axe/impact labels separate from coach judgments. Local status/explicit commits used because helper posts external issue comments and stages unrelated files.
