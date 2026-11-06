@@ -4,6 +4,9 @@ import 'dart:typed_data';
 import 'package:analysis_engine/analysis_engine.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+
+import '../vision/training_track.dart';
+
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -20,7 +23,10 @@ Future<List<String>> pickReferenceClips() async {
     dialogTitle: 'Choose reference clips',
     type: FileType.video,
   );
-  return [for (final f in files) if (f.path != null) f.path!];
+  return [
+    for (final f in files)
+      if (f.path != null) f.path!,
+  ];
 }
 
 Future<String?> savePackageCopy(String fileName, List<int> bytes) async {
@@ -39,11 +45,16 @@ ProfileBuilderController defaultProfileBuilder(AppDatabase db, PackInfo pack) =>
     ProfileBuilderController(
       pack: pack.analysisPack,
       probe: probeClip,
-      evaluate: visionEvaluator(pack.analysisPack),
+      evaluate: visionEvaluator(
+        pack.analysisPack,
+        load: reviewedTrainingTrack(db),
+      ),
       store: (profile) async {
         final support = await getApplicationSupportDirectory();
         return storeProfilePackage(
-            profile, Directory(p.join(support.path, 'profiles')));
+          profile,
+          Directory(p.join(support.path, 'profiles')),
+        );
       },
       save: savePackageCopy,
       install: (meta, path) => db.saveProfile(meta, path),
@@ -119,6 +130,7 @@ class _ProfileBuilderScreenState extends State<ProfileBuilderScreen> {
                                   key: Key('clip-${clip.displayName}'),
                                   clip: clip,
                                   onRemove: () => c.removeClip(clip),
+                                  onRetry: () => c.retryClip(clip),
                                 ),
                               Padding(
                                 padding: const EdgeInsets.all(8),
@@ -144,14 +156,16 @@ class _ProfileBuilderScreenState extends State<ProfileBuilderScreen> {
                       icon: c.building
                           ? const SizedBox.square(
                               dimension: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2))
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
                           : const Icon(Icons.person_pin_outlined),
-                      label: Text(c.checking
-                          ? 'Checking clips…'
-                          : 'Build profile'),
+                      label: Text(
+                        c.checking ? 'Checking clips…' : 'Build profile',
+                      ),
                       style: FilledButton.styleFrom(
-                          minimumSize: const Size.fromHeight(48),
-                          textStyle: theme.textTheme.titleSmall),
+                        minimumSize: const Size.fromHeight(48),
+                        textStyle: theme.textTheme.titleSmall,
+                      ),
                     ),
                   ),
                 ],
@@ -177,21 +191,25 @@ class _Progress extends StatelessWidget {
     final enough = c.usableCount >= c.minClips;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          key: const Key('builder-progress'),
-          enough
-              ? '${c.usableCount} clean clips · enough to build'
-              : '${c.usableCount} of ${c.minClips} clean clips',
-          style: theme.textTheme.bodyMedium?.copyWith(
-              fontFeatures: const [FontFeature.tabularFigures()]),
-        ),
-        const SizedBox(height: 6),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(3),
-          child: LinearProgressIndicator(value: ratio, minHeight: 6),
-        ),
-      ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            key: const Key('builder-progress'),
+            enough
+                ? '${c.usableCount} clean clips · enough to build'
+                : '${c.usableCount} of ${c.minClips} clean clips',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+          const SizedBox(height: 6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: LinearProgressIndicator(value: ratio, minHeight: 6),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -207,34 +225,51 @@ class _EmptyClips extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Icon(Icons.video_collection_outlined,
-              size: 48, color: theme.colorScheme.onSurfaceVariant),
-          const SizedBox(height: 12),
-          Text('Add $minClips or more clips of one person',
-              style: theme.textTheme.titleMedium),
-          const SizedBox(height: 4),
-          Text('Same movement, clearly visible. Each clip is checked as it comes in.',
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.video_collection_outlined,
+              size: 48,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Add $minClips or more clips of one person',
+              style: theme.textTheme.titleMedium,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Same movement, clearly visible. Each clip is checked as it comes in.',
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-          const SizedBox(height: 16),
-          FilledButton.tonalIcon(
-            key: const Key('add-clips'),
-            onPressed: onAdd,
-            icon: const Icon(Icons.add),
-            label: const Text('Add clips'),
-          ),
-        ]),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 16),
+            FilledButton.tonalIcon(
+              key: const Key('add-clips'),
+              onPressed: onAdd,
+              icon: const Icon(Icons.add),
+              label: const Text('Add clips'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class _ClipTile extends StatelessWidget {
-  const _ClipTile({super.key, required this.clip, required this.onRemove});
+  const _ClipTile({
+    super.key,
+    required this.clip,
+    required this.onRemove,
+    required this.onRetry,
+  });
   final BuilderClip clip;
   final VoidCallback onRemove;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +279,9 @@ class _ClipTile extends StatelessWidget {
     final String subtitle;
     if (clip.status == ClipStatus.checking) {
       leading = const SizedBox.square(
-          dimension: 20, child: CircularProgressIndicator(strokeWidth: 2));
+        dimension: 20,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      );
       subtitle = 'Checking…';
     } else if (clip.usable) {
       leading = Icon(Icons.check_circle, color: scheme.primary);
@@ -257,10 +294,21 @@ class _ClipTile extends StatelessWidget {
       leading: leading,
       title: Text(clip.displayName, overflow: TextOverflow.ellipsis),
       subtitle: Text(subtitle),
-      trailing: IconButton(
-        tooltip: 'Remove',
-        onPressed: onRemove,
-        icon: const Icon(Icons.close),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (!clip.usable && clip.status == ClipStatus.done)
+            IconButton(
+              tooltip: 'Retry clip',
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh),
+            ),
+          IconButton(
+            tooltip: 'Remove clip',
+            onPressed: onRemove,
+            icon: const Icon(Icons.close),
+          ),
+        ],
       ),
     );
   }
@@ -277,15 +325,20 @@ class _Outcome extends StatelessWidget {
     final scheme = theme.colorScheme;
     return switch (c.outcome!) {
       BuildReady(:final profile, :final consistency) => Card(
-          key: const Key('build-ready'),
-          margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-          color: scheme.primaryContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('${profile.coachName} · v${profile.version} is ready',
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: scheme.onPrimaryContainer)),
+        key: const Key('build-ready'),
+        margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+        color: scheme.primaryContainer,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${profile.coachName} · v${profile.version} is ready',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: scheme.onPrimaryContainer,
+                ),
+              ),
               const SizedBox(height: 4),
               Text(
                 '${profile.sourceClipCount} clips · held-out match '
@@ -294,44 +347,62 @@ class _Outcome extends StatelessWidget {
                 style: TextStyle(color: scheme.onPrimaryContainer),
               ),
               const SizedBox(height: 12),
-              Row(children: [
-                OutlinedButton.icon(
-                  key: const Key('save-package'),
-                  onPressed: c.exportCopy,
-                  icon: const Icon(Icons.save_alt),
-                  label: const Text('Save a copy'),
-                ),
-                const SizedBox(width: 12),
-                if (c.savedTo != null)
-                  Expanded(
-                    child: Text('Saved',
-                        key: const Key('saved'),
-                        style: TextStyle(color: scheme.onPrimaryContainer)),
+              Row(
+                children: [
+                  OutlinedButton.icon(
+                    key: const Key('save-package'),
+                    onPressed: c.exportCopy,
+                    icon: const Icon(Icons.save_alt),
+                    label: const Text('Save a copy'),
                   ),
-              ]),
-            ]),
+                  const SizedBox(width: 12),
+                  if (c.savedTo != null)
+                    Expanded(
+                      child: Text(
+                        'Saved',
+                        key: const Key('saved'),
+                        style: TextStyle(color: scheme.onPrimaryContainer),
+                      ),
+                    ),
+                ],
+              ),
+            ],
           ),
         ),
+      ),
       BuildRejected(:final error) => Card(
-          key: const Key('build-rejected'),
-          margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-          color: scheme.surfaceContainerHigh,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(children: [
-                Icon(Icons.info_outline, color: scheme.error),
-                const SizedBox(width: 8),
-                Expanded(
-                    child: Text(error.message, style: theme.textTheme.bodyLarge)),
-              ]),
+        key: const Key('build-rejected'),
+        margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+        color: scheme.surfaceContainerHigh,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.info_outline, color: scheme.error),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      error.message,
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 6),
-              Text(error.errorCode,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                      color: scheme.onSurfaceVariant, letterSpacing: 0.6)),
-            ]),
+              Text(
+                error.errorCode,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                  letterSpacing: 0.6,
+                ),
+              ),
+            ],
           ),
         ),
+      ),
     };
   }
 }

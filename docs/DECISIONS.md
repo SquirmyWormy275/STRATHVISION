@@ -86,7 +86,7 @@ See docs/CARNE_ASADA.md for full specification.
 
 ## Phase 4 Profile Builder Decisions
 
-- The builder lives in `packages/analysis_engine` (`ProfileBuilder`), so the phone and the workbench share it. DECISIONS says coaches can do everything on the phone, so the Build a profile screen is on every platform.
+- The builder lives in `packages/analysis_engine` (`ProfileBuilder`). Its implementation is shared, but the Build a profile screen is desktop-only (audit decision, 2026-11-06). Phones consume fitted packages.
 - Fitting:
   - center = mean.
   - spread = sample SD, floored at the metric's `min_spread` (and never 0).
@@ -103,7 +103,7 @@ See docs/CARNE_ASADA.md for full specification.
 
 ## Phase 5 Style Comparison Decisions
 
-- `compare()` in `packages/analysis_engine` implements the INTERFACES.md "Comparison rules". A delta's contribution is its weighted share of the score lost, so the ranking is the largest weighted measured differences. Ties are broken by metric key, which keeps the result deterministic.
+- `compare()` in `packages/analysis_engine` implements the INTERFACES.md "Comparison rules". A delta's contribution is its weighted share of score lost. The `confidence-v1` policy ranks by contribution times reliability, demotes reliability below 0.6, and breaks ties by reliability then metric key; score semantics remain unchanged.
 - Low confidence (below 0.6, for phases, metrics or the pose summary) adds warnings and never changes the score. The stub phase detector reports 0.5, so every result carries a "phase timing is uncertain" warning until a real detector lands. This is intended.
 - In the Analysis panel, "Compare with" lists ready profiles for the active pack's event, and the newest is selected by default. "Nobody" shows measurements only. Changing the profile re-analyzes the clip so that profile's patches apply.
 - Patches: when a profile is selected, its package's `specialist_patches/` are parsed against the base heads, and the highest valid version per head is applied inside the analysis isolate. Rejected patches are skipped and named in the result's warnings. `applied_patches` lists what was applied.
@@ -292,7 +292,7 @@ Research accuracy follow-up: image-space axe observations and source-disjoint ge
 - Primary: automatic workbench loop (laptop ingests, fits, pushes when phone reachable).
 - Secondary: manual transfer when convenient (AirDrop, local network, P2P code).
 - Opportunistic local Wi-Fi + one-time peer-to-peer. No required cloud.
-- Phone base / laptop-trained package / desktop full. Phone never required to do heavy fit for personal use; coaches can do everything on phone.
+- Phone review/inference / laptop-trained package / desktop full. Profile fitting and weight editing are desktop-only.
 - Single writer queue per overlay. Fits run on snapshot; mid-fit arrivals apply after.
 - Automatic rollback (keep last two versions). Soft reset (parameters only). Full export-and-rebuild archive.
 - Format versioning: newer readers accept older packages; older readers refuse or read-only.
@@ -344,3 +344,7 @@ One-sentence edit explanations (exact style):
 - “Raised the weight of the residual exemplar from the 14-second mark of the Gurr clip; it matched the current priority better than the existing mean.”
 - “Dropped one low-confidence exemplar that was pulling the mean flat.”
 - “No geometric change. Only re-weighted existing coach strokes after the new voice note.”
+
+## Audit hardening decision — 2026-11-06
+
+The user authorized execution of the repository audit roadmap. The additive audit contract in INTERFACES.md governs package containment, content identity, event-bound mark transfer, fail-closed athlete selection, input recovery and confidence-aware delta ranking. Profile fitting is desktop-only; earlier statements allowing all coach fitting flows on phones are superseded. Model confidence is not physical uncertainty, so overall score semantics remain unchanged and ranking is versioned separately. No research detector is promoted by this work. Device acceptance and independent coach evidence stay open until observed.

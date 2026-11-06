@@ -16,6 +16,8 @@ import '../data/database.dart';
 import '../packs/pack_registry.dart';
 import '../packs/placeholder_pack.dart';
 import '../profiles/builder_controller.dart';
+import '../profiles/source_identity.dart';
+import '../vision/training_track.dart';
 import '../profiles/profile_package.dart';
 import '../workspace/project.dart';
 import '../profiles/clip_probe.dart';
@@ -72,7 +74,7 @@ class LibraryScreen extends StatelessWidget {
   final StagePlayerFactory playerFactory;
   final AnalysisRunner? analysisRunner;
   final ProfileBuilderController Function(AppDatabase db, PackInfo pack)
-      profileBuilder;
+  profileBuilder;
   final ClipsPicker pickClips;
 
   /// Installed packs (empty = built-in placeholder only).
@@ -99,7 +101,9 @@ class LibraryScreen extends StatelessWidget {
 
   Future<Directory> _store() async => profileStore != null
       ? profileStore!()
-      : Directory(p.join((await getApplicationSupportDirectory()).path, 'profiles'));
+      : Directory(
+          p.join((await getApplicationSupportDirectory()).path, 'profiles'),
+        );
 
   /// Export with an explicit choice and a summary before writing
   /// (DECISIONS.md). Default: coaching profile only.
@@ -113,13 +117,17 @@ class LibraryScreen extends StatelessWidget {
       final plan = await showDialog<ExportPlan>(
         context: context,
         builder: (_) => _ExportDialog(
-            plan: (choice) => planExport(db, row, choice, attributes: attributes)),
+          plan: (choice) => planExport(db, row, choice, attributes: attributes),
+        ),
       );
       if (plan == null) return;
       final where = await saveFile(plan.fileName, plan.zip());
       if (where != null) {
-        messenger.showSnackBar(SnackBar(
-            content: Text('Saved ${plan.fileName}. Send it like any file.')));
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text('Saved ${plan.fileName}. Send it like any file.'),
+          ),
+        );
       }
     } on AnalysisError catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(e.message)));
@@ -131,14 +139,21 @@ class LibraryScreen extends StatelessWidget {
     final rows = await db.comparisonsForProfile(row.profileId);
     final summary = summarizeDrift([
       for (final r in rows)
-        DriftPoint.fromResult(r.createdAt, jsonDecode(r.json) as Map<String, Object?>),
+        DriftPoint.fromResult(
+          r.createdAt,
+          jsonDecode(r.json) as Map<String, Object?>,
+        ),
     ]);
-    await navigator.push(MaterialPageRoute<void>(
-      builder: (_) => DriftScreen(
-          title: '${row.coachName} · ${_workbenchFor(row)?.event.label ?? row.eventId}',
+    await navigator.push(
+      MaterialPageRoute<void>(
+        builder: (_) => DriftScreen(
+          title:
+              '${row.coachName} · ${_workbenchFor(row)?.event.label ?? row.eventId}',
           summary: summary,
-          pack: _workbenchFor(row)),
-    ));
+          pack: _workbenchFor(row),
+        ),
+      ),
+    );
   }
 
   Future<void> _setInbox(BuildContext context) async {
@@ -147,31 +162,46 @@ class LibraryScreen extends StatelessWidget {
     if (folder == null) return;
     await db.setSetting(inboxFolderKey, folder);
     final n = await scanInbox(db, folder, await _store());
-    messenger.showSnackBar(SnackBar(
-        content: Text(n == 0
-            ? 'Inbox set. New packages dropped there will appear here.'
-            : 'Inbox set. Added $n ${n == 1 ? 'package' : 'packages'}.')));
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          n == 0
+              ? 'Inbox set. New packages dropped there will appear here.'
+              : 'Inbox set. Added $n ${n == 1 ? 'package' : 'packages'}.',
+        ),
+      ),
+    );
   }
 
   Future<List<HealthItem>> _health(ProfileRow row) async {
     final bundle = await readProfileBundle(row.sourcePath);
     final n = (await db.comparisonsForProfile(row.profileId)).length;
-    return profileHealth(bundle: bundle, events: PackInfo.all(_packs), comparisons: n);
+    return profileHealth(
+      bundle: bundle,
+      events: PackInfo.all(_packs),
+      comparisons: n,
+    );
   }
 
   CarneFactory get _carne => carne ?? defaultCarne(db);
 
-  Future<void> _openCarne(BuildContext context, ProfileRow row, PackInfo pack,
-      WorkbenchController wb) async {
+  Future<void> _openCarne(
+    BuildContext context,
+    ProfileRow row,
+    PackInfo pack,
+    WorkbenchController wb,
+  ) async {
     final controller = await _carne(row, pack, wb);
     if (!context.mounted) return;
-    await Navigator.of(context).push(MaterialPageRoute<void>(
-      builder: (_) =>
-          CarneScreen(
-              controller: controller,
-              title: '${row.coachName} · v${row.version}',
-              pickFiles: pickFiles),
-    ));
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => CarneScreen(
+          controller: controller,
+          title: '${row.coachName} · v${row.version}',
+          pickFiles: pickFiles,
+        ),
+      ),
+    );
     controller.dispose();
   }
 
@@ -182,7 +212,10 @@ class LibraryScreen extends StatelessWidget {
           : null);
 
   Future<void> _openWorkbench(
-      BuildContext context, ProfileRow row, PackInfo pack) async {
+    BuildContext context,
+    ProfileRow row,
+    PackInfo pack,
+  ) async {
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     final WorkbenchController controller;
@@ -192,24 +225,30 @@ class LibraryScreen extends StatelessWidget {
       messenger.showSnackBar(SnackBar(content: Text(e.message)));
       return;
     }
-    await navigator.push(MaterialPageRoute<void>(
-      builder: (ctx) => WorkbenchScreen(
+    await navigator.push(
+      MaterialPageRoute<void>(
+        builder: (ctx) => WorkbenchScreen(
           controller: controller,
           title: '${row.coachName} · v${row.version}',
           pickClips: pickClips,
-          onCarne: () => _openCarne(ctx, row, pack, controller)),
-    ));
+          onCarne: () => _openCarne(ctx, row, pack, controller),
+        ),
+      ),
+    );
     controller.dispose();
   }
 
-  List<PackDefinition> get _packs => packs.isEmpty ? [placeholderDefinition] : packs;
+  List<PackDefinition> get _packs =>
+      packs.isEmpty ? [placeholderDefinition] : packs;
 
   Future<void> _buildProfile(BuildContext context, PackInfo pack) async {
     final controller = profileBuilder(db, pack);
-    await Navigator.of(context).push(MaterialPageRoute<void>(
-      builder: (_) =>
-          ProfileBuilderScreen(controller: controller, pickClips: pickClips),
-    ));
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            ProfileBuilderScreen(controller: controller, pickClips: pickClips),
+      ),
+    );
     controller.dispose();
   }
 
@@ -219,15 +258,18 @@ class LibraryScreen extends StatelessWidget {
     if (path == null) return;
     try {
       final meta = await readProfilePackage(path);
-      final installed = (await db.allProfiles()).where((r) => r.profileId == meta.profileId);
+      final installed = (await db.allProfiles()).where(
+        (r) => r.profileId == meta.profileId,
+      );
       ImportChoice? choice;
       if (installed.isNotEmpty) {
         if (!context.mounted) return;
         choice = await showDialog<ImportChoice>(
           context: context,
           builder: (_) => _ImportDialog(
-              name: '${meta.coachName} · v${meta.version}',
-              have: [for (final r in installed) 'v${r.version}']),
+            name: '${meta.coachName} · v${meta.version}',
+            have: [for (final r in installed) 'v${r.version}'],
+          ),
         );
         if (choice == null) return;
       }
@@ -235,27 +277,33 @@ class LibraryScreen extends StatelessWidget {
       messenger.showSnackBar(SnackBar(content: Text(msg)));
     } on AnalysisError catch (e) {
       final problems = (e.details['problems'] as List?)?.cast<String>();
-      messenger.showSnackBar(SnackBar(
-        duration: const Duration(seconds: 6),
-        content: Text(problems == null || problems.isEmpty
-            ? e.message
-            : '${e.message} ${problems.first}'
-                '${problems.length > 1 ? ' (+${problems.length - 1} more)' : ''}'),
-      ));
+      messenger.showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 6),
+          content: Text(
+            problems == null || problems.isEmpty
+                ? e.message
+                : '${e.message} ${problems.first}'
+                      '${problems.length > 1 ? ' (+${problems.length - 1} more)' : ''}',
+          ),
+        ),
+      );
     }
   }
 
   void _openProject(BuildContext context, Project project, PackInfo pack) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => WorkspaceRoute(
-        db: db,
-        project: project,
-        pack: pack,
-        pickClip: pickClip,
-        playerFactory: playerFactory,
-        analysisRunner: analysisRunner,
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => WorkspaceRoute(
+          db: db,
+          project: project,
+          pack: pack,
+          pickClip: pickClip,
+          playerFactory: playerFactory,
+          analysisRunner: analysisRunner,
+        ),
       ),
-    ));
+    );
   }
 
   Future<void> _newReview(BuildContext context, PackInfo pack) async {
@@ -269,7 +317,10 @@ class LibraryScreen extends StatelessWidget {
   }
 
   Future<void> _reopen(
-      BuildContext context, String projectId, PackInfo pack) async {
+    BuildContext context,
+    String projectId,
+    PackInfo pack,
+  ) async {
     final project = await db.loadProject(projectId);
     if (project != null && context.mounted) {
       _openProject(context, project, pack);
@@ -278,15 +329,15 @@ class LibraryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => StreamBuilder<String?>(
-        stream: db.watchSetting(AppDatabase.activeEventKey),
-        builder: (context, snap) =>
-            _build(context, activePack(_packs, snap.data)),
-      );
+    stream: db.watchSetting(AppDatabase.activeEventKey),
+    builder: (context, snap) => _build(context, activePack(_packs, snap.data)),
+  );
 
   /// The pack event a profile belongs to, if installed.
-  PackInfo? _workbenchFor(ProfileRow row) => PackInfo.all(_packs)
-      .where((x) => x.packId == row.packId && x.eventId == row.eventId)
-      .firstOrNull;
+  PackInfo? _workbenchFor(ProfileRow row) =>
+      PackInfo.all(_packs)
+          .where((x) => x.packId == row.packId && x.eventId == row.eventId)
+          .firstOrNull;
 
   Widget _eventPicker(BuildContext context, PackInfo pack) {
     final all = PackInfo.all(_packs);
@@ -299,14 +350,20 @@ class LibraryScreen extends StatelessWidget {
       itemBuilder: (_) => [
         for (final p in all)
           PopupMenuItem(
-              key: Key('event-${p.key}'), value: p.key, child: Text(p.label)),
+            key: Key('event-${p.key}'),
+            value: p.key,
+            child: Text(p.label),
+          ),
       ],
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Text(pack.event.label, key: const Key('active-event')),
-          const Icon(Icons.arrow_drop_down),
-        ]),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(pack.event.label, key: const Key('active-event')),
+            const Icon(Icons.arrow_drop_down),
+          ],
+        ),
       ),
     );
   }
@@ -318,12 +375,13 @@ class LibraryScreen extends StatelessWidget {
         title: const Text('Library'),
         actions: [
           _eventPicker(context, pack),
-          IconButton(
-            key: const Key('build-profile'),
-            tooltip: 'Build a profile',
-            icon: const Icon(Icons.person_add_alt),
-            onPressed: () => _buildProfile(context, pack),
-          ),
+          if (Platform.isLinux || Platform.isMacOS || Platform.isWindows)
+            IconButton(
+              key: const Key('build-profile'),
+              tooltip: 'Build a profile',
+              icon: const Icon(Icons.person_add_alt),
+              onPressed: () => _buildProfile(context, pack),
+            ),
           PopupMenuButton<String>(
             key: const Key('library-menu'),
             onSelected: (v) {
@@ -331,7 +389,10 @@ class LibraryScreen extends StatelessWidget {
             },
             itemBuilder: (_) => const [
               PopupMenuItem(
-                  key: Key('menu-inbox'), value: 'inbox', child: Text('Inbox folder…')),
+                key: Key('menu-inbox'),
+                value: 'inbox',
+                child: Text('Inbox folder…'),
+              ),
             ],
           ),
           IconButton(
@@ -374,9 +435,14 @@ class LibraryScreen extends StatelessWidget {
                       health: _health(row),
                       onTrend: () => _trend(context, row),
                       onExport: () => _export(context, row),
-                      onWorkbench: _workbenchFor(row) == null || _workbench == null
+                      onWorkbench:
+                          _workbenchFor(row) == null || _workbench == null
                           ? null
-                          : () => _openWorkbench(context, row, _workbenchFor(row)!),
+                          : () => _openWorkbench(
+                              context,
+                              row,
+                              _workbenchFor(row)!,
+                            ),
                     ),
                 ],
               ],
@@ -396,8 +462,18 @@ class LibraryScreen extends StatelessWidget {
 
 String _shortDate(DateTime t) {
   const months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
   final l = t.toLocal();
   final hh = l.hour.toString().padLeft(2, '0');
@@ -413,11 +489,14 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-        child: Text(text,
-            style: theme.textTheme.labelLarge
-                ?.copyWith(color: theme.colorScheme.primary)),
-      );
+    padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+    child: Text(
+      text,
+      style: theme.textTheme.labelLarge?.copyWith(
+        color: theme.colorScheme.primary,
+      ),
+    ),
+  );
 }
 
 class _EmptyLibrary extends StatelessWidget {
@@ -434,8 +513,11 @@ class _EmptyLibrary extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.video_library_outlined,
-                size: 56, color: theme.colorScheme.outline),
+            Icon(
+              Icons.video_library_outlined,
+              size: 56,
+              color: theme.colorScheme.outline,
+            ),
             const SizedBox(height: 16),
             Text('Add a clip to start', style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
@@ -443,8 +525,9 @@ class _EmptyLibrary extends StatelessWidget {
               'Start a review to watch and compare clips side by side.\n'
               'Profiles are optional.',
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 20),
             TextButton.icon(
@@ -480,127 +563,165 @@ class _ProfileTile extends StatelessWidget {
     return ListTile(
       key: Key('profile-${profile.profileId}-${profile.version}'),
       leading: CircleAvatar(
-        child: Text(profile.coachName.isEmpty
-            ? '?'
-            : profile.coachName.characters.first.toUpperCase()),
+        child: Text(
+          profile.coachName.isEmpty
+              ? '?'
+              : profile.coachName.characters.first.toUpperCase(),
+        ),
       ),
       title: Text('${profile.coachName} · v${profile.version}'),
-      subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          '${profile.packId} / ${profile.eventId}\n'
-          '${profile.sourceClipCount} clips · ${profile.metricCount} metrics · '
-          'schema ${profile.metricSchemaVersion}',
-        ),
-        if (health != null)
-          FutureBuilder<List<HealthItem>>(
-            future: health,
-            builder: (context, snap) {
-              final items = snap.data;
-              if (items == null) return const SizedBox.shrink();
-              final scheme = Theme.of(context).colorScheme;
-              return Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Wrap(spacing: 10, runSpacing: 2, children: [
-                  for (final h in items)
-                    Row(
-                      key: Key('health-${h.label}'),
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(h.ok ? Icons.check_circle_outline : Icons.error_outline,
-                            size: 14, color: h.ok ? scheme.primary : scheme.error),
-                        const SizedBox(width: 3),
-                        Text(h.label, style: Theme.of(context).textTheme.bodySmall),
-                      ],
-                    ),
-                ]),
-              );
-            },
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${profile.packId} / ${profile.eventId}\n'
+            '${profile.sourceClipCount} clips · ${profile.metricCount} metrics · '
+            'schema ${profile.metricSchemaVersion}',
           ),
-      ]),
+          if (health != null)
+            FutureBuilder<List<HealthItem>>(
+              future: health,
+              builder: (context, snap) {
+                final items = snap.data;
+                if (items == null) return const SizedBox.shrink();
+                final scheme = Theme.of(context).colorScheme;
+                return Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 2,
+                    children: [
+                      for (final h in items)
+                        Row(
+                          key: Key('health-${h.label}'),
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              h.ok
+                                  ? Icons.check_circle_outline
+                                  : Icons.error_outline,
+                              size: 14,
+                              color: h.ok ? scheme.primary : scheme.error,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              h.label,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
       isThreeLine: true,
-      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-        Chip(
-          label: Text(ready ? 'Ready' : 'Not ready'),
-          visualDensity: VisualDensity.compact,
-        ),
-        if (onTrend != null)
-          IconButton(
-            key: Key('trend-${profile.profileId}-${profile.version}'),
-            tooltip: 'Match trend',
-            icon: const Icon(Icons.show_chart),
-            onPressed: onTrend,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Chip(
+            label: Text(ready ? 'Ready' : 'Not ready'),
+            visualDensity: VisualDensity.compact,
           ),
-        if (onExport != null)
-          IconButton(
-            key: Key('export-${profile.profileId}-${profile.version}'),
-            tooltip: 'Export package',
-            icon: const Icon(Icons.ios_share),
-            onPressed: onExport,
-          ),
-        if (onWorkbench != null && ready)
-          IconButton(
-            key: Key('workbench-${profile.profileId}-${profile.version}'),
-            tooltip: 'Workbench',
-            icon: const Icon(Icons.tune),
-            onPressed: onWorkbench,
-          ),
-      ]),
+          if (onTrend != null)
+            IconButton(
+              key: Key('trend-${profile.profileId}-${profile.version}'),
+              tooltip: 'Match trend',
+              icon: const Icon(Icons.show_chart),
+              onPressed: onTrend,
+            ),
+          if (onExport != null)
+            IconButton(
+              key: Key('export-${profile.profileId}-${profile.version}'),
+              tooltip: 'Export package',
+              icon: const Icon(Icons.ios_share),
+              onPressed: onExport,
+            ),
+          if (onWorkbench != null && ready)
+            IconButton(
+              key: Key('workbench-${profile.profileId}-${profile.version}'),
+              tooltip: 'Workbench',
+              icon: const Icon(Icons.tune),
+              onPressed: onWorkbench,
+            ),
+        ],
+      ),
     );
   }
 }
 
 typedef WorkbenchFactory = Future<WorkbenchController> Function(
-    ProfileRow row, PackInfo pack);
+  ProfileRow row,
+  PackInfo pack,
+);
 
 /// Production workbench: reads the package, probes and analyzes clips off
 /// the UI isolate, compiles with Claude when ANTHROPIC_API_KEY is set, and
 /// stores each saved version under app support.
 WorkbenchFactory defaultWorkbench(AppDatabase db) => (row, pack) async {
-      final bundle = await readProfileBundle(row.sourcePath);
-      return WorkbenchController(
-        pack: pack.analysisPack,
-        bundle: bundle,
-        probe: probeClip,
-        analyze: visionProbeAnalyzer(pack.analysisPack),
-        compiler: ClaudeAdapterCompiler.fromEnvironment(),
-        write: (Profile profile, patches, adapters) async {
-          final support = await getApplicationSupportDirectory();
-          final path = await storeProfilePackage(
-              profile, Directory(p.join(support.path, 'profiles')),
-              patches: patches, adapters: adapters);
-          await db.saveProfile(await readProfilePackage(path), path);
-          return path;
-        },
+  final bundle = await readProfileBundle(row.sourcePath);
+  return WorkbenchController(
+    pack: pack.analysisPack,
+    bundle: bundle,
+    probe: probeClip,
+    analyze: visionProbeAnalyzer(
+      pack.analysisPack,
+      load: reviewedTrainingTrack(db),
+    ),
+    fingerprint: sourceHash,
+    compiler: ClaudeAdapterCompiler.fromEnvironment(),
+    write: (Profile profile, patches, adapters) async {
+      final support = await getApplicationSupportDirectory();
+      final path = await storeProfilePackage(
+        profile,
+        Directory(p.join(support.path, 'profiles')),
+        patches: patches,
+        adapters: adapters,
       );
-    };
+      await db.saveProfile(await readProfilePackage(path), path);
+      return path;
+    },
+  );
+};
 
 typedef CarneFactory = Future<CarneController> Function(
-    ProfileRow row, PackInfo pack, WorkbenchController workbench);
+  ProfileRow row,
+  PackInfo pack,
+  WorkbenchController workbench,
+);
 
 /// Production playground: strokes analyzed off the UI isolate, marks from
 /// every project on the same clip file, versions stored under app support.
 CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async {
   final athletes = CarneAthleteState();
   return CarneController(
-      pack: pack.analysisPack,
-      attributes: [...pack.topAttributes, ...pack.moreAttributes],
-      bundle: wb.bundle,
-      probe: probeClip,
-      analyze: isolateStrokeAnalyzer(pack.analysisPack, athletes: athletes),
-      athletes: athletes,
-      analysisMetadata: carneAnalysisMetadata(),
-      marks: db.marksForPath,
-      phaseLabel: pack.phaseLabel,
-      metricLabel: pack.metricLabel,
-      write: (Profile profile, patches, adapters, research) async {
-        final support = await getApplicationSupportDirectory();
-        final path = await storeProfilePackage(
-            profile, Directory(p.join(support.path, 'profiles')),
-            patches: patches, adapters: adapters, research: research);
-        await db.saveProfile(await readProfilePackage(path), path);
-        return path;
-      },
-    );
+    pack: pack.analysisPack,
+    attributes: [...pack.topAttributes, ...pack.moreAttributes],
+    bundle: wb.bundle,
+    probe: probeClip,
+    analyze: isolateStrokeAnalyzer(pack.analysisPack, athletes: athletes),
+    athletes: athletes,
+    analysisMetadata: carneAnalysisMetadata(),
+    marks: (path) async => db.marksForPath(path,
+        packId: pack.analysisPack.packId, eventId: pack.analysisPack.eventId,
+        sourceSha256: await sourceHash(path)),
+    phaseLabel: pack.phaseLabel,
+    metricLabel: pack.metricLabel,
+    write: (Profile profile, patches, adapters, research) async {
+      final support = await getApplicationSupportDirectory();
+      final path = await storeProfilePackage(
+        profile,
+        Directory(p.join(support.path, 'profiles')),
+        patches: patches,
+        adapters: adapters,
+        research: research,
+      );
+      await db.saveProfile(await readProfilePackage(path), path);
+      return path;
+    },
+  );
 };
 
 Future<String?> pickInboxFolder() =>
@@ -633,41 +754,57 @@ class _ExportDialogState extends State<_ExportDialog> {
       title: const Text('Export package'),
       content: SizedBox(
         width: 420,
-        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          RadioGroup<ExportChoice>(
-            groupValue: _choice,
-            onChanged: _pick,
-            child: Column(children: [
-              for (final c in ExportChoice.values)
-                RadioListTile<ExportChoice>(
-                  key: Key('export-choice-${c.name}'),
-                  contentPadding: EdgeInsets.zero,
-                  value: c,
-                  title: Text(c.label),
-                ),
-            ]),
-          ),
-          const SizedBox(height: 8),
-          Text('This will write:', style: theme.textTheme.labelLarge),
-          FutureBuilder<ExportPlan>(
-            future: _plan,
-            builder: (context, snap) => snap.data == null
-                ? const Padding(padding: EdgeInsets.all(8), child: LinearProgressIndicator())
-                : Column(
-                    key: const Key('export-summary'),
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [for (final l in snap.data!.summary) Text('· $l')],
-                  ),
-          ),
-        ]),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RadioGroup<ExportChoice>(
+              groupValue: _choice,
+              onChanged: _pick,
+              child: Column(
+                children: [
+                  for (final c in ExportChoice.values)
+                    RadioListTile<ExportChoice>(
+                      key: Key('export-choice-${c.name}'),
+                      contentPadding: EdgeInsets.zero,
+                      value: c,
+                      title: Text(c.label),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text('This will write:', style: theme.textTheme.labelLarge),
+            FutureBuilder<ExportPlan>(
+              future: _plan,
+              builder: (context, snap) => snap.data == null
+                  ? const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: LinearProgressIndicator(),
+                    )
+                  : Column(
+                      key: const Key('export-summary'),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (final l in snap.data!.summary) Text('· $l'),
+                      ],
+                    ),
+            ),
+          ],
+        ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
         FutureBuilder<ExportPlan>(
           future: _plan,
           builder: (context, snap) => FilledButton(
             key: const Key('export-save'),
-            onPressed: snap.data == null ? null : () => Navigator.pop(context, snap.data),
+            onPressed: snap.data == null
+                ? null
+                : () => Navigator.pop(context, snap.data),
             child: const Text('Save'),
           ),
         ),
@@ -683,17 +820,22 @@ class _ImportDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        title: Text('$name is already here'),
-        content: Text('You have ${have.join(', ')}. Replace removes those; Keep both '
-            'installs it alongside; Merge also brings in its marks and match history.'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          for (final c in ImportChoice.values)
-            TextButton(
-              key: Key('import-${c.name}'),
-              onPressed: () => Navigator.pop(context, c),
-              child: Text(c.label),
-            ),
-        ],
-      );
+    title: Text('$name is already here'),
+    content: Text(
+      'You have ${have.join(', ')}. Replace removes those; Keep both '
+      'installs it alongside; Merge also brings in its marks and match history.',
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: const Text('Cancel'),
+      ),
+      for (final c in ImportChoice.values)
+        TextButton(
+          key: Key('import-${c.name}'),
+          onPressed: () => Navigator.pop(context, c),
+          child: Text(c.label),
+        ),
+    ],
+  );
 }

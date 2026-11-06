@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:io';
+
+import '../profiles/source_identity.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
@@ -24,20 +27,23 @@ class WorkspaceController extends ChangeNotifier {
     required StagePlayer playerA,
     required StagePlayer playerB,
     List<String> attributes = const [],
+    this.packId,
+    this.eventId,
     DateTime Function()? clock,
     this.driftTolerance = const Duration(milliseconds: 40),
     this.driftCheckInterval = const Duration(milliseconds: 250),
-  })  : _project = project, // ignore: prefer_initializing_formals
-        _players = {Stage.a: playerA, Stage.b: playerB},
-        _attributes = List.of(attributes),
-        _activeAttribute = attributes.isEmpty ? null : attributes.first,
-        _clock = clock ?? DateTime.now {
+  }) : _project = project, // ignore: prefer_initializing_formals
+       _players = {Stage.a: playerA, Stage.b: playerB},
+       _attributes = List.of(attributes),
+       _activeAttribute = attributes.isEmpty ? null : attributes.first,
+       _clock = clock ?? DateTime.now {
     for (final s in Stage.values) {
       _subs.add(_players[s]!.changes.listen((_) => notifyListeners()));
     }
   }
 
   final ProjectStore store;
+  final String? packId, eventId;
   final Duration driftTolerance;
   final Duration driftCheckInterval;
   final DateTime Function() _clock;
@@ -147,14 +153,20 @@ class WorkspaceController extends ChangeNotifier {
   }
 
   /// The saved choice of who to analyse in [clipId] (null = automatic).
-  Map<String, Object?>? athleteFor(String clipId) => _project.clipById(clipId)?.athlete;
+  Map<String, Object?>? athleteFor(String clipId) =>
+      _project.clipById(clipId)?.athlete;
 
   /// Saves who to analyse in [clipId] (null returns to automatic).
   Future<void> setAthlete(String clipId, Map<String, Object?>? athlete) async {
     if (_project.clipById(clipId) == null) return;
-    await _commit(_project.copyWith(clips: [
-      for (final c in _project.clips) c.clipId == clipId ? c.withAthlete(athlete) : c,
-    ]));
+    await _commit(
+      _project.copyWith(
+        clips: [
+          for (final c in _project.clips)
+            c.clipId == clipId ? c.withAthlete(athlete) : c,
+        ],
+      ),
+    );
   }
 
   /// Scrub one stage. When locked, the other stage follows at the offset.
@@ -180,31 +192,40 @@ class WorkspaceController extends ChangeNotifier {
   Future<void> setSyncPoint() async {
     final a = _stageClipId(Stage.a), b = _stageClipId(Stage.b);
     if (a == null || b == null) return;
-    final offset = player(Stage.b).position.inMilliseconds -
+    final offset =
+        player(Stage.b).position.inMilliseconds -
         player(Stage.a).position.inMilliseconds;
     final rel = SyncRelationship(
-        clipAId: a, clipBId: b, offsetMs: offset, createdAt: _clock());
-    await _commit(_project.copyWith(
-      syncRelationships: [
-        for (final r in _project.syncRelationships)
-          if (!r.pairs(a, b)) r,
-        rel,
-      ],
-      workspace: _project.workspace.copyWith(locked: true),
-    ));
+      clipAId: a,
+      clipBId: b,
+      offsetMs: offset,
+      createdAt: _clock(),
+    );
+    await _commit(
+      _project.copyWith(
+        syncRelationships: [
+          for (final r in _project.syncRelationships)
+            if (!r.pairs(a, b)) r,
+          rel,
+        ],
+        workspace: _project.workspace.copyWith(locked: true),
+      ),
+    );
   }
 
   Future<void> clearSync() async {
     final a = _stageClipId(Stage.a), b = _stageClipId(Stage.b);
     if (sync == null) return;
     _stopDriftCorrection();
-    await _commit(_project.copyWith(
-      syncRelationships: [
-        for (final r in _project.syncRelationships)
-          if (!r.pairs(a, b)) r,
-      ],
-      workspace: _project.workspace.copyWith(locked: false),
-    ));
+    await _commit(
+      _project.copyWith(
+        syncRelationships: [
+          for (final r in _project.syncRelationships)
+            if (!r.pairs(a, b)) r,
+        ],
+        workspace: _project.workspace.copyWith(locked: false),
+      ),
+    );
   }
 
   /// Switch between locked and independent playback (needs a sync point).
@@ -212,8 +233,9 @@ class WorkspaceController extends ChangeNotifier {
     if (value && sync == null) return;
     if (value == _project.workspace.locked) return;
     await _commit(
-        _project.copyWith(workspace: _project.workspace.copyWith(locked: value)),
-        undoable: false);
+      _project.copyWith(workspace: _project.workspace.copyWith(locked: value)),
+      undoable: false,
+    );
     if (value) {
       await _alignB();
       if (playing) {
@@ -260,9 +282,11 @@ class WorkspaceController extends ChangeNotifier {
       await player(s).setRate(value);
     }
     await _commit(
-        _project.copyWith(
-            workspace: _project.workspace.copyWith(playbackRate: value)),
-        undoable: false);
+      _project.copyWith(
+        workspace: _project.workspace.copyWith(playbackRate: value),
+      ),
+      undoable: false,
+    );
     if (locked) await _alignB();
   }
 
@@ -293,8 +317,11 @@ class WorkspaceController extends ChangeNotifier {
     await moved.timeout(const Duration(milliseconds: 300), onTimeout: () {});
   }
 
-  Future<void> toggleMirrorB() => _commit(_project.copyWith(
-      workspace: _project.workspace.copyWith(mirrorB: !mirrorB)));
+  Future<void> toggleMirrorB() => _commit(
+    _project.copyWith(
+      workspace: _project.workspace.copyWith(mirrorB: !mirrorB),
+    ),
+  );
 
   /// Swap the clips on A and B. A sync relationship is carried over with the
   /// pair reversed and the offset negated, so lock survives the swap.
@@ -308,13 +335,16 @@ class WorkspaceController extends ChangeNotifier {
         if (old == null || !r.pairs(a, b)) r,
       if (old != null && a != null && b != null)
         SyncRelationship(
-            clipAId: b,
-            clipBId: a,
-            offsetMs: -old.offsetMs,
-            createdAt: old.createdAt),
+          clipAId: b,
+          clipBId: a,
+          offsetMs: -old.offsetMs,
+          createdAt: old.createdAt,
+        ),
     ];
-    final ws = _project.workspace
-        .copyWith(stageAClipId: () => b, stageBClipId: () => a);
+    final ws = _project.workspace.copyWith(
+      stageAClipId: () => b,
+      stageBClipId: () => a,
+    );
     await _commit(_project.copyWith(syncRelationships: rels, workspace: ws));
     await _reopenStages(seekA: posB, seekB: posA);
   }
@@ -323,16 +353,20 @@ class WorkspaceController extends ChangeNotifier {
   Future<void> annotate(String text) async {
     final clip = clipOn(_activeStage);
     if (clip == null || text.trim().isEmpty) return;
-    await _commit(_project.copyWith(annotations: [
-      ..._project.annotations,
-      Annotation(
-        annotationId: _uuid.v4(),
-        clipId: clip.clipId,
-        timeMs: player(_activeStage).position.inMilliseconds,
-        text: text.trim(),
-        createdAt: _clock(),
+    await _commit(
+      _project.copyWith(
+        annotations: [
+          ..._project.annotations,
+          Annotation(
+            annotationId: _uuid.v4(),
+            clipId: clip.clipId,
+            timeMs: player(_activeStage).position.inMilliseconds,
+            text: text.trim(),
+            createdAt: _clock(),
+          ),
+        ],
       ),
-    ]));
+    );
   }
 
   void selectAttribute(String attribute) {
@@ -343,22 +377,41 @@ class WorkspaceController extends ChangeNotifier {
 
   /// Red/green on the selected attribute for the current stroke of the
   /// active stage. Does not move the playhead.
-  Future<void> mark(MarkLabel label, {MarkAuthor author = MarkAuthor.athlete}) async {
+  Future<void> mark(
+    MarkLabel label, {
+    MarkAuthor author = MarkAuthor.athlete,
+  }) async {
     final clip = clipOn(_activeStage);
     final attribute = _activeAttribute;
     if (clip == null || attribute == null) return;
-    await _commit(_project.copyWith(marks: [
-      ..._project.marks,
-      Mark(
-        markId: _uuid.v4(),
-        clipId: clip.clipId,
-        timeMs: player(_activeStage).position.inMilliseconds,
-        attribute: attribute,
-        label: label,
-        author: author,
-        createdAt: _clock(),
+    final timeMs = player(_activeStage).position.inMilliseconds;
+    final createdAt = _clock();
+    String? hash;
+    try {
+      if (File(clip.path).existsSync()) hash = await sourceHash(clip.path);
+    } catch (_) {
+      /* retained locally */
+    }
+    if (_disposed) return;
+    await _commit(
+      _project.copyWith(
+        marks: [
+          ..._project.marks,
+          Mark(
+            markId: _uuid.v4(),
+            clipId: clip.clipId,
+            timeMs: timeMs,
+            packId: packId,
+            eventId: eventId,
+            sourceSha256: hash,
+            attribute: attribute,
+            label: label,
+            author: author,
+            createdAt: createdAt,
+          ),
+        ],
       ),
-    ]));
+    );
   }
 
   /// One-tap undo of the last mark, annotation, sync, load, swap, or mirror.
@@ -370,7 +423,7 @@ class WorkspaceController extends ChangeNotifier {
     await store.saveProject(_project);
     final stagesChanged =
         before.workspace.stageAClipId != _project.workspace.stageAClipId ||
-            before.workspace.stageBClipId != _project.workspace.stageBClipId;
+        before.workspace.stageBClipId != _project.workspace.stageBClipId;
     if (stagesChanged) {
       await _pauseAll();
       await _reopenStages();
@@ -409,7 +462,8 @@ class WorkspaceController extends ChangeNotifier {
   Future<void> _alignB({Duration? aPosition}) async {
     final s = sync;
     if (s == null) return;
-    final target = (aPosition ?? player(Stage.a).position) +
+    final target =
+        (aPosition ?? player(Stage.a).position) +
         Duration(milliseconds: s.offsetMs);
     await player(Stage.b).seek(_clamp(Stage.b, target));
   }
@@ -443,8 +497,10 @@ class WorkspaceController extends ChangeNotifier {
   Future<void> correctDrift() async {
     final s = sync;
     if (!locked || s == null) return;
-    final target = _clamp(Stage.b,
-        player(Stage.a).position + Duration(milliseconds: s.offsetMs));
+    final target = _clamp(
+      Stage.b,
+      player(Stage.a).position + Duration(milliseconds: s.offsetMs),
+    );
     final drift = player(Stage.b).position - target; // + means B is ahead
     final size = drift.abs();
 
@@ -457,8 +513,10 @@ class WorkspaceController extends ChangeNotifier {
     } else if (size > driftTolerance) {
       // Speed change that closes the gap in ~_catchUpSeconds of wall time,
       // capped at ±50% of the playback rate.
-      final delta = (drift.inMicroseconds / 1e6 / _catchUpSeconds)
-          .clamp(-rate * 0.5, rate * 0.5);
+      final delta = (drift.inMicroseconds / 1e6 / _catchUpSeconds).clamp(
+        -rate * 0.5,
+        rate * 0.5,
+      );
       _bRateNudged = true;
       await player(Stage.b).setRate(rate - delta);
     } else if (_bRateNudged) {

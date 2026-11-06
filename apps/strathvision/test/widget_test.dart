@@ -14,12 +14,17 @@ void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
 
   late AppDatabase db;
-  setUp(() => db = AppDatabase(NativeDatabase.memory()));
-  tearDown(() => db.close());
+  late Directory store;
+  setUp(() {
+    db = AppDatabase(NativeDatabase.memory());
+    store = Directory.systemTemp.createTempSync('sv-widget-');
+  });
+  tearDown(() async { await db.close(); store.deleteSync(recursive: true); });
 
   Future<void> pumpApp(WidgetTester tester, {String? path}) async {
     await tester.pumpWidget(StrathvisionApp(
       db: db,
+      profileStore: () async => store,
       pickPath: () async => path,
       playerFactory: FakeStagePlayer.new,
     ));

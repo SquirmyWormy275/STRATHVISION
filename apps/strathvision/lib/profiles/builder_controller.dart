@@ -8,54 +8,71 @@ import 'package:uuid/uuid.dart';
 import 'clip_probe.dart';
 import 'profile_export.dart';
 import 'profile_package.dart';
-import '../vision/pose_service.dart';
+import '../vision/training_track.dart';
+import 'source_identity.dart';
 
 typedef ClipEvaluator = Future<ClipQuality> Function(
-    ClipSource clip, String displayName);
+  ClipSource clip,
+  String displayName,
+);
 
 /// Production evaluator: real pose on device, then quality evaluation.
-ClipEvaluator visionEvaluator(AnalysisPack pack) => (clip, name) async {
-      final track = await PoseService.instance.track(clip);
+ClipEvaluator visionEvaluator(AnalysisPack pack, {TrainingTrackLoader? load}) =>
+    (clip, name) async {
+      final track = await trainingTrack(clip, load: load);
       if (track.frames.isEmpty) {
         return ClipQuality(
-            clipId: clip.clipId,
-            displayName: name,
-            usable: false,
-            reasons: const ['No person could be found in this clip.']);
+          clipId: clip.clipId,
+          displayName: name,
+          usable: false,
+          reasons: const ['No person could be found in this clip.'],
+        );
       }
-      return Isolate.run(() => ProfileBuilder(
-              engine: AnalysisEngine(
-                  pack: pack,
-                  pose: PrecomputedPoseEstimator(track),
-                  implement: const GripImplementTracker(),
-                  phases: const EventPhaseDetector(),
-                  perStroke: true))
-          .evaluate(clip, displayName: name));
+      return Isolate.run(
+        () => ProfileBuilder(
+          engine: AnalysisEngine(
+            pack: pack,
+            pose: PrecomputedPoseEstimator(track),
+            implement: const GripImplementTracker(),
+            phases: const EventPhaseDetector(),
+            perStroke: true,
+          ),
+        ).evaluate(clip, displayName: name),
+      );
     };
 
 /// Evaluates a reference clip on a background isolate (stand-in pose).
-ClipEvaluator isolateEvaluator(AnalysisPack pack) => (clip, name) => Isolate.run(
-    () => ProfileBuilder(engine: AnalysisEngine(pack: pack))
-        .evaluate(clip, displayName: name));
+ClipEvaluator isolateEvaluator(AnalysisPack pack) =>
+    (clip, name) => Isolate.run(
+      () =>
+          ProfileBuilder(engine: AnalysisEngine(pack: pack))
+              .evaluate(clip, displayName: name),
+    );
 
 /// Stores a built package in the app's profile store; returns its path.
 typedef PackageStore = Future<String> Function(Profile profile);
 
 /// Lets the user save a copy of the package; returns where, or null.
-typedef PackageSaver = Future<String?> Function(String fileName, Uint8List bytes);
+typedef PackageSaver = Future<String?> Function(
+  String fileName,
+  Uint8List bytes,
+);
 
 /// Adds the stored package to the Library.
 typedef ProfileInstaller = Future<void> Function(
-    ProfileMetadata metadata, String path);
+  ProfileMetadata metadata,
+  String path,
+);
 
 enum ClipStatus { checking, done }
 
 class BuilderClip {
   BuilderClip({required this.clipId, required this.path})
-      : displayName = p.basenameWithoutExtension(path);
+    : displayName = p.basenameWithoutExtension(path);
 
-  final String clipId;
+  String clipId;
   final String path;
+  String? hash;
   final String displayName;
   ClipStatus status = ClipStatus.checking;
   ClipQuality? quality;
@@ -72,6 +89,7 @@ class ProfileBuilderController extends ChangeNotifier {
     required this.store,
     required this.save,
     required this.install,
+    this.fingerprint = sourceHash,
     DateTime Function()? clock,
   }) : _clock = clock ?? DateTime.now;
 
@@ -81,6 +99,9 @@ class ProfileBuilderController extends ChangeNotifier {
   final PackageStore store;
   final PackageSaver save;
   final ProfileInstaller install;
+  final Future<String> Function(String) fingerprint;
+  Future<void> _queue = Future.value();
+  final Map<String, BuilderClip> _hashes = {};
   final DateTime Function() _clock;
   static const _uuid = Uuid();
 
@@ -105,39 +126,90 @@ class ProfileBuilderController extends ChangeNotifier {
   }
 
   /// Clip import: probe, analyze, and judge each new clip.
-  Future<void> addClips(List<String> paths) async {
-    final added = <BuilderClip>[];
+  Future<void> addClips(List<String> paths) {
+    final job = _queue.then((_) => _addClips(paths));
+    _queue = job.catchError((Object _) {});
+    return job;
+  }
+
+  Future<void> _addClips(List<String> paths) async {
     for (final path in paths) {
+      if (_disposed) return;
       if (clips.any((c) => c.path == path)) continue;
       final c = BuilderClip(clipId: _uuid.v4(), path: path);
       clips.add(c);
-      added.add(c);
+      _invalidate();
+      await _check(c);
     }
-    if (added.isEmpty) return;
+  }
+
+  Future<void> _check(BuilderClip c) async {
+    c.status = ClipStatus.checking;
+    c.quality = null;
     _invalidate();
-    for (final c in added) {
+    try {
+      final hash = await fingerprint(c.path);
+      if (_disposed || !clips.contains(c)) return;
+      if (_hashes.containsKey(hash) && _hashes[hash] != c) {
+        c.quality = ClipQuality(
+          clipId: c.clipId,
+          displayName: c.displayName,
+          usable: false,
+          reasons: const ['This recording is already included.'],
+        );
+        return;
+      }
+      if (c.hash != hash && _hashes[c.hash] == c) _hashes.remove(c.hash);
+      c.hash = hash;
+      _hashes[hash] = c;
+      c.clipId = 'sha256:$hash';
       final info = await probe(c.path);
-      if (!clips.contains(c)) continue; // removed meanwhile
-      c.quality = info == null
-          ? ClipQuality(
-              clipId: c.clipId,
-              displayName: c.displayName,
-              usable: false,
-              reasons: const ['This file could not be opened as video.'],
-            )
-          : await evaluate(
-              ClipSource(
-                  clipId: c.clipId,
-                  path: c.path,
-                  durationMs: info.durationMs,
-                  fps: info.fps),
-              c.displayName);
+      if (info == null) {
+        throw AnalysisError(
+          ErrorCode.phaseDetectionFailed,
+          'This file could not be opened as video.',
+        );
+      }
+      final quality = await evaluate(
+        ClipSource(
+          clipId: c.clipId,
+          path: c.path,
+          durationMs: info.durationMs,
+          fps: info.fps,
+        ),
+        c.displayName,
+      );
+      if (_disposed || !clips.contains(c)) return;
+      c.quality = quality;
+
+    } catch (error) {
+      c.quality = ClipQuality(
+        clipId: c.clipId,
+        displayName: c.displayName,
+        usable: false,
+        reasons: [
+          error is AnalysisError
+              ? error.message
+              : 'This clip could not be checked. Retry or remove it.',
+        ],
+      );
+    } finally {
       c.status = ClipStatus.done;
       _notify();
     }
   }
 
+  Future<void> retryClip(BuilderClip c) {
+    final job = _queue.then((_) async {
+      if (!clips.contains(c) || c.usable || _disposed) return;
+      await _check(c);
+    });
+    _queue = job.catchError((Object _) {});
+    return job;
+  }
+
   void removeClip(BuilderClip c) {
+    if (_hashes[c.hash] == c) _hashes.remove(c.hash);
     clips.remove(c);
     _invalidate();
   }
@@ -175,7 +247,10 @@ class ProfileBuilderController extends ChangeNotifier {
   Future<void> exportCopy() async {
     final out = outcome;
     if (out is! BuildReady) return;
-    savedTo = await save(packageFileName(out.profile), zipProfilePackage(out.profile));
+    savedTo = await save(
+      packageFileName(out.profile),
+      zipProfilePackage(out.profile),
+    );
     _notify();
   }
 

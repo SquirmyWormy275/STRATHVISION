@@ -40,11 +40,15 @@ void main() {
   final pack = placeholderPack.analysisPack;
   // One synthetic "coach": every clip shares a style.
   final engine = AnalysisEngine(
-      pack: pack, pose: const StubPoseEstimator(styleSeed: 42));
+    pack: pack,
+    pose: const StubPoseEstimator(styleSeed: 42),
+  );
 
   late ProfileBuilderController ctl;
-  ProfileBuilderController controller(AppDatabase db, PackInfo active) => ctl = ProfileBuilderController(
+  ProfileBuilderController controller(AppDatabase db, PackInfo active) =>
+      ctl = ProfileBuilderController(
         pack: pack,
+        fingerprint: (path) async => path, // synthetic fixture identity
         probe: (path) async => path.contains('broken')
             ? null
             : const ClipInfo(durationMs: 6000, fps: 30),
@@ -65,7 +69,8 @@ void main() {
     await tester.pump();
     for (var i = 0; i < 500 && ctl.building; i++) {
       await tester.runAsync(
-          () => Future<void>.delayed(const Duration(milliseconds: 10)));
+        () => Future<void>.delayed(const Duration(milliseconds: 10)),
+      );
       await tester.pump();
     }
     expect(ctl.building, isFalse, reason: 'build did not finish');
@@ -76,17 +81,19 @@ void main() {
     tester.view.physicalSize = const Size(1200, 1600);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
-    await tester.pumpWidget(MaterialApp(
-      home: LibraryScreen(
-        db: db,
-        profileBuilder: controller,
-        pickClips: () async {
-          final out = [...pickQueue];
-          pickQueue.clear();
-          return out;
-        },
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LibraryScreen(
+          db: db,
+          profileBuilder: controller,
+          pickClips: () async {
+            final out = [...pickQueue];
+            pickQueue.clear();
+            return out;
+          },
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
   }
 
@@ -100,15 +107,21 @@ void main() {
     await tester.pump(Duration.zero);
   }
 
-  testWidgets('15 clean clips → ready profile in the Library + valid package',
-      (tester) async {
+  testWidgets('15 clean clips → ready profile in the Library + valid package', (
+    tester,
+  ) async {
     await pumpLibrary(tester);
     await tap(tester, 'build-profile');
     expect(find.text('Add 15 or more clips of one person'), findsOneWidget);
-    expect(tester.widget<FilledButton>(find.byKey(const Key('build'))).onPressed,
-        isNull);
+    expect(
+      tester.widget<FilledButton>(find.byKey(const Key('build'))).onPressed,
+      isNull,
+    );
 
-    await tester.enterText(find.byKey(const Key('coach-name')), 'Synthetic Coach');
+    await tester.enterText(
+      find.byKey(const Key('coach-name')),
+      'Synthetic Coach',
+    );
     pickQueue.addAll([
       for (var i = 0; i < 15; i++) '/ref/swing_$i.mp4',
       '/ref/broken.mp4',
@@ -118,7 +131,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('15 clean clips · enough to build'), findsOneWidget);
-    expect(find.text('This file could not be opened as video.'), findsOneWidget);
+    expect(
+      find.text('This file could not be opened as video.'),
+      findsOneWidget,
+    );
 
     await build(tester);
     expect(find.byKey(const Key('build-ready')), findsOneWidget);
@@ -130,15 +146,24 @@ void main() {
     expect(files, hasLength(1));
     final zip = ZipDecoder().decodeBytes(files.single.readAsBytesSync());
     final names = zip.files.map((f) => f.name).toList();
-    expect(names, containsAll(['profile.json', 'specialist_patches/', 'adapters/']));
-    final manifest = jsonDecode(utf8.decode(
-        zip.files.firstWhere((f) => f.name == 'profile.json').content as List<int>));
+    expect(
+      names,
+      containsAll(['profile.json', 'specialist_patches/', 'adapters/']),
+    );
+    final manifest = jsonDecode(
+      utf8.decode(
+        zip.files.firstWhere((f) => f.name == 'profile.json').content
+            as List<int>,
+      ),
+    );
     expect(validateProfile(manifest), isEmpty);
     expect(manifest['source_clip_count'], 15);
     expect(manifest['quality_gates']['self_consistency_passed'], isTrue);
     expect(manifest['metrics'], hasLength(pack.metrics.length));
     // The importer accepts it too.
-    final meta = await tester.runAsync(() => readProfilePackage(files.single.path));
+    final meta = await tester.runAsync(
+      () => readProfilePackage(files.single.path),
+    );
     expect(meta!.coachName, 'Synthetic Coach');
 
     await tap(tester, 'save-package');
@@ -152,8 +177,9 @@ void main() {
     await unmount(tester);
   });
 
-  testWidgets('too few clean clips → structured rejection, nothing stored',
-      (tester) async {
+  testWidgets('too few clean clips → structured rejection, nothing stored', (
+    tester,
+  ) async {
     await pumpLibrary(tester);
     await tap(tester, 'build-profile');
     await tester.enterText(find.byKey(const Key('coach-name')), 'Coach');
@@ -164,8 +190,10 @@ void main() {
     await build(tester);
     expect(find.byKey(const Key('build-rejected')), findsOneWidget);
     expect(find.text('INSUFFICIENT_CLIPS'), findsOneWidget);
-    expect(find.text('Add 6 more clean clips to build this profile.'),
-        findsOneWidget);
+    expect(
+      find.text('Add 6 more clean clips to build this profile.'),
+      findsOneWidget,
+    );
     expect(store.listSync(), isEmpty);
 
     // Adding clips clears the old verdict.
@@ -197,8 +225,9 @@ void main() {
 
   test('isolate evaluator judges a clip off the UI isolate', () async {
     final q = await isolateEvaluator(pack)(
-        const ClipSource(clipId: 'c', path: '/x.mp4', durationMs: 6000, fps: 30),
-        'x');
+      const ClipSource(clipId: 'c', path: '/x.mp4', durationMs: 6000, fps: 30),
+      'x',
+    );
     expect(q.usable, isTrue);
   });
 }

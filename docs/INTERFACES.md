@@ -341,7 +341,7 @@ Per metric (optional): `"weight": 1.0` is the pack default weight for style matc
   - `distance_spreads = |user_value - coach_center| / coach_spread`.
   - `contribution = weight * (1 - exp(-d²/2)) / Σweight`. This is the share of the score lost to this metric, so `overall_score + Σcontribution = 1` over the metrics used.
   - `direction` is `neutral` when d < 0.5. Otherwise it is `higher` or `lower`, according to the sign of `user_value - coach_center`.
-- **Ranking.** `ranked_deltas` are sorted by `contribution`, descending. Ties are broken by `metric_key`.
+- **Ranking.** `confidence-v1` sorts `ranked_deltas` by `ranking_weight` descending, then confidence descending and `metric_key`. See the audit hardening contract below. Legacy records without the policy retain their recorded order.
 - **Overall score.** `overall_score` is the style-match score (Quality Gates) over the metrics used.
 - **Coverage.**
   - `metrics_missing` lists profile metrics absent from the vector.
@@ -526,3 +526,17 @@ All analysis operations return either a success payload matching the schemas abo
 - Profiles built under an old schema may not be scored against clips using a new schema without an explicit migration step.
 - Profile versions are strictly increasing. Old versions remain readable.
 - Specialist patches and adapters version independently inside the package.
+
+## Audit hardening contract (2026-11-06)
+
+This additive revision supersedes conflicting descriptions above.
+
+- Package IDs are opaque nonempty identifiers, never filesystem paths. Imported packages are stored under internally generated names. Manifest IDs with separators, dot traversal or control characters are rejected. Imports validate extras before committing and transact database changes.
+- Builder inputs use streaming SHA-256 content IDs. Copies and renames count once. Each failed input reaches a terminal rejected state and can be retried; one failure cannot strand the batch. Reference IDs retain content provenance. This is exact-file independence, not proof of independent recording sessions.
+- Profile fitting and specialist tuning require a nonambiguous, orientation-sure athlete track. A saved spatial selection from a review can resolve ambiguity. Conflicting saved selections are rejected.
+- New marks record optional pack_id/event_id and source_sha256. Legacy marks remain readable locally. Transfer exports only marks with matching event provenance; legacy/unknown-event marks are retained locally and counted as excluded in the export summary. Transfer uses source hashes, never filenames, and stable mark IDs. Legacy imported marks remain unbound. Repeated merge is idempotent.
+- Comparison ranking adds ranking_policy=confidence-v1 and per-delta confidence/ranking_weight. Reliability is the minimum of pose, phase and metric confidence. Ranking uses contribution × reliability, with confidence below 0.6 producing zero ranking weight. Ties use reliability then metric key. The existing overall style-match score and contribution decomposition remain unchanged for historical comparability; the UI clearly labels low-confidence results. These confidences are model heuristics, not calibrated physical uncertainty.
+- Profile creation/fitting and specialist editing are desktop-only. Mobile remains a reviewer/inference/package-import client. This resolves the prior contradictory phone-fitting text.
+
+Production CARNE mark lookup requires matching pack, event and current source SHA-256. Older local marks without provenance remain visible for review but must be re-marked before research updates.
+Priority adapters cannot display a focus whose mapped measurements fail the confidence threshold; missing attribute mappings also suppress the suggestion.

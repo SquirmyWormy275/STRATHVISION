@@ -194,8 +194,8 @@ void main() {
       await tap(tester, 'analyze');
       final r = saved.single;
       expect(r.appliedPatches, ['slope_residual_v2']);
-      expect(r.warnings.last,
-          'Specialist patch slope_residual_v3.patch was rejected and not applied.');
+      expect(r.warnings,
+          contains('Specialist patch slope_residual_v3.patch was rejected and not applied.'));
     });
 
     testWidgets('same clip, same profile → same score (deterministic)',

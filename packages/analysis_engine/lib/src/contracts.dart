@@ -19,16 +19,16 @@ class PhaseSpan {
   final bool cutShort;
 
   Map<String, Object?> toJson() => {
-        'start_frame': startFrame,
-        'end_frame': endFrame,
-        'confidence': confidence,
-      };
+    'start_frame': startFrame,
+    'end_frame': endFrame,
+    'confidence': confidence,
+  };
 
   factory PhaseSpan.fromJson(Map<String, Object?> j) => PhaseSpan(
-        startFrame: (j['start_frame'] as num).toInt(),
-        endFrame: (j['end_frame'] as num).toInt(),
-        confidence: (j['confidence'] as num).toDouble(),
-      );
+    startFrame: (j['start_frame'] as num).toInt(),
+    endFrame: (j['end_frame'] as num).toInt(),
+    confidence: (j['confidence'] as num).toDouble(),
+  );
 }
 
 /// `metrics.<metric_key>` in a Metric Vector.
@@ -43,14 +43,17 @@ class MetricValue {
   final double confidence;
   final String phase;
 
-  Map<String, Object?> toJson() =>
-      {'value': value, 'confidence': confidence, 'phase': phase};
+  Map<String, Object?> toJson() => {
+    'value': value,
+    'confidence': confidence,
+    'phase': phase,
+  };
 
   factory MetricValue.fromJson(Map<String, Object?> j) => MetricValue(
-        value: (j['value'] as num).toDouble(),
-        confidence: (j['confidence'] as num).toDouble(),
-        phase: j['phase'] as String,
-      );
+    value: (j['value'] as num).toDouble(),
+    confidence: (j['confidence'] as num).toDouble(),
+    phase: j['phase'] as String,
+  );
 }
 
 /// Metric Vector (per analyzed clip).
@@ -76,15 +79,15 @@ class MetricVector {
   final Map<String, double> specialistResiduals;
 
   Map<String, Object?> toJson() => {
-        'clip_id': clipId,
-        'pack_id': packId,
-        'event_id': eventId,
-        'metric_schema_version': metricSchemaVersion,
-        'phases': {for (final e in phases.entries) e.key: e.value.toJson()},
-        'metrics': {for (final e in metrics.entries) e.key: e.value.toJson()},
-        'pose_confidence_summary': poseConfidenceSummary,
-        'specialist_residuals': specialistResiduals,
-      };
+    'clip_id': clipId,
+    'pack_id': packId,
+    'event_id': eventId,
+    'metric_schema_version': metricSchemaVersion,
+    'phases': {for (final e in phases.entries) e.key: e.value.toJson()},
+    'metrics': {for (final e in metrics.entries) e.key: e.value.toJson()},
+    'pose_confidence_summary': poseConfidenceSummary,
+    'specialist_residuals': specialistResiduals,
+  };
 
   /// Parses JSON that passed [validateMetricVector].
   factory MetricVector.fromJson(Map<String, Object?> j) {
@@ -122,6 +125,8 @@ class RankedDelta {
     required this.contribution,
     required this.phase,
     required this.direction,
+    this.confidence = 1,
+    this.rankingWeight,
   });
 
   final String metricKey;
@@ -130,21 +135,25 @@ class RankedDelta {
   final double coachSpread;
   final double distanceSpreads;
   final double contribution;
+  final double confidence;
+  final double? rankingWeight;
   final String phase;
 
   /// `higher | lower | neutral`.
   final String direction;
 
   Map<String, Object?> toJson() => {
-        'metric_key': metricKey,
-        'user_value': userValue,
-        'coach_center': coachCenter,
-        'coach_spread': coachSpread,
-        'distance_spreads': distanceSpreads,
-        'contribution': contribution,
-        'phase': phase,
-        'direction': direction,
-      };
+    'metric_key': metricKey,
+    'user_value': userValue,
+    'coach_center': coachCenter,
+    'coach_spread': coachSpread,
+    'distance_spreads': distanceSpreads,
+    'contribution': contribution,
+    'confidence': confidence,
+    'ranking_weight': rankingWeight ?? contribution,
+    'phase': phase,
+    'direction': direction,
+  };
 }
 
 /// Comparison Result. Produced from Phase 5 on; defined here so the
@@ -163,6 +172,7 @@ class ComparisonResult {
     required this.nearestReferenceClipIds,
     required this.warnings,
     required this.appliedPatches,
+    this.rankingPolicy = 'legacy',
   });
 
   final String resultId;
@@ -177,24 +187,26 @@ class ComparisonResult {
   final List<String> nearestReferenceClipIds;
   final List<String> warnings;
   final List<String> appliedPatches;
+  final String rankingPolicy;
 
   Map<String, Object?> toJson() => {
-        'result_id': resultId,
-        'clip_id': clipId,
-        'profile_id': profileId,
-        'profile_version': profileVersion,
-        'overall_score': overallScore,
-        'score_meaning': 'style_match',
-        'ranked_deltas': [for (final d in rankedDeltas) d.toJson()],
-        'coverage': {
-          'metrics_used': metricsUsed,
-          'metrics_missing': metricsMissing,
-          'low_confidence_phases': lowConfidencePhases,
-        },
-        'nearest_reference_clip_ids': nearestReferenceClipIds,
-        'warnings': warnings,
-        'applied_patches': appliedPatches,
-      };
+    'result_id': resultId,
+    'clip_id': clipId,
+    'profile_id': profileId,
+    'profile_version': profileVersion,
+    'overall_score': overallScore,
+    'score_meaning': 'style_match',
+    'ranking_policy': rankingPolicy,
+    'ranked_deltas': [for (final d in rankedDeltas) d.toJson()],
+    'coverage': {
+      'metrics_used': metricsUsed,
+      'metrics_missing': metricsMissing,
+      'low_confidence_phases': lowConfidencePhases,
+    },
+    'nearest_reference_clip_ids': nearestReferenceClipIds,
+    'warnings': warnings,
+    'applied_patches': appliedPatches,
+  };
 }
 
 // ---------------------------------------------------------------- validators
@@ -212,16 +224,25 @@ class _Check {
     return null;
   }
 
-  void str(Map<String, Object?> j, String key, String path,
-      {bool nonEmpty = true}) {
+  void str(
+    Map<String, Object?> j,
+    String key,
+    String path, {
+    bool nonEmpty = true,
+  }) {
     final v = j[key];
     if (v is! String || (nonEmpty && v.isEmpty)) {
       problems.add('$path$key must be a ${nonEmpty ? 'non-empty ' : ''}string');
     }
   }
 
-  void number(Map<String, Object?> j, String key, String path,
-      {double? min, double? max}) {
+  void number(
+    Map<String, Object?> j,
+    String key,
+    String path, {
+    double? min,
+    double? max,
+  }) {
     final v = j[key];
     if (v is! num || v.isNaN || v.isInfinite) {
       problems.add('$path$key must be a finite number');
@@ -251,8 +272,10 @@ class _Check {
 /// Validates a Metric Vector JSON object against INTERFACES.md.
 /// [requiredResiduals] are the heads the pack declares; each must appear in
 /// `specialist_residuals`.
-List<String> validateMetricVector(Object? json,
-    {List<String> requiredResiduals = const []}) {
+List<String> validateMetricVector(
+  Object? json, {
+  List<String> requiredResiduals = const [],
+}) {
   final c = _Check();
   final j = c.obj(json, 'metric_vector');
   if (j == null) return c.problems;
@@ -341,6 +364,15 @@ List<String> validateComparisonResult(Object? json) {
         'contribution',
       ]) {
         c.number(d, k, path);
+      }
+      for (final k in ['confidence', 'ranking_weight']) {
+        if (d.containsKey(k)) {
+          c.number(d, k, path);
+          final v = d[k];
+          if (v is num && (!v.isFinite || v < 0 || v > 1)) {
+            c.problems.add('$path$k must be finite and in [0, 1]');
+          }
+        }
       }
       c.str(d, 'phase', path);
       if (!const ['higher', 'lower', 'neutral'].contains(d['direction'])) {

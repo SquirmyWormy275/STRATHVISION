@@ -8,39 +8,58 @@ import 'package:uuid/uuid.dart';
 
 import '../profiles/clip_probe.dart';
 import '../profiles/profile_package.dart';
-import '../vision/pose_service.dart';
+import '../vision/training_track.dart';
 
 /// Analyzes one probe clip against the coach reference with patches applied.
-typedef ProbeAnalyzer = Future<AnalysisDetail> Function(ClipSource clip,
-    Map<String, double> reference, List<SpecialistPatch> patches);
+typedef ProbeAnalyzer = Future<AnalysisDetail> Function(
+  ClipSource clip,
+  Map<String, double> reference,
+  List<SpecialistPatch> patches,
+);
 
 /// Production probe analyzer: real pose on device, per stroke.
-ProbeAnalyzer visionProbeAnalyzer(AnalysisPack pack) => (clip, reference, patches) async {
-      final track = await PoseService.instance.track(clip);
-      if (track.frames.isEmpty) {
-        return AnalysisDetail(
-            AnalysisFailure(AnalysisError(ErrorCode.lowPoseConfidence,
-                'No person could be found in this clip.')),
-            const {});
-      }
-      return Isolate.run(() => AnalysisEngine(
-              pack: pack,
-              pose: PrecomputedPoseEstimator(track),
-              implement: const GripImplementTracker(),
-              phases: const EventPhaseDetector(),
-              heads: applyPatches(headsFor(pack), patches),
-              perStroke: true)
-          .analyzeDetailed(clip, reference: reference));
-    };
+ProbeAnalyzer visionProbeAnalyzer(
+  AnalysisPack pack, {
+  TrainingTrackLoader? load,
+}) => (clip, reference, patches) async {
+  final track = await trainingTrack(clip, load: load);
+  if (track.frames.isEmpty) {
+    return AnalysisDetail(
+      AnalysisFailure(
+        AnalysisError(
+          ErrorCode.lowPoseConfidence,
+          'No person could be found in this clip.',
+        ),
+      ),
+      const {},
+    );
+  }
+  return Isolate.run(
+    () => AnalysisEngine(
+      pack: pack,
+      pose: PrecomputedPoseEstimator(track),
+      implement: const GripImplementTracker(),
+      phases: const EventPhaseDetector(),
+      heads: applyPatches(headsFor(pack), patches),
+      perStroke: true,
+    ).analyzeDetailed(clip, reference: reference),
+  );
+};
 
 ProbeAnalyzer isolateProbeAnalyzer(AnalysisPack pack) =>
-    (clip, reference, patches) => Isolate.run(() => AnalysisEngine(
-            pack: pack, heads: applyPatches(headsFor(pack), patches))
-        .analyzeDetailed(clip, reference: reference));
+    (clip, reference, patches) => Isolate.run(
+      () => AnalysisEngine(
+        pack: pack,
+        heads: applyPatches(headsFor(pack), patches),
+      ).analyzeDetailed(clip, reference: reference),
+    );
 
 /// Stores a new package version and adds it to the Library; returns its path.
-typedef VersionWriter = Future<String> Function(Profile profile,
-    Map<String, String> patches, Map<String, String> adapters);
+typedef VersionWriter = Future<String> Function(
+  Profile profile,
+  Map<String, String> patches,
+  Map<String, String> adapters,
+);
 
 enum AdapterState { missing, stale, compiled, pending }
 
@@ -55,10 +74,11 @@ class WorkbenchController extends ChangeNotifier {
     required this.analyze,
     required this.write,
     this.compiler,
+    this.fingerprint,
     DateTime Function()? clock,
     String Function(String path)? clipId,
-  })  : _clock = clock ?? DateTime.now,
-        _clipId = clipId ?? ((_) => _uuid.v4()) {
+  }) : _clock = clock ?? DateTime.now,
+       _clipId = clipId ?? ((_) => _uuid.v4()) {
     final heads = headsFor(pack);
     _patches = loadPatches(bundle.patchFiles, heads);
     _adapters = loadAdapters(bundle.adapterFiles, pack, pack.adapters);
@@ -72,6 +92,9 @@ class WorkbenchController extends ChangeNotifier {
 
   /// Null when no compiler is configured (no API key on this computer).
   final AdapterCompiler? compiler;
+  final Future<String> Function(String)? fingerprint;
+  final Set<String> _sourceHashes = {};
+  final List<String> clipErrors = [];
   final DateTime Function() _clock;
   final String Function(String path) _clipId;
   static const _uuid = Uuid();
@@ -90,20 +113,24 @@ class WorkbenchController extends ChangeNotifier {
   bool _disposed = false;
 
   /// The head the harness tunes (the first patchable head of the event).
-  HeadDef? get head => pack.heads.where((h) => h.acceptance != null).firstOrNull;
+  HeadDef? get head =>
+      pack.heads.where((h) => h.acceptance != null).firstOrNull;
 
   SpecialistPatch? get currentPatch =>
       _patches.applied.where((x) => x.head == head?.name).firstOrNull;
 
   int get probeClipCount => _clips.length;
 
-  Map<String, double> get _reference =>
-      {for (final e in bundle.profile.metrics.entries) e.key: e.value.center};
+  Map<String, double> get _reference => {
+    for (final e in bundle.profile.metrics.entries) e.key: e.value.center,
+  };
 
   AdapterState adapterState(AdapterSpec spec) {
     if (_compiled.containsKey(spec.name)) return AdapterState.pending;
     if (_adapters.adapters.containsKey(spec.name)) return AdapterState.compiled;
-    if (bundle.adapterFiles.containsKey('${spec.name}.paw')) return AdapterState.stale;
+    if (bundle.adapterFiles.containsKey('${spec.name}.paw')) {
+      return AdapterState.stale;
+    }
     return AdapterState.missing;
   }
 
@@ -115,24 +142,45 @@ class WorkbenchController extends ChangeNotifier {
 
   /// Adds coach clips the probes are measured on.
   Future<void> addProbeClips(List<String> paths) async {
+    if (addingClips) return;
     addingClips = true;
+    clipErrors.clear();
     run = null;
     _notify();
     try {
       for (final path in paths) {
-        final info = await probe(path);
-        if (info == null) continue;
-        final d = await analyze(
+        if (_disposed) return;
+        try {
+          final hash = await fingerprint?.call(path);
+          if (hash != null && _sourceHashes.contains(hash)) continue;
+          final info = await probe(path);
+          if (info == null) {
+            throw AnalysisError(
+              ErrorCode.phaseDetectionFailed,
+              'This file could not be opened as video.',
+            );
+          }
+          final d = await analyze(
             ClipSource(
-                clipId: _clipId(path),
-                path: path,
-                durationMs: info.durationMs,
-                fps: info.fps),
+              clipId: hash == null ? _clipId(path) : 'sha256:$hash',
+              path: path,
+              durationMs: info.durationMs,
+              fps: info.fps,
+            ),
             _reference,
-            currentPatch == null ? const [] : [currentPatch!]);
-        if (d.outcome is! AnalysisSuccess || head == null) continue;
-        _clips.add(HarnessClip.fromDetail(d, head!.name));
-        probeClipNames.add(p.basenameWithoutExtension(path));
+            currentPatch == null ? const [] : [currentPatch!],
+          );
+          if (_disposed) return;
+          if (d.outcome case AnalysisFailure(:final error)) throw error;
+          if (head == null) continue;
+          if (hash != null) _sourceHashes.add(hash);
+          _clips.add(HarnessClip.fromDetail(d, head!.name));
+          probeClipNames.add(p.basenameWithoutExtension(path));
+        } catch (error) {
+          clipErrors.add(
+            '${p.basename(path)}: ${error is AnalysisError ? error.message : "Could not check this clip. Retry it."}',
+          );
+        }
         _notify();
       }
     } finally {
@@ -145,16 +193,22 @@ class WorkbenchController extends ChangeNotifier {
   Map<String, double?>? get baseline => head == null || _clips.isEmpty
       ? null
       : SpecialistHarness(
-              pack: pack, headName: head!.name, clips: _clips, current: currentPatch)
-          .baseline();
+          pack: pack,
+          headName: head!.name,
+          clips: _clips,
+          current: currentPatch,
+        ).baseline();
 
   /// Runs the harness: proposes a sparse patch and judges it by the pack's
   /// rules, reading only the probes.
   void runHarness() {
     if (head == null || _clips.isEmpty) return;
     run = SpecialistHarness(
-            pack: pack, headName: head!.name, clips: _clips, current: currentPatch)
-        .search();
+      pack: pack,
+      headName: head!.name,
+      clips: _clips,
+      current: currentPatch,
+    ).search();
     _notify();
   }
 
@@ -168,7 +222,9 @@ class WorkbenchController extends ChangeNotifier {
       _compiled[spec.name] = await compileAdapter(spec, pack, c, now: _clock());
     } on AnalysisError catch (e) {
       final problems = (e.details['problems'] as List?)?.join('; ');
-      compileErrors[spec.name] = problems == null ? e.message : '${e.message} $problems';
+      compileErrors[spec.name] = problems == null
+          ? e.message
+          : '${e.message} $problems';
     } finally {
       compiling.remove(spec.name);
       _notify();

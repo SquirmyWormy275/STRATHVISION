@@ -56,12 +56,15 @@ ClipQuality evaluateClip({
       final crit = [
         for (final p in pack.criticalPhases) detail.phasePoseConfidence[p] ?? 0,
       ];
-      final critConf = crit.isEmpty ? 0.0 : crit.reduce((a, b) => a + b) / crit.length;
+      final critConf = crit.isEmpty
+          ? 0.0
+          : crit.reduce((a, b) => a + b) / crit.length;
       if (critConf < pack.minCriticalPoseConfidence) {
         reasons.add('The body is hard to see in the key part of the movement.');
       }
-      final missing =
-          pack.metrics.where((m) => !vector.metrics.containsKey(m.key)).toList();
+      final missing = pack.metrics
+          .where((m) => !vector.metrics.containsKey(m.key))
+          .toList();
       if (missing.isNotEmpty) {
         reasons.add('Some measurements could not be taken.');
       }
@@ -85,7 +88,9 @@ ClipQuality evaluateClip({
 /// weights of present metrics average 1. Metrics measured less reliably
 /// count less.
 Map<String, ProfileMetric> fitMetrics(
-    List<MetricVector> vectors, AnalysisPack pack) {
+  List<MetricVector> vectors,
+  AnalysisPack pack,
+) {
   final raw = <String, ProfileMetric>{};
   for (final def in pack.metrics) {
     final vals = <double>[], confs = <double>[];
@@ -99,7 +104,9 @@ Map<String, ProfileMetric> fitMetrics(
     final mean = vals.reduce((a, b) => a + b) / vals.length;
     var sd = 0.0;
     if (vals.length > 1) {
-      final ss = vals.map((x) => (x - mean) * (x - mean)).reduce((a, b) => a + b);
+      final ss = vals
+          .map((x) => (x - mean) * (x - mean))
+          .reduce((a, b) => a + b);
       sd = math.sqrt(ss / (vals.length - 1));
     }
     final spread = math.max(sd, math.max(def.minSpread, 1e-6));
@@ -113,8 +120,9 @@ Map<String, ProfileMetric> fitMetrics(
     );
   }
   final weights = raw.values.map((m) => m.weight).toList();
-  final meanW =
-      weights.isEmpty ? 0.0 : weights.reduce((a, b) => a + b) / weights.length;
+  final meanW = weights.isEmpty
+      ? 0.0
+      : weights.reduce((a, b) => a + b) / weights.length;
   double r(double v) => (v * 1e4).roundToDouble() / 1e4;
   return {
     for (final e in raw.entries)
@@ -128,8 +136,9 @@ Map<String, ProfileMetric> fitMetrics(
   };
 }
 
-Map<String, double> metricValues(MetricVector v) =>
-    {for (final e in v.metrics.entries) e.key: e.value.value};
+Map<String, double> metricValues(MetricVector v) => {
+  for (final e in v.metrics.entries) e.key: e.value.value,
+};
 
 // ----------------------------------------------------- self-consistency (task 3)
 
@@ -155,7 +164,8 @@ SelfConsistency selfConsistency(List<MetricVector> vectors, AnalysisPack pack) {
   for (var i = 0; i < vectors.length; i++) {
     final rest = [...vectors.take(i), ...vectors.skip(i + 1)];
     final fit = fitMetrics(rest, pack);
-    scores[vectors[i].clipId] = styleMatchScore(metricValues(vectors[i]), fit) ?? 0;
+    scores[vectors[i].clipId] =
+        styleMatchScore(metricValues(vectors[i]), fit) ?? 0;
   }
   final mean = scores.isEmpty
       ? 0.0
@@ -196,10 +206,17 @@ class ProfileBuilder {
   AnalysisPack get pack => engine.pack;
 
   /// Analyzes and judges one reference clip (clip import, task 1).
-  Future<ClipQuality> evaluate(ClipSource clip, {required String displayName}) async {
+  Future<ClipQuality> evaluate(
+    ClipSource clip, {
+    required String displayName,
+  }) async {
     final detail = await engine.analyzeDetailed(clip);
     return evaluateClip(
-        displayName: displayName, clipId: clip.clipId, detail: detail, pack: pack);
+      displayName: displayName,
+      clipId: clip.clipId,
+      detail: detail,
+      pack: pack,
+    );
   }
 
   /// Applies the quality gates to evaluated clips and fits the profile.
@@ -213,7 +230,9 @@ class ProfileBuilder {
     required DateTime now,
     Profile? previous,
   }) {
-    final usable = clips.where((c) => c.usable).toList();
+    final usable = {
+      for (final c in clips.where((c) => c.usable)) c.clipId: c,
+    }.values.toList();
     final vectors = [for (final c in usable) c.vector!];
     final gates = <String, Object?>{
       'clips_total': clips.length,
@@ -223,29 +242,41 @@ class ProfileBuilder {
 
     if (previous != null &&
         (previous.packId != pack.packId || previous.eventId != pack.eventId)) {
-      return BuildRejected(AnalysisError(ErrorCode.schemaMismatch,
-          'The previous profile is for a different event.', {
-        'previous_pack_id': previous.packId,
-        'previous_event_id': previous.eventId,
-      }));
+      return BuildRejected(
+        AnalysisError(
+          ErrorCode.schemaMismatch,
+          'The previous profile is for a different event.',
+          {
+            'previous_pack_id': previous.packId,
+            'previous_event_id': previous.eventId,
+          },
+        ),
+      );
     }
     if (previous != null &&
         previous.metricSchemaVersion != pack.metricSchemaVersion) {
-      return BuildRejected(AnalysisError(ErrorCode.schemaMismatch,
-          'The previous profile uses an older measurement schema.', {
-        'previous_schema': previous.metricSchemaVersion,
-        'schema': pack.metricSchemaVersion,
-      }));
+      return BuildRejected(
+        AnalysisError(
+          ErrorCode.schemaMismatch,
+          'The previous profile uses an older measurement schema.',
+          {
+            'previous_schema': previous.metricSchemaVersion,
+            'schema': pack.metricSchemaVersion,
+          },
+        ),
+      );
     }
 
     final minClipsMet = usable.length >= pack.minClips;
     gates['min_clips_met'] = minClipsMet;
     if (!minClipsMet) {
-      return BuildRejected(AnalysisError(
-        ErrorCode.insufficientClips,
-        'Add ${pack.minClips - usable.length} more clean clips to build this profile.',
-        {'gates': gates, 'unusable': _unusable(clips)},
-      ));
+      return BuildRejected(
+        AnalysisError(
+          ErrorCode.insufficientClips,
+          'Add ${pack.minClips - usable.length} more clean clips to build this profile.',
+          {'gates': gates, 'unusable': _unusable(clips)},
+        ),
+      );
     }
 
     final crit = usable.map((c) => c.criticalPoseConfidence ?? 0).toList();
@@ -253,11 +284,13 @@ class ProfileBuilder {
     gates['critical_pose_confidence'] = _r(avgCrit);
     gates['min_critical_pose_confidence'] = pack.minCriticalPoseConfidence;
     if (avgCrit < pack.minCriticalPoseConfidence) {
-      return BuildRejected(AnalysisError(
-        ErrorCode.lowPoseConfidence,
-        'The body is not tracked clearly enough across these clips.',
-        {'gates': gates},
-      ));
+      return BuildRejected(
+        AnalysisError(
+          ErrorCode.lowPoseConfidence,
+          'The body is not tracked clearly enough across these clips.',
+          {'gates': gates},
+        ),
+      );
     }
 
     final consistency = selfConsistency(vectors, pack);
@@ -265,16 +298,19 @@ class ProfileBuilder {
     gates['self_consistency_threshold'] = consistency.threshold;
     gates['self_consistency_passed'] = consistency.passed;
     if (!consistency.passed) {
-      return BuildRejected(AnalysisError(
-        ErrorCode.profileNotReady,
-        'These clips do not agree with each other well enough to form one style.',
-        {
-          'gates': gates,
-          'held_out_scores': {
-            for (final e in consistency.heldOutScores.entries) e.key: _r(e.value),
+      return BuildRejected(
+        AnalysisError(
+          ErrorCode.profileNotReady,
+          'These clips do not agree with each other well enough to form one style.',
+          {
+            'gates': gates,
+            'held_out_scores': {
+              for (final e in consistency.heldOutScores.entries)
+                e.key: _r(e.value),
+            },
           },
-        },
-      ));
+        ),
+      );
     }
 
     final profile = Profile(
@@ -288,7 +324,8 @@ class ProfileBuilder {
       sourceClipCount: usable.length,
       minClipsMet: true,
       selfConsistencyPassed: true,
-      notes: '${usable.length} of ${clips.length} clips used. '
+      notes:
+          '${usable.length} of ${clips.length} clips used. '
           'Held-out match ${(consistency.meanScore * 100).round()}% '
           '(needs ${(consistency.threshold * 100).round()}%). '
           'Critical-phase pose confidence ${(avgCrit * 100).round()}%.',
@@ -300,16 +337,21 @@ class ProfileBuilder {
     );
     final problems = validateProfile(profile.toJson());
     if (problems.isNotEmpty) {
-      return BuildRejected(AnalysisError(ErrorCode.schemaMismatch,
-          'The builder produced an invalid profile.', {'problems': problems}));
+      return BuildRejected(
+        AnalysisError(
+          ErrorCode.schemaMismatch,
+          'The builder produced an invalid profile.',
+          {'problems': problems},
+        ),
+      );
     }
     return BuildReady(profile, consistency);
   }
 
   static List<Map<String, Object?>> _unusable(List<ClipQuality> clips) => [
-        for (final c in clips.where((c) => !c.usable))
-          {'clip_id': c.clipId, 'name': c.displayName, 'reasons': c.reasons},
-      ];
+    for (final c in clips.where((c) => !c.usable))
+      {'clip_id': c.clipId, 'name': c.displayName, 'reasons': c.reasons},
+  ];
 
   static double _r(double v) => (v * 1e4).roundToDouble() / 1e4;
 }

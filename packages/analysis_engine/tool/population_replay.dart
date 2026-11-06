@@ -27,8 +27,9 @@ Future<void> main(List<String> args) async {
     final joints = <Joint, Vec3>{};
     for (final entry in (raw['j'] as Map).entries) {
       final joint = Joint.fromWire(entry.key);
-      if (joint == null)
+      if (joint == null) {
         throw FormatException('Unknown cached joint ${entry.key}');
+      }
       final xyz = entry.value as List;
       joints[joint] = Vec3(
         (xyz[0] as num).toDouble(),
@@ -39,8 +40,9 @@ Future<void> main(List<String> args) async {
     final confidence = <Joint, double>{};
     for (final entry in (raw['c'] as Map).entries) {
       final joint = Joint.fromWire(entry.key);
-      if (joint == null)
+      if (joint == null) {
         throw FormatException('Unknown cached confidence joint');
+      }
       confidence[joint] = (entry.value as num).toDouble();
     }
     frames.add(

@@ -5,16 +5,19 @@ import 'dart:typed_data';
 import 'package:analysis_engine/analysis_engine.dart';
 import 'package:archive/archive.dart';
 import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
 
 /// Zip bytes for a profile package: `profile.json`, plus the empty
 /// `specialist_patches/` and `adapters/` directories (INTERFACES.md).
 ///
 /// [patches] and [adapters] (file name → contents) go into
 /// `specialist_patches/` and `adapters/`.
-Uint8List zipProfilePackage(Profile profile,
-    {Map<String, String> patches = const {},
-    Map<String, String> adapters = const {},
-    Map<String, String> research = const {}}) {
+Uint8List zipProfilePackage(
+  Profile profile, {
+  Map<String, String> patches = const {},
+  Map<String, String> adapters = const {},
+  Map<String, String> research = const {},
+}) {
   final archive = Archive();
   final entries = {
     ...profile.packageEntries(),
@@ -25,9 +28,11 @@ Uint8List zipProfilePackage(Profile profile,
   };
   for (final e in entries.entries) {
     final content = e.value;
-    archive.add(content == null
-        ? ArchiveFile.directory(e.key)
-        : ArchiveFile.bytes(e.key, utf8.encode(content)));
+    archive.add(
+      content == null
+          ? ArchiveFile.directory(e.key)
+          : ArchiveFile.bytes(e.key, utf8.encode(content)),
+    );
   }
   return Uint8List.fromList(ZipEncoder().encode(archive));
 }
@@ -46,16 +51,23 @@ String packageFileName(Profile profile) {
 ///
 /// [research] goes into `carne_asada/` (desktop research records; phones
 /// never read it).
-Future<String> storeProfilePackage(Profile profile, Directory dir,
-    {Map<String, String> patches = const {},
-    Map<String, String> adapters = const {},
-    Map<String, String> research = const {}}) async {
+Future<String> storeProfilePackage(
+  Profile profile,
+  Directory dir, {
+  Map<String, String> patches = const {},
+  Map<String, String> adapters = const {},
+  Map<String, String> research = const {},
+}) async {
   await dir.create(recursive: true);
-  final path =
-      p.join(dir.path, '${profile.profileId}_v${profile.version}.zip');
+  final path = p.join(dir.path, '${const Uuid().v4()}.zip');
   await File(path).writeAsBytes(
-      zipProfilePackage(profile,
-          patches: patches, adapters: adapters, research: research),
-      flush: true);
+    zipProfilePackage(
+      profile,
+      patches: patches,
+      adapters: adapters,
+      research: research,
+    ),
+    flush: true,
+  );
   return path;
 }

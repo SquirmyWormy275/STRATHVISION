@@ -23,23 +23,30 @@ class Clip {
   final Map<String, Object?>? athlete;
 
   Clip withAthlete(Map<String, Object?>? value) => Clip(
-      clipId: clipId, path: path, displayName: displayName, addedAt: addedAt, athlete: value);
+    clipId: clipId,
+    path: path,
+    displayName: displayName,
+    addedAt: addedAt,
+    athlete: value,
+  );
 
   Map<String, Object?> toJson() => {
-        'clip_id': clipId,
-        'path': path,
-        'display_name': displayName,
-        'added_at': _iso(addedAt),
-        if (athlete != null) 'athlete': athlete,
-      };
+    'clip_id': clipId,
+    'path': path,
+    'display_name': displayName,
+    'added_at': _iso(addedAt),
+    if (athlete != null) 'athlete': athlete,
+  };
 
   factory Clip.fromJson(Map<String, Object?> j) => Clip(
-        clipId: j['clip_id'] as String,
-        path: j['path'] as String,
-        displayName: j['display_name'] as String,
-        addedAt: _date(j['added_at']),
-        athlete: j['athlete'] == null ? null : Map<String, Object?>.from(j['athlete'] as Map),
-      );
+    clipId: j['clip_id'] as String,
+    path: j['path'] as String,
+    displayName: j['display_name'] as String,
+    addedAt: _date(j['added_at']),
+    athlete: j['athlete'] == null
+        ? null
+        : Map<String, Object?>.from(j['athlete'] as Map),
+  );
 }
 
 class SyncRelationship {
@@ -60,18 +67,18 @@ class SyncRelationship {
   bool pairs(String? a, String? b) => clipAId == a && clipBId == b;
 
   Map<String, Object?> toJson() => {
-        'clip_a_id': clipAId,
-        'clip_b_id': clipBId,
-        'offset_ms': offsetMs,
-        'created_at': _iso(createdAt),
-      };
+    'clip_a_id': clipAId,
+    'clip_b_id': clipBId,
+    'offset_ms': offsetMs,
+    'created_at': _iso(createdAt),
+  };
 
   factory SyncRelationship.fromJson(Map<String, Object?> j) => SyncRelationship(
-        clipAId: j['clip_a_id'] as String,
-        clipBId: j['clip_b_id'] as String,
-        offsetMs: (j['offset_ms'] as num).toInt(),
-        createdAt: _date(j['created_at']),
-      );
+    clipAId: j['clip_a_id'] as String,
+    clipBId: j['clip_b_id'] as String,
+    offsetMs: (j['offset_ms'] as num).toInt(),
+    createdAt: _date(j['created_at']),
+  );
 }
 
 enum MarkLabel { red, green }
@@ -88,38 +95,48 @@ class Mark {
     required this.author,
     required this.createdAt,
     this.strokeIndex,
+    this.packId,
+    this.eventId,
+    this.sourceSha256,
   });
 
   final String markId;
   final String clipId;
   final int timeMs;
   final int? strokeIndex;
+  final String? packId, eventId, sourceSha256;
   final String attribute;
   final MarkLabel label;
   final MarkAuthor author;
   final DateTime createdAt;
 
   Map<String, Object?> toJson() => {
-        'mark_id': markId,
-        'clip_id': clipId,
-        'time_ms': timeMs,
-        'stroke_index': strokeIndex,
-        'attribute': attribute,
-        'label': label.name,
-        'author': author.name,
-        'created_at': _iso(createdAt),
-      };
+    'mark_id': markId,
+    'clip_id': clipId,
+    'time_ms': timeMs,
+    'stroke_index': strokeIndex,
+    if (packId != null) 'pack_id': packId,
+    if (eventId != null) 'event_id': eventId,
+    if (sourceSha256 != null) 'source_sha256': sourceSha256,
+    'attribute': attribute,
+    'label': label.name,
+    'author': author.name,
+    'created_at': _iso(createdAt),
+  };
 
   factory Mark.fromJson(Map<String, Object?> j) => Mark(
-        markId: j['mark_id'] as String,
-        clipId: j['clip_id'] as String,
-        timeMs: (j['time_ms'] as num).toInt(),
-        strokeIndex: (j['stroke_index'] as num?)?.toInt(),
-        attribute: j['attribute'] as String,
-        label: MarkLabel.values.byName(j['label'] as String),
-        author: MarkAuthor.values.byName(j['author'] as String),
-        createdAt: _date(j['created_at']),
-      );
+    markId: j['mark_id'] as String,
+    clipId: j['clip_id'] as String,
+    timeMs: (j['time_ms'] as num).toInt(),
+    strokeIndex: (j['stroke_index'] as num?)?.toInt(),
+    packId: j['pack_id'] as String?,
+    eventId: j['event_id'] as String?,
+    sourceSha256: j['source_sha256'] as String?,
+    attribute: j['attribute'] as String,
+    label: MarkLabel.values.byName(j['label'] as String),
+    author: MarkAuthor.values.byName(j['author'] as String),
+    createdAt: _date(j['created_at']),
+  );
 }
 
 class Annotation {
@@ -138,20 +155,20 @@ class Annotation {
   final DateTime createdAt;
 
   Map<String, Object?> toJson() => {
-        'annotation_id': annotationId,
-        'clip_id': clipId,
-        'time_ms': timeMs,
-        'text': text,
-        'created_at': _iso(createdAt),
-      };
+    'annotation_id': annotationId,
+    'clip_id': clipId,
+    'time_ms': timeMs,
+    'text': text,
+    'created_at': _iso(createdAt),
+  };
 
   factory Annotation.fromJson(Map<String, Object?> j) => Annotation(
-        annotationId: j['annotation_id'] as String,
-        clipId: j['clip_id'] as String,
-        timeMs: (j['time_ms'] as num).toInt(),
-        text: j['text'] as String,
-        createdAt: _date(j['created_at']),
-      );
+    annotationId: j['annotation_id'] as String,
+    clipId: j['clip_id'] as String,
+    timeMs: (j['time_ms'] as num).toInt(),
+    text: j['text'] as String,
+    createdAt: _date(j['created_at']),
+  );
 }
 
 class WorkspaceState {
@@ -175,22 +192,21 @@ class WorkspaceState {
     bool? mirrorB,
     double? playbackRate,
     bool? locked,
-  }) =>
-      WorkspaceState(
-        stageAClipId: stageAClipId != null ? stageAClipId() : this.stageAClipId,
-        stageBClipId: stageBClipId != null ? stageBClipId() : this.stageBClipId,
-        mirrorB: mirrorB ?? this.mirrorB,
-        playbackRate: playbackRate ?? this.playbackRate,
-        locked: locked ?? this.locked,
-      );
+  }) => WorkspaceState(
+    stageAClipId: stageAClipId != null ? stageAClipId() : this.stageAClipId,
+    stageBClipId: stageBClipId != null ? stageBClipId() : this.stageBClipId,
+    mirrorB: mirrorB ?? this.mirrorB,
+    playbackRate: playbackRate ?? this.playbackRate,
+    locked: locked ?? this.locked,
+  );
 
   Map<String, Object?> toJson() => {
-        'stage_a_clip_id': stageAClipId,
-        'stage_b_clip_id': stageBClipId,
-        'mirror_b': mirrorB,
-        'playback_rate': playbackRate,
-        'locked': locked,
-      };
+    'stage_a_clip_id': stageAClipId,
+    'stage_b_clip_id': stageBClipId,
+    'mirror_b': mirrorB,
+    'playback_rate': playbackRate,
+    'locked': locked,
+  };
 
   factory WorkspaceState.fromJson(Map<String, Object?>? j) => j == null
       ? const WorkspaceState()
@@ -240,28 +256,27 @@ class Project {
     List<String>? linkedProfileIds,
     List<Mark>? marks,
     WorkspaceState? workspace,
-  }) =>
-      Project(
-        projectId: projectId,
-        name: name ?? this.name,
-        clips: clips ?? this.clips,
-        syncRelationships: syncRelationships ?? this.syncRelationships,
-        annotations: annotations ?? this.annotations,
-        linkedProfileIds: linkedProfileIds ?? this.linkedProfileIds,
-        marks: marks ?? this.marks,
-        workspace: workspace ?? this.workspace,
-      );
+  }) => Project(
+    projectId: projectId,
+    name: name ?? this.name,
+    clips: clips ?? this.clips,
+    syncRelationships: syncRelationships ?? this.syncRelationships,
+    annotations: annotations ?? this.annotations,
+    linkedProfileIds: linkedProfileIds ?? this.linkedProfileIds,
+    marks: marks ?? this.marks,
+    workspace: workspace ?? this.workspace,
+  );
 
   Map<String, Object?> toJson() => {
-        'project_id': projectId,
-        'name': name,
-        'clips': [for (final c in clips) c.toJson()],
-        'sync_relationships': [for (final s in syncRelationships) s.toJson()],
-        'annotations': [for (final a in annotations) a.toJson()],
-        'linked_profile_ids': linkedProfileIds,
-        'marks': [for (final m in marks) m.toJson()],
-        'workspace': workspace.toJson(),
-      };
+    'project_id': projectId,
+    'name': name,
+    'clips': [for (final c in clips) c.toJson()],
+    'sync_relationships': [for (final s in syncRelationships) s.toJson()],
+    'annotations': [for (final a in annotations) a.toJson()],
+    'linked_profile_ids': linkedProfileIds,
+    'marks': [for (final m in marks) m.toJson()],
+    'workspace': workspace.toJson(),
+  };
 
   factory Project.fromJson(Map<String, Object?> j) {
     List<Map<String, Object?>> list(String k) =>
@@ -271,14 +286,18 @@ class Project {
       name: j['name'] as String,
       clips: [for (final c in list('clips')) Clip.fromJson(c)],
       syncRelationships: [
-        for (final s in list('sync_relationships')) SyncRelationship.fromJson(s)
+        for (final s in list('sync_relationships'))
+          SyncRelationship.fromJson(s),
       ],
-      annotations: [for (final a in list('annotations')) Annotation.fromJson(a)],
-      linkedProfileIds:
-          ((j['linked_profile_ids'] as List?) ?? const []).cast<String>(),
+      annotations: [
+        for (final a in list('annotations')) Annotation.fromJson(a),
+      ],
+      linkedProfileIds: ((j['linked_profile_ids'] as List?) ?? const [])
+          .cast<String>(),
       marks: [for (final m in list('marks')) Mark.fromJson(m)],
-      workspace:
-          WorkspaceState.fromJson(j['workspace'] as Map<String, Object?>?),
+      workspace: WorkspaceState.fromJson(
+        j['workspace'] as Map<String, Object?>?,
+      ),
     );
   }
 }

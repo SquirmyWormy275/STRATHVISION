@@ -122,12 +122,17 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
       .watch();
 
   /// Every red/green mark, across projects, on clips at [path].
-  Future<List<Mark>> marksForPath(String path) async {
+  Future<List<Mark>> marksForPath(String path, {
+    String? packId, String? eventId, String? sourceSha256,
+  }) async {
     final out = <Mark>[];
     for (final row in await select(projectRows).get()) {
       final project = Project.fromJson(jsonDecode(row.json) as Map<String, Object?>);
       final ids = {for (final c in project.clips) if (c.path == path) c.clipId};
-      out.addAll(project.marks.where((m) => ids.contains(m.clipId)));
+      out.addAll(project.marks.where((m) => ids.contains(m.clipId) &&
+          (packId == null || m.packId == packId) &&
+          (eventId == null || m.eventId == eventId) &&
+          (sourceSha256 == null || m.sourceSha256 == sourceSha256)));
     }
     return out;
   }

@@ -43,8 +43,10 @@ class StrathvisionApp extends StatelessWidget {
     this.pickClips,
     this.pickFiles,
     this.saveFile,
+    this.profileStore,
   });
 
+  final Future<Directory> Function()? profileStore;
   final AppDatabase db;
   final ProfilePathPicker pickPath;
   final ClipPathPicker pickClip;
@@ -70,6 +72,7 @@ class StrathvisionApp extends StatelessWidget {
       darkTheme: theme(Brightness.dark),
       home: LibraryScreen(
         db: db,
+        profileStore: profileStore,
         pickPath: pickPath,
         pickClip: pickClip,
         playerFactory: playerFactory,

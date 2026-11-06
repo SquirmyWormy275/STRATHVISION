@@ -12,7 +12,9 @@ import 'workspace_screen.dart';
 
 /// Ready profiles for the active pack's event, newest first.
 Future<List<ProfileChoice>> compatibleProfiles(
-    AppDatabase db, PackInfo pack) async {
+  AppDatabase db,
+  PackInfo pack,
+) async {
   final a = pack.analysisPack;
   return [
     for (final r in await db.allProfiles())
@@ -69,21 +71,29 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
     playerA: _a,
     playerB: _b,
     attributes: widget.pack.topAttributes,
+    packId: widget.pack.analysisPack.packId,
+    eventId: widget.pack.analysisPack.eventId,
   );
-  late final AthleteChoices _athletes = AthleteChoices(targetFor: (id) {
-    final j = _controller.athleteFor(id);
-    return j == null ? null : AthleteTarget.fromJson(j);
-  });
+  late final AthleteChoices _athletes = AthleteChoices(
+    targetFor: (id) {
+      final j = _controller.athleteFor(id);
+      return j == null ? null : AthleteTarget.fromJson(j);
+    },
+  );
   late final AnalysisController _analysis = AnalysisController(
     workspace: _controller,
     pack: widget.pack.analysisPack,
-    run: widget.analysisRunner ?? visionRunner(widget.pack.analysisPack, athletes: _athletes),
+    run:
+        widget.analysisRunner ??
+        visionRunner(widget.pack.analysisPack, athletes: _athletes),
     athletes: widget.analysisRunner == null ? _athletes : null,
     listProfiles: () => compatibleProfiles(widget.db, widget.pack),
     metricLabel: widget.pack.metricLabel,
     phaseLabel: (id) => widget.pack.phaseLabel(id).toLowerCase(),
-    saveResult: (r) =>
-        widget.db.saveComparison(projectId: widget.project.projectId, result: r),
+    saveResult: (r) => widget.db.saveComparison(
+      projectId: widget.project.projectId,
+      result: r,
+    ),
   );
 
   @override
@@ -104,11 +114,10 @@ class _WorkspaceRouteState extends State<WorkspaceRoute> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      WorkspaceScreen(
-        controller: _controller,
-        pickClip: widget.pickClip,
-        analysis: _analysis,
-        pack: widget.pack,
-      );
+  Widget build(BuildContext context) => WorkspaceScreen(
+    controller: _controller,
+    pickClip: widget.pickClip,
+    analysis: _analysis,
+    pack: widget.pack,
+  );
 }

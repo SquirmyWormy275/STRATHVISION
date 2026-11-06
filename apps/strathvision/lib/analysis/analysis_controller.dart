@@ -283,6 +283,12 @@ class AnalysisController extends ChangeNotifier {
                 implementConfidence: detail.implementConfidence,
                 comparison: comparison.result,
                 fps: fps));
+            // A compiled preference must not bypass measurement confidence.
+            final keys = pack.attributeMetrics[focus] ?? const <String>[];
+            final reliable = comparison.result.rankedDeltas
+                .where((d) => d.confidence >= lowConfidence)
+                .map((d) => d.metricKey).toSet();
+            if (keys.isEmpty || !keys.every(reliable.contains)) focus = null;
           }
           await saveResult?.call(comparison.result);
         }

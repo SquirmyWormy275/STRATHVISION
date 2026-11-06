@@ -17,20 +17,20 @@ class ProfileMetric {
   final String phase;
 
   Map<String, Object?> toJson() => {
-        'center': center,
-        'spread': spread,
-        'weight': weight,
-        'unit': unit,
-        'phase': phase,
-      };
+    'center': center,
+    'spread': spread,
+    'weight': weight,
+    'unit': unit,
+    'phase': phase,
+  };
 
   factory ProfileMetric.fromJson(Map<String, Object?> j) => ProfileMetric(
-        center: (j['center'] as num).toDouble(),
-        spread: (j['spread'] as num).toDouble(),
-        weight: (j['weight'] as num).toDouble(),
-        unit: j['unit'] as String,
-        phase: j['phase'] as String,
-      );
+    center: (j['center'] as num).toDouble(),
+    spread: (j['spread'] as num).toDouble(),
+    weight: (j['weight'] as num).toDouble(),
+    unit: j['unit'] as String,
+    phase: j['phase'] as String,
+  );
 }
 
 /// A reference clip kept in the package for nearest-reference lookup.
@@ -62,35 +62,36 @@ class ReferenceClip {
   final String? source;
 
   ReferenceClip withWeight(double w) => ReferenceClip(
-      clipId: clipId,
-      metrics: metrics,
-      exemplar: exemplar,
-      weight: w,
-      confidence: confidence,
-      source: source);
+    clipId: clipId,
+    metrics: metrics,
+    exemplar: exemplar,
+    weight: w,
+    confidence: confidence,
+    source: source,
+  );
 
   Map<String, Object?> toJson() => {
-        'clip_id': clipId,
-        'metrics': metrics,
-        if (exemplar) ...{
-          'exemplar': true,
-          'weight': weight,
-          'confidence': confidence,
-          'source': source,
-        },
-      };
+    'clip_id': clipId,
+    'metrics': metrics,
+    if (exemplar) ...{
+      'exemplar': true,
+      'weight': weight,
+      'confidence': confidence,
+      'source': source,
+    },
+  };
 
   factory ReferenceClip.fromJson(Map<String, Object?> j) => ReferenceClip(
-        clipId: j['clip_id'] as String,
-        metrics: {
-          for (final e in (j['metrics'] as Map).entries)
-            e.key as String: (e.value as num).toDouble(),
-        },
-        exemplar: j['exemplar'] == true,
-        weight: (j['weight'] as num?)?.toDouble() ?? 1.0,
-        confidence: (j['confidence'] as num?)?.toDouble() ?? 1.0,
-        source: j['source'] as String?,
-      );
+    clipId: j['clip_id'] as String,
+    metrics: {
+      for (final e in (j['metrics'] as Map).entries)
+        e.key as String: (e.value as num).toDouble(),
+    },
+    exemplar: j['exemplar'] == true,
+    weight: (j['weight'] as num?)?.toDouble() ?? 1.0,
+    confidence: (j['confidence'] as num?)?.toDouble() ?? 1.0,
+    source: j['source'] as String?,
+  );
 }
 
 /// Profile Package manifest (`profile.json`): the INTERFACES.md minimum
@@ -129,22 +130,22 @@ class Profile {
   bool get ready => minClipsMet && selfConsistencyPassed;
 
   Map<String, Object?> toJson() => {
-        'profile_id': profileId,
-        'version': version,
-        'coach_name': coachName,
-        'pack_id': packId,
-        'event_id': eventId,
-        'metric_schema_version': metricSchemaVersion,
-        'created_at': createdAt.toUtc().toIso8601String(),
-        'source_clip_count': sourceClipCount,
-        'quality_gates': {
-          'min_clips_met': minClipsMet,
-          'self_consistency_passed': selfConsistencyPassed,
-          'notes': notes,
-        },
-        'metrics': {for (final e in metrics.entries) e.key: e.value.toJson()},
-        'reference_clips': [for (final r in referenceClips) r.toJson()],
-      };
+    'profile_id': profileId,
+    'version': version,
+    'coach_name': coachName,
+    'pack_id': packId,
+    'event_id': eventId,
+    'metric_schema_version': metricSchemaVersion,
+    'created_at': createdAt.toUtc().toIso8601String(),
+    'source_clip_count': sourceClipCount,
+    'quality_gates': {
+      'min_clips_met': minClipsMet,
+      'self_consistency_passed': selfConsistencyPassed,
+      'notes': notes,
+    },
+    'metrics': {for (final e in metrics.entries) e.key: e.value.toJson()},
+    'reference_clips': [for (final r in referenceClips) r.toJson()],
+  };
 
   /// Parses JSON that passed [validateProfile].
   factory Profile.fromJson(Map<String, Object?> j) {
@@ -163,8 +164,9 @@ class Profile {
       notes: gates['notes'] as String,
       metrics: {
         for (final e in (j['metrics'] as Map).entries)
-          e.key as String:
-              ProfileMetric.fromJson(Map<String, Object?>.from(e.value as Map)),
+          e.key as String: ProfileMetric.fromJson(
+            Map<String, Object?>.from(e.value as Map),
+          ),
       },
       referenceClips: [
         for (final r in (j['reference_clips'] as List? ?? const []))
@@ -176,11 +178,10 @@ class Profile {
   /// Package contents: path → text, or null for a directory.
   /// INTERFACES.md: `profile.json`, `specialist_patches/`, `adapters/`.
   Map<String, String?> packageEntries() => {
-        profileManifestName:
-            const JsonEncoder.withIndent('  ').convert(toJson()),
-        'specialist_patches/': null,
-        'adapters/': null,
-      };
+    profileManifestName: const JsonEncoder.withIndent('  ').convert(toJson()),
+    'specialist_patches/': null,
+    'adapters/': null,
+  };
 }
 
 /// Name of the manifest inside a directory or zip package.
@@ -200,22 +201,39 @@ List<String> validateProfile(Object? json) {
   }
 
   final profileId = field<String>(json, 'profile_id', 'profile_id');
+  if (profileId != null &&
+      (profileId.contains('/') ||
+          profileId.contains('\\') ||
+          profileId == '.' ||
+          profileId == '..' ||
+          profileId.codeUnits.any((c) => c < 32 || c == 127))) {
+    problems.add('profile_id must be an identifier, not a path');
+  }
   final version = field<int>(json, 'version', 'version');
   field<String>(json, 'coach_name', 'coach_name');
   final packId = field<String>(json, 'pack_id', 'pack_id');
   final eventId = field<String>(json, 'event_id', 'event_id');
-  final schema =
-      field<String>(json, 'metric_schema_version', 'metric_schema_version');
+  final schema = field<String>(
+    json,
+    'metric_schema_version',
+    'metric_schema_version',
+  );
   final createdAt = field<String>(json, 'created_at', 'created_at');
   final clipCount = field<int>(json, 'source_clip_count', 'source_clip_count');
-  final gates =
-      field<Map<String, Object?>>(json, 'quality_gates', 'quality_gates');
+  final gates = field<Map<String, Object?>>(
+    json,
+    'quality_gates',
+    'quality_gates',
+  );
   final metrics = field<Map<String, Object?>>(json, 'metrics', 'metrics');
 
   if (gates != null) {
     field<bool>(gates, 'min_clips_met', 'quality_gates.min_clips_met');
-    field<bool>(gates, 'self_consistency_passed',
-        'quality_gates.self_consistency_passed');
+    field<bool>(
+      gates,
+      'self_consistency_passed',
+      'quality_gates.self_consistency_passed',
+    );
     field<String>(gates, 'notes', 'quality_gates.notes');
   }
 
@@ -234,9 +252,13 @@ List<String> validateProfile(Object? json) {
         if (m[k] is! String) problems.add('$path.$k must be a string');
       }
       final spread = m['spread'];
-      if (spread is num && spread < 0) problems.add('$path.spread must be >= 0');
+      if (spread is num && spread < 0) {
+        problems.add('$path.spread must be >= 0');
+      }
       final weight = m['weight'];
-      if (weight is num && weight < 0) problems.add('$path.weight must be >= 0');
+      if (weight is num && weight < 0) {
+        problems.add('$path.weight must be >= 0');
+      }
     }
   }
 
@@ -263,9 +285,13 @@ List<String> validateProfile(Object? json) {
     } else {
       for (var i = 0; i < refs.length; i++) {
         final r = refs[i];
-        if (r is! Map || r['clip_id'] is! String || r['metrics'] is! Map ||
+        if (r is! Map ||
+            r['clip_id'] is! String ||
+            r['metrics'] is! Map ||
             (r['metrics'] as Map).values.any((v) => v is! num)) {
-          problems.add('reference_clips[$i] must have clip_id and numeric metrics');
+          problems.add(
+            'reference_clips[$i] must have clip_id and numeric metrics',
+          );
         }
       }
     }

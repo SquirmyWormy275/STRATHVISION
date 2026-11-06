@@ -1,9 +1,11 @@
 import 'dart:io';
 
+
 import 'package:path/path.dart' as p;
 
 import '../data/database.dart';
 import 'profile_package.dart';
+import 'package_exchange.dart';
 
 /// Setting key for the shared inbox folder (Syncthing, a USB stick, a
 /// network share…). Packages dropped there are imported; no cloud involved.
@@ -25,13 +27,10 @@ Future<int> scanInbox(AppDatabase db, String folder, Directory store) async {
       final meta = await readProfilePackage(f.path);
       final key = '${meta.profileId}@${meta.version}';
       if (installed.contains(key)) continue;
-      // Keep a private copy so the Library survives the inbox being cleaned.
-      final copy = p.join(store.path, '${meta.profileId}_v${meta.version}.zip');
-      await f.copy(copy);
-      await db.saveProfile(meta, copy);
+      await applyImport(db, f.path, meta, null, () async => store);
       installed.add(key);
       added++;
-    } on AnalysisError {
+    } on Object {
       continue;
     }
   }

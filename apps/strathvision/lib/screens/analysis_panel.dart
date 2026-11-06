@@ -21,7 +21,9 @@ class AnalyzeButton extends StatelessWidget {
     final onPressed = analysis.running ? null : analysis.analyze;
     final icon = analysis.running
         ? const SizedBox.square(
-            dimension: 16, child: CircularProgressIndicator(strokeWidth: 2))
+            dimension: 16,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          )
         : const Icon(Icons.insights, size: 18);
     // Phones: icon only, so the top bar never overflows.
     if (MediaQuery.sizeOf(context).width < 600) {
@@ -49,46 +51,59 @@ class _ProfileSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final muted = theme.textTheme.bodySmall
-        ?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    final muted = theme.textTheme.bodySmall?.copyWith(
+      color: theme.colorScheme.onSurfaceVariant,
+    );
     final choices = analysis.choices;
     final error = analysis.profileError;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 8, 6),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        if (choices.isEmpty)
-          Text('Build or import a profile to compare against it.',
-              key: const Key('no-profiles'), style: muted)
-        else
-          Row(children: [
-            Text('Compare with', style: muted),
-            const SizedBox(width: 8),
-            Expanded(
-              child: DropdownButton<String>(
-                key: const Key('profile-select'),
-                isExpanded: true,
-                isDense: true,
-                underline: const SizedBox.shrink(),
-                value: analysis.selectedProfile?.key ?? '',
-                items: [
-                  const DropdownMenuItem(value: '', child: Text('Nobody')),
-                  for (final c in choices)
-                    DropdownMenuItem(
-                        value: c.key,
-                        child: Text(c.label, overflow: TextOverflow.ellipsis)),
-                ],
-                onChanged: analysis.running
-                    ? null
-                    : (k) => analysis.selectProfile(
-                        choices.where((c) => c.key == k).firstOrNull),
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (choices.isEmpty)
+            Text(
+              'Build or import a profile to compare against it.',
+              key: const Key('no-profiles'),
+              style: muted,
+            )
+          else
+            Row(
+              children: [
+                Text('Compare with', style: muted),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: DropdownButton<String>(
+                    key: const Key('profile-select'),
+                    isExpanded: true,
+                    isDense: true,
+                    underline: const SizedBox.shrink(),
+                    value: analysis.selectedProfile?.key ?? '',
+                    items: [
+                      const DropdownMenuItem(value: '', child: Text('Nobody')),
+                      for (final c in choices)
+                        DropdownMenuItem(
+                          value: c.key,
+                          child: Text(c.label, overflow: TextOverflow.ellipsis),
+                        ),
+                    ],
+                    onChanged: analysis.running
+                        ? null
+                        : (k) => analysis.selectProfile(
+                            choices.where((c) => c.key == k).firstOrNull,
+                          ),
+                  ),
+                ),
+              ],
             ),
-          ]),
-        if (error != null)
-          Text(error.message,
+          if (error != null)
+            Text(
+              error.message,
               key: const Key('profile-error'),
-              style: muted?.copyWith(color: theme.colorScheme.error)),
-      ]),
+              style: muted?.copyWith(color: theme.colorScheme.error),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -113,9 +128,10 @@ class AnalysisPanel extends StatelessWidget {
     final Widget body;
     if (clip == null) {
       body = _Message(
-          icon: Icons.movie_outlined,
-          title: 'No clip on this stage',
-          text: 'Add a clip, then tap Analyze.');
+        icon: Icons.movie_outlined,
+        title: 'No clip on this stage',
+        text: 'Add a clip, then tap Analyze.',
+      );
     } else if (analysis.running) {
       body = const _Running();
     } else if (result == null) {
@@ -127,13 +143,13 @@ class AnalysisPanel extends StatelessWidget {
     } else {
       body = switch (result) {
         AnalysisSuccess(:final vector) => _Metrics(
-            vector: vector,
-            pack: pack,
-            fps: analysis.fps,
-            comparison: analysis.comparison,
-            profileLabel: analysis.selectedProfile?.label,
-            focus: analysis.analysis?.focus,
-          ),
+          vector: vector,
+          pack: pack,
+          fps: analysis.fps,
+          comparison: analysis.comparison,
+          profileLabel: analysis.selectedProfile?.label,
+          focus: analysis.analysis?.focus,
+        ),
         AnalysisFailure(:final error) => _Failure(error: error),
       };
     }
@@ -148,37 +164,45 @@ class AnalysisPanel extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 4, 4),
-            child: Row(children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Analysis', style: theme.textTheme.titleSmall),
-                    if (clip != null)
-                      Text('$stage · ${clip.displayName}',
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Analysis', style: theme.textTheme.titleSmall),
+                      if (clip != null)
+                        Text(
+                          '$stage · ${clip.displayName}',
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall
-                              ?.copyWith(color: scheme.onSurfaceVariant)),
-                  ],
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-              if (result != null && !analysis.running)
+                if (result != null && !analysis.running)
+                  IconButton(
+                    key: const Key('analysis-rerun'),
+                    tooltip: 'Analyze again',
+                    onPressed: analysis.analyze,
+                    icon: const Icon(Icons.refresh),
+                  ),
                 IconButton(
-                  key: const Key('analysis-rerun'),
-                  tooltip: 'Analyze again',
-                  onPressed: analysis.analyze,
-                  icon: const Icon(Icons.refresh),
+                  key: const Key('analysis-close'),
+                  tooltip: 'Close',
+                  onPressed: analysis.closePanel,
+                  icon: const Icon(Icons.close),
                 ),
-              IconButton(
-                key: const Key('analysis-close'),
-                tooltip: 'Close',
-                onPressed: analysis.closePanel,
-                icon: const Icon(Icons.close),
-              ),
-            ]),
+              ],
+            ),
           ),
           if (clip != null) _ProfileSelector(analysis: analysis),
-          if (clip != null && analysis.athletes != null && !analysis.running && result != null)
+          if (clip != null &&
+              analysis.athletes != null &&
+              !analysis.running &&
+              result != null)
             _AthleteBar(analysis: analysis, clipId: clip.clipId),
           if (analysis.analysis case final a?
               when !analysis.running && suggestHigherFrameRate(a, analysis.fps))
@@ -207,8 +231,13 @@ class _AthleteBar extends StatelessWidget {
     final athletes = analysis.athletes!;
     final found = athletes.found(clipId), source = athletes.source(clipId);
     if (found == null || source == null) return;
-    final choice = await showAthletePicker(context,
-        clip: source, found: found, asking: asking, load: athletes.loadPeople);
+    final choice = await showAthletePicker(
+      context,
+      clip: source,
+      found: found,
+      asking: asking,
+      load: athletes.loadPeople,
+    );
     switch (choice) {
       case FollowPerson(:final target):
         await analysis.chooseAthlete(target);
@@ -221,64 +250,85 @@ class _AthleteBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
-        listenable: analysis.athletes!,
-        builder: (context, _) {
-          final athletes = analysis.athletes!;
-          final found = athletes.found(clipId);
-          if (found == null) return const SizedBox.shrink();
-          final theme = Theme.of(context);
-          final scheme = theme.colorScheme;
-          final chosen = athletes.targetFor(clipId) != null;
-          if (athletes.needsChoice(clipId) || found.target == null) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
-              child: Material(
-                key: const Key('athlete-question'),
-                color: scheme.tertiaryContainer,
-                borderRadius: BorderRadius.circular(8),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
-                  child: Row(children: [
-                    Icon(Icons.groups_outlined, color: scheme.onTertiaryContainer),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        found.target == null
-                            ? 'Nobody could be followed automatically. Pick the athlete to measure.'
-                            : 'More than one person is moving. Check that the right person was measured.',
-                        style: theme.textTheme.bodyMedium?.copyWith(color: scheme.onTertiaryContainer),
+    listenable: analysis.athletes!,
+    builder: (context, _) {
+      final athletes = analysis.athletes!;
+      final found = athletes.found(clipId);
+      if (found == null) return const SizedBox.shrink();
+      final theme = Theme.of(context);
+      final scheme = theme.colorScheme;
+      final chosen = athletes.targetFor(clipId) != null;
+      if (athletes.needsChoice(clipId) || found.target == null) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+          child: Material(
+            key: const Key('athlete-question'),
+            color: scheme.tertiaryContainer,
+            borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.groups_outlined,
+                    color: scheme.onTertiaryContainer,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      found.target == null
+                          ? 'Nobody could be followed automatically. Pick the athlete to measure.'
+                          : 'More than one person is moving. Check that the right person was measured.',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: scheme.onTertiaryContainer,
                       ),
                     ),
-                    FilledButton.tonal(
-                      key: const Key('athlete-ask'),
-                      onPressed: () => _pick(context, asking: true),
-                      child: const Text('Pick athlete'),
-                    ),
-                  ]),
+                  ),
+                  FilledButton.tonal(
+                    key: const Key('athlete-ask'),
+                    onPressed: () => _pick(context, asking: true),
+                    child: const Text('Pick athlete'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 8, 4),
+        child: Row(
+          children: [
+            Icon(
+              Icons.person_search_outlined,
+              size: 18,
+              color: scheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                chosen
+                    ? 'Measuring the person you chose.'
+                    : 'Measuring the person picked automatically.',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: scheme.onSurfaceVariant,
                 ),
               ),
-            );
-          }
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 8, 4),
-            child: Row(children: [
-              Icon(Icons.person_search_outlined, size: 18, color: scheme.onSurfaceVariant),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  chosen ? 'Measuring the person you chose.' : 'Measuring the person picked automatically.',
-                  style: theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-                ),
+            ),
+            TextButton(
+              key: const Key('athlete-wrong'),
+              onPressed: () => _pick(context, asking: false),
+              child: Text(
+                found.orientationSure
+                    ? 'Wrong person?'
+                    : 'Wrong person or sideways?',
               ),
-              TextButton(
-                key: const Key('athlete-wrong'),
-                onPressed: () => _pick(context, asking: false),
-                child: Text(found.orientationSure ? 'Wrong person?' : 'Wrong person or sideways?'),
-              ),
-            ]),
-          );
-        },
+            ),
+          ],
+        ),
       );
+    },
+  );
 }
 
 /// Most swings could not be measured: say how to film them sharper.
@@ -293,17 +343,26 @@ class _FilmingTip extends StatelessWidget {
     return Padding(
       key: const Key('filming-tip'),
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(Icons.videocam_outlined, size: 18, color: scheme.onSurfaceVariant),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            '$measured of $found swings could be measured; fast swings blur at this frame rate. '
-            'Film at 60 frames per second for sharper swings (in the camera\'s video settings).',
-            style: theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.videocam_outlined,
+            size: 18,
+            color: scheme.onSurfaceVariant,
           ),
-        ),
-      ]),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              '$measured of $found swings could be measured; fast swings blur at this frame rate. '
+              'Film at 60 frames per second for sharper swings (in the camera\'s video settings).',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -313,20 +372,24 @@ class _Running extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ValueListenableBuilder<double?>(
-        valueListenable: PoseService.instance.progress,
-        builder: (context, p, _) => Column(
-          key: const Key('analysis-running'),
-          children: [
-            LinearProgressIndicator(value: p),
-            Expanded(
-              child: Center(
-                child: Text(p == null ? 'Analyzing…' : 'Tracking the body… ${(p * 100).round()}%',
-                    style: Theme.of(context).textTheme.bodyMedium),
-              ),
+    valueListenable: PoseService.instance.progress,
+    builder: (context, p, _) => Column(
+      key: const Key('analysis-running'),
+      children: [
+        LinearProgressIndicator(value: p),
+        Expanded(
+          child: Center(
+            child: Text(
+              p == null
+                  ? 'Analyzing…'
+                  : 'Tracking the body… ${(p * 100).round()}%',
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
-          ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 }
 
 class _Message extends StatelessWidget {
@@ -342,16 +405,22 @@ class _Message extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Icon(icon, size: 32, color: theme.colorScheme.onSurfaceVariant),
-          const SizedBox(height: 12),
-          Text(title, style: theme.textTheme.titleSmall),
-          const SizedBox(height: 4),
-          Text(text,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 32, color: theme.colorScheme.onSurfaceVariant),
+            const SizedBox(height: 12),
+            Text(title, style: theme.textTheme.titleSmall),
+            const SizedBox(height: 4),
+            Text(
+              text,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-        ]),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -370,24 +439,36 @@ class _Failure extends StatelessWidget {
       key: const Key('analysis-error'),
       padding: const EdgeInsets.all(16),
       children: [
-        Row(children: [
-          Icon(Icons.info_outline, color: scheme.error),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(error.message, style: theme.textTheme.bodyLarge),
-          ),
-        ]),
+        Row(
+          children: [
+            Icon(Icons.info_outline, color: scheme.error),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(error.message, style: theme.textTheme.bodyLarge),
+            ),
+          ],
+        ),
         const SizedBox(height: 12),
-        Text(error.errorCode,
-            style: theme.textTheme.labelSmall
-                ?.copyWith(color: scheme.onSurfaceVariant, letterSpacing: 0.6)),
+        Text(
+          error.errorCode,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: scheme.onSurfaceVariant,
+            letterSpacing: 0.6,
+          ),
+        ),
         for (final e in error.details.entries)
-          Text('${e.key}: ${e.value}',
-              style: theme.textTheme.bodySmall?.copyWith(
-                  color: scheme.onSurfaceVariant, fontFeatures: _tabular)),
+          Text(
+            '${e.key}: ${e.value}',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: scheme.onSurfaceVariant,
+              fontFeatures: _tabular,
+            ),
+          ),
         const SizedBox(height: 16),
-        Text('Review tools keep working without analysis.',
-            style: theme.textTheme.bodySmall),
+        Text(
+          'Review tools keep working without analysis.',
+          style: theme.textTheme.bodySmall,
+        ),
       ],
     );
   }
@@ -423,17 +504,25 @@ class _Metrics extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final muted = theme.textTheme.bodySmall
-        ?.copyWith(color: scheme.onSurfaceVariant, fontFeatures: _tabular);
-    final figures = theme.textTheme.bodyMedium
-        ?.copyWith(fontFeatures: _tabular, fontWeight: FontWeight.w600);
+    final muted = theme.textTheme.bodySmall?.copyWith(
+      color: scheme.onSurfaceVariant,
+      fontFeatures: _tabular,
+    );
+    final figures = theme.textTheme.bodyMedium?.copyWith(
+      fontFeatures: _tabular,
+      fontWeight: FontWeight.w600,
+    );
 
     Widget section(String title) => Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
-          child: Text(title.toUpperCase(),
-              style: theme.textTheme.labelSmall?.copyWith(
-                  color: scheme.onSurfaceVariant, letterSpacing: 0.8)),
-        );
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
+      child: Text(
+        title.toUpperCase(),
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: scheme.onSurfaceVariant,
+          letterSpacing: 0.8,
+        ),
+      ),
+    );
 
     return ListView(
       key: const Key('analysis-metrics'),
@@ -442,20 +531,23 @@ class _Metrics extends StatelessWidget {
         if (comparison case final c?)
           switch (c) {
             ComparisonSuccess(:final result) => _Comparison(
-                result: result,
-                pack: pack,
-                profileLabel: profileLabel ?? '',
-                focus: focus),
+              result: result,
+              pack: pack,
+              profileLabel: profileLabel ?? '',
+              focus: focus,
+            ),
             ComparisonFailure(:final error) => Padding(
-                key: const Key('comparison-error'),
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                child: Row(children: [
+              key: const Key('comparison-error'),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: Row(
+                children: [
                   Icon(Icons.info_outline, color: scheme.error, size: 18),
                   const SizedBox(width: 8),
                   Expanded(child: Text(error.message)),
                   Text(error.errorCode, style: muted),
-                ]),
+                ],
               ),
+            ),
           },
         section('Measurements'),
         section('Body tracking'),
@@ -470,7 +562,8 @@ class _Metrics extends StatelessWidget {
           _Row(
             key: Key('phase-${e.key}'),
             label: pack.phaseLabel(e.key),
-            sub: '${_time(e.value.startFrame)} – ${_time(e.value.endFrame)}'
+            sub:
+                '${_time(e.value.startFrame)} – ${_time(e.value.endFrame)}'
                 '  ·  frames ${e.value.startFrame}–${e.value.endFrame}',
             confidence: e.value.confidence,
             numStyle: figures,
@@ -482,7 +575,8 @@ class _Metrics extends StatelessWidget {
             key: Key('metric-${e.key}'),
             label: pack.metricLabel(e.key),
             sub: pack.phaseLabel(e.value.phase),
-            value: '${e.value.value.toStringAsFixed(1)} ${_units(e.key)}'.trim(),
+            value: '${e.value.value.toStringAsFixed(1)} ${_units(e.key)}'
+                .trim(),
             confidence: e.value.confidence,
             numStyle: figures,
             subStyle: muted,
@@ -523,35 +617,40 @@ class _Row extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-      child: Row(children: [
-        Expanded(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(label, overflow: TextOverflow.ellipsis),
-            if (sub != null) Text(sub!, style: subStyle),
-          ]),
-        ),
-        if (value != null) ...[
-          const SizedBox(width: 8),
-          Text(value!, style: numStyle),
-        ],
-        if (confidence != null) ...[
-          const SizedBox(width: 12),
-          Tooltip(
-            message: 'Confidence ${(confidence! * 100).round()}%',
-            child: SizedBox(
-              width: 40,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(2),
-                child: LinearProgressIndicator(
-                  value: confidence,
-                  minHeight: 4,
-                  backgroundColor: scheme.surfaceContainerHighest,
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, overflow: TextOverflow.ellipsis),
+                if (sub != null) Text(sub!, style: subStyle),
+              ],
+            ),
+          ),
+          if (value != null) ...[
+            const SizedBox(width: 8),
+            Text(value!, style: numStyle),
+          ],
+          if (confidence != null) ...[
+            const SizedBox(width: 12),
+            Tooltip(
+              message: 'Confidence ${(confidence! * 100).round()}%',
+              child: SizedBox(
+                width: 40,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(2),
+                  child: LinearProgressIndicator(
+                    value: confidence,
+                    minHeight: 4,
+                    backgroundColor: scheme.surfaceContainerHighest,
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ],
-      ]),
+      ),
     );
   }
 }
@@ -576,8 +675,10 @@ class _Comparison extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final muted = theme.textTheme.bodySmall
-        ?.copyWith(color: scheme.onSurfaceVariant, fontFeatures: _tabular);
+    final muted = theme.textTheme.bodySmall?.copyWith(
+      color: scheme.onSurfaceVariant,
+      fontFeatures: _tabular,
+    );
     final defs = {for (final m in pack.analysisPack.metrics) m.key: m};
     return Column(
       key: const Key('comparison'),
@@ -585,41 +686,60 @@ class _Comparison extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-          child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Text('${(result.overallScore * 100).round()}%',
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '${(result.overallScore * 100).round()}%',
                 key: const Key('overall-score'),
                 style: theme.textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w600, fontFeatures: _tabular)),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Text('style match with $profileLabel',
-                    style: theme.textTheme.bodyMedium),
+                  fontWeight: FontWeight.w600,
+                  fontFeatures: _tabular,
+                ),
               ),
-            ),
-          ]),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Text(
+                    'style match with $profileLabel',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-              '${result.metricsUsed} measurements compared'
-              '${result.appliedPatches.isEmpty ? '' : ' · patches: ${result.appliedPatches.join(', ')}'}',
-              key: const Key('comparison-coverage'),
-              style: muted),
+            '${result.metricsUsed} measurements compared'
+            '${result.appliedPatches.isEmpty ? '' : ' · patches: ${result.appliedPatches.join(', ')}'}',
+            key: const Key('comparison-coverage'),
+            style: muted,
+          ),
         ),
         if (focus != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: Row(children: [
-              Icon(Icons.center_focus_strong, size: 18, color: scheme.primary),
-              const SizedBox(width: 8),
-              Text('Focus next: ', style: theme.textTheme.bodyMedium),
-              Text(focus!,
+            child: Row(
+              children: [
+                Icon(
+                  Icons.center_focus_strong,
+                  size: 18,
+                  color: scheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text('Focus next: ', style: theme.textTheme.bodyMedium),
+                Text(
+                  focus!,
                   key: const Key('focus'),
-                  style: theme.textTheme.bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w600)),
-            ]),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
         for (final w in result.warnings)
           Container(
@@ -627,24 +747,37 @@ class _Comparison extends StatelessWidget {
             margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-                color: scheme.errorContainer,
-                borderRadius: BorderRadius.circular(8)),
-            child: Row(children: [
-              Icon(Icons.warning_amber_rounded,
-                  size: 16, color: scheme.onErrorContainer),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(w,
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: scheme.onErrorContainer)),
-              ),
-            ]),
+              color: scheme.errorContainer,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.warning_amber_rounded,
+                  size: 16,
+                  color: scheme.onErrorContainer,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    w,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: scheme.onErrorContainer,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 2),
-          child: Text('BIGGEST DIFFERENCES',
-              style: theme.textTheme.labelSmall?.copyWith(
-                  color: scheme.onSurfaceVariant, letterSpacing: 0.8)),
+          child: Text(
+            'BIGGEST DIFFERENCES',
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: scheme.onSurfaceVariant,
+              letterSpacing: 0.8,
+            ),
+          ),
         ),
         for (final d in result.rankedDeltas)
           _DeltaTile(delta: d, def: defs[d.metricKey], pack: pack),
@@ -654,7 +787,11 @@ class _Comparison extends StatelessWidget {
 }
 
 class _DeltaTile extends StatelessWidget {
-  const _DeltaTile({required this.delta, required this.def, required this.pack});
+  const _DeltaTile({
+    required this.delta,
+    required this.def,
+    required this.pack,
+  });
 
   final RankedDelta delta;
   final MetricDef? def;
@@ -666,35 +803,46 @@ class _DeltaTile extends StatelessWidget {
     final scheme = theme.colorScheme;
     final d = delta;
     final unit = def?.unit ?? '';
-    String v(double x) => '${x.toStringAsFixed(1)}${unit == '°' ? '' : ' '}$unit';
+    String v(double x) =>
+        '${x.toStringAsFixed(1)}${unit == '°' ? '' : ' '}$unit';
     final (IconData icon, String dir) = switch (d.direction) {
       'higher' => (Icons.arrow_upward, 'Higher than coach'),
       'lower' => (Icons.arrow_downward, 'Lower than coach'),
       _ => (Icons.check, 'Within the coach\'s range'),
     };
-    final muted = theme.textTheme.bodySmall
-        ?.copyWith(color: scheme.onSurfaceVariant, fontFeatures: _tabular);
-    final figures = theme.textTheme.bodyMedium
-        ?.copyWith(fontFeatures: _tabular, fontWeight: FontWeight.w600);
+    final muted = theme.textTheme.bodySmall?.copyWith(
+      color: scheme.onSurfaceVariant,
+      fontFeatures: _tabular,
+    );
+    final figures = theme.textTheme.bodyMedium?.copyWith(
+      fontFeatures: _tabular,
+      fontWeight: FontWeight.w600,
+    );
     return ExpansionTile(
       key: Key('delta-${d.metricKey}'),
       tilePadding: const EdgeInsets.symmetric(horizontal: 16),
       childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      leading: Icon(icon,
-          size: 20,
-          color: d.direction == 'neutral' ? scheme.primary : scheme.tertiary),
-      title: Text(pack.metricLabel(d.metricKey), overflow: TextOverflow.ellipsis),
+      leading: Icon(
+        icon,
+        size: 20,
+        color: d.direction == 'neutral' ? scheme.primary : scheme.tertiary,
+      ),
+      title: Text(
+        pack.metricLabel(d.metricKey),
+        overflow: TextOverflow.ellipsis,
+      ),
       subtitle: Text(
-          '${pack.phaseLabel(d.phase)} · $dir · '
-          '${d.distanceSpreads.toStringAsFixed(1)} spreads',
-          style: muted),
+        '${pack.phaseLabel(d.phase)} · $dir · '
+        '${d.distanceSpreads.toStringAsFixed(1)} spreads${d.confidence < 0.6 ? " · Uncertain" : ""}',
+        style: muted,
+      ),
       trailing: SizedBox(
         width: 40,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(2),
           child: LinearProgressIndicator(
-            value: (d.contribution * 2).clamp(0.0, 1.0),
+            value: ((d.rankingWeight ?? d.contribution) * 2).clamp(0.0, 1.0),
             minHeight: 4,
             color: scheme.tertiary,
             backgroundColor: scheme.surfaceContainerHighest,
@@ -706,31 +854,50 @@ class _DeltaTile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
-                describeMetric(def!, phaseLabel: pack.phaseLabel),
-                key: Key('definition-${d.metricKey}'),
-                style: theme.textTheme.bodySmall),
+              describeMetric(def!, phaseLabel: pack.phaseLabel),
+              key: Key('definition-${d.metricKey}'),
+              style: theme.textTheme.bodySmall,
+            ),
           ),
-        Row(children: [
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('This clip', style: muted),
-              Text(v(d.userValue), key: Key('user-${d.metricKey}'), style: figures),
-            ]),
-          ),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Coach', style: muted),
-              Text('${v(d.coachCenter)} ± ${v(d.coachSpread)}',
-                  key: Key('coach-${d.metricKey}'), style: figures),
-            ]),
-          ),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Phase', style: muted),
-              Text(pack.phaseLabel(d.phase), style: figures),
-            ]),
-          ),
-        ]),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('This clip', style: muted),
+                  Text(
+                    v(d.userValue),
+                    key: Key('user-${d.metricKey}'),
+                    style: figures,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Coach', style: muted),
+                  Text(
+                    '${v(d.coachCenter)} ± ${v(d.coachSpread)}',
+                    key: Key('coach-${d.metricKey}'),
+                    style: figures,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Phase', style: muted),
+                  Text(pack.phaseLabel(d.phase), style: figures),
+                ],
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

@@ -232,7 +232,8 @@ void main() {
     await analysis.analyze();
     final r = saved.single;
     expect(r.appliedPatches, ['slope_residual_v1']);
-    expect(analysis.analysis!.focus, isIn(['Slope', 'Spacing', 'Hinge', 'Path']));
+    expect(analysis.analysis!.focus, isNull,
+        reason: 'adapter priority cannot override uncertain phase measurements');
     // Stub tracker confidence is 0.8 and stub phases 0.5: usable.
     expect(analysis.analysis!.usable, isTrue);
     expect(r.warnings.where((x) => x.contains('usable threshold')), isEmpty);
