@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-06T15:44:22Z
+heartbeat: 2026-11-06T15:53:13Z
 branch: implementation
-phase: Inventory-first research
-task: Reusable sport-agnostic inventory and split safeguards
-next: Review PR 7. The 436-source private plan remains quarantined until recording/session provenance and exposure are reviewed; collect genuine labels and freeze comparison gates before representation or CARNE evaluation.
+phase: Release preparation
+task: Final build gates and verified release artifacts
+next: Wait for all eight jobs on PR 7 final head, merge into main when green, verify same-run artifacts/checksums and prepare a draft release. Production signing information remains pending.
 owned_paths: tools/datasets docs .github/workflows README.md
 active_processes: none
 <!-- STATE:END -->
@@ -74,6 +74,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T15:53:13Z **codex** — Release prep integrated main and native Linux fixes; 376 local tests pass, native pose passes, patched training environment passes CPU/CUDA compatibility → next: Wait for all eight jobs on PR 7 final head, merge into main when green, verify same-run artifacts/checksums and prepare a draft release. Production signing information remains pending.
 - 2026-11-06T15:44:22Z **codex** — Claimed: Prepare full release: integrate latest baseline fixes, pass all build gates, merge inventory and prepare verified distribution artifacts
 - 2026-11-06T08:30:26Z **codex** — Released: Inventory-first workstream delivered in PR 7: source-preserving manifests, metadata, SHA-256 aliases, provenance and frozen split safeguards; 109 relevant local tests pass → next: Review PR 7. The 436-source private plan remains quarantined until recording/session provenance and exposure are reviewed; collect genuine labels and freeze comparison gates before representation or CARNE evaluation.
 - 2026-11-06T08:30:26Z **codex** — Published aggregate evidence and post-inventory representation assessment without private filenames or model promotion → next: Review PR 7 and use docs/DATASETS.md to review session provenance before freezing a new evaluation.

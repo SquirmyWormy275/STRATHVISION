@@ -22,3 +22,11 @@ Run Python tests from the repository root using the pinned research environment:
 ```
 
 The image studies use Python 3.12; `requirements-training.txt` records the separate CUDA training environment. App/engine tests have their own Flutter/Dart setup. Tests establish mechanism correctness; detector accuracy, coaching judgments and field outcomes require their respective evidence.
+
+## Maintained training environment and historical reproduction
+
+`requirements-training.txt` now pins patched setuptools and a compatible Torch/TorchVision pair, and includes the ordinary research requirements. Install it into a fresh Python 3.12 environment. It is optional research tooling and is not shipped inside the Flutter app. The old full CUDA 12.8 environment remains available with `git show 7367abb:tools/carne_asada/requirements-training.txt` for auditing the historical experiment. It contains known-vulnerable packages and should not be installed for new work. New fits under the maintained environment are new experiments; frozen weights, references and historical results remain unchanged.
+
+The pairing is checked against the [published TorchVision dependency metadata](https://pypi.org/pypi/torchvision/0.28.0/json). Package-update validation uses dependency resolution, model construction, detection operators and one synthetic forward/backward step; it does not establish reproduction of historical accuracy or CUDA performance.
+
+Validate the installed training environment with `python -m pip check`, `python tools/carne_asada/check_training_env.py --device cpu`, and `python -m pytest -q tools/carne_asada`. On a compatible GPU, `--device cuda` additionally exercises the same synthetic steps on CUDA. CI installs the matching CPU wheels and makes this compatibility check a build gate.

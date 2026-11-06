@@ -8,6 +8,14 @@ Local verification before publication: 116 engine tests, 151 app unit/widget tes
 
 Review regressions also cover missing-frame dropout, late athlete entry after an empty preview, profile-scoped comparison caches, immutable generated versions (including concurrent saves), save-error recovery, and playback settings retained through undo. CI runs on pull requests and main-branch pushes; duplicate implementation-push runs are excluded so cancelled duplicates cannot block required checks.
 
+## Release preparation, 2026-11-06
+
+The inventory branch incorporates the merged audit baseline, including the Ubuntu 24.04 native CI configuration and headless probing fix. Local checks on the combined tree pass: 116 engine tests, 151 app tests, 30 dataset tests, 74 research tests and five handoff tests; both analyzers are clean. Native pose passes again locally.
+
+The optional research training environment replaces vulnerable setuptools/Torch pins with setuptools 84.1.0, Torch 2.13.0 and matching TorchVision 0.28.0. A fresh Python 3.12 installation resolves cleanly. `tools/carne_asada/check_training_env.py` exercises all three research builders with synthetic inputs on CPU and CUDA: finite forward/backward passes, an optimizer step, detection output and weights-only save/load. No footage is read, no pretrained weights downloaded and no historical accuracy result is re-scored. CI additionally gates all platform builds on CPU training-dependency compatibility. Historical environment pins remain in Git for auditing.
+
+Release artifacts must come from one successful eight-job run. Production signing and physical-device acceptance remain open as described in [distribution](DISTRIBUTION.md); a passing build is not a signed iOS IPA or a validated coaching product.
+
 ## Automated checks
 
 From the repository root:
