@@ -12,6 +12,7 @@ import 'package:strathvision/profiles/clip_probe.dart';
 import 'package:strathvision/profiles/inbox.dart';
 import 'package:strathvision/profiles/package_exchange.dart';
 import 'package:strathvision/profiles/profile_package.dart';
+import 'package:strathvision/profiles/profile_store.dart';
 import 'package:strathvision/vision/athlete.dart';
 import 'package:strathvision/vision/pose_service.dart';
 import 'package:strathvision/vision/training_track.dart';
@@ -39,6 +40,34 @@ void main() {
       ..writeAsBytesSync(ZipEncoder().encode(a));
     return f.path;
   }
+
+  test('generated profile versions reject collision without replacing bytes', () async {
+    final profile = Profile.fromJson(manifest());
+    final directory = Directory('${dir.path}/generated');
+    final first = await storeNewProfileVersion(db, profile, directory);
+    final bytes = File(first).readAsBytesSync();
+    final changed = Profile.fromJson({...manifest(), 'coach_name': 'Different'});
+    await expectLater(storeNewProfileVersion(db, changed, directory), throwsStateError);
+    expect((await db.allProfiles()).single.sourcePath, first);
+    expect(File(first).readAsBytesSync(), bytes);
+    expect(directory.listSync(), hasLength(1));
+  });
+
+  test('concurrent generated saves cannot replace an installed version', () async {
+    final profile = Profile.fromJson(manifest());
+    final directory = Directory('${dir.path}/generated');
+    Future<bool> save() async {
+      try {
+        await storeNewProfileVersion(db, profile, directory);
+        return true;
+      } on StateError {
+        return false;
+      }
+    }
+    expect(await Future.wait([save(), save()]), containsAll([true, false]));
+    expect(await db.allProfiles(), hasLength(1));
+    expect(directory.listSync(), hasLength(1));
+  });
 
   test('traversal manifests are rejected by manual and inbox import', () async {
     for (final id in [

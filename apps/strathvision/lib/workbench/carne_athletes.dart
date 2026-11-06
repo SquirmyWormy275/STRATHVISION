@@ -66,7 +66,11 @@ Future<AthleteTrack> loadCarneTrack(
     );
     final found = await loader(preview, null);
     state.record(clip, found);
-    if (found.ambiguous || !found.orientationSure || found.target == null) {
+    // A genuinely empty opening is not a competitor-choice failure. The
+    // full tracker can find an athlete who enters later in the recording.
+    final empty = found.target == null && found.candidates.isEmpty &&
+        found.track.frames.isEmpty;
+    if (!empty && (found.ambiguous || !found.orientationSure || found.target == null)) {
       throw CarneAthleteChoiceNeeded(clip, found);
     }
     target = found.target;

@@ -97,7 +97,7 @@ void main() {
   });
 
   ({Profile profile, Map<String, String> patches, Map<String, String> adapters})? written;
-  WorkbenchController controller({AdapterCompiler? compiler}) => WorkbenchController(
+  WorkbenchController controller({AdapterCompiler? compiler, VersionWriter? write}) => WorkbenchController(
         pack: pack,
         bundle: ProfileBundle(profile: coach, patchFiles: const {}),
         probe: (path) async => const ClipInfo(durationMs: 6000, fps: 30),
@@ -108,7 +108,7 @@ void main() {
                 heads: applyPatches(headsFor(pack), patches))
             .analyzeDetailed(clip, reference: reference),
         compiler: compiler,
-        write: (profile, patches, adapters) async {
+        write: write ?? (profile, patches, adapters) async {
           written = (profile: profile, patches: patches, adapters: adapters);
           return '/store/${profile.profileId}_v${profile.version}.zip';
         },
@@ -179,6 +179,22 @@ void main() {
     expect(tester.widget<TextButton>(find.byKey(const Key('compile-usable_footage'))).onPressed,
         isNull);
     expect(tester.widget<FilledButton>(find.byKey(const Key('save-version'))).onPressed, isNull);
+    c.dispose();
+  });
+
+  testWidgets('occupied-version failure is visible and retains pending work', (tester) async {
+    final c = controller(compiler: _Scripted(), write: (_, _, _) async {
+      throw StateError('Version 2 already exists. Open the latest version.');
+    });
+    await pump(tester, c, const []);
+    await tap(tester, 'compile-usable_footage');
+    await tap(tester, 'save-version');
+    expect(find.byKey(const Key('workbench-save-error')), findsOneWidget);
+    expect(find.textContaining('Open the latest version'), findsOneWidget);
+    expect(c.savedPath, isNull);
+    expect(c.hasChanges, isTrue);
+    expect(c.saving, isFalse);
+    expect(tester.takeException(), isNull);
     c.dispose();
   });
 

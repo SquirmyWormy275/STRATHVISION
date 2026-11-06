@@ -540,3 +540,6 @@ This additive revision supersedes conflicting descriptions above.
 
 Production CARNE mark lookup requires matching pack, event and current source SHA-256. Older local marks without provenance remain visible for review but must be re-marked before research updates.
 Priority adapters cannot display a focus whose mapped measurements fail the confidence threshold; missing attribute mappings also suppress the suggestion.
+## Review regression invariants (2026-11-06)
+
+Missing implement observations count toward contiguous dropout, including span edges. An empty selection preview must search the full recording before requiring a competitor choice; real ambiguity still stops ingestion. Cached analyses are visible only for the selected profile key. Newly generated versions must never replace an installed version: collisions are rejected with recovery guidance. Undo preserves current playback speed and lock preference where the restored clips still have a sync relationship.

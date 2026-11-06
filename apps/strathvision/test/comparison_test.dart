@@ -122,6 +122,28 @@ void main() {
       await tester.pumpAndSettle();
     }
 
+    testWidgets('cached stage comparisons are scoped to the selected coach', (tester) async {
+      const first = ProfileChoice(profileId: 'prof-1', version: 1, label: 'One', path: '/one');
+      const second = ProfileChoice(profileId: 'prof-1', version: 2, label: 'Two', path: '/two');
+      await pump(tester, choices: [first, second]);
+      await analysis.analyze();
+      await ws.loadClip(Stage.b, '/clips/other.mp4');
+      ws.setActiveStage(Stage.b);
+      await analysis.analyze();
+      await analysis.selectProfile(second);
+      expect(analysis.analysis!.profileKey, second.key);
+      ws.setActiveStage(Stage.a);
+      expect(analysis.analysis, isNull);
+      await analysis.analyze();
+      expect(analysis.analysis!.profileKey, second.key);
+      ws.setActiveStage(Stage.b);
+      await analysis.selectProfile(null);
+      expect(analysis.comparison, isNull);
+      ws.setActiveStage(Stage.a);
+      expect(analysis.analysis, isNull);
+      await tester.pumpWidget(const SizedBox());
+    });
+
     testWidgets('score and ranked deltas against the selected profile',
         (tester) async {
       await pump(tester, patches: {'slope_residual_v2.patch': patchV2()});

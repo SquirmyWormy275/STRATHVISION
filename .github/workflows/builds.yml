@@ -5,7 +5,7 @@ name: builds
 
 on:
   push:
-    branches: [implementation, main]
+    branches: [main]
   pull_request:
     branches: [main, implementation]
   workflow_dispatch:

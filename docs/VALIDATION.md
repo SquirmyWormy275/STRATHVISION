@@ -4,7 +4,9 @@ Software regression checks, compilation, device behavior and coaching validity a
 
 ## Audit run, 2026-11-06
 
-Local verification before publication: 112 engine tests, 144 app unit/widget tests, 74 Python tests and five isolated handoff tests passed. Analyzer checks were clean. Native Linux playback passed 4/4, the full desktop workflow passed 1/1, and native pose passed 1/1, including 2.1 cm median agreement with the same-model reference (not motion ground truth). Line coverage: engine 91.4%, app 80.7%, excluding generated Dart. CI artifacts provide subsequent per-commit measurements.
+Local verification before publication: 116 engine tests, 151 app unit/widget tests, 74 Python tests and five isolated handoff tests passed. Analyzer checks were clean. Native Linux playback passed 4/4, the full desktop workflow passed 1/1, and native pose passed 1/1, including 2.1 cm median agreement with the same-model reference (not motion ground truth). Line coverage: engine 91.4%, app 81.0%, excluding generated Dart. CI artifacts provide subsequent per-commit measurements.
+
+Review regressions also cover missing-frame dropout, late athlete entry after an empty preview, profile-scoped comparison caches, immutable generated versions (including concurrent saves), save-error recovery, and playback settings retained through undo. CI runs on pull requests and main-branch pushes; duplicate implementation-push runs are excluded so cancelled duplicates cannot block required checks.
 
 ## Automated checks
 

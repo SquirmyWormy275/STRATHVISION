@@ -192,8 +192,8 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
   /// Stores imported metadata. Re-importing the same id + version replaces the
   /// earlier row (the replace/keep/merge choice arrives with real packages).
   Future<void> saveProfile(ProfileMetadata m, String sourcePath,
-      {DateTime? importedAt}) {
-    return into(profiles).insertOnConflictUpdate(ProfilesCompanion.insert(
+      {DateTime? importedAt, bool replace = true}) async {
+    final row = ProfilesCompanion.insert(
       profileId: m.profileId,
       version: m.version,
       coachName: m.coachName,
@@ -207,7 +207,12 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
       selfConsistencyPassed: m.selfConsistencyPassed,
       sourcePath: sourcePath,
       importedAt: importedAt ?? DateTime.now(),
-    ));
+    );
+    if (replace) {
+      await into(profiles).insertOnConflictUpdate(row);
+    } else {
+      await into(profiles).insert(row);
+    }
   }
 
   Future<void> removeProfile(String profileId, int version) =>

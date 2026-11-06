@@ -110,6 +110,7 @@ class WorkbenchController extends ChangeNotifier {
   bool addingClips = false;
   HarnessRun? run;
   String? savedPath;
+  String? saveError;
   bool saving = false;
   bool _disposed = false;
 
@@ -237,6 +238,7 @@ class WorkbenchController extends ChangeNotifier {
   Future<void> save() async {
     if (!hasChanges || saving) return;
     saving = true;
+    saveError = null;
     _notify();
     try {
       final patch = pendingPatch;
@@ -269,6 +271,8 @@ class WorkbenchController extends ChangeNotifier {
         referenceClips: p.referenceClips,
       );
       savedPath = await write(next, patches, adapters);
+    } catch (error) {
+      saveError = 'Could not save this version. $error';
     } finally {
       saving = false;
       _notify();

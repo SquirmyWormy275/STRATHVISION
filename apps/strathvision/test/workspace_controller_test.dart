@@ -308,6 +308,19 @@ void main() {
   });
 
   group('marks, annotations, undo', () {
+    test('undo retains current playback speed and unlocked preference', () async {
+      await loadAndSync();
+      await c.mark(MarkLabel.green);
+      await c.setRate(.25);
+      await c.setLocked(false);
+      await c.undo();
+      expect(c.project.marks, isEmpty);
+      expect(c.rate, .25);
+      expect(a.rate, .25);
+      expect(b.rate, .25);
+      expect(store.saved!.workspace.playbackRate, .25);
+      expect(c.locked, isFalse);
+    });
     test('red/green stores attribute, clip, and time without moving playhead',
         () async {
       await loadBoth();

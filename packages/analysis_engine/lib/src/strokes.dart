@@ -269,19 +269,17 @@ List<(int, int)> segmentStrokes(ImplementTrack imp, double fps) {
 }
 
 /// Longest run, in seconds, where the implement track is unconfident
-/// (below 0.5) inside frames [start, end].
+/// (below 0.5) or absent inside frames [start, end].
 double longestDropout(ImplementTrack imp, double fps, int start, int end) {
-  var best = 0, runStart = -1, lastFrame = start;
+  var best = 0, missingSince = start;
   for (final fr in imp.frames) {
     if (fr.frame < start || fr.frame > end) continue;
-    if (fr.confidence < 0.5) {
-      if (runStart < 0) runStart = fr.frame;
-      lastFrame = fr.frame;
-      best = math.max(best, lastFrame - runStart + 1);
-    } else {
-      runStart = -1;
+    if (fr.confidence >= 0.5) {
+      best = math.max(best, fr.frame - missingSince);
+      missingSince = fr.frame + 1;
     }
   }
+  best = math.max(best, end - missingSince + 1);
   return best / fps;
 }
 
