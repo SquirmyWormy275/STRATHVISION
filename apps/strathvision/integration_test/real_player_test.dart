@@ -205,15 +205,19 @@ void main() {
 
   testWidgets('headless probe reads duration and frame rate', (tester) async {
     final dir = await resolveClipDir(tester);
+    debugPrint('probe: 30 fps clip');
     final info30 = await tester.runAsync(() => probeClip('$dir/clip30.mp4'));
+    debugPrint('probe: 25 fps clip');
     final info25 = await tester.runAsync(() => probeClip('$dir/clip25.mp4'));
     expect(info30!.durationMs, closeTo(10000, 100));
     expect(info30.fps, closeTo(30, 0.01));
     expect(info25!.durationMs, closeTo(12000, 100));
     expect(info25.fps, closeTo(25, 0.01));
+    debugPrint('probe: nonexistent clip');
     final missing =
         await tester.runAsync(() => probeClip('$dir/does_not_exist.mp4'));
     expect(missing, isNull);
+    debugPrint('probe: complete');
   });
 
   testWidgets('a clip opened before its video view exists still plays',

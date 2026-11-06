@@ -4,7 +4,9 @@ Software regression checks, compilation, device behavior and coaching validity a
 
 ## Audit run, 2026-11-06
 
-Local verification before publication: 112 engine tests, 144 app unit/widget tests, 74 Python tests and five isolated handoff tests passed. Analyzer checks were clean. Native Linux playback passed 4/4, the full desktop workflow passed 1/1, and native pose passed 1/1, including 2.1 cm median agreement with the same-model reference (not motion ground truth). Line coverage: engine 91.4%, app 80.7%, excluding generated Dart. CI artifacts provide subsequent per-commit measurements.
+Local verification before publication: 116 engine tests, 151 app unit/widget tests, 74 Python tests and five isolated handoff tests passed. Analyzer checks were clean. Native Linux playback passed 4/4, the full desktop workflow passed 1/1, and native pose passed 1/1, including 2.1 cm median agreement with the same-model reference (not motion ground truth). Line coverage: engine 91.4%, app 81.0%, excluding generated Dart. CI artifacts provide subsequent per-commit measurements.
+
+Review regressions also cover missing-frame dropout, late athlete entry after an empty preview, profile-scoped comparison caches, immutable generated versions (including concurrent saves), save-error recovery, and playback settings retained through undo. CI runs on pull requests and main-branch pushes; duplicate implementation-push runs are excluded so cancelled duplicates cannot block required checks.
 
 ## Automated checks
 
@@ -37,7 +39,7 @@ flutter test integration_test/real_player_test.dart -d linux --dart-define=CLIP_
 flutter test integration_test/real_pose_test.dart -d linux --dart-define=CLIP_DIR="$PWD/integration_test/assets" --dart-define=REF="$PWD/../../packages/analysis_engine/test/fixtures/cleave_pose.json"
 ```
 
-CI uses Xvfb and software rendering. The first suite checks actual decoder positions, sync, stepping, slow playback, probing and lazy video initialization. The second checks native pose determinism, orientation, reference agreement and the analysis path. [Fixture attribution](../apps/strathvision/integration_test/assets/ATTRIBUTION.md) applies. Agreement with the same model's reference is not ground-truth motion accuracy.
+CI uses Ubuntu 24.04, Xvfb and software rendering for a fixed GTK/libmpv baseline. Ubuntu 26.04 (`ubuntu-latest` during this audit) showed intermittent native decoder/pose timeouts; support for that combination remains unverified. Native steps have explicit time limits. The first suite checks actual decoder positions, sync, stepping, slow playback, probing and lazy video initialization. The second checks native pose determinism, orientation, reference agreement and the analysis path. [Fixture attribution](../apps/strathvision/integration_test/assets/ATTRIBUTION.md) applies. Agreement with the same model's reference is not ground-truth motion accuracy.
 
 `app_e2e_test.dart` deliberately rejects copied reference footage, then installs the **synthetic** laptop package for comparison/trend/export screens. It no longer presents duplicated footage as a valid independent profile. CI runs it alongside the focused native checks; it also remains useful as a local desktop acceptance run.
 

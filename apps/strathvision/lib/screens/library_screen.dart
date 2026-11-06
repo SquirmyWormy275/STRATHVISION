@@ -19,9 +19,9 @@ import '../profiles/builder_controller.dart';
 import '../profiles/source_identity.dart';
 import '../vision/training_track.dart';
 import '../profiles/profile_package.dart';
+import '../profiles/profile_store.dart';
 import '../workspace/project.dart';
 import '../profiles/clip_probe.dart';
-import '../profiles/profile_export.dart';
 import '../workbench/claude_compiler.dart';
 import '../workbench/workbench_controller.dart';
 import '../workbench/carne_athletes.dart';
@@ -676,13 +676,13 @@ WorkbenchFactory defaultWorkbench(AppDatabase db) => (row, pack) async {
     compiler: ClaudeAdapterCompiler.fromEnvironment(),
     write: (Profile profile, patches, adapters) async {
       final support = await getApplicationSupportDirectory();
-      final path = await storeProfilePackage(
+      final path = await storeNewProfileVersion(
+        db,
         profile,
         Directory(p.join(support.path, 'profiles')),
         patches: patches,
         adapters: adapters,
       );
-      await db.saveProfile(await readProfilePackage(path), path);
       return path;
     },
   );
@@ -713,14 +713,14 @@ CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async {
     metricLabel: pack.metricLabel,
     write: (Profile profile, patches, adapters, research) async {
       final support = await getApplicationSupportDirectory();
-      final path = await storeProfilePackage(
+      final path = await storeNewProfileVersion(
+        db,
         profile,
         Directory(p.join(support.path, 'profiles')),
         patches: patches,
         adapters: adapters,
         research: research,
       );
-      await db.saveProfile(await readProfilePackage(path), path);
       return path;
     },
   );

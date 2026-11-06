@@ -73,6 +73,8 @@ class WorkbenchScreen extends StatelessWidget {
                       minimumSize: const Size.fromHeight(48),
                     ),
                   ),
+                  if (c.saveError != null)
+                    Text(c.saveError!, key: const Key('workbench-save-error')),
                 ],
               ),
             ),

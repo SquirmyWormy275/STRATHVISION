@@ -17,13 +17,17 @@ Future<ClipInfo?> probeClip(String path) async {
   final player = Player();
   try {
     final native = player.platform;
-    await player.open(Media(path), play: false);
     if (native is NativePlayer) {
       // media_kit turns the video track off (vid=no) when no controller is
       // attached, and then mpv never reports the frame rate. Select it, but
       // render nowhere.
       await native.setProperty('vo', 'null');
       await native.setProperty('ao', 'null');
+    }
+    // Configure headless output before loading: opening with default outputs
+    // can initialize display/audio backends that this probe never needs.
+    await player.open(Media(path), play: false);
+    if (native is NativePlayer) {
       await native.setProperty('vid', 'auto');
     }
     final duration = player.state.duration > Duration.zero

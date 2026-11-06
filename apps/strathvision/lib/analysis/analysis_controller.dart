@@ -164,7 +164,10 @@ class AnalysisController extends ChangeNotifier {
   /// Clip on the active stage, if any.
   String? get clipId => workspace.clipOn(workspace.activeStage)?.clipId;
 
-  ClipAnalysis? get analysis => clipId == null ? null : _results[clipId];
+  ClipAnalysis? get analysis {
+    final cached = _results[clipId];
+    return cached?.profileKey == _selected?.key ? cached : null;
+  }
   AnalysisOutcome? get result => analysis?.outcome;
   ComparisonOutcome? get comparison => analysis?.comparison;
   bool get running => clipId != null && _running.contains(clipId);
@@ -201,10 +204,11 @@ class AnalysisController extends ChangeNotifier {
   /// Picks the profile to compare with (null = measurements only), and
   /// re-analyzes the current clip so its patches apply.
   Future<void> selectProfile(ProfileChoice? choice) async {
+    final hadResult = _results.containsKey(clipId);
     _selected = choice;
     _profileError = null;
     _notify();
-    if (analysis != null) await analyze();
+    if (hadResult) await analyze();
   }
 
   /// Analyze the clip on the active stage, compare it with the selected

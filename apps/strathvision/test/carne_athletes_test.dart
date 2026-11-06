@@ -18,6 +18,34 @@ void main() {
   late CarneFixture fixture;
   setUpAll(() async => fixture = await CarneFixture.load());
 
+  for (final lateTarget in [true, false]) {
+    test('empty preview searches full clip; late target=$lateTarget', () async {
+      final requested = <int>[];
+      final state = CarneAthleteState();
+      final clip = ClipSource(clipId: 'late', path: '/late', durationMs: 12000, fps: 30);
+      final future = loadCarneTrack(clip, state, load: (source, target) async {
+        requested.add(source.durationMs);
+        expect(target, isNull);
+        return AthleteTrack(
+          track: PoseTrack(fps: 30, frames: const []),
+          target: source.durationMs > 4000 && lateTarget
+              ? const AthleteTarget(quarterTurns: 0, frame: 180, x: .5, y: .5)
+              : null,
+          ambiguous: source.durationMs == 4000 || !lateTarget,
+          orientationSure: source.durationMs > 4000,
+          candidatesFrame: source.durationMs > 4000 ? 180 : 0,
+          candidates: const [],
+        );
+      });
+      if (lateTarget) {
+        expect((await future).target!.frame, 180);
+      } else {
+        await expectLater(future, throwsA(isA<CarneAthleteChoiceNeeded>()));
+      }
+      expect(requested, [4000, 12000]);
+    });
+  }
+
   test(
     'an ambiguous long recording asks after four seconds of analysis',
     () async {
@@ -41,7 +69,10 @@ void main() {
               ambiguous: true,
               orientationSure: true,
               candidatesFrame: 0,
-              candidates: const [],
+              candidates: const [
+                PersonBox(.1, .1, .4, .9, .95),
+                PersonBox(.6, .1, .9, .9, .95),
+              ],
             );
           },
         ),

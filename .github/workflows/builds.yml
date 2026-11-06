@@ -5,7 +5,7 @@ name: builds
 
 on:
   push:
-    branches: [implementation, main]
+    branches: [main]
   pull_request:
     branches: [main, implementation]
   workflow_dispatch:
@@ -82,15 +82,23 @@ jobs:
 
   linux:
     needs: [test, research]
-    runs-on: ubuntu-latest
+    # Fixed native GTK/libmpv baseline; latest moved to Ubuntu 26.04, where
+    # headless decoder/pose runs intermittently stalled without an assertion.
+    runs-on: ubuntu-24.04
     env:
       LIBGL_ALWAYS_SOFTWARE: '1'
     steps:
       - uses: actions/checkout@v4
       - name: System libraries
+        timeout-minutes: 8
         run: |
-          sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libmpv-dev xvfb
+          # The hosted Azure mirror stalled at ~35 KB/s during validation.
+          # Keep signed Ubuntu packages, but use the primary HTTPS archive.
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            printf '%s\n' 'https://archive.ubuntu.com/ubuntu' | sudo tee /etc/apt/apt-mirrors.txt
+          fi
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install --no-install-recommends -y clang cmake ninja-build pkg-config libgtk-3-dev libmpv-dev xvfb xauth
       - uses: subosito/flutter-action@v2
         with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
       - name: Real Linux decoder

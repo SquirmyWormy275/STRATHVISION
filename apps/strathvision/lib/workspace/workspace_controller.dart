@@ -418,7 +418,11 @@ class WorkspaceController extends ChangeNotifier {
   Future<void> undo() async {
     if (_undo.isEmpty) return;
     final before = _project;
-    _project = _undo.removeLast();
+    final restored = _undo.removeLast();
+    _project = restored.copyWith(workspace: restored.workspace.copyWith(
+      playbackRate: before.workspace.playbackRate,
+      locked: before.workspace.locked && restored.activeSync != null,
+    ));
     _notify();
     await store.saveProject(_project);
     final stagesChanged =
