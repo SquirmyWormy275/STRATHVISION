@@ -8,7 +8,7 @@ branch: implementation
 phase: Inventory-first research
 task: Reusable sport-agnostic inventory and split safeguards
 next: Review PR 7. The 436-source private plan remains quarantined until recording/session provenance and exposure are reviewed; collect genuine labels and freeze comparison gates before representation or CARNE evaluation.
-owned_paths: 
+owned_paths:
 active_processes: none
 <!-- STATE:END -->
 
