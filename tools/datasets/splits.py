@@ -1,6 +1,5 @@
 """Freeze and validate reviewed, transitive source/session splits without reading pixels."""
 import argparse
-from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -93,6 +92,7 @@ def build(inventory, provenance, priors=()):
     # Frozen groups carry all their identities, even if an old alias/source disappeared.
     frozen = []
     prior_opened = set()
+    prior_unknown = set()
     for prior in priors:
         require(prior.get('format') == 'footage-split/1', 'Expected footage-split/1 prior plan')
         seen = set()
@@ -115,6 +115,8 @@ def build(inventory, provenance, priors=()):
             require(exposure in {'unknown', 'opened', 'unseen'}, 'Invalid prior exposure')
             if exposure == 'opened':
                 prior_opened.add(sha)
+            elif exposure == 'unknown':
+                prior_unknown.add(sha)
     for sha in prior_opened & set(by_id):
         require(exposures[sha] != 'unseen', 'Previously opened source cannot become unseen')
         exposures[sha] = 'opened'
@@ -141,7 +143,7 @@ def build(inventory, provenance, priors=()):
         require(not old_choices or chosen in old_choices, 'Cannot reassign a previously frozen group')
         if chosen == 'test':
             require(all(exposures[s] == 'unseen' for s in members)
-                    and not any('sha256:' + s in identities for s in prior_opened),
+                    and not any('sha256:' + s in identities for s in prior_opened | (prior_unknown - set(by_id))),
                     'Fresh test group contains opened or unknown-exposure sources')
         groups.append({'group_id': hashlib.sha256('\n'.join(identities).encode()).hexdigest(),
                        'identities': identities, 'sources': members, 'split': chosen, 'blockers': reasons})
@@ -153,14 +155,14 @@ def build(inventory, provenance, priors=()):
                             'This plan neither reads test pixels nor authorizes fitting or test evaluation.']}
 
 
-def read_json(path):
+def parse_json(raw):
     def pairs(items):
         result = {}
         for key, value in items:
             require(key not in result, f'Duplicate JSON key: {key}')
             result[key] = value
         return result
-    return json.loads(Path(path).read_text(), object_pairs_hook=pairs,
+    return json.loads(raw, object_pairs_hook=pairs,
                       parse_constant=lambda value: (_ for _ in ()).throw(ValueError('Nonfinite JSON value')))
 
 
@@ -171,14 +173,7 @@ def bound_plan(inventory_path, provenance_path, prior_paths):
     for path in paths:
         raw = Path(path).read_bytes()
         hashes.append(hashlib.sha256(raw).hexdigest())
-        # Reject duplicate keys consistently, including for inputs read from bytes.
-        def unique(items):
-            result = {}
-            for key, value in items:
-                require(key not in result, f'Duplicate JSON key: {key}')
-                result[key] = value
-            return result
-        documents.append(json.loads(raw, object_pairs_hook=unique))
+        documents.append(parse_json(raw))
     result = build(documents[0], documents[1], documents[2:])
     result['inputs'] = {'inventory_sha256': hashes[0], 'provenance_sha256': hashes[1],
                         'prior_plan_sha256': hashes[2:]}
@@ -203,7 +198,7 @@ def main():
             write_json(output / 'split.json', result)
         else:
             require(args.plan is not None, 'validate requires --plan')
-            require(read_json(args.plan) == result, 'Plan does not match its bound inputs and current safeguards')
+            require(parse_json(args.plan.read_bytes()) == result, 'Plan does not match its bound inputs and current safeguards')
         print(json.dumps(result['summary'], sort_keys=True))
         return 0
     except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:

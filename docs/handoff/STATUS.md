@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-06T08:19:19Z
+heartbeat: 2026-11-06T08:22:31Z
 branch: implementation
 phase: Inventory-first research
 task: Reusable sport-agnostic inventory and split safeguards
-next: Finish read-only Seagate scan (session 81306), verify aggregate evidence, run all research checks and publish focused PR against implementation.
+next: Complete Seagate scan, record current aggregate inventory and historical exposure quarantine, then publish PR with research checks.
 owned_paths: tools/datasets docs .github/workflows/research.yml README.md
 active_processes: Read-only inventory-20261106 Python scan of mounted Seagate; no model fitting
 <!-- STATE:END -->
@@ -70,6 +70,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T08:22:31Z **codex** — Hardened directory traversal against replacement races and added executable split validation; 30 dataset tests pass → next: Complete Seagate scan, record current aggregate inventory and historical exposure quarantine, then publish PR with research checks.
 - 2026-11-06T08:19:19Z **codex** — Inventory and provenance/split tools implemented; 26 tests pass including real audiovisual metadata and original preservation → next: Finish read-only Seagate scan (session 81306), verify aggregate evidence, run all research checks and publish focused PR against implementation.
 - 2026-11-06T08:08:28Z **codex** — Claimed: Read-only sport-agnostic footage inventory, provenance and split safeguards
 - 2026-11-06T07:45:23Z **codex** — Audit hardening: local analyzers clean; 112 engine, 144 app, 74 Python and 5 handoff tests pass. Native decoder 4/4 and pose 1/1 pass. PR #6 reconciles main; issues #2–#5 track remaining acceptance. Isolate regression now covers database-backed athlete selection. Native desktop e2e passed after correcting async import/harness waits and the isolate boundary. Final platform checks and publication evidence are attached to PR #6.

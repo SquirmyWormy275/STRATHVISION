@@ -119,42 +119,48 @@ def open_source(root, relative):
 
 def snapshot(root):
     rows, errors = [], []
-    device = root.stat().st_dev
 
-    def walk(directory):
+    def walk(directory_fd, relative, device):
         try:
-            fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
-            try:
-                with os.scandir(fd) as entries:
-                    # Stat while the descriptor is open; DirEntry.path is just a name for fd scans.
-                    entries = [(entry.name, entry.stat(follow_symlinks=False)) for entry in entries]
-                    entries.sort(key=lambda item: item[0])
-            finally:
-                os.close(fd)
+            with os.scandir(directory_fd) as entries:
+                names = sorted(entry.name for entry in entries)
         except OSError as exc:
-            errors.append({'path': str(directory.relative_to(root)), 'error': type(exc).__name__})
+            errors.append({'path': relative.as_posix(), 'error': type(exc).__name__})
             return
-        for name, info in entries:
-            path = directory / name
-            row = {'path': path.relative_to(root).as_posix()}
+        for name in names:
+            path = relative / name
+            row = {'path': path.as_posix()}
             try:
+                info = os.stat(name, dir_fd=directory_fd, follow_symlinks=False)
                 row['signature'] = signature(info)
                 if stat.S_ISLNK(info.st_mode):
                     row.update(disposition='symlink', state='excluded')
                 elif info.st_dev != device:
                     row.update(disposition='nested_filesystem', state='excluded')
                 elif stat.S_ISDIR(info.st_mode):
-                    walk(path)
+                    child = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
+                                    dir_fd=directory_fd)
+                    try:
+                        actual = os.fstat(child)
+                        if (actual.st_dev, actual.st_ino) != (info.st_dev, info.st_ino):
+                            raise ValueError('Directory changed during traversal')
+                        walk(child, path, device)
+                    finally:
+                        os.close(child)
                     continue
                 elif stat.S_ISREG(info.st_mode):
                     kind = disposition(path)
                     row.update(disposition=kind, state='pending' if kind in {'video', 'audio'} else 'excluded')
                 else:
                     row.update(disposition='special_file', state='excluded')
-            except OSError as exc:
+            except (OSError, ValueError) as exc:
                 row.update(disposition='unknown', state='error', error=type(exc).__name__)
             rows.append(row)
-    walk(root)
+    fd = os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        walk(fd, Path('.'), os.fstat(fd).st_dev)
+    finally:
+        os.close(fd)
     return sorted(rows, key=lambda r: r['path']), errors
 
 

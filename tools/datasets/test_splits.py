@@ -2,6 +2,8 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -145,10 +147,35 @@ class SplitTests(unittest.TestCase):
         self.provenance['sources']['invented'] = {}
         with self.assertRaisesRegex(ValueError, 'Unknown provenance'):
             splits.build(self.inventory, self.provenance)
+
         del self.provenance['sources']['invented']
         self.provenance['sources'][self.ids[0]]['parent_sha256'] = ['short']
         with self.assertRaisesRegex(ValueError, 'full SHA'):
             splits.build(self.inventory, self.provenance)
+
+    def test_cli_rejects_modified_plan_and_changed_bound_input(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.inventory['root'] = str(root/'originals')
+            (root/'originals').mkdir()
+            inventory_path, provenance_path = root/'inventory.json', root/'provenance.json'
+            inventory_path.write_text(json.dumps(self.inventory))
+            provenance_path.write_text(json.dumps(self.provenance))
+            arguments = ['--inventory', str(inventory_path), '--provenance', str(provenance_path)]
+            command = [sys.executable, str(Path(splits.__file__))]
+            output = root/'study'
+            result = subprocess.run(command + ['plan', *arguments, '--output', str(output)], capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            validate = command + ['validate', *arguments, '--plan', str(output/'split.json')]
+            self.assertEqual(subprocess.run(validate, capture_output=True).returncode, 0)
+            original = (output/'split.json').read_text()
+            document = json.loads(original)
+            document['groups'][0]['split'] = 'test'
+            (output/'split.json').write_text(json.dumps(document))
+            self.assertEqual(subprocess.run(validate, capture_output=True).returncode, 2)
+            (output/'split.json').write_text(original)
+            provenance_path.write_text(json.dumps(self.provenance, indent=2))
+            self.assertEqual(subprocess.run(validate, capture_output=True).returncode, 2)
 
     def test_bound_input_change_and_plan_tampering(self):
         with tempfile.TemporaryDirectory() as directory:

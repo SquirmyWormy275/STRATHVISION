@@ -137,6 +137,45 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(rows, [])
         self.assertEqual(errors[0]['error'], 'PermissionError')
 
+    def test_one_stat_failure_does_not_hide_other_files(self):
+        self.source('bad.mp4')
+        self.source('good.mp4')
+        original = os.stat
+        def failing(path, *args, **kwargs):
+            if path == 'bad.mp4':
+                raise PermissionError('fixture denial')
+            return original(path, *args, **kwargs)
+        with patch.object(os, 'stat', side_effect=failing):
+            rows, errors = inv.snapshot(self.root)
+        self.assertEqual([r['state'] for r in rows], ['error', 'pending'])
+        self.assertFalse(errors)
+
+    def test_directory_replaced_with_symlink_is_not_traversed(self):
+        folder = self.root/'folder'
+        folder.mkdir()
+        outside = self.base/'outside'
+        outside.mkdir()
+        (outside/'private.mp4').write_bytes(b'outside')
+        original = os.open
+        def replaced(path, *args, **kwargs):
+            if path == 'folder':
+                folder.rmdir()
+                folder.symlink_to(outside, target_is_directory=True)
+            return original(path, *args, **kwargs)
+        with patch.object(os, 'open', side_effect=replaced):
+            rows, _ = inv.snapshot(self.root)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]['state'], 'error')
+
+    def test_mount_change_keeps_progress_without_completed_manifest(self):
+        self.source()
+        with patch.object(inv, 'probe', return_value=inv.metadata(MEDIA)), \
+                patch.object(inv, 'mount_identity', side_effect=[{'uuid': 'a'}, {'uuid': 'b'}]):
+            with self.assertRaisesRegex(ValueError, 'Mount changed'):
+                inv.run(self.root, self.base/'interrupted')
+        self.assertTrue((self.base/'interrupted/progress.jsonl').exists())
+        self.assertFalse((self.base/'interrupted/inventory.json').exists())
+
     @unittest.skipUnless(shutil.which('ffmpeg') and shutil.which('ffprobe'), 'ffmpeg required')
     def test_real_media_end_to_end(self):
         path = self.root/'actual clip.mp4'
