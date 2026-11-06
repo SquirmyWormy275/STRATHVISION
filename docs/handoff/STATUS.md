@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-06T15:53:13Z
+heartbeat: 2026-11-06T16:09:36Z
 branch: implementation
-phase: Release preparation
-task: Final build gates and verified release artifacts
-next: Wait for all eight jobs on PR 7 final head, merge into main when green, verify same-run artifacts/checksums and prepare a draft release. Production signing information remains pending.
+phase: Release packaging
+task: Verified release candidate
+next: Verify all five archives, record hashes/source/run, create draft v1.0.0-rc.1, then release ownership. Production signing and physical-device acceptance remain open.
 owned_paths: tools/datasets docs .github/workflows README.md
 active_processes: none
 <!-- STATE:END -->
@@ -18,7 +18,7 @@ The audit repairs package containment/atomicity, feedback provenance, duplicate 
 
 ## Inventory-first workstream acceptance
 
-The mounted Seagate scan on 2026-11-06 verified 438 video files / 436 unique payloads (62,500.223842 s), with all 468 path signatures unchanged. All 424 prior payloads remain; 12 are newly inventoried. The private provenance/split plan quarantines all 436 sources (424 conservatively opened, 12 unknown) pending reviewed recording/session evidence. See [dataset contracts](../DATASETS.md) and [results](../experiments/Inventory-20261106.md). PR #7 targets implementation. No new representation training or CARNE learning evaluation was performed.
+The mounted Seagate scan on 2026-11-06 verified 438 video files / 436 unique payloads (62,500.223842 s), with all 468 path signatures unchanged. All 424 prior payloads remain; 12 are newly inventoried. The private provenance/split plan quarantines all 436 sources (424 conservatively opened, 12 unknown) pending reviewed recording/session evidence. See [dataset contracts](../DATASETS.md) and [results](../experiments/Inventory-20261106.md). PR #7 merged into main as dae099b on 2026-11-06; all eight jobs passed on tested head cd994ca (run 42247210828). No new representation training or CARNE learning evaluation was performed.
 
 ## Historical phase progress
 
@@ -47,6 +47,8 @@ The table below preserves milestone evidence from its original dates. “Done”
 
 ## Blockers / questions for the human
 
+- **General release signing and device acceptance remain open.** Android is debug/test signed, macOS is unsigned, and iOS is an unsigned app rather than an installable IPA. Existing Android release-keystore and Apple signing/provisioning locations were requested; none are configured in repository secrets. No physical Android device was connected during release preparation. Follow `docs/DISTRIBUTION.md` and the device record in `docs/VALIDATION.md` before general availability.
+
 - **Local speech transcription remains open.** Voice input paths are recorded as awaiting transcription. The standalone experiment report does not copy audio files or bind spoken labels; the UI reports receipt rather than claiming audio was saved.
 - **Gurr coach-learning evidence remains open.** All five parts and 47 unique videos have published coverage/no-feedback controls. The local Gurr review packet and measured-export learning replay are delivered; the twelve real tasks start unlabelled because judgments and field tests do not exist yet. First field step: collect reviewed stroke judgments using `docs/FEEDBACK_REVIEW.md`. Actual learning evidence additionally needs a ready profile with disjoint source provenance and accurate usable measurements. The original HOG/SSDLite axe prototypes failed; the additional-footage Faster R-CNN also remains research-only (1/9 visible test heads, `docs/experiments/New-Footage.md`). Native diagnostics still expose selection/contact failures (`docs/experiments/Gurr-Round2.md`). No learning improvement is claimed.
 
@@ -74,6 +76,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-06T16:09:36Z **codex** — PR 7 merged to main as dae099b; all eight CI jobs passed for cd994ca, whose tree exactly matches main; release artifacts downloading → next: Verify all five archives, record hashes/source/run, create draft v1.0.0-rc.1, then release ownership. Production signing and physical-device acceptance remain open.
 - 2026-11-06T15:53:13Z **codex** — Release prep integrated main and native Linux fixes; 376 local tests pass, native pose passes, patched training environment passes CPU/CUDA compatibility → next: Wait for all eight jobs on PR 7 final head, merge into main when green, verify same-run artifacts/checksums and prepare a draft release. Production signing information remains pending.
 - 2026-11-06T15:44:22Z **codex** — Claimed: Prepare full release: integrate latest baseline fixes, pass all build gates, merge inventory and prepare verified distribution artifacts
 - 2026-11-06T08:30:26Z **codex** — Released: Inventory-first workstream delivered in PR 7: source-preserving manifests, metadata, SHA-256 aliases, provenance and frozen split safeguards; 109 relevant local tests pass → next: Review PR 7. The 436-source private plan remains quarantined until recording/session provenance and exposure are reviewed; collect genuine labels and freeze comparison gates before representation or CARNE evaluation.
