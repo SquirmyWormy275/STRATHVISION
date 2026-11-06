@@ -63,7 +63,12 @@ Use the Python 3.12/CUDA environment in [`requirements-training.txt`](../../tool
 ```sh
 python tools/carne_asada/barbell_data.py sample --parent "$BARBELL_WORK" --partition train
 python tools/carne_asada/barbell_data.py sample --parent "$BARBELL_WORK" --partition validation
-python tools/carne_asada/barbell_detector.py fit   --parent "$BARBELL_WORK"   --reference docs/experiments/evaluation/seagate/weightlifting/fit-reference.json   --model "$BARBELL_WORK/models/barbell.pt"   --metadata "$BARBELL_WORK/models/barbell.json"   --output "$BARBELL_WORK/validation.json"
+python tools/carne_asada/barbell_detector.py fit \
+  --parent "$BARBELL_WORK" \
+  --reference docs/experiments/evaluation/seagate/weightlifting/fit-reference.json \
+  --model "$BARBELL_WORK/models/barbell.pt" \
+  --metadata "$BARBELL_WORK/models/barbell.json" \
+  --output "$BARBELL_WORK/validation.json"
 ```
 
 The sampler rehashes each original source before decoding and uses the same autorotation, HDR handling and maximum 1600-pixel edge used here. Training verifies every prepared PNG hash. The saved model is a delta excluding the frozen ResNet body; the exact COCO checkpoint URL and SHA-256 are in its metadata, and that checkpoint belongs under `model-cache/checkpoints/`. To replay the published test, use the published weights, metadata, freeze and full `test-reference.json`, with the exact frozen code and plan. `barbell_data.py sample --partition test` requires `--freeze` and actual `--model` files. `barbell_detector.py test` additionally checks metadata, fitting references and code hashes and refuses to overwrite an existing test result. Refitting does not create a fresh holdout from these now-opened test videos.

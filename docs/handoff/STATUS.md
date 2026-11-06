@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-05T23:54:46Z
+heartbeat: 2026-11-06T00:08:14Z
 branch: implementation
 phase: 8 — Seagate multi-sport footage research
 task: Inventory all Seagate sources, exclude partial downloads and duplicates, expand axe training labels, and establish a separate weightlifting experiment
-next: Barbell fit complete and frozen before test pixels:47 positives/9 negatives,1000 steps,validation8TP3FP5FN. Prepare/label 24 reserved frames, score once, finish Seagate inventory session36202 and library audit session99501, publish final README/results and release.
+next: Axe and frozen barbell results complete (barbell9TP2FP6FN;15visible/8unrated),published ccc1ecb;74tests pass. Inventory36202 is finishing426candidates; automatic audit39184 resumes to final inventory. Run private seagate-20261105/publish_results.py after both finish; verify/report full counts, update README/status, push and release.
 <!-- STATE:END -->
 
 ## Phase progress

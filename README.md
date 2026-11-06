@@ -97,6 +97,12 @@ The [additional event and early-training study](docs/experiments/New-Footage.md)
 
 A separate native Flutter diagnostic completed all thirteen existing pilot/follow-up windows. Its original test matched **4/15** contacts with three extras; all matches were underhand, while the standing-block heat deferred to competitor selection. One follow-up rear view also showed a large target mismatch without an ambiguity flag. The [native result and limitations](docs/experiments/Gurr-Round2.md#native-app-diagnostic-result) document the tested runtime and remaining failures. These opened references do not establish field coaching accuracy.
 
+### Seagate follow-up: woodchopping and Olympic weightlifting
+
+The [Seagate study](docs/experiments/Seagate-Footage.md) expands axe training supervision from 35 to **73 visible heads**. On the unchanged validation set, matches increased **8 → 11 of 26**, while incorrect boxes increased **2 → 11**. F1 moved only 44.4% → 45.8%; the old test was not reused as a fresh holdout.
+
+A separate full-frame barbell prototype trained for 1,000 CUDA steps on **47 positive and nine negative frames** from 36 uploads. Its frozen 12-upload test found **9/15 visible bars**, with two incorrect boxes and six misses; eight uncertain frames were unrated. Thin unloaded bars remain a major failure case. The report publishes weights, references, source/image hashes, checkpoint history and reproduction steps. Edited uploads can reuse demonstrations, so this is a limited localization pilot, not evidence of independent-session generalization, bar-path accuracy or improved coaching. Both models remain research-only.
+
 ### How to run it
 
 Prerequisites:
