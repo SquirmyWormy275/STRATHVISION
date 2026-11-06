@@ -23,7 +23,7 @@ The drive was mounted read/write; the pipeline opened originals read-only and wr
 | Previously published unique payloads still present | 424 / 424 |
 | Newly inventoried payloads versus the published snapshot | 12 |
 
-The six additional files beyond the previous report's 12 later video candidates are downloader intermediates. No archive was extracted, no source was copied or transcoded, and no video frames were sampled. All candidates were videos; standalone audio was supported by the tool but none qualified in this snapshot. Container probing does not validate full decoding, athlete selection, action quality, constant frame rate or session independence.
+Compared with the prior snapshot, there are 12 more completed video paths and six more download intermediates. No archive was extracted, no source was copied or transcoded, and no video frames were sampled. All candidates were videos; standalone audio was supported by the tool but none qualified in this snapshot. Container probing does not validate full decoding, athlete selection, action quality, constant frame rate or session independence.
 
 The [aggregate machine-readable record](evaluation/inventory-20261106-summary.json) binds the private inventory, exposure/provenance file and split plan by SHA-256. It contains no source filenames or local paths. The complete inventory ran the code recorded in commit `d420743`; the subsequent directory-race hardening and closing verification have their own code hash in that record. The real-media integration test exercises the final implementation.
 
