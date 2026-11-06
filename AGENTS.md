@@ -13,10 +13,12 @@ Two coding agents work on this repo: **Claude Code** and **Codex**. Either one c
 
 ## While working
 
-- **Checkpoint after every finished task or meaningful step:** `scripts/handoff.sh checkpoint <agent> "<what is done>" "<exact next step>"`. This commits and pushes your work along with the status update.
+- **Checkpoint after every finished task or meaningful step:** `scripts/handoff.sh checkpoint <agent> "<what is done>" "<exact next step>"`. This commits only the status update by default. To include completed work, append `--paths path/to/file another/file` (last option); directories include all changes beneath them. Unrelated staged work is preserved. Pushing requires `HANDOFF_PUSH=1`; issue comments require `HANDOFF_POST_ISSUE=1` and user authorization to send them.
 - You may be cut off at any moment, with no chance to write a final note. Your last checkpoint is your handoff, so keep it current.
 - Write the next step so a stranger can do it: file paths, command, expected result.
 - Never leave the branch broken across a checkpoint. If you're mid-change, checkpoint as `WIP:` with the exact failing test or step.
+
+Refresh ownership during long work with `scripts/handoff.sh heartbeat <agent>`; this makes no commit or network request. `status` is read-only by default; `HANDOFF_SYNC=1` enables fetch/fast-forward and `HANDOFF_READ_ISSUE=1` reads issue comments. Status/release never sweep up unrelated files.
 
 ## Stopping on purpose
 
@@ -24,7 +26,7 @@ Two coding agents work on this repo: **Claude Code** and **Codex**. Either one c
 
 ## Asking the other agent or the human
 
-- `scripts/handoff.sh note <agent> "<message>"` appends to the log and posts on the handoff issue.
+- `scripts/handoff.sh note <agent> "<message>"` appends to the local log. External comments are opt-in as above.
 - Open questions for the human go under **Blockers** in STATUS.md. Follow the "stop and ask" rule in `docs/EXECUTION_PLAN.md`. Do not invent behavior to get past a blocker.
 
 ## Project rules (binding)

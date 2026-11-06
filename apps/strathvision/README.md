@@ -137,10 +137,10 @@ Automated Linux verification: `flutter test integration_test/carne_run_flow_test
 4. If the package has `specialist_patches/slope_residual_vN.patch`, the coverage line reads "patches: slope_residual_vN". A broken patch is skipped and shown as a warning.
 5. Choose **Nobody** to see measurements only. Each comparison is stored for drift.
 
-## Phase 4 manual check
+## Phase 4 manual check (desktop)
 
 1. In **Library**, tap the person-plus icon (**Build a profile**).
-2. Type a name, tap **Add clips**, and pick 15 or more clips of one person. Each clip shows a spinner, then **Clean** or the reason it can't be used. The bar counts clean clips toward 15.
+2. Type a name, tap **Add clips**, and pick 15 or more distinct recordings of one person. Exact copies count once. Resolve uncertain athlete/orientation choices in a review, then retry failed clips. Each clip shows a spinner, then **Clean** or the reason it can't be used. The bar counts clean clips toward 15.
 3. Tap **Build profile**.
    - **Ready:** "<Name> · v1 is ready", with the held-out match. The profile is added to the Library. **Save a copy** writes `<Name>_v1.zip`, which holds `profile.json`, `specialist_patches/` and `adapters/`.
    - **Rejected:** a plain message and the error code, for example "Add 6 more clean clips…" (`INSUFFICIENT_CLIPS`). Nothing is stored.
@@ -148,7 +148,7 @@ Automated Linux verification: `flutter test integration_test/carne_run_flow_test
 
 The default builder evaluates real video through the local pose pipeline. Fifteen
 selected files do not guarantee a ready profile: enough clips must be usable and
-the pack's confidence and self-consistency gates must pass. Synthetic fixtures
+the pack's confidence and self-consistency gates must pass. These checks do not prove independence between recording sessions. Synthetic fixtures
 exercise the builder in tests; they do not validate accuracy on real footage.
 
 ## Phase 3 manual check

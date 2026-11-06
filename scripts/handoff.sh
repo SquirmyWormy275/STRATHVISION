@@ -8,9 +8,10 @@
 #   scripts/handoff.sh note       <claude|codex> "<message>"
 #   scripts/handoff.sh setup-github           # labels + pinned handoff issue (needs gh auth)
 #
-# Every write command updates docs/handoff/STATUS.md, commits, pushes, and
-# mirrors the entry to the GitHub handoff issue. Network steps degrade to
-# warnings, so local state is always written even when offline/unauthenticated.
+# Writes commit only STATUS.md unless checkpoint explicitly lists --paths.
+# HANDOFF_PUSH=1 opts into pushing; HANDOFF_POST_ISSUE=1 opts into comments.
+# HANDOFF_SYNC=1 opts into fetch/fast-forward before status/claim.
+# heartbeat only refreshes local ownership; it never stages, commits or posts.
 set -euo pipefail
 
 ROOT="$(git -C "$(dirname "${BASH_SOURCE[0]}")" rev-parse --show-toplevel)"
@@ -30,7 +31,7 @@ check_agent() {
 # get_field <name>  -> value from the STATE block
 get_field() {
   sed -n '/<!-- STATE:BEGIN -->/,/<!-- STATE:END -->/p' "$STATUS" \
-    | sed -n "s/^$1: //p" | head -1
+    | sed -n "s/^$1: //p"
 }
 
 # set_fields name=value ...  (values may contain anything but newlines)
@@ -90,6 +91,7 @@ repo_slug() {
 }
 
 post_issue() {   # post_issue <agent> <markdown>
+  [[ "${HANDOFF_POST_ISSUE:-0}" == 1 ]] || return 0
   gh_ok || { warn "gh not authenticated; skipped GitHub issue update"; return 0; }
   local n; n=$(issue_number)
   [[ -n "$n" ]] || { warn "no open '$ISSUE_LABEL' issue; run: scripts/handoff.sh setup-github"; return 0; }
@@ -101,17 +103,26 @@ $2
     || warn "could not comment on issue #$n"
 }
 
-commit_push() {  # commit_push <message> [all]
+commit_push() {  # message [explicit repository-relative paths...]
+  local message="$1"; shift
   cd "$ROOT"
-  if [[ "${2:-}" == all ]]; then git add -A; else git add "$STATUS"; fi
-  if git diff --cached --quiet; then return 0; fi
-  git commit -q -m "$1" || die "commit failed"
-  local branch; branch=$(git rev-parse --abbrev-ref HEAD)
-  git push -q -u origin "$branch" 2>/dev/null \
-    || warn "push failed (not authenticated or offline); commit is local only. Push later with: git push -u origin $branch"
+  local paths=(docs/handoff/STATUS.md "$@")
+  # --only excludes unrelated changes already staged by the user.
+  git add -A -- "${paths[@]}"
+  if git diff HEAD --quiet -- "${paths[@]}"; then return 0; fi
+  git commit --only -q -m "$message" -- "${paths[@]}" || die "commit failed"
+  if [[ "${HANDOFF_PUSH:-0}" == 1 ]]; then
+    local branch; branch=$(git rev-parse --abbrev-ref HEAD)
+    git push -q -u origin "$branch" || warn "push failed; commit is local only"
+  fi
+}
+
+check_owner() {
+  [[ "$(get_field owner)" == "$1" ]] || die "claim ownership before writing a checkpoint or release"
 }
 
 sync_first() {
+  [[ "${HANDOFF_SYNC:-0}" == 1 ]] || return 0
   cd "$ROOT"
   git fetch -q origin 2>/dev/null || { warn "fetch failed; working from local state"; return 0; }
   local branch; branch=$(git rev-parse --abbrev-ref HEAD)
@@ -129,10 +140,10 @@ case "$cmd" in
     hb=$(get_field heartbeat); age=$(minutes_since "$hb")
     echo "heartbeat age: ${age} min (stale after ${STALE_MINUTES})"
     echo "--- recent log"
-    sed -n '/prepends entries below this line/,$p' "$STATUS" | sed 1d | head -5
+    sed -n '/prepends entries below this line/,$p' "$STATUS" | sed -n '2,6p'
     echo "--- recent commits"
     git -C "$ROOT" log --oneline -5
-    if gh_ok && n=$(issue_number) && [[ -n "$n" ]]; then
+    if [[ "${HANDOFF_READ_ISSUE:-0}" == 1 ]] && gh_ok && n=$(issue_number) && [[ -n "$n" ]]; then
       echo "--- latest comments on handoff issue #$n (humans may redirect you here)"
       gh issue view "$n" --repo "$(repo_slug)" --comments --json comments \
         -q '.comments[-3:][] | "[\(.createdAt)] \(.author.login): \(.body | split("\n")[0:3] | join(" "))"' 2>/dev/null \
@@ -156,20 +167,34 @@ case "$cmd" in
     post_issue "$agent" "🟢 **Claimed**: $what$takeover"
     ;;
 
+  heartbeat)
+    agent="${1:-}"; check_agent "$agent"; check_owner "$agent"
+    set_fields "heartbeat=$(now)"
+    ;;
+
   checkpoint)
     agent="${1:-}"; done_="${2:-}"; next="${3:-}"; check_agent "$agent"
     [[ -n "$done_" && -n "$next" ]] || die 'usage: checkpoint <agent> "<done>" "<next>" [--phase P] [--task T]'
-    shift 3; extra=()
+    check_owner "$agent"
+    shift 3; extra=(); paths=()
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --phase) extra+=("phase=$2"); shift 2;;
         --task)  extra+=("task=$2");  shift 2;;
+        --paths)
+          shift
+          [[ $# -gt 0 ]] || die '--paths needs at least one path'
+          for path in "$@"; do
+            [[ "$path" != /* && "$path" != .. && "$path" != ../* && "$path" != */../* && "$path" != */.. && "$path" != :* ]] || die "use a repository-relative path: $path"
+            paths+=("$path")
+          done
+          break;;
         *) die "unknown option $1";;
       esac
     done
     set_fields "owner=$agent" "heartbeat=$(now)" "next=$next" ${extra[@]+"${extra[@]}"}
     log_entry "$agent" "$done_ → next: $next"
-    commit_push "checkpoint($agent): $done_" all
+    commit_push "checkpoint($agent): $done_" "${paths[@]}"
     post_issue "$agent" "✅ **Checkpoint**: $done_
 
 **Next:** $next"
@@ -178,9 +203,10 @@ case "$cmd" in
   release)
     agent="${1:-}"; summary="${2:-}"; next="${3:-}"; check_agent "$agent"
     [[ -n "$summary" && -n "$next" ]] || die 'usage: release <agent> "<summary>" "<next>"'
+    check_owner "$agent"
     set_fields "owner=none" "heartbeat=$(now)" "next=$next"
     log_entry "$agent" "Released: $summary → next: $next"
-    commit_push "handoff($agent): release — $summary" all
+    commit_push "handoff($agent): release — $summary"
     post_issue "$agent" "⏸️ **Released**: $summary
 
 **Next:** $next"
@@ -216,5 +242,5 @@ case "$cmd" in
     echo "handoff issue: #$n  https://github.com/$slug/issues/$n"
     ;;
 
-  *) die "unknown command '$cmd' (status|claim|checkpoint|release|note|setup-github)";;
+  *) die "unknown command '$cmd' (status|claim|heartbeat|checkpoint|release|note|setup-github)";;
 esac

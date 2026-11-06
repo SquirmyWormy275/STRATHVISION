@@ -1,41 +1,38 @@
-# STRATHVISION Architecture
+# STRATHVISION architecture
 
-See docs/DECISIONS.md for the full binding list. This file summarizes the runtime shape.
+The shipped prototype has three layers: a Flutter review client, a pure-Dart analysis engine, and event packs. Python is research tooling; there is no separate Rust/Python production core.
 
-## Pipeline
+```mermaid
+flowchart LR
+  V[Local video] --> UI[Flutter review workspace]
+  V --> P[Local person and pose inference]
+  P --> E[Dart phases and metrics]
+  K[Event pack] --> E
+  E --> C[Profile comparison and confidence-aware deltas]
+  F[Versioned profile package] --> C
+  C --> UI
+  E --> W[Desktop fitting and research workbench]
+  W --> F
+```
 
-Video → 3D full-body pose (root-relative) + implement track → phase and stroke segmentation → feature vector → profile density / manifold / importance weights → ranked deltas + counterfactual ghost (re-projected).
+## Code boundaries
 
-Specialist residual heads (e.g. slope_residual) sit on the feature vector and accept versioned patches from the workbench harness.
+- [Workspace](../apps/strathvision/lib/workspace): native media_kit players, synchronization, marks and saved projects; video review works independently of analysis.
+- [Vision](../apps/strathvision/lib/vision): person/athlete selection and BlazePose through ONNX Runtime. Training paths reject unresolved identity/orientation. Implement position is derived from grip/forearm geometry; no research detector is promoted.
+- [Analysis engine](../packages/analysis_engine/lib/src): stage interfaces, segmentation, metrics, profile gates, comparison and bounded edits. [Packs](../apps/strathvision/assets/packs) supply event definitions and weights.
+- [Package exchange](../apps/strathvision/lib/profiles/package_exchange.dart): generated private storage names, transactional metadata/extras, event-bound marks and content-based local-video matching.
+- [Research tooling](../tools/carne_asada): private dataset preparation and evaluation. Published reports retain failed and zero-edit results.
 
-## Profile Structure
+## Device roles and transfer
 
-- Shared base layer: body model, general ranges, implement-class attachments, cross-event mobility.
-- Per-event overlays: phase-conditioned mixture (μ, Σ), importance vector w, residual exemplars, reinforcement history, phase/segmenter state, specialist patches, compile-once adapters.
-- Coaching packages are exportable overlays (athlete-derived or coach-authored) with stable IDs and versions.
-- CARNE ASADA logs live in packages but are desktop-research only and never required for inference.
+Desktop builds profiles, tunes specialist heads and runs CARNE ASADA. Phone reviews, annotates and performs inference with imported packages. Profile fitting and weight editing are not mobile flows. Packages move as files, manually or through a user-selected inbox folder. Automatic peer discovery/push is a design direction, not implemented synchronization.
 
-## Weight-Space Layers
+SQLite/Drift stores projects, profile metadata, settings and comparisons. The app owns imported package copies. Videos remain where the user placed them. Exported marks omit filesystem paths; hashes establish byte identity, not person identity, authorship or independent recording sessions. Legacy marks remain unbound when source identity is missing.
 
-1. Specialist net harness (workbench): sparse patches on tiny residual heads. Probes defined in DECISIONS.md.
-2. Compile-once adapters: English specs in packs become local adapters inside packages.
-3. CARNE ASADA (desktop only): recursive sparse edits to the mixture under hard bounds. See docs/CARNE_ASADA.md.
+## Evidence boundaries
 
-## Learning Loop
+A profile passes count, confidence and self-consistency checks before being used. Self-consistency is not external accuracy. Comparison scores retain their historical meaning while `confidence-v1` orders deltas by contribution times minimum pose/phase/metric confidence and demotes values below 0.6. This is a heuristic, not calibrated uncertainty.
 
-Clean frames and winning red/green/voice bindings produce discounted updates to mixture parameters and w. Inference always reads the current parameters. Light updates (w + exemplars) can apply on-phone immediately; full fits update μ/Σ. Specialist patches and adapters load with the package.
+Specialist patches and compiled adapters run locally. Optional adapter creation uses a configured provider on desktop. CARNE ASADA edits are bounded, versioned and reversible; real coaching improvement still needs genuine labels and an independent session holdout. Local voice transcription remains unimplemented.
 
-## Device Roles
-
-- Phone (iOS/Android): full coach flows, inference, light updates, basic-to-advanced review, remote exchange. Loads patches and adapters. No weight editing, no CARNE ASADA.
-- Laptop/desktop workbench: automatic ingest/fit/push, specialist harness, adapter compilation, full CARNE ASADA research loop, heavier merges, archive.
-
-## Sync
-
-Local/P2P profile packages only. No required cloud. Workbench mode is primary; manual transfer is secondary. Packages include patches and adapters.
-
-## Gating
-
-Usable-action thresholds (Good/Great/Excellent) control when implement-specific and weighted features activate. Below Good the app remains a capable dual-video reviewer.
-
-All detailed rules, conflict handling, retention, recovery, edge cases, status messages, and CARNE ASADA constraints are in DECISIONS.md and CARNE_ASADA.md.
+Exact contracts: [INTERFACES](INTERFACES.md). Rationale and historical decisions: [DECISIONS](DECISIONS.md). Acceptance status: [VALIDATION](VALIDATION.md) and [ROADMAP](ROADMAP.md).

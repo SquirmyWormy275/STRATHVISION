@@ -2,7 +2,7 @@
 
 This document augments the locked `docs/EXECUTION_PLAN.md`. It does not invent new top-level concepts or alter contracts in `ARCHITECTURE.md`, `DECISIONS.md`, or `INTERFACES.md`. All recommendations stay inside the existing phases, quality gates, and non-goals.
 
-Implementation has not started. Dual-video excellence remains the first usable product. Analysis is progressive enhancement. CARNE ASADA stays desktop-only research.
+**Historical proposal, not current implementation.** The app now uses a Dart runtime with local BlazePose/ONNX; RTMPose/Sports2D below are possible alternatives requiring measured validation. See [current architecture](ARCHITECTURE.md) and [roadmap](ROADMAP.md). Dual-video excellence remains the first usable product. Analysis is progressive enhancement. CARNE ASADA stays desktop-only research.
 
 ## Guiding Constraints (reaffirmed)
 

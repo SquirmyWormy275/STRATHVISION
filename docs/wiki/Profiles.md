@@ -18,7 +18,7 @@ A profile cannot be marked ready unless:
 - Pose and phase confidence on critical sections meets threshold
 - A self-consistency check passes (held-out clips from the same coach match the profile built from the remaining clips)
 
-These gates exist so the system cannot emit a confident style-match score from inadequate or inconsistent reference data.
+These gates reject inadequate or inconsistent reference data. Exact-byte copies count once and unresolved athlete/orientation selection blocks fitting. Passing the gates does not establish independent-session generalization, correct contact timing, or coaching accuracy.
 
 ## Lifecycle
 

@@ -2,7 +2,7 @@
 
 The locked test-distribution paths (DECISIONS.md "Distribution"). No store, no accounts, no cloud.
 
-Every push to `implementation` that touches the app runs `.github/workflows/builds.yml`. It runs the tests, then builds an Android APK, Linux, Windows and macOS zips, and an unsigned iOS app. Download them from the run's **Artifacts** on the Actions tab.
+Every pull request to `main` or `implementation`, and every push to either branch runs `.github/workflows/builds.yml`. It runs Dart/Flutter and Python tests, reports line coverage, checks documentation links and handoff isolation, runs native decoder/pose smoke on Linux, and builds an Android APK, Linux, Windows and macOS zips, and an unsigned iOS app. Download them from the run's **Artifacts** on the Actions tab.
 
 ## Android: APK sideload
 

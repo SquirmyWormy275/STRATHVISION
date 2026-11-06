@@ -2,15 +2,22 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-06T00:12:18Z
+owner: codex
+heartbeat: 2026-11-06T07:30:26Z
 branch: implementation
-phase: 8 — Seagate multi-sport footage research
-task: Completed the Seagate snapshot inventory, expanded axe study and separate weightlifting pilot
-next: Seagate starting-snapshot study complete; see docs/experiments/Seagate-Footage.md and evaluation/seagate/results.json. Twelve later download candidates are listed separately for a future ingestion pass. Future research: independent recording-session barbell holdout, thin-bar/negative axe examples, and genuine field feedback; no model promotion.
+phase: Audit hardening and public baseline
+task: User-authorized audit repairs, CI, documentation and acceptance roadmap
+next: Finish native e2e and CI for audit PR; reconcile main after green checks. Remaining field acceptance is tracked in issues #2-#5 and docs/ROADMAP.md.
 <!-- STATE:END -->
 
-## Phase progress
+## Current acceptance
+
+The audit repairs package containment/atomicity, feedback provenance, duplicate fitting inputs, failure recovery and confidence-aware ranking; adds PR/research/native CI and coverage; and replaces stale public navigation. See [validation](../VALIDATION.md) for observed results and [roadmap](../ROADMAP.md) for remaining work. Physical-device, coach/holdout and live-provider checks are still open. Local transcription is not implemented.
+
+## Historical phase progress
+
+The table below preserves milestone evidence from its original dates. “Done” means an implementation milestone, not complete v1 acceptance; old test counts and stub descriptions are historical. The current runtime uses real local pose and the current acceptance above takes precedence.
+
 
 | Phase | State |
 |-------|-------|
@@ -27,7 +34,7 @@ next: Seagate starting-snapshot study complete; see docs/experiments/Seagate-Foo
 
 ## Desktop end-to-end
 
-`integration_test/app_e2e_test.dart` drives the real app on Linux through every screen: review with real video, sync, 0.25×, step, mirror, marks, undo, Analyze, reopen, Build a profile from 15 clips, compare, trend, export, workbench harness, and CARNE ASADA. It captures real screen grabs and passes. Running it found and fixed three bugs:
+`integration_test/app_e2e_test.dart` drives the real app on Linux through every screen: review with real video, sync, 0.25×, step, mirror, marks, undo, Analyze, reopen, reject 15 copied clips, install an explicitly synthetic profile, compare, trend, export, workbench harness, and CARNE ASADA. The previous copied-clip profile fixture was invalid evidence and was corrected during the audit. It captures real screen grabs and passes. Running it found and fixed three bugs:
 - clips playing with no picture (lazy video controller)
 - the frame-rate race
 - raw metric keys in warnings
