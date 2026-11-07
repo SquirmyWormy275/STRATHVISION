@@ -1,13 +1,13 @@
 name: ui-review-evidence
-
 on:
   pull_request:
     branches: [main, implementation]
   workflow_dispatch:
-
 permissions:
   contents: read
-
+concurrency:
+  group: ui-review-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 jobs:
   source-provenance:
     runs-on: ubuntu-24.04
@@ -18,13 +18,12 @@ jobs:
         shell: python
         run: |
           import hashlib, json, pathlib, subprocess, zipfile
-          root = pathlib.Path('.')
           paths = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
           allowed = {'.dart', '.md', '.yaml', '.yml', '.json', '.py', '.sh', '.lock', '.txt'}
           files = []
           with zipfile.ZipFile('ui-review-source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
               for name in sorted(paths):
-                  path = root / name
+                  path = pathlib.Path(name)
                   if not name or not path.is_file() or path.suffix not in allowed:
                       continue
                   if name.startswith(('docs/experiments/', 'research-data/')):
@@ -32,15 +31,35 @@ jobs:
                   data = path.read_bytes()
                   archive.writestr(name, data)
                   files.append({'path': name, 'sha256': hashlib.sha256(data).hexdigest()})
-              manifest = {
-                  'format': 'strathvision-ui-source/1',
+              manifest = {'format': 'strathvision-ui-source/1',
                   'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip(),
-                  'files': files,
-                  'scope': 'Text source snapshot only. Not a compiled app or visual acceptance result.'
-              }
+                  'files': files, 'scope': 'Text source snapshot. Not compiled or visually accepted.'}
               archive.writestr('UI_SOURCE_MANIFEST.json', json.dumps(manifest, indent=2) + '\n')
       - uses: actions/upload-artifact@v4
         with:
           name: ui-review-source
           path: ui-review-source.zip
+          retention-days: 14
+  flutter-ui:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/fetch_ui_fonts.py
+      - uses: subosito/flutter-action@v2
+        with: {channel: stable, flutter-version: '3.47.9', cache: true}
+      - name: Flutter compile and focused regressions
+        working-directory: apps/strathvision
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test test/review_presentation_test.dart test/thumbnail_service_test.dart --reporter expanded
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: flutter-ui-screenshot-candidates
+          path: |
+            apps/strathvision/test/goldens/candidates/*.png
+            apps/strathvision/test/failures/**
+          if-no-files-found: ignore
           retention-days: 14

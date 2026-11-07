@@ -1,32 +1,27 @@
-# Test builds for every locked distribution path (docs/DISTRIBUTION.md):
-# Android APK, desktop zips (Linux, Windows, macOS), and an unsigned iOS
-# build that is signed ad hoc on a Mac. Artifacts attach to each run.
+# Test distribution only: compilation is not physical-device or coaching acceptance.
 name: builds
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main, implementation]
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: builds-${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
-
 env:
   FLUTTER_VERSION: '3.47.9'
-
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Provision pinned offline UI fonts
+        run: python scripts/fetch_ui_fonts.py
       - uses: subosito/flutter-action@v2
-        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+        with: {channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true}
       - name: Engine tests
         working-directory: packages/analysis_engine
         run: |
@@ -45,7 +40,6 @@ jobs:
           path: |
             packages/analysis_engine/coverage/lcov.info
             apps/strathvision/coverage/lcov.info
-
   research:
     runs-on: ubuntu-latest
     steps:
@@ -62,8 +56,6 @@ jobs:
         run: |
           python -m unittest discover -s scripts/tests -v
           python scripts/check_links.py
-
-
   training:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -80,27 +72,23 @@ jobs:
         run: |
           python tools/carne_asada/check_training_env.py --device cpu
           python -m pytest -q tools/carne_asada
-
   android:
     needs: [test, research, training]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: '17' }
+        with: {distribution: temurin, java-version: '17'}
+      - name: Provision pinned offline UI fonts
+        run: python scripts/fetch_ui_fonts.py
       - uses: subosito/flutter-action@v2
-        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+        with: {channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true}
       - working-directory: apps/strathvision
         run: flutter build apk --release
       - uses: actions/upload-artifact@v4
-        with:
-          name: strathvision-android-apk
-          path: apps/strathvision/build/app/outputs/flutter-apk/app-release.apk
-
+        with: {name: strathvision-android-apk, path: apps/strathvision/build/app/outputs/flutter-apk/app-release.apk}
   linux:
     needs: [test, research, training]
-    # Fixed native GTK/libmpv baseline; latest moved to Ubuntu 26.04, where
-    # headless decoder/pose runs intermittently stalled without an assertion.
     runs-on: ubuntu-24.04
     env:
       LIBGL_ALWAYS_SOFTWARE: '1'
@@ -109,15 +97,15 @@ jobs:
       - name: System libraries
         timeout-minutes: 8
         run: |
-          # The hosted Azure mirror stalled at ~35 KB/s during validation.
-          # Keep signed Ubuntu packages, but use the primary HTTPS archive.
           if [ -f /etc/apt/apt-mirrors.txt ]; then
             printf '%s\n' 'https://archive.ubuntu.com/ubuntu' | sudo tee /etc/apt/apt-mirrors.txt
           fi
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install --no-install-recommends -y clang cmake ninja-build pkg-config libgtk-3-dev libmpv-dev xvfb xauth
+      - name: Provision pinned offline UI fonts
+        run: python scripts/fetch_ui_fonts.py
       - uses: subosito/flutter-action@v2
-        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+        with: {channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true}
       - name: Real Linux decoder
         timeout-minutes: 10
         working-directory: apps/strathvision
@@ -129,54 +117,64 @@ jobs:
       - name: Full Linux desktop workflow
         timeout-minutes: 15
         working-directory: apps/strathvision
-        run: xvfb-run -a flutter test integration_test/app_e2e_test.dart -d linux --reporter expanded --dart-define=CLIP_DIR="$PWD/integration_test/assets"
+        run: xvfb-run -a flutter test integration_test/app_e2e_test.dart -d linux --reporter expanded --dart-define=CLIP_DIR="$PWD/integration_test/assets" --dart-define=SHOTS="$PWD/build/ui-native-shots"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-linux-review-screenshots
+          path: apps/strathvision/build/ui-native-shots/
+          if-no-files-found: ignore
+          retention-days: 14
       - working-directory: apps/strathvision
         run: |
           flutter build linux --release
           cd build/linux/x64/release/bundle && zip -r ../../../../../strathvision-linux-x64.zip .
       - uses: actions/upload-artifact@v4
-        with: { name: strathvision-linux-x64, path: apps/strathvision/strathvision-linux-x64.zip }
-
+        with: {name: strathvision-linux-x64, path: apps/strathvision/strathvision-linux-x64.zip}
   windows:
     needs: [test, research, training]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Provision pinned offline UI fonts
+        run: python scripts/fetch_ui_fonts.py
       - uses: subosito/flutter-action@v2
-        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+        with: {channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true}
       - working-directory: apps/strathvision
         shell: pwsh
         run: |
           flutter build windows --release
           Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath strathvision-windows-x64.zip
       - uses: actions/upload-artifact@v4
-        with: { name: strathvision-windows-x64, path: apps/strathvision/strathvision-windows-x64.zip }
-
+        with: {name: strathvision-windows-x64, path: apps/strathvision/strathvision-windows-x64.zip}
   macos:
     needs: [test, research, training]
     runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
+      - name: Provision pinned offline UI fonts
+        run: python scripts/fetch_ui_fonts.py
       - uses: subosito/flutter-action@v2
-        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
+        with: {channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true}
       - working-directory: apps/strathvision
         run: |
           flutter build macos --release
           ditto -c -k --keepParent build/macos/Build/Products/Release/strathvision.app strathvision-macos.zip
       - uses: actions/upload-artifact@v4
-        with: { name: strathvision-macos, path: apps/strathvision/strathvision-macos.zip }
-
+        with: {name: strathvision-macos, path: apps/strathvision/strathvision-macos.zip}
   ios:
     needs: [test, research, training]
     runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
+      - name: Provision pinned offline UI fonts
+        run: python scripts/fetch_ui_fonts.py
       - uses: subosito/flutter-action@v2
-        with: { channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true }
-      - name: Unsigned build (sign ad hoc on a Mac, see docs/DISTRIBUTION.md)
+        with: {channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true}
+      - name: Unsigned build
         working-directory: apps/strathvision
         run: |
           flutter build ios --release --no-codesign
           ditto -c -k --keepParent build/ios/iphoneos/Runner.app strathvision-ios-unsigned.zip
       - uses: actions/upload-artifact@v4
-        with: { name: strathvision-ios-unsigned, path: apps/strathvision/strathvision-ios-unsigned.zip }
+        with: {name: strathvision-ios-unsigned, path: apps/strathvision/strathvision-ios-unsigned.zip}
