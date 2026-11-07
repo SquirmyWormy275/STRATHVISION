@@ -1,0 +1,60 @@
+name: ui-regression-diagnostics
+on:
+  pull_request:
+    branches: [implementation]
+permissions:
+  contents: read
+concurrency:
+  group: ui-diagnostics-${{ github.head_ref }}
+  cancel-in-progress: true
+jobs:
+  inspector-regressions:
+    if: github.head_ref == 'codex/footage-first-ui' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/fetch_ui_fonts.py
+      - uses: subosito/flutter-action@v2
+        with: {channel: stable, flutter-version: '3.47.9', cache: true}
+      - working-directory: apps/strathvision
+        run: flutter pub get
+      - name: Bound each inspector regression and retain full output
+        shell: python
+        run: |
+          import json, pathlib, subprocess
+          root = pathlib.Path('apps/strathvision')
+          out = root / 'build/ui-diagnostics'
+          out.mkdir(parents=True, exist_ok=True)
+          results = []
+          for name in ['analysis_test.dart', 'packs_test.dart']:
+              command = ['flutter', 'test', '--no-pub', '--reporter', 'expanded',
+                         '--timeout', '30s', 'test/' + name]
+              with (out / (name + '.log')).open('w') as log:
+                  process = subprocess.Popen(command, cwd=root, stdout=log, stderr=subprocess.STDOUT,
+                                             start_new_session=True)
+                  timed_out = False
+                  try:
+                      code = process.wait(timeout=100)
+                  except subprocess.TimeoutExpired:
+                      import os, signal
+                      timed_out = True
+                      os.killpg(process.pid, signal.SIGTERM)
+                      try:
+                          process.wait(timeout=10)
+                      except subprocess.TimeoutExpired:
+                          os.killpg(process.pid, signal.SIGKILL)
+                          process.wait()
+                      code = 124
+              print('=== ' + name + ' ===', flush=True)
+              print((out / (name + '.log')).read_text(), flush=True)
+              results.append({'file': name, 'exit_code': code, 'timed_out': timed_out})
+          (out / 'results.json').write_text(json.dumps(results, indent=2) + '\n')
+          raise SystemExit(0 if all(r['exit_code'] == 0 for r in results) else 1)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inspector-regression-diagnostics
+          path: apps/strathvision/build/ui-diagnostics/
+          if-no-files-found: error
+          retention-days: 14
