@@ -12,8 +12,7 @@ import 'package:strathvision/packs/placeholder_pack.dart';
 
 import 'support/fake_stage_player.dart';
 
-/// Validate measurements through the actual optional inspector, including content
-/// below its viewport. Larger readable type must not weaken measurement coverage.
+/// Inspect all measurement rows, including those below the readable viewport.
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
   late AppDatabase db;
@@ -21,7 +20,6 @@ void main() {
   late List<String> clipQueue;
   late List<ClipSource> requests;
   late List<Map<String, Object?>> outputs;
-
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
     players = [];
@@ -37,18 +35,15 @@ void main() {
     outputs.add(jsonDecode(jsonEncode(detail.outcome.toJson())) as Map<String, Object?>);
     return detail;
   };
-
   Future<void> unmountApp(WidgetTester tester) async {
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);
   }
-
   Future<void> pumpApp(WidgetTester tester, AnalysisRunner runner,
       {Size size = const Size(1600, 1000)}) async {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    // Also detach listeners on assertion failure, before closing Drift.
     addTearDown(() => unmountApp(tester));
     await tester.runAsync(() => db.setSetting(AppDatabase.activeEventKey, placeholderPack.key));
     await tester.pumpWidget(StrathvisionApp(
@@ -65,13 +60,11 @@ void main() {
     ));
     await tester.pumpAndSettle();
   }
-
   Future<void> tap(WidgetTester tester, String key) async {
     await tester.ensureVisible(find.byKey(Key(key)));
     await tester.tap(find.byKey(Key(key)));
     await tester.pumpAndSettle();
   }
-
   Future<void> inspectRow(WidgetTester tester, String key) async {
     final scrollable = find.descendant(
       of: find.byKey(const Key('analysis-metrics')),
@@ -107,7 +100,6 @@ void main() {
     expect(find.byKey(const Key('analysis-panel')), findsNothing);
     await unmountApp(tester);
   });
-
   testWidgets('failure shows the Error Contract and review keeps working', (tester) async {
     await pumpApp(tester, recording(AnalysisEngine(
       pack: pack, pose: const StubPoseEstimator(confidence: 0.2),
@@ -124,7 +116,6 @@ void main() {
     expect(players[0].position, FakeStagePlayer.frame);
     await unmountApp(tester);
   });
-
   testWidgets('narrow details close back to the same video', (tester) async {
     await pumpApp(tester, recording(AnalysisEngine(pack: pack)), size: const Size(420, 900));
     clipQueue.add('/clips/session.mp4');
@@ -138,7 +129,6 @@ void main() {
     expect(tester.takeException(), isNull);
     await unmountApp(tester);
   });
-
   testWidgets('results follow the active stage', (tester) async {
     await pumpApp(tester, recording(AnalysisEngine(pack: pack)));
     clipQueue.addAll(['/clips/a.mp4', '/clips/b.mp4']);
@@ -151,17 +141,15 @@ void main() {
     expect(requests[0].clipId, isNot(requests[1].clipId));
     await unmountApp(tester);
   });
-
   test('isolate runner returns a valid Metric Vector', () async {
     final out = await isolateRunner(pack)(
       const ClipSource(clipId: 'c1', path: '/clips/a.mp4', durationMs: 8000, fps: 25),
       const [], const {},
     );
-    expect(out.outcome, isA<AnalysisSuccess>);
+    expect(out.outcome, isA<AnalysisSuccess>());
     expect(validateMetricVector(out.outcome.toJson()), isEmpty);
     expect(out.features, hasLength(featureWidth));
   });
-
   test('placeholder pack analysis section is valid and domain-neutral', () {
     expect(pack.phases, hasLength(3));
     expect(pack.metrics, hasLength(4));
