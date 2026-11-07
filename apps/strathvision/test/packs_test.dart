@@ -8,12 +8,8 @@ import 'package:strathvision/data/database.dart';
 import 'package:strathvision/main.dart';
 import 'package:strathvision/packs/pack_registry.dart';
 import 'package:strathvision/packs/placeholder_pack.dart';
-
 import 'support/fake_stage_player.dart';
 
-/// Phase 6 in the app: pack files load at runtime, the active event is
-/// chosen in the Library and persists, and its attributes and metrics drive
-/// the workspace.
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -21,103 +17,85 @@ void main() {
   test('bundled pack files load from assets next to the placeholder', () async {
     final packs = await loadPacks(rootBundle);
     expect(packs.map((p) => p.packId), ['placeholder', 'timber']);
-    final all = PackInfo.all(packs).map((p) => p.key);
-    expect(all, [
-      'placeholder/placeholder',
-      'timber/underhand',
-      'timber/standing_block',
-      'timber/springboard',
+    expect(PackInfo.all(packs).map((p) => p.key), [
+      'placeholder/placeholder', 'timber/underhand',
+      'timber/standing_block', 'timber/springboard',
     ]);
   });
 
-  test(
-    'active pack: saved choice, else first domain event, else placeholder',
-    () async {
-      final packs = await loadPacks(rootBundle);
-      expect(activePack(packs, null).key, 'timber/underhand');
-      expect(
-        activePack(packs, 'timber/standing_block').key,
-        'timber/standing_block',
-      );
-      expect(activePack(packs, 'gone/event').key, 'timber/underhand');
-      expect(
-        activePack([placeholderDefinition], null).key,
-        'placeholder/placeholder',
-      );
-    },
-  );
+  test('active pack: saved choice, else first domain event, else placeholder', () async {
+    final packs = await loadPacks(rootBundle);
+    expect(activePack(packs, null).key, 'timber/underhand');
+    expect(activePack(packs, 'timber/standing_block').key, 'timber/standing_block');
+    expect(activePack(packs, 'gone/event').key, 'timber/underhand');
+    expect(activePack([placeholderDefinition], null).key, 'placeholder/placeholder');
+  });
 
-  testWidgets('event picker switches the pack the workspace uses', (
-    tester,
-  ) async {
+  testWidgets('event picker selects new reviews without relabeling old ones', (tester) async {
     final packs = await tester.runAsync(() => loadPacks(rootBundle));
     final db = AppDatabase(NativeDatabase.memory());
     tester.view.physicalSize = const Size(1600, 1000);
-    tester.view.devicePixelRatio = 1.0;
+    tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
+    addTearDown(() async {
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(Duration.zero);
+      await tester.runAsync(db.close);
+    });
     final runs = <ClipSource>[];
-    await tester.pumpWidget(
-      StrathvisionApp(
-        db: db,
-        sourceSignature: (path) async => 'test:$path',
-        packs: packs!,
-        pickClip: () async => '/clips/session.mp4',
-        playerFactory: FakeStagePlayer.new,
-        analysisRunner: (clip, patches, reference) {
-          runs.add(clip);
-          final key = tester
-              .widget<Text>(
-                find.byKey(const Key('active-event'), skipOffstage: false),
-              )
-              .data;
-          final pack = activePack(
-            packs,
-            key == 'Underhand' ? 'timber/underhand' : 'timber/standing_block',
-          ).analysisPack;
-          return AnalysisEngine(pack: pack).analyzeDetailed(clip);
-        },
-      ),
-    );
+    await tester.pumpWidget(StrathvisionApp(
+      db: db,
+      sourceSignature: (path) async => 'test:$path',
+      packs: packs!,
+      pickClip: () async => '/clips/session.mp4',
+      playerFactory: FakeStagePlayer.new,
+      analysisRunner: (clip, patches, reference) {
+        runs.add(clip);
+        // This fixture deliberately analyzes the first review's chosen event.
+        return AnalysisEngine(pack: activePack(packs, 'timber/underhand').analysisPack)
+            .analyzeDetailed(clip);
+      },
+    ));
     await tester.pumpAndSettle();
     expect(find.text('Just video'), findsOneWidget);
-    await tester.tap(find.byKey(const Key('event-picker')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('event-timber/underhand')));
-    await tester.pumpAndSettle();
-    expect(find.text('Underhand'), findsOneWidget);
 
-    // Timber attributes in the mark bar, timber metrics in Analyze.
-    await tester.tap(find.byKey(const Key('open-workspace')));
-    await tester.pumpAndSettle();
+    Future<void> tapKey(String key) async {
+      await tester.ensureVisible(find.byKey(Key(key)));
+      await tester.tap(find.byKey(Key(key)));
+      await tester.pumpAndSettle();
+    }
+
+    await tapKey('event-picker');
+    await tapKey('event-timber/underhand');
+    expect(find.text('Underhand'), findsOneWidget);
+    await tapKey('open-workspace');
     expect(find.byKey(const Key('attr-Slope')), findsOneWidget);
     expect(find.byKey(const Key('attr-Timing')), findsNothing);
-    await tester.tap(find.byKey(const Key('analyze')));
-    await tester.pumpAndSettle();
-    expect(find.text('Entry slope'), findsOneWidget);
-    expect(find.text('Hinge at entry'), findsOneWidget);
+    await tapKey('analyze');
+    final measurementScroll = find.descendant(
+      of: find.byKey(const Key('analysis-metrics')),
+      matching: find.byType(Scrollable),
+    ).first;
+    for (final label in ['Entry slope', 'Hinge at entry']) {
+      await tester.scrollUntilVisible(find.text(label), 100, scrollable: measurementScroll);
+      await tester.pumpAndSettle();
+      expect(find.text(label), findsOneWidget);
+    }
+    expect(runs, hasLength(1));
     await tester.pageBack();
     await tester.pumpAndSettle();
 
-    // Switch to Standing block; the choice persists.
-    await tester.tap(find.byKey(const Key('event-picker')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('event-timber/standing_block')));
-    await tester.pumpAndSettle();
+    await tapKey('event-picker');
+    await tapKey('event-timber/standing_block');
     expect(find.text('Standing block'), findsOneWidget);
-    final saved = await tester.runAsync(
-      () => db.watchSetting(AppDatabase.activeEventKey).first,
-    );
+    final saved = await tester.runAsync(() => db.watchSetting(AppDatabase.activeEventKey).first);
     expect(saved, 'timber/standing_block');
-    final project = (await tester.runAsync(
-      () => db.select(db.projectRows).get(),
-    ))!.single;
-    await tester.tap(find.byKey(Key('project-${project.projectId}')));
-    await tester.pumpAndSettle();
+    final project = (await tester.runAsync(() => db.select(db.projectRows).get()))!.single;
+    await tapKey('project-${project.projectId}');
     expect(find.text('Underhand'), findsOneWidget);
     expect(find.byKey(const Key('attr-Slope')), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);
-    await tester.runAsync(db.close);
   });
 }
