@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -39,10 +40,15 @@ class MediaKitStagePlayer implements StagePlayer {
     _video;
   }
   final Player _player = Player();
-  late final VideoController _video = VideoController(_player,
+  late final VideoController _video = VideoController(
+    _player,
     configuration: Platform.isAndroid
-      ? const VideoControllerConfiguration(vo: 'mediacodec_embed', hwdec: 'mediacodec')
-      : const VideoControllerConfiguration());
+        ? const VideoControllerConfiguration(
+            vo: 'mediacodec_embed',
+            hwdec: 'mediacodec',
+          )
+        : const VideoControllerConfiguration(),
+  );
   final _changes = StreamController<void>.broadcast();
   late final List<StreamSubscription<Object?>> _subs;
   bool _hasMedia = false;
@@ -56,6 +62,7 @@ class MediaKitStagePlayer implements StagePlayer {
     final w = _player.state.width, h = _player.state.height;
     return w == null || h == null || h <= 0 ? null : w / h;
   }
+
   Future<bool> settleSeek() async {
     final target = _confirmationTarget;
     if (target == null || playing) return true;
@@ -76,13 +83,17 @@ class MediaKitStagePlayer implements StagePlayer {
     final pending = _pendingSeek;
     if (pending != null) {
       final reported = _player.state.position;
-      final settled = (reported - pending).abs() < const Duration(milliseconds: 20);
-      final expired = DateTime.now().difference(_pendingSince) > const Duration(milliseconds: 750);
+      final settled =
+          (reported - pending).abs() < const Duration(milliseconds: 20);
+      final expired =
+          DateTime.now().difference(_pendingSince) >
+          const Duration(milliseconds: 750);
       if (!settled && !expired && !_player.state.playing) return pending;
       _pendingSeek = null;
     }
     return _player.state.position;
   }
+
   @override
   Duration get duration => _player.state.duration;
   @override
@@ -94,8 +105,12 @@ class MediaKitStagePlayer implements StagePlayer {
 
   @override
   Future<void> open(String path) async {
-    if (!await File(path).exists()) throw FileSystemException('Video unavailable', path);
-    _fps = null; _pendingSeek = null; _confirmationTarget = null;
+    if (!await File(path).exists()) {
+      throw FileSystemException('Video unavailable', path);
+    }
+    _fps = null;
+    _pendingSeek = null;
+    _confirmationTarget = null;
     _hasMedia = false;
     await _player.stop();
     final ready = Completer<void>();
@@ -109,10 +124,16 @@ class MediaKitStagePlayer implements StagePlayer {
       await _player.open(Media(path), play: false);
       final native = _player.platform;
       if (native is NativePlayer) await native.setProperty('vid', 'auto');
-      if (_player.state.duration > Duration.zero && !ready.isCompleted) ready.complete();
+      if (_player.state.duration > Duration.zero && !ready.isCompleted) {
+        ready.complete();
+      }
     }
+
     try {
-      await Future.wait<void>([start(), ready.future.timeout(const Duration(seconds: 10))], eagerError: true);
+      await Future.wait<void>([
+        start(),
+        ready.future.timeout(const Duration(seconds: 10)),
+      ], eagerError: true);
       _hasMedia = true;
       _changes.add(null);
     } catch (_) {
@@ -121,24 +142,33 @@ class MediaKitStagePlayer implements StagePlayer {
       _changes.add(null);
       rethrow;
     } finally {
-      await durationSub.cancel(); await errorSub.cancel();
+      await durationSub.cancel();
+      await errorSub.cancel();
     }
   }
+
   @override
   Future<void> close() async {
-    await _player.stop(); _hasMedia = false;
-    _pendingSeek = null; _confirmationTarget = null;
+    await _player.stop();
+    _hasMedia = false;
+    _pendingSeek = null;
+    _confirmationTarget = null;
     _changes.add(null);
   }
+
   @override
   Future<void> play() => _player.play();
   @override
   Future<void> pause() => _player.pause();
   @override
   Future<void> seek(Duration position) {
-    _pendingSeek = position; _confirmationTarget = position; _pendingSince = DateTime.now();
-    _changes.add(null); return _player.seek(position);
+    _pendingSeek = position;
+    _confirmationTarget = position;
+    _pendingSince = DateTime.now();
+    _changes.add(null);
+    return _player.seek(position);
   }
+
   @override
   Future<void> setRate(double rate) => _player.setRate(rate);
   double? _fps;
@@ -158,6 +188,7 @@ class MediaKitStagePlayer implements StagePlayer {
     }
     return 30;
   }
+
   @override
   Future<void> stepFrame({required bool forward}) async {
     if (_player.state.playing) await _player.pause();
@@ -169,14 +200,23 @@ class MediaKitStagePlayer implements StagePlayer {
     if (duration > Duration.zero && to > duration) to = duration;
     await seek(to);
   }
+
   @override
   Widget view({required bool mirror}) {
-    final video = Video(controller: _video, controls: NoVideoControls, fit: BoxFit.contain);
+    final video = Video(
+      controller: _video,
+      controls: NoVideoControls,
+      fit: BoxFit.contain,
+    );
     return mirror ? Transform.flip(flipX: true, child: video) : video;
   }
+
   @override
   Future<void> dispose() async {
-    for (final s in _subs) { await s.cancel(); }
-    await _changes.close(); await _player.dispose();
+    for (final s in _subs) {
+      await s.cancel();
+    }
+    await _changes.close();
+    await _player.dispose();
   }
 }

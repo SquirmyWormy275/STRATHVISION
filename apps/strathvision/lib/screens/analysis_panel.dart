@@ -66,35 +66,42 @@ class _ProfileSelector extends StatelessWidget {
               'Build or import a profile to compare against it.',
               key: const Key('no-profiles'),
               style: muted,
-            )
-          else
-            Row(
-              children: [
-                Text('Compare with', style: muted),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: DropdownButton<String>(
-                    key: const Key('profile-select'),
-                    isExpanded: true,
-                    isDense: true,
-                    underline: const SizedBox.shrink(),
-                    value: analysis.selectedProfile?.key ?? '',
-                    items: [
-                      const DropdownMenuItem(value: '', child: Text('Nobody')),
-                      for (final c in choices)
-                        DropdownMenuItem(
-                          value: c.key,
-                          child: Text(c.label, overflow: TextOverflow.ellipsis),
+            ),
+          Row(
+            children: [
+              Text('Profile', style: muted),
+              const SizedBox(width: 8),
+              Expanded(
+                child: DropdownButton<String>(
+                  key: const Key('profile-select'),
+                  isExpanded: true,
+                  isDense: true,
+                  underline: const SizedBox.shrink(),
+                  value: analysis.selectedProfile?.key ?? '',
+                  items: [
+                    const DropdownMenuItem(
+                      value: '',
+                      child: Text('Measurements only'),
+                    ),
+                    for (final c in choices)
+                      DropdownMenuItem(
+                        value: c.key,
+                        child: Text(c.label, overflow: TextOverflow.ellipsis),
+                      ),
+                  ],
+                  onChanged: analysis.running
+                      ? null
+                      : (k) => analysis.selectProfile(
+                          choices.where((c) => c.key == k).firstOrNull,
                         ),
-                    ],
-                    onChanged: analysis.running
-                        ? null
-                        : (k) => analysis.selectProfile(
-                            choices.where((c) => c.key == k).firstOrNull,
-                          ),
-                  ),
                 ),
-              ],
+              ),
+            ],
+          ),
+          if (analysis.missingProfileKey != null)
+            Text(
+              'Saved profile ${analysis.missingProfileKey} is unavailable. Choose another explicitly; video review still works.',
+              style: muted,
             ),
           if (error != null)
             Text(
@@ -692,7 +699,7 @@ class _Comparison extends StatelessWidget {
               Text(
                 '${(result.overallScore * 100).round()}%',
                 key: const Key('overall-score'),
-                style: theme.textTheme.displaySmall?.copyWith(
+                style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   fontFeatures: _tabular,
                 ),

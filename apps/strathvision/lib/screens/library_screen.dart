@@ -300,6 +300,7 @@ class LibraryScreen extends StatelessWidget {
           db: db,
           project: project,
           pack: pack,
+          availablePacks: packs,
           pickClip: pickClip,
           playerFactory: playerFactory,
           analysisRunner: analysisRunner,
@@ -374,7 +375,7 @@ class LibraryScreen extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Library'),
+        title: const Text('Profiles & tools'),
         actions: [
           _eventPicker(context, pack),
           if (Platform.isLinux || Platform.isMacOS || Platform.isWindows)
@@ -706,9 +707,12 @@ CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async {
     analyze: isolateStrokeAnalyzer(pack.analysisPack, athletes: athletes),
     athletes: athletes,
     analysisMetadata: carneAnalysisMetadata(),
-    marks: (path) async => db.marksForPath(path,
-        packId: pack.analysisPack.packId, eventId: pack.analysisPack.eventId,
-        sourceSha256: await sourceHash(path)),
+    marks: (path) async => db.marksForPath(
+      path,
+      packId: pack.analysisPack.packId,
+      eventId: pack.analysisPack.eventId,
+      sourceSha256: await sourceHash(path),
+    ),
     phaseLabel: pack.phaseLabel,
     metricLabel: pack.metricLabel,
     write: (Profile profile, patches, adapters, research) async {
