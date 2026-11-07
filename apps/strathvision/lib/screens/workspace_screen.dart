@@ -15,7 +15,7 @@ typedef ClipPathPicker = Future<String?> Function();
 Future<String?> pickClipFile() async => (await FilePicker.pickFile(
   dialogTitle: 'Choose a clip', type: FileType.video))?.path;
 
-/// Review is complete with one clip. Players belong to WorkspaceRoute, not layout.
+/// Review is complete with one clip. Player ownership never depends on layout.
 class WorkspaceScreen extends StatefulWidget {
   WorkspaceScreen({super.key, required this.controller, this.pickClip = pickClipFile,
     PackInfo? pack, this.analysis, this.eventConfirmed = true,
@@ -46,10 +46,9 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     if (_busy) return;
     setState(() { _busy = true; _error = null; });
     try { await _seeking; await action(); }
-    catch (_) { if (mounted) setState(() => _error = 'That action could not finish. Your original videos are unchanged. Retry or use Undo.'); }
+    catch (_) { if (mounted) setState(() => _error = 'That action could not finish. Original videos are unchanged. Retry or use Undo.'); }
     finally { if (mounted) setState(() => _busy = false); }
   }
-
   void _scrub(Stage stage, Duration position) {
     _pendingScrub = (stage, position);
     _seeking ??= _drainScrubs();
@@ -62,10 +61,9 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         await c.scrub(next.$1, next.$2);
       }
     } catch (_) {
-      if (mounted) setState(() => _error = 'Could not seek to that frame. Try the frame-step controls.');
+      if (mounted) setState(() => _error = 'Could not seek to that frame. Try frame stepping.');
     } finally { _seeking = null; }
   }
-
   Future<void> _load(Stage stage) => _run(() async {
     _modal = true;
     try {
@@ -73,14 +71,12 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
       if (path != null && mounted) await c.loadClip(stage, path);
     } finally { _modal = false; }
   });
-
   Future<void> _mark(MarkLabel label) => _run(() async {
     if (!widget.eventConfirmed) { await widget.onChooseEvent?.call(); return; }
     await c.pause();
     if (!await c.settleFrames()) throw StateError('Wait for the displayed frame.');
     await c.mark(label);
   });
-
   Future<void> _annotate() => _run(() async {
     await c.pause();
     if (!await c.settleFrames() || !mounted) return;
@@ -92,6 +88,17 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     if (mounted) _focus.requestFocus();
   });
 
+  /// Inference never holds the transport's short-operation lock.
+  Future<void> _requestAnalysis() async {
+    final analysis = a;
+    if (analysis == null || analysis.running) return;
+    try {
+      if (analysis.result != null) { analysis.openPanel(); }
+      else { await analysis.analyze(); }
+    } catch (_) {
+      if (mounted) setState(() => _error = 'Analysis could not finish. Video review still works.');
+    }
+  }
   bool get _shortcutsAllowed {
     if (_modal || _busy || ModalRoute.of(context)?.isCurrent != true) return false;
     final focusContext = FocusManager.instance.primaryFocus?.context;
@@ -102,7 +109,6 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   void _shortcut(Future<void> Function() action) {
     if (_shortcutsAllowed) unawaited(_run(action));
   }
-
   Map<ShortcutActivator, VoidCallback> get _shortcuts => {
     const SingleActivator(LogicalKeyboardKey.space): () => _shortcut(c.togglePlay),
     const SingleActivator(LogicalKeyboardKey.arrowRight): () => _shortcut(() => c.stepFrame(forward: true)),
@@ -114,7 +120,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     const SingleActivator(LogicalKeyboardKey.keyR): () { if (_shortcutsAllowed) unawaited(_mark(MarkLabel.red)); },
     const SingleActivator(LogicalKeyboardKey.keyZ, control: true): () => _shortcut(c.undo),
     const SingleActivator(LogicalKeyboardKey.keyZ, meta: true): () => _shortcut(c.undo),
-    if (a != null) const SingleActivator(LogicalKeyboardKey.keyA): () => _shortcut(a!.analyze),
+    if (a != null) const SingleActivator(LogicalKeyboardKey.keyA): () { if (_shortcutsAllowed) unawaited(_requestAnalysis()); },
   };
 
   @override
@@ -145,17 +151,15 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
                   onPressed: _busy ? null : () => _run(() => c.clearStage(Stage.b)),
                   icon: const Icon(Icons.crop_square), label: const Text('Single view')),
                 if (a != null && c.clipOn(c.activeStage) != null)
-                  OutlinedButton.icon(key: const Key('analyze'), onPressed: _busy || a!.running ? null : () => _run(() async {
-                    if (a!.result != null) { a!.openPanel(); } else { await a!.analyze(); }
-                  }), icon: const Icon(Icons.insights), label: Text(a!.running ? 'Analyzing…' : a!.result == null ? 'Analyze' : 'Details')),
+                  OutlinedButton.icon(key: const Key('analyze'), onPressed: a!.running ? null : _requestAnalysis,
+                    icon: const Icon(Icons.insights), label: Text(a!.running ? 'Analyzing…' : a!.result == null ? 'Analyze' : 'Details')),
               ]),
               if (_error != null || widget.notice != null) Padding(padding: const EdgeInsets.all(8),
                 child: Semantics(liveRegion: true, child: Text(_error ?? widget.notice!))),
             ]));
           final controls = Column(mainAxisSize: MainAxisSize.min, children: [
             TransportBar(controller: c, onAnnotate: _annotate, run: _run, enabled: !_busy),
-            if (hasClip && widget.eventConfirmed) MarkBar(controller: c, pack: widget.pack,
-              onMark: _mark, enabled: !_busy),
+            if (hasClip && widget.eventConfirmed) MarkBar(controller: c, pack: widget.pack, onMark: _mark, enabled: !_busy),
           ]);
           if (scroll) return SingleChildScrollView(child: Column(children: [header,
             SizedBox(height: math.max(260.0, bounds.maxHeight * 0.55), child: _body()), controls]));
@@ -163,7 +167,6 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         })),
       )),
     ));
-
   Widget _body() => LayoutBuilder(builder: (context, bounds) {
     final analysis = a;
     final side = bounds.maxWidth >= 1180 && bounds.maxHeight >= 300;
@@ -176,20 +179,17 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         child: SizedBox(width: 340, child: AnalysisPanel(analysis: analysis!, pack: widget.pack))),
     ]);
   });
-
   Widget _stages() => LayoutBuilder(builder: (context, bounds) {
     final stages = c.hasBothClips ? Stage.values : [c.clipOn(Stage.b) != null ? Stage.b : Stage.a];
     double ratio(Stage s) { final player = c.player(s); return player is MediaKitStagePlayer ? player.aspectRatio ?? 16 / 9 : 16 / 9; }
     final average = stages.map(ratio).reduce((a, b) => a + b) / stages.length;
     final horizontal = stages.length < 2 || bounds.maxWidth / math.max(1, bounds.maxHeight) > average;
-    return Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 8), child: Flex(
-      direction: horizontal ? Axis.horizontal : Axis.vertical,
+    return Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 8), child: Flex(direction: horizontal ? Axis.horizontal : Axis.vertical,
       children: [for (var i = 0; i < stages.length; i++) ...[
         if (i != 0) const SizedBox(width: 12, height: 12),
         Expanded(child: StagePanel(key: Key('stage-${stages[i].name.toUpperCase()}'),
           controller: c, stage: stages[i], onLoad: () => _load(stages[i]),
           onScrub: (position) => _scrub(stages[i], position))),
-      ]],
-    ));
+      ]]));
   });
 }

@@ -1,0 +1,85 @@
+# Temporary maintenance runner for the user-authorized isolated redesign branch.
+# It cannot modify workflows, the engine, main, implementation, or another PR.
+name: ui-integration-repair
+on:
+  pull_request:
+    branches: [implementation]
+permissions:
+  contents: read
+concurrency:
+  group: ui-integration-repair
+  cancel-in-progress: false
+jobs:
+  repair:
+    if: github.repository == 'SquirmyWormy275/STRATHVISION' && github.event.pull_request.number == 9 && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'codex/footage-first-ui'
+    permissions:
+      contents: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Confirm isolated branch lease
+        run: |
+          test "$(git ls-remote origin refs/heads/codex/footage-first-ui | cut -f1)" = "$EXPECTED_HEAD"
+      - run: python scripts/fetch_ui_fonts.py
+      - uses: subosito/flutter-action@v2
+        with: {channel: stable, flutter-version: '3.47.9', cache: true}
+      - name: Apply guarded integration edits
+        run: python scripts/ui_integration_repair.py
+      - name: Dart-supported style fixes
+        working-directory: apps/strathvision
+        run: |
+          flutter pub get
+          dart fix --apply
+      - name: Verify scope and format changed Dart files
+        shell: python
+        run: |
+          import pathlib, subprocess
+          changed = subprocess.check_output(['git', 'diff', '--name-only', '-z']).decode().split('\0')
+          allowed = {
+            'lib/main.dart', 'lib/design/sv_theme.dart', 'lib/media/thumbnail_service.dart',
+            'lib/workspace/review_presentation.dart', 'lib/workspace/stage_player.dart',
+            'lib/workspace/workspace_controller.dart', 'lib/analysis/analysis_controller.dart',
+            'lib/screens/footage_library_screen.dart', 'lib/screens/workspace_screen.dart',
+            'lib/screens/workspace_widgets.dart', 'lib/screens/workspace_route.dart',
+            'lib/screens/library_screen.dart', 'lib/screens/analysis_panel.dart',
+            'test/widget_test.dart', 'test/workspace_screen_test.dart', 'test/analysis_test.dart',
+            'test/packs_test.dart', 'test/comparison_test.dart', 'test/ui_redesign_test.dart',
+            'test/thumbnail_service_test.dart', 'test/review_presentation_test.dart',
+            'integration_test/app_e2e_test.dart'
+          }
+          paths = ['apps/strathvision/' + p for p in sorted(allowed)]
+          unexpected = [p for p in changed if p and p not in paths]
+          if unexpected:
+              raise SystemExit('Refusing unrelated changes: ' + repr(unexpected))
+          subprocess.run(['dart', 'format', *paths], check=True)
+      - name: Compile before publishing repairs
+        working-directory: apps/strathvision
+        run: flutter analyze
+      - name: Commit only the scoped repair, without force
+        run: |
+          test "$(git ls-remote origin refs/heads/codex/footage-first-ui | cut -f1)" = "$EXPECTED_HEAD"
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git diff --name-only -z | xargs -0 -r git add --
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix(ui): reconcile explicit review context and baseline workflows; format Flutter sources'
+            git push origin HEAD:refs/heads/codex/footage-first-ui
+          fi
+      - name: Focused rendered UI evidence
+        working-directory: apps/strathvision
+        run: flutter test test/ui_redesign_test.dart test/review_presentation_test.dart test/thumbnail_service_test.dart --reporter expanded --update-goldens --dart-define=CAPTURE_UI=true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: flutter-ui-repair-evidence
+          path: |
+            apps/strathvision/test/goldens/candidates/*.png
+            apps/strathvision/test/failures/**
+          if-no-files-found: ignore
+          retention-days: 14
