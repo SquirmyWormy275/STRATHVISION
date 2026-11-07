@@ -2,18 +2,20 @@
 
 Branch: `codex/footage-first-ui`. Draft PR #9 targets `implementation`. The user authorized implementation, not release or main merge. Work is isolated from the user's local workstation and existing release candidate.
 
-## Scope
+## Delivered source
 
-Shared graphite/chalk/cobalt theme and bundled fonts; footage-led library; direct clip opening; optional comparison; explicit human marks; saved event/profile/version and positions; separate local presentation storage; bounded native thumbnails; regression and screenshot evidence tooling. Engine mathematics, sport-pack boundaries, feedback content provenance and research results remain unchanged.
+Shared graphite/chalk/cobalt theme and bundled fonts; footage-led library; direct clip opening; optional comparison; explicit human marks; saved event/profile/version and positions; separate local presentation storage; bounded native thumbnails; regression and screenshot tooling. Engine mathematics, sport-pack boundaries, feedback content provenance and research results remain unchanged.
 
 References: [visual system](../VISUAL_SYSTEM.md), [local-state contract](../UI_REDESIGN_CONTRACT.md), [acceptance gates](../UI_REDESIGN_ACCEPTANCE.md).
 
-## Evidence — in progress
+## Observed evidence
 
-Initial compile at `3eec0e2` found a Clip name collision, missing Drift extension import and style diagnostics. Pinned font/license retrieval passed. A guarded maintenance runner on this topic branch applies only explicitly allowed app/test edits and Dart fixes, checks the expected head, and can only fast-forward this branch. It cannot modify workflows, main, implementation or the analysis engine. Remove it after integration and rerun required checks on the final head.
+On 2026-11-07, the isolated integration run 42402300585 passed `flutter analyze` and the focused rendered-UI/presentation/thumbnail regression step on repaired source `dfec9530cfb3bf6c7803688998776dc682529936`. The complete app suite was still running when this checkpoint was written. Exact counts and later checks must come from their completed runs, not this note.
 
-Tests are added, not yet certified here as passing. Record exact observed results before closing acceptance. Rendered candidates using player doubles are not native or physical-device evidence. Preserve failed runs; never fabricate throughput or coaching accuracy.
+Earlier compile failures are retained in GitHub Actions. Pinned font/license provisioning passed. The temporary, narrowly scoped repair workflow committed only allowed app/test files and is now removed, along with its one-time script. Ongoing CI is read-only. New exact-profile/save-recovery tests and the final source need their own checks.
 
-## Priorities for review
+Rendered candidates use actual Flutter widgets and deterministic test players, not native footage. They are not approved golden baselines. Native decoder/device behavior, physical-device acceptance, production signing, 60 fps performance and coaching accuracy are separate gates. No claim of those outcomes is made here.
 
-Save/close ordering; canceled or failed imports; event change followed by reopening; missing profile versions; corrupt/future settings; large text and short windows; source change; native decoder seeking and screenshots; all profile/export/workbench operations. Keep the draft unmerged while checks fail or device evidence is outstanding.
+## Review priorities
+
+Save/close ordering; canceled or failed imports; event change followed by reopening; missing profile versions; corrupt/future settings; large text and short windows; source change; native decoder seeking/screenshots; profile/export/workbench parity. Keep the draft unmerged while required checks fail.

@@ -31,10 +31,11 @@ jobs:
                   data = path.read_bytes()
                   archive.writestr(name, data)
                   files.append({'path': name, 'sha256': hashlib.sha256(data).hexdigest()})
-              manifest = {'format': 'strathvision-ui-source/1',
+              archive.writestr('UI_SOURCE_MANIFEST.json', json.dumps({
+                  'format': 'strathvision-ui-source/1',
                   'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip(),
-                  'files': files, 'scope': 'Text source snapshot. Not compiled or visually accepted.'}
-              archive.writestr('UI_SOURCE_MANIFEST.json', json.dumps(manifest, indent=2) + '\n')
+                  'files': files,
+                  'scope': 'Text source snapshot. Not a compiled app or device acceptance.'}, indent=2) + '\n')
       - uses: actions/upload-artifact@v4
         with:
           name: ui-review-source
@@ -48,18 +49,31 @@ jobs:
       - run: python scripts/fetch_ui_fonts.py
       - uses: subosito/flutter-action@v2
         with: {channel: stable, flutter-version: '3.47.9', cache: true}
-      - name: Flutter compile and focused regressions
+      - name: Analyze and render regression candidates
         working-directory: apps/strathvision
         run: |
           flutter pub get
           flutter analyze
-          flutter test test/review_presentation_test.dart test/thumbnail_service_test.dart --reporter expanded
+          flutter test test/ui_redesign_test.dart test/review_presentation_test.dart test/thumbnail_service_test.dart test/ui_restore_test.dart --reporter expanded --update-goldens --dart-define=CAPTURE_UI=true
+      - name: Record screenshot scope and source
+        if: always()
+        shell: python
+        run: |
+          import json, pathlib, subprocess
+          p = pathlib.Path('apps/strathvision/test/goldens/candidates')
+          p.mkdir(parents=True, exist_ok=True)
+          (p / 'EVIDENCE.json').write_text(json.dumps({
+              'source': subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip(),
+              'scope': 'Actual Flutter rendering with deterministic test players; not native video/device acceptance.',
+              'golden_status': 'Candidates for visual review, not automatically approved baselines.',
+              'private_footage': False,
+              'images': sorted(x.name for x in p.glob('*.png'))}, indent=2) + '\n')
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: flutter-ui-screenshot-candidates
           path: |
-            apps/strathvision/test/goldens/candidates/*.png
+            apps/strathvision/test/goldens/candidates/
             apps/strathvision/test/failures/**
-          if-no-files-found: ignore
+          if-no-files-found: error
           retention-days: 14
