@@ -1,0 +1,46 @@
+name: ui-review-evidence
+
+on:
+  pull_request:
+    branches: [main, implementation]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture reviewed source and provenance
+        shell: python
+        run: |
+          import hashlib, json, pathlib, subprocess, zipfile
+          root = pathlib.Path('.')
+          paths = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          allowed = {'.dart', '.md', '.yaml', '.yml', '.json', '.py', '.sh', '.lock', '.txt'}
+          files = []
+          with zipfile.ZipFile('ui-review-source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in sorted(paths):
+                  path = root / name
+                  if not name or not path.is_file() or path.suffix not in allowed:
+                      continue
+                  if name.startswith(('docs/experiments/', 'research-data/')):
+                      continue
+                  data = path.read_bytes()
+                  archive.writestr(name, data)
+                  files.append({'path': name, 'sha256': hashlib.sha256(data).hexdigest()})
+              manifest = {
+                  'format': 'strathvision-ui-source/1',
+                  'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip(),
+                  'files': files,
+                  'scope': 'Text source snapshot only. Not a compiled app or visual acceptance result.'
+              }
+              archive.writestr('UI_SOURCE_MANIFEST.json', json.dumps(manifest, indent=2) + '\n')
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ui-review-source
+          path: ui-review-source.zip
+          retention-days: 14
