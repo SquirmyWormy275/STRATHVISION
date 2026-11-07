@@ -30,11 +30,33 @@ jobs:
           python scripts/ui_integration_repair.py
           python - <<'PY'
           from pathlib import Path
-          p = Path('apps/strathvision/lib/screens/analysis_panel.dart')
-          s = p.read_text()
-          old = '          else\n            Row(\n'
-          assert s.count(old) == 1, 'Unexpected profile selector structure'
-          p.write_text(s.replace(old, '          Row(\n', 1))
+          root = Path('apps/strathvision')
+          def change(name, old, new):
+              p = root / name
+              s = p.read_text()
+              assert s.count(old) == 1, 'Unexpected structure: ' + name + ': ' + repr(old[:80])
+              p.write_text(s.replace(old, new, 1))
+          change('lib/screens/analysis_panel.dart',
+              '            )\n          else\n            Row(\n',
+              '            ),\n          Row(\n')
+          change('test/comparison_test.dart', "find.text('Compare with')", "find.text('Profile')")
+          change('lib/screens/workspace_route.dart',
+              'final positions = <String, int>{}, signatures = <String, String>{};',
+              'final positions = Map<String, int>.of(_saved.positions), signatures = Map<String, String>.of(_saved.signatures);')
+          change('lib/screens/workspace_route.dart',
+              'if (signature != loaded) continue;',
+              'if (signature != loaded) { positions.remove(clip.clipId); signatures.remove(clip.clipId); continue; }')
+          change('test/widget_test.dart',
+              "  testWidgets('importing the dummy profile lists its metadata',",
+              "  testWidgets('canceling Add clip stores no empty review', (tester) async {\n"
+              "    await pumpApp(tester);\n"
+              "    await tester.tap(find.byKey(const Key('open-workspace')));\n"
+              "    await tester.pumpAndSettle();\n"
+              "    expect(find.text('Your footage'), findsOneWidget);\n"
+              "    expect(await tester.runAsync(() => db.select(db.projectRows).get()), isEmpty);\n"
+              "    await unmountApp(tester);\n"
+              "  });\n\n"
+              "  testWidgets('importing the dummy profile lists its metadata',")
           PY
       - name: Resolve Flutter packages
         working-directory: apps/strathvision
