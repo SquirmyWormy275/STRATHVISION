@@ -1,5 +1,4 @@
-# Temporary maintenance runner for the user-authorized isolated redesign branch.
-# It cannot modify workflows, the engine, main, implementation, or another PR.
+# Temporary, strictly scoped maintenance for the user-authorized UI branch.
 name: ui-integration-repair
 on:
   pull_request:
@@ -15,31 +14,35 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
+        with: {ref: '${{ github.event.pull_request.head.sha }}'}
       - name: Confirm isolated branch lease
-        run: |
-          test "$(git ls-remote origin refs/heads/codex/footage-first-ui | cut -f1)" = "$EXPECTED_HEAD"
+        run: test "$(git ls-remote origin refs/heads/codex/footage-first-ui | cut -f1)" = "$EXPECTED_HEAD"
       - run: python scripts/fetch_ui_fonts.py
       - uses: subosito/flutter-action@v2
         with: {channel: stable, flutter-version: '3.47.9', cache: true}
       - name: Apply guarded integration edits
-        run: python scripts/ui_integration_repair.py
-      - name: Dart-supported style fixes
-        working-directory: apps/strathvision
         run: |
-          flutter pub get
-          dart fix --apply
-      - name: Verify scope and format changed Dart files
+          python scripts/ui_integration_repair.py
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('apps/strathvision/lib/screens/analysis_panel.dart')
+          s = p.read_text()
+          old = '          else\n            Row(\n'
+          assert s.count(old) == 1, 'Unexpected profile selector structure'
+          p.write_text(s.replace(old, '          Row(\n', 1))
+          PY
+      - name: Resolve Flutter packages
+        working-directory: apps/strathvision
+        run: flutter pub get
+      - name: Scope-checked Dart formatting and fixes
         shell: python
         run: |
-          import pathlib, subprocess
-          changed = subprocess.check_output(['git', 'diff', '--name-only', '-z']).decode().split('\0')
+          import subprocess
           allowed = {
             'lib/main.dart', 'lib/design/sv_theme.dart', 'lib/media/thumbnail_service.dart',
             'lib/workspace/review_presentation.dart', 'lib/workspace/stage_player.dart',
@@ -53,14 +56,19 @@ jobs:
             'integration_test/app_e2e_test.dart'
           }
           paths = ['apps/strathvision/' + p for p in sorted(allowed)]
+          for _ in range(2):
+              subprocess.run(['dart', 'format', *paths], check=True)
+              subprocess.run(['dart', 'fix', '--apply'], cwd='apps/strathvision', check=True)
+          subprocess.run(['dart', 'format', *paths], check=True)
+          changed = subprocess.check_output(['git', 'diff', '--name-only', '-z']).decode().split('\0')
           unexpected = [p for p in changed if p and p not in paths]
           if unexpected:
               raise SystemExit('Refusing unrelated changes: ' + repr(unexpected))
-          subprocess.run(['dart', 'format', *paths], check=True)
-      - name: Compile before publishing repairs
+      - name: Analyze before publishing repairs
+        id: compile
         working-directory: apps/strathvision
         run: flutter analyze
-      - name: Commit only the scoped repair, without force
+      - name: Commit only scoped repairs, without force
         run: |
           test "$(git ls-remote origin refs/heads/codex/footage-first-ui | cut -f1)" = "$EXPECTED_HEAD"
           git diff --check
@@ -71,15 +79,40 @@ jobs:
             git commit -m 'fix(ui): reconcile explicit review context and baseline workflows; format Flutter sources'
             git push origin HEAD:refs/heads/codex/footage-first-ui
           fi
-      - name: Focused rendered UI evidence
+      - name: Rendered UI and focused regressions
         working-directory: apps/strathvision
         run: flutter test test/ui_redesign_test.dart test/review_presentation_test.dart test/thumbnail_service_test.dart --reporter expanded --update-goldens --dart-define=CAPTURE_UI=true
+      - name: Complete app regression suite
+        if: always() && steps.compile.outcome == 'success'
+        working-directory: apps/strathvision
+        run: flutter test --reporter expanded
+      - name: Capture repair source provenance
+        if: always()
+        shell: python
+        run: |
+          import hashlib, json, pathlib, subprocess, zipfile
+          files = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          records = []
+          with zipfile.ZipFile('ui-repair-source.zip', 'w', zipfile.ZIP_DEFLATED) as z:
+              for name in files:
+                  p = pathlib.Path(name)
+                  if not name or not p.is_file() or p.suffix not in {'.dart','.md','.py','.yml','.yaml','.lock','.txt'}:
+                      continue
+                  if name.startswith(('docs/experiments/', 'research-data/')):
+                      continue
+                  data = p.read_bytes(); z.writestr(name, data)
+                  records.append({'path': name, 'sha256': hashlib.sha256(data).hexdigest()})
+              z.writestr('UI_SOURCE_MANIFEST.json', json.dumps({
+                  'commit': subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),
+                  'worktree_changed': bool(subprocess.check_output(['git','diff','--name-only']).strip()),
+                  'files': records}, indent=2))
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: flutter-ui-repair-evidence
           path: |
+            ui-repair-source.zip
             apps/strathvision/test/goldens/candidates/*.png
             apps/strathvision/test/failures/**
-          if-no-files-found: ignore
+          if-no-files-found: error
           retention-days: 14
