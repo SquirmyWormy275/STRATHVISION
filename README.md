@@ -1,18 +1,19 @@
 # STRATHVISION
 
-**Review athletic technique locally. Compare clips, inspect measurements, and test whether bounded model updates help.**
+**Review athletic technique on your own machine. Compare clips side-by-side, slow them down, mark what matters, and optionally measure movement against a private reference profile.**
 
-STRATHVISION is a Flutter prototype for athletes and coaches working with technique video. Its dual-video workspace works without AI: align two clips, play them together in slow motion, step through frames, and save feedback. Optional local analysis compares movement with a private reference profile and shows the measurements behind the score.
+STRATHVISION is a local-first Flutter app for athletes and coaches. The core dual-video workspace needs no account, no cloud, and no AI: align two clips, play them together in slow motion, step through frames, mirror one side, and save red/green marks with feedback. Optional on-device analysis uses pose estimation to compare movement against a private profile you control and shows the measurements behind any score.
 
-The engineering contribution is a complete path from video review to a versioned, inspectable analysis package: a cross-platform client, a shared Dart engine, declarative sport packs, and a desktop research workbench. CARNE ASADA investigates whether small, constrained model edits can improve agreement with genuine coaching feedback. **That learning benefit has not been established.**
+It is a testable prototype, not a validated coaching product. Desktop can fit and edit profiles; phones review, annotate, and run installed packages. Analysis results are inspectable and limited; they are not a technique grade.
 
-## Start here
+## What you can do today
 
-1. [Try the review workflow](docs/GETTING_STARTED.md): two bundled test clips, sync, slow motion, marks, and reopening a project.
-2. [Set up and run the app](apps/strathvision/README.md), or [download a test build](docs/DISTRIBUTION.md).
-3. [Understand the architecture](docs/ARCHITECTURE.md), then follow the [learning guide](docs/wiki/Home.md).
-4. [Inventory local footage](docs/DATASETS.md), deduplicate originals and review session provenance before choosing a model.
-5. [Inspect results and failures](docs/RESEARCH_STATUS.md), [validation](docs/VALIDATION.md), and the [prioritized roadmap](docs/ROADMAP.md).
+- Sync and review two technique clips together (slow motion, frame stepping, mirror, saved projects)
+- Add red/green marks and feedback that stay tied to the actual video content
+- Run optional local analysis (person selection, phases, metrics, profile comparison)
+- Keep everything private: core review and inference require no account or hosted model
+
+[Try the review workflow](docs/GETTING_STARTED.md) with the bundled test clips, or [set up and run the app](apps/strathvision/README.md) / [download a test build](docs/DISTRIBUTION.md).
 
 ## What works, and what remains experimental
 
@@ -25,6 +26,8 @@ The engineering contribution is a complete path from video review to a versioned
 | Research workbench | Specialist patches, optional adapter compilation, bounded CARNE ASADA updates | [Research records](docs/CARNE_RUN_REPORT.md); synthetic tests establish software behavior, not coaching improvement |
 
 The latest full-duration study processed **47 recordings in 195 windows** with no failed windows. Contact-timing diagnostics still matched only **2 of 15** annotated contacts. The committed population-review snapshot contains no coach judgments and establishes no learning improvement. Axe detectors failed validation; the barbell pilot remains research-only. Read the [study reports](docs/RESEARCH_STATUS.md) before using analysis as evidence about technique.
+
+CARNE ASADA investigates whether small, constrained model edits can improve agreement with genuine coaching feedback. **That learning benefit has not been established.**
 
 ## Design decisions worth inspecting
 
@@ -46,4 +49,4 @@ The latest full-duration study processed **47 recordings in 195 windows** with n
 | [docs/experiments](docs/experiments) | Reproducible research reports and published aggregate results |
 | [.github/workflows/builds.yml](.github/workflows/builds.yml) | PR checks, test coverage reports, research tests, native Linux smoke and five platform builds |
 
-This is a testable prototype, not a validated coaching product. Desktop fits and edits profiles; phones review, annotate and run installed packages. See [contribution guidance](CONTRIBUTING.md) and [model/media attribution](apps/strathvision/integration_test/assets/ATTRIBUTION.md).
+See [contribution guidance](CONTRIBUTING.md) and [model/media attribution](apps/strathvision/integration_test/assets/ATTRIBUTION.md). For architecture and deeper reading: [ARCHITECTURE.md](docs/ARCHITECTURE.md), [learning guide](docs/wiki/Home.md), [validation](docs/VALIDATION.md), and the [roadmap](docs/ROADMAP.md).
