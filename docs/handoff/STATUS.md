@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-11T17:30:55Z
+heartbeat: 2026-11-11T17:36:51Z
 branch: implementation
 phase: Release packaging
 task: Verified release candidate
-next: Physical-device acceptance, production signing and 60 fps measurement per docs/UI_REDESIGN_ACCEPTANCE.md; issues #2-#5 remain open.
+next: Merge PR into implementation once CI is green; close issue #5.
 owned_paths: 
 active_processes: none
 <!-- STATE:END -->
@@ -82,6 +82,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-11T17:36:51Z **claude** — Issue #5: CLI adapter compiler + live compile evidence committed; 176 app tests pass → next: Merge PR into implementation once CI is green; close issue #5.
 - 2026-11-11T17:30:55Z **claude** — Claimed: Issue #5: Claude Code CLI (subscription) adapter compiler as a no-API-key path; live compile validation
 - 2026-11-11T15:21:59Z **claude** — Released: PR #9 completed: Linux decoder CI fixed, 7 review fixes with regression tests, all 11 CI jobs green, native screenshots inspected; merged into implementation → next: Physical-device acceptance, production signing and 60 fps measurement per docs/UI_REDESIGN_ACCEPTANCE.md; issues #2-#5 remain open.
 - 2026-11-11T07:00:34Z **claude** — Tolerate nonfatal mpv decoder errors during open (2s grace for a playable duration); analyzer clean, 171 app tests pass → next: Watch PR #9 builds workflow; linux 'Real Linux decoder' should pass. If green, PR stays draft pending native screenshots/device acceptance per PR body.
