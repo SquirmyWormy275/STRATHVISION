@@ -13,6 +13,7 @@ import '../vision/pose_service.dart';
 import '../vision/athlete.dart';
 import '../workspace/project.dart' show Mark;
 import 'carne_run.dart';
+import 'transcriber.dart';
 import 'carne_athletes.dart';
 
 export 'carne_run.dart' show ExperimentWriter;
@@ -59,12 +60,40 @@ typedef ResearchWriter = Future<String> Function(
 
 /// One line in the status feed.
 class FeedLine {
-  const FeedLine(this.text, {this.useAnywayClip, this.athleteClip});
+  const FeedLine(
+    this.text, {
+    this.useAnywayClip,
+    this.athleteClip,
+    this.transcriptId,
+  });
   final String text;
 
   /// Set on "below the usable threshold" lines: the clip "use anyway" adds.
   final String? useAnywayClip;
   final String? athleteClip;
+
+  /// Set on "transcript ready" lines: the transcript awaiting review.
+  final String? transcriptId;
+}
+
+/// A local transcript held for explicit review. Nothing from it is used or
+/// recorded until the reviewer accepts it.
+class PendingTranscript {
+  PendingTranscript({
+    required this.id,
+    required this.path,
+    required this.sha256,
+    required this.transcript,
+    required this.input,
+    this.clipBefore,
+  });
+  final String id, path, sha256;
+  final Transcript transcript;
+  final Map<String, Object?> input;
+
+  /// The clip current when the note was dropped ("ignore this clip" target).
+  final String? clipBefore;
+  String get name => p.basename(path);
 }
 
 const _video = {'.mp4', '.mov', '.m4v', '.avi', '.mkv', '.webm'};
@@ -86,6 +115,7 @@ class CarneController extends ChangeNotifier {
     this.analysisMetadata = const {'provider': 'unspecified'},
     this.phaseLabel,
     this.metricLabel,
+    this.transcriber,
     DateTime Function()? clock,
   }) : athletes = athletes ?? CarneAthleteState(),
        _clock = clock ?? DateTime.now,
@@ -117,6 +147,13 @@ class CarneController extends ChangeNotifier {
   final ClipFingerprinter _fingerprint;
   final Map<String, Object?> analysisMetadata;
   final CarneAthleteState athletes;
+
+  /// Optional local transcriber; null keeps voice notes awaiting transcription.
+  final Transcriber? transcriber;
+  final Map<String, PendingTranscript> _transcripts = {};
+  TranscriptionCancel? _transcribing;
+  PendingTranscript? pendingTranscript(String id) => _transcripts[id];
+  bool get transcribing => _transcribing != null;
   final Set<String> _pendingAthletes = {};
   bool needsAthleteChoice(String id) => _pendingAthletes.contains(id);
   static const _uuid = Uuid();
@@ -357,6 +394,9 @@ class CarneController extends ChangeNotifier {
       input['kind'] = 'text';
       await _note(await _readText(path));
       input['status'] = 'note_received';
+    } else if (_audio.contains(ext) && transcriber != null) {
+      input['kind'] = 'audio';
+      await _transcribe(transcriber!, path, input);
     } else if (_audio.contains(ext)) {
       input['kind'] = 'audio';
       input['status'] = 'awaiting_transcription';
@@ -448,7 +488,8 @@ class CarneController extends ChangeNotifier {
   }
 
   /// Text notes: `priority: ATTRIBUTE` and `ignore this clip`.
-  Future<void> _note(String text) async {
+  Future<void> _note(String text, {String? clip}) async {
+    final target = clip ?? _lastClip;
     for (final raw in const LineSplitter().convert(text)) {
       final line = raw.trim().toLowerCase();
       if (line.startsWith('priority:')) {
@@ -458,12 +499,125 @@ class CarneController extends ChangeNotifier {
             .firstOrNull;
         // Apply all notes (including ignores) before the batch runs the loop.
         if (attr != null) _setPriority(attr, update: false);
-      } else if (line == 'ignore this clip' && _lastClip != null) {
-        final source = _sources[_lastClip!]!;
+      } else if (line == 'ignore this clip' &&
+          target != null &&
+          _sources[target] != null) {
+        final source = _sources[target]!;
         session.ignore(source.name, clipId: source.clipId);
         feed.add(FeedLine('Ignoring ${source.name}.'));
       }
     }
+  }
+
+  Future<void> _transcribe(
+    Transcriber t,
+    String path,
+    Map<String, Object?> input,
+  ) async {
+    final name = p.basename(path);
+    final hash = await _fingerprint(path);
+    input['sha256'] = hash;
+    input['transcription_engine'] = t.id;
+    final cancel = _transcribing = TranscriptionCancel();
+    _activity = 'Transcribing $name on this computer…';
+    _notify();
+    try {
+      Transcript? transcript;
+      for (var attempt = 1; transcript == null; attempt++) {
+        try {
+          transcript = await t.transcribe(path, cancel: cancel);
+        } on TranscriptionError catch (e) {
+          if (!e.retryable || attempt >= 2) rethrow;
+        }
+      }
+      if (transcript.text.isEmpty) {
+        input['status'] = 'no_speech';
+        feed.add(FeedLine('No speech found in $name. The audio was kept.'));
+        return;
+      }
+      final id = _uuid.v4();
+      _transcripts[id] = PendingTranscript(
+        id: id,
+        path: path,
+        sha256: hash,
+        transcript: transcript,
+        input: input,
+        clipBefore: _lastClip,
+      );
+      input['status'] = 'transcript_ready';
+      input['transcript_id'] = id;
+      feed.add(
+        FeedLine('Transcript of $name is ready to review.', transcriptId: id),
+      );
+    } on TranscriptionError catch (e) {
+      input['status'] = e.failure == TranscriptionFailure.cancelled
+          ? 'transcription_cancelled'
+          : 'transcription_failed';
+      input['transcription_error'] = {
+        'failure': e.failure.name,
+        'message': e.message,
+      };
+      // DECISIONS.md: drop the language binding after retry; keep audio.
+      feed.add(
+        FeedLine(
+          '${e.message} The voice note was kept; no spoken labels were used.',
+        ),
+      );
+    } finally {
+      _transcribing = null;
+    }
+  }
+
+  /// Stops the transcription in progress, if any. The audio is kept.
+  void cancelTranscription() => _transcribing?.cancel();
+
+  /// Binds reviewed [text] to its source, event, time and [author], then
+  /// applies it like a text note. Returns false when nothing was accepted.
+  Future<bool> acceptTranscript(
+    String id, {
+    required String text,
+    required String author,
+  }) async {
+    final pending = _transcripts[id];
+    final reviewed = text.trim();
+    if (pending == null ||
+        busy ||
+        reviewed.isEmpty ||
+        !const {'coach', 'athlete'}.contains(author)) {
+      return false;
+    }
+    _transcripts.remove(id);
+    pending.input['status'] = 'transcript_accepted';
+    pending.input['transcript'] = {
+      'text': reviewed,
+      'edited': reviewed != pending.transcript.text,
+      'author': author,
+      'source_sha256': pending.sha256,
+      'pack_id': pack.packId,
+      'event_id': pack.eventId,
+      'segments': [for (final s in pending.transcript.segments) s.toJson()],
+      'applies_to_clip': pending.clipBefore,
+      'accepted_at': _clock().toUtc().toIso8601String(),
+      'engine': pending.transcript.engine,
+    };
+    feed.add(FeedLine('Accepted the spoken note from ${pending.name}.'));
+    await _note(reviewed, clip: pending.clipBefore);
+    _changed();
+    _tryUpdate();
+    _notify();
+    return true;
+  }
+
+  /// Drops a transcript without using it. The audio file is untouched.
+  void discardTranscript(String id) {
+    final pending = _transcripts.remove(id);
+    if (pending == null) return;
+    pending.input['status'] = 'transcript_discarded';
+    feed.add(
+      FeedLine('Discarded the transcript of ${pending.name}. The audio was kept.'),
+    );
+    _changed();
+    _notify();
   }
 
   /// Reads a text note (injectable for tests).

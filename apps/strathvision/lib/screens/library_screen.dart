@@ -23,6 +23,7 @@ import '../profiles/profile_store.dart';
 import '../workspace/project.dart';
 import '../profiles/clip_probe.dart';
 import '../workbench/claude_compiler.dart';
+import '../workbench/transcriber.dart';
 import '../workbench/workbench_controller.dart';
 import '../workbench/carne_athletes.dart';
 import 'profile_builder_screen.dart';
@@ -702,7 +703,13 @@ typedef CarneFactory = Future<CarneController> Function(
 /// every project on the same clip file, versions stored under app support.
 CarneFactory defaultCarne(AppDatabase db) => (row, pack, wb) async {
   final athletes = CarneAthleteState();
+  final support = await getApplicationSupportDirectory();
+  // Optional and local: voice notes stay "awaiting transcription" without it.
+  final transcriber = await WhisperCppTranscriber.detect(
+    modelCandidates: [p.join(support.path, 'transcription', whisperModelFile)],
+  );
   return CarneController(
+    transcriber: transcriber,
     pack: pack.analysisPack,
     attributes: [...pack.topAttributes, ...pack.moreAttributes],
     bundle: wb.bundle,

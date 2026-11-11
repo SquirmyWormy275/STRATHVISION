@@ -34,6 +34,6 @@ SQLite/Drift stores projects, profile metadata, settings and comparisons. The ap
 
 A profile passes count, confidence and self-consistency checks before being used. Self-consistency is not external accuracy. Comparison scores retain their historical meaning while `confidence-v1` orders deltas by contribution times minimum pose/phase/metric confidence and demotes values below 0.6. This is a heuristic, not calibrated uncertainty.
 
-Specialist patches and compiled adapters run locally. Optional adapter creation uses a configured provider on desktop. CARNE ASADA edits are bounded, versioned and reversible; real coaching improvement still needs genuine labels and an independent session holdout. Local voice transcription remains unimplemented.
+Specialist patches and compiled adapters run locally. Optional adapter creation uses a configured provider on desktop. CARNE ASADA edits are bounded, versioned and reversible; real coaching improvement still needs genuine labels and an independent session holdout. Optional local voice transcription (whisper.cpp, [TRANSCRIPTION.md](TRANSCRIPTION.md)) produces transcripts that are used only after explicit review.
 
 Exact contracts: [INTERFACES](INTERFACES.md). Rationale and historical decisions: [DECISIONS](DECISIONS.md). Acceptance status: [VALIDATION](VALIDATION.md) and [ROADMAP](ROADMAP.md).

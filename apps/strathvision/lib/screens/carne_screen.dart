@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../workbench/carne_controller.dart';
 import '../vision/pose_service.dart' show PeopleLoader;
 import 'athlete_picker.dart';
+import 'transcript_review.dart';
 
 typedef AnyFilesPicker = Future<List<String>> Function();
 
@@ -186,10 +187,22 @@ class _CarneScreenState extends State<CarneScreen> {
                 children: [
                   Text('Status', style: theme.textTheme.titleSmall),
                   const SizedBox(height: 6),
-                  Text(
-                    c.statusText,
-                    key: const Key('carne-run-status'),
-                    style: theme.textTheme.titleMedium,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          c.statusText,
+                          key: const Key('carne-run-status'),
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ),
+                      if (c.transcribing)
+                        TextButton(
+                          key: const Key('cancel-transcription'),
+                          onPressed: c.cancelTranscription,
+                          child: const Text('Cancel'),
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 6),
                   Expanded(
@@ -205,6 +218,38 @@ class _CarneScreenState extends State<CarneScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(child: Text(line.text)),
+                                if (line.transcriptId != null &&
+                                    c.pendingTranscript(line.transcriptId!) !=
+                                        null)
+                                  TextButton(
+                                    key: Key(
+                                      'review-transcript-${line.transcriptId}',
+                                    ),
+                                    onPressed: c.busy
+                                        ? null
+                                        : () async {
+                                            final id = line.transcriptId!;
+                                            final pending = c
+                                                .pendingTranscript(id);
+                                            if (pending == null) return;
+                                            final decision =
+                                                await showTranscriptReview(
+                                                  context,
+                                                  pending,
+                                                );
+                                            if (decision is AcceptTranscript) {
+                                              await c.acceptTranscript(
+                                                id,
+                                                text: decision.text,
+                                                author: decision.author,
+                                              );
+                                            } else if (decision
+                                                is DiscardTranscript) {
+                                              c.discardTranscript(id);
+                                            }
+                                          },
+                                    child: const Text('Review'),
+                                  ),
                                 if (line.useAnywayClip != null)
                                   TextButton(
                                     key: Key(

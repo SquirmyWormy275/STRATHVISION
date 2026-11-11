@@ -14,6 +14,7 @@ import 'package:strathvision/profiles/profile_export.dart';
 import 'package:strathvision/profiles/profile_package.dart';
 import 'package:strathvision/screens/carne_screen.dart';
 import 'package:strathvision/workbench/carne_controller.dart';
+import 'package:strathvision/workbench/transcriber.dart';
 import 'package:strathvision/workspace/project.dart';
 
 /// Phase 8 acceptance in the app.
@@ -40,8 +41,9 @@ void main() {
 
   ({Profile profile, Map<String, String> research})? written;
   final notes = <String, String>{};
-  CarneController controller({bool marked = true, double conf = 0.85}) {
+  CarneController controller({bool marked = true, double conf = 0.85, Transcriber? transcriber}) {
     final c = CarneController(
+      transcriber: transcriber,
       pack: info.analysisPack,
       attributes: [...info.topAttributes, ...info.moreAttributes],
       bundle: ProfileBundle(profile: coach, patchFiles: const {}),
@@ -211,4 +213,143 @@ void main() {
     // The placeholder event is untouched by research files too.
     expect(placeholderPack.analysisPack.adapters, isEmpty);
   });
+
+  group('voice notes with a local transcriber', () {
+    Transcript said(String text) => Transcript(
+          segments: [TranscriptSegment(0, 2400, text)],
+          engine: 'whisper.cpp:test',
+        );
+
+    test('transcript waits for review; accepting binds it, then applies it',
+        () async {
+      final c = controller(transcriber: _FakeTranscriber([said('priority: hinge')]));
+      addTearDown(c.dispose);
+      await c.drop(['/feed/coach.m4a']);
+      final line = c.feed.lastWhere((l) => l.transcriptId != null);
+      expect(line.text, 'Transcript of coach.m4a is ready to review.');
+      final id = line.transcriptId!;
+      expect(c.pendingTranscript(id)!.transcript.text, 'priority: hinge');
+      // Nothing is used or recorded before review.
+      expect(c.session.priority, isNot('Hinge'));
+      final run = c.runReport();
+      final input = (run['inputs'] as List).cast<Map>().single;
+      expect(input['status'], 'transcript_ready');
+      expect(input.containsKey('transcript'), isFalse);
+
+      expect(await c.acceptTranscript(id, text: 'priority: hinge', author: 'nobody'),
+          isFalse, reason: 'author must be coach or athlete');
+      expect(await c.acceptTranscript(id, text: '  ', author: 'coach'), isFalse);
+      expect(await c.acceptTranscript(id, text: 'Priority: Hinge', author: 'coach'),
+          isTrue);
+      expect(c.session.priority, 'Hinge');
+      final after = (c.runReport()['inputs'] as List).cast<Map>().single;
+      final bound = after['transcript'] as Map;
+      expect(bound['author'], 'coach');
+      expect(bound['edited'], isTrue);
+      expect(bound['source_sha256'], sha256.convert(utf8.encode('/feed/coach.m4a')).toString());
+      expect(bound['pack_id'], info.analysisPack.packId);
+      expect(bound['event_id'], info.analysisPack.eventId);
+      expect(bound['accepted_at'], now.toIso8601String());
+      expect((bound['segments'] as List).single, {'start_ms': 0, 'end_ms': 2400, 'text': 'priority: hinge'});
+      expect(after['status'], 'transcript_accepted');
+      expect(c.pendingTranscript(id), isNull);
+    });
+
+    test('discarding uses nothing and keeps the audio', () async {
+      final c = controller(transcriber: _FakeTranscriber([said('priority: hinge')]));
+      addTearDown(c.dispose);
+      await c.drop(['/feed/coach.m4a']);
+      final id = c.feed.lastWhere((l) => l.transcriptId != null).transcriptId!;
+      c.discardTranscript(id);
+      expect(c.session.priority, isNot('Hinge'));
+      expect(c.feed.map((l) => l.text), contains('Discarded the transcript of coach.m4a. The audio was kept.'));
+      final input = (c.runReport()['inputs'] as List).cast<Map>().single;
+      expect(input['status'], 'transcript_discarded');
+      expect(input.containsKey('transcript'), isFalse);
+    });
+
+    test('a failure is retried once, then the language binding is dropped',
+        () async {
+      const boom = TranscriptionError(TranscriptionFailure.failed, 'Transcription failed (exit 1).');
+      final flaky = _FakeTranscriber([boom, said('ignore this clip')]);
+      final c1 = controller(transcriber: flaky);
+      addTearDown(c1.dispose);
+      await c1.drop(['/feed/a.wav']);
+      expect(flaky.calls, 2);
+      expect(c1.feed.where((l) => l.transcriptId != null), hasLength(1));
+
+      final broken = _FakeTranscriber([boom, boom, boom]);
+      final c2 = controller(transcriber: broken);
+      addTearDown(c2.dispose);
+      await c2.drop(['/feed/b.wav']);
+      expect(broken.calls, 2);
+      expect(c2.feed.map((l) => l.text), contains(
+          'Transcription failed (exit 1). The voice note was kept; no spoken labels were used.'));
+      final input = (c2.runReport()['inputs'] as List).cast<Map>().single;
+      expect(input['status'], 'transcription_failed');
+      expect((input['transcription_error'] as Map)['failure'], 'failed');
+    });
+
+    test('missing model and unsupported audio are not retried', () async {
+      for (final failure in [
+        TranscriptionFailure.missingModel,
+        TranscriptionFailure.unsupportedAudio,
+        TranscriptionFailure.cancelled,
+      ]) {
+        final t = _FakeTranscriber([TranscriptionError(failure, 'No.')]);
+        final c = controller(transcriber: t);
+        addTearDown(c.dispose);
+        await c.drop(['/feed/c.ogg']);
+        expect(t.calls, 1, reason: failure.name);
+        final input = (c.runReport()['inputs'] as List).cast<Map>().single;
+        expect(input['status'], failure == TranscriptionFailure.cancelled
+            ? 'transcription_cancelled'
+            : 'transcription_failed');
+      }
+    });
+
+    test('silence is recorded as no speech', () async {
+      final c = controller(transcriber: _FakeTranscriber([
+        const Transcript(segments: [], engine: 'whisper.cpp:test'),
+      ]));
+      addTearDown(c.dispose);
+      await c.drop(['/feed/quiet.flac']);
+      expect(c.feed.map((l) => l.text),
+          contains('No speech found in quiet.flac. The audio was kept.'));
+    });
+
+    testWidgets('review dialog requires a speaker before accepting', (tester) async {
+      final c = controller(transcriber: _FakeTranscriber([said('priority: hinge')]));
+      await pump(tester, c, ['/feed/coach.m4a']);
+      await tap(tester, 'choose-files');
+      final id = c.feed.lastWhere((l) => l.transcriptId != null).transcriptId!;
+      await tap(tester, 'review-transcript-$id');
+      expect(find.text('priority: hinge'), findsOneWidget);
+      final accept = find.byKey(const Key('transcript-accept'));
+      expect(tester.widget<FilledButton>(accept).onPressed, isNull);
+      await tester.tap(find.text('Coach'));
+      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(accept).onPressed, isNotNull);
+      await tester.tap(accept);
+      await tester.pumpAndSettle();
+      expect(c.session.priority, 'Hinge');
+      expect(find.byKey(Key('review-transcript-$id')), findsNothing);
+      c.dispose();
+    });
+  });
+}
+
+/// Returns (or throws) each scripted result in turn.
+class _FakeTranscriber implements Transcriber {
+  _FakeTranscriber(this.results);
+  final List<Object> results;
+  int calls = 0;
+  @override
+  String get id => 'whisper.cpp:test';
+  @override
+  Future<Transcript> transcribe(String audioPath, {TranscriptionCancel? cancel}) async {
+    final r = results[calls++];
+    if (r is TranscriptionError) throw r;
+    return r as Transcript;
+  }
 }
