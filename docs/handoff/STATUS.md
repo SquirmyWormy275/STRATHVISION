@@ -2,8 +2,8 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-11T17:50:25Z
+owner: claude
+heartbeat: 2026-11-11T18:35:16Z
 branch: implementation
 phase: Release packaging
 task: Verified release candidate
@@ -82,6 +82,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-11T18:35:16Z **claude** — Claimed: Issue #4: local voice-note transcription (whisper.cpp subprocess) with explicit transcript review in CARNE ASADA
 - 2026-11-11T17:50:25Z **claude** — Released: Issue #5 done: CLI adapter compiler merged (PR #10), live compile evidence recorded, issue closed → next: Open: #2 physical-device acceptance, #3 coach validation, #4 local voice-note transcription; production signing.
 - 2026-11-11T17:36:51Z **claude** — Issue #5: CLI adapter compiler + live compile evidence committed; 176 app tests pass → next: Merge PR into implementation once CI is green; close issue #5.
 - 2026-11-11T17:30:55Z **claude** — Claimed: Issue #5: Claude Code CLI (subscription) adapter compiler as a no-API-key path; live compile validation
