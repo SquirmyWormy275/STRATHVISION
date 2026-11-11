@@ -1,0 +1,81 @@
+{
+  "compiler": "claude-code:claude-opus-5-5",
+  "pack": "timber/underhand",
+  "ran_at": "2026-11-11T17:35:32.310329Z",
+  "results": [
+    {
+      "spec": "usable_footage",
+      "examples": 5,
+      "attempts": 1,
+      "seconds": 14,
+      "adapter": {
+        "format": "paw/1",
+        "adapter": "usable_footage",
+        "pack_id": "timber",
+        "event_id": "underhand",
+        "spec_hash": "3ddc9beab3001fb6",
+        "compiled_by": "claude-code:claude-opus-5-5",
+        "compiled_at": "2026-11-11T17:35:08.567499Z",
+        "kind": "logistic",
+        "threshold": 0.5,
+        "outputs": {
+          "usable": {
+            "bias": -41.0,
+            "weights": {
+              "pose_confidence": 20.0,
+              "implement_confidence": 20.0,
+              "phase_confidence.downswing": 16.0,
+              "phase_confidence.entry": 16.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "spec": "priority_scorer",
+      "examples": 4,
+      "attempts": 1,
+      "seconds": 9,
+      "adapter": {
+        "format": "paw/1",
+        "adapter": "priority_scorer",
+        "pack_id": "timber",
+        "event_id": "underhand",
+        "spec_hash": "-7c380e1110625981",
+        "compiled_by": "claude-code:claude-opus-5-5",
+        "compiled_at": "2026-11-11T17:35:22.609568Z",
+        "kind": "logistic",
+        "threshold": null,
+        "outputs": {
+          "Slope": {
+            "bias": 0.0,
+            "weights": {
+              "abs_delta.entry_slope": 0.5,
+              "abs_delta.downswing_slope": 0.5
+            }
+          },
+          "Spacing": {
+            "bias": 0.0,
+            "weights": {
+              "abs_delta.lead_knee_at_entry": 0.5,
+              "abs_delta.trail_knee_at_entry": 0.5
+            }
+          },
+          "Hinge": {
+            "bias": 0.0,
+            "weights": {
+              "abs_delta.hinge_at_entry": 1.0
+            }
+          },
+          "Path": {
+            "bias": 0.0,
+            "weights": {
+              "abs_delta.trail_elbow_downswing": 0.5,
+              "abs_delta.shoulder_lift_backswing": 0.5
+            }
+          }
+        }
+      }
+    }
+  ]
+}

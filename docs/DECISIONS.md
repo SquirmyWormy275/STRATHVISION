@@ -147,7 +147,9 @@ See docs/CARNE_ASADA.md for full specification.
   - The compiler is Claude through the Messages API, using model `claude-opus-5-5`.
   - Dart has no official SDK, so the call is raw HTTP with `anthropic-version: 2026-10-21`.
   - The request uses structured output (`output_config.format` `json_schema`, with input names and outputs restricted by enum) and server-side fallbacks (`fallbacks: "default"`).
-  - The API key comes from `ANTHROPIC_API_KEY` on the workbench computer. Without it, Compile is disabled and the screen says why.
+  - The API key comes from `ANTHROPIC_API_KEY` on the workbench computer.
+  - **Amended 2026-11-11 (owner-authorized):** without an API key, the workbench uses a signed-in Claude Code CLI instead (`claude -p --output-format json --json-schema <same schema> --tools ""`, model `claude-opus-5-5`). It sends the same prompt and schema, is validated the same way, and the `.paw` records `compiled_by: claude-code:<model>`. This lets a Claude subscription compile without a separate API credential. The API key path takes precedence when set.
+  - With neither available, Compile is disabled and the screen says why.
   - Each compile is validated against the spec's examples, with up to 3 attempts. Each retry sends the mismatches back.
   - The resulting `.paw` is a logistic model run locally on the phone and desktop. Inference never calls an LLM.
 - **Adapters at inference.** When the selected profile's package has adapters:

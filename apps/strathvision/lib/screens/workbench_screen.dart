@@ -247,7 +247,7 @@ class _AdaptersCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               c.compiler == null
-                  ? 'Compiling needs ANTHROPIC_API_KEY set on this computer. '
+                  ? 'Compiling needs ANTHROPIC_API_KEY or a signed-in Claude Code (claude) on this computer. '
                         'Compiled adapters then run on the phone with no AI calls.'
                   : 'Compiled once here with ${c.compiler!.id}; they run on the '
                         'phone with no AI calls.',

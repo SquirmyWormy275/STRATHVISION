@@ -661,7 +661,8 @@ typedef WorkbenchFactory = Future<WorkbenchController> Function(
 );
 
 /// Production workbench: reads the package, probes and analyzes clips off
-/// the UI isolate, compiles with Claude when ANTHROPIC_API_KEY is set, and
+/// the UI isolate, compiles with Claude (ANTHROPIC_API_KEY, else a signed-in
+/// Claude Code CLI), and
 /// stores each saved version under app support.
 WorkbenchFactory defaultWorkbench(AppDatabase db) => (row, pack) async {
   final bundle = await readProfileBundle(row.sourcePath);
@@ -674,7 +675,9 @@ WorkbenchFactory defaultWorkbench(AppDatabase db) => (row, pack) async {
       load: reviewedTrainingTrack(db),
     ),
     fingerprint: sourceHash,
-    compiler: ClaudeAdapterCompiler.fromEnvironment(),
+    compiler:
+        ClaudeAdapterCompiler.fromEnvironment() ??
+        await ClaudeCodeAdapterCompiler.detect(),
     write: (Profile profile, patches, adapters) async {
       final support = await getApplicationSupportDirectory();
       final path = await storeNewProfileVersion(
