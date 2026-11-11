@@ -117,8 +117,14 @@ class MediaKitStagePlayer implements StagePlayer {
     final durationSub = _player.stream.duration.listen((duration) {
       if (duration > Duration.zero && !ready.isCompleted) ready.complete();
     });
+    // mpv reports recoverable decoder messages (for example "Could not open
+    // codec." from one track or a hardware decoder probe) on the same channel
+    // as fatal open failures. Fail only if no playable duration follows.
+    Timer? errorGrace;
     final errorSub = _player.stream.error.listen((message) {
-      if (!ready.isCompleted) ready.completeError(FormatException(message));
+      errorGrace ??= Timer(const Duration(seconds: 2), () {
+        if (!ready.isCompleted) ready.completeError(FormatException(message));
+      });
     });
     Future<void> start() async {
       await _player.open(Media(path), play: false);
@@ -142,6 +148,7 @@ class MediaKitStagePlayer implements StagePlayer {
       _changes.add(null);
       rethrow;
     } finally {
+      errorGrace?.cancel();
       await durationSub.cancel();
       await errorSub.cancel();
     }

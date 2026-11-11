@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-11T06:59:11Z
+heartbeat: 2026-11-11T07:00:34Z
 branch: implementation
 phase: Release packaging
 task: Verified release candidate
-next: Finish production signing using the user-provided Android/Apple setup, complete docs/VALIDATION.md physical-device acceptance, then publish the appropriate release. For research, review session provenance and freeze an independent protocol before model comparison.
+next: Watch PR #9 builds workflow; linux 'Real Linux decoder' should pass. If green, PR stays draft pending native screenshots/device acceptance per PR body.
 owned_paths: 
 active_processes: none
 <!-- STATE:END -->
@@ -82,6 +82,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-11T07:00:34Z **claude** — Tolerate nonfatal mpv decoder errors during open (2s grace for a playable duration); analyzer clean, 171 app tests pass → next: Watch PR #9 builds workflow; linux 'Real Linux decoder' should pass. If green, PR stays draft pending native screenshots/device acceptance per PR body.
 - 2026-11-11T06:59:11Z **claude** — Claimed: Fix PR #9 linux CI: tolerate nonfatal mpv decoder errors in MediaKitStagePlayer.open
 - 2026-11-06T16:12:11Z **codex** — Released: PR 7 merged; eight CI jobs green; draft v1.0.0-rc.1 uploaded with five verified packages, hashes and provenance; zero open dependency alerts → next: Finish production signing using the user-provided Android/Apple setup, complete docs/VALIDATION.md physical-device acceptance, then publish the appropriate release. For research, review session provenance and freeze an independent protocol before model comparison.
 - 2026-11-06T16:09:36Z **codex** — PR 7 merged to main as dae099b; all eight CI jobs passed for cd994ca, whose tree exactly matches main; release artifacts downloading → next: Verify all five archives, record hashes/source/run, create draft v1.0.0-rc.1, then release ownership. Production signing and physical-device acceptance remain open.
