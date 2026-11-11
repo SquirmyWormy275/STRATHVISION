@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -152,16 +153,118 @@ Use as few inputs as the rule needs. Return the weights.''';
         .where((b) => b['type'] == 'text')
         .map((b) => b['text'] as String)
         .join();
-    final json = jsonDecode(textBlock) as Map<String, Object?>;
-    return {
-      for (final o in (json['outputs'] as List).cast<Map<String, Object?>>())
-        o['name'] as String: AdapterOutput(
-          bias: (o['bias'] as num).toDouble(),
-          weights: {
-            for (final w in (o['weights'] as List).cast<Map<String, Object?>>())
-              w['input'] as String: (w['weight'] as num).toDouble(),
-          },
-        ),
-    };
+    return parseOutputs(jsonDecode(textBlock) as Map<String, Object?>);
+  }
+
+  /// Parses the structured `{"outputs": [...]}` answer shared by every
+  /// Claude transport.
+  static Map<String, AdapterOutput> parseOutputs(Map<String, Object?> json) => {
+        for (final o in (json['outputs'] as List).cast<Map<String, Object?>>())
+          o['name'] as String: AdapterOutput(
+            bias: (o['bias'] as num).toDouble(),
+            weights: {
+              for (final w in (o['weights'] as List).cast<Map<String, Object?>>())
+                w['input'] as String: (w['weight'] as num).toDouble(),
+            },
+          ),
+      };
+}
+
+/// Runs [executable] with [args], writing [stdin]; returns (exit code, stdout, stderr).
+typedef ProcessRunner = Future<(int, String, String)> Function(
+    String executable, List<String> args, String stdin, Duration timeout);
+
+Future<(int, String, String)> _runProcess(
+    String executable, List<String> args, String stdin, Duration timeout) async {
+  // Run outside any project so no repository instructions reach the compiler.
+  final process = await Process.start(executable, args,
+      workingDirectory: Directory.systemTemp.path);
+  process.stdin.write(stdin);
+  await process.stdin.close();
+  final out = process.stdout.transform(utf8.decoder).join();
+  final err = process.stderr.transform(utf8.decoder).join();
+  final code = await process.exitCode.timeout(timeout, onTimeout: () {
+    process.kill();
+    throw TimeoutException('Compiler timed out', timeout);
+  });
+  return (code, await out, await err);
+}
+
+/// Compiles adapter specs with Claude through a signed-in Claude Code CLI
+/// (`claude -p`), for workbench computers with a Claude subscription but no
+/// API key. Same prompt, schema and validation as [ClaudeAdapterCompiler];
+/// tools are disabled, so the call is a single structured answer.
+/// Inference never calls it: compiled adapters run locally.
+class ClaudeCodeAdapterCompiler implements AdapterCompiler {
+  ClaudeCodeAdapterCompiler({
+    this.executable = 'claude',
+    this.model = 'claude-opus-5-5',
+    this.timeout = const Duration(minutes: 5),
+    ProcessRunner? run,
+  }) : _run = run ?? _runProcess;
+
+  /// Returns a compiler when `claude` is installed; null otherwise. Sign-in is
+  /// checked on the first compile, which reports a clear error if missing.
+  static Future<ClaudeCodeAdapterCompiler?> detect({ProcessRunner? run}) async {
+    final runner = run ?? _runProcess;
+    try {
+      final (code, out, _) = await runner(
+          'claude', const ['--version'], '', const Duration(seconds: 10));
+      return code == 0 && out.contains('Claude Code')
+          ? ClaudeCodeAdapterCompiler(run: run)
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  final String executable;
+  final String model;
+  final Duration timeout;
+  final ProcessRunner _run;
+
+  @override
+  String get id => 'claude-code:$model';
+
+  @override
+  Future<Map<String, AdapterOutput>> propose(
+      AdapterSpec spec, AnalysisPack pack, List<String> inputNames,
+      {List<String> feedback = const []}) async {
+    final args = [
+      '-p',
+      '--output-format', 'json',
+      '--json-schema', jsonEncode(ClaudeAdapterCompiler.schema(spec, inputNames)),
+      '--model', model,
+      '--tools', '',
+      '--no-session-persistence',
+      '--strict-mcp-config',
+    ];
+    final (int, String, String) ran;
+    try {
+      ran = await _run(executable, args,
+          ClaudeAdapterCompiler.prompt(spec, pack, inputNames, feedback), timeout);
+    } on TimeoutException {
+      throw AnalysisError(ErrorCode.adapterCompileFailed,
+          'The compiler did not answer in time.');
+    } on ProcessException catch (e) {
+      throw AnalysisError(ErrorCode.adapterCompileFailed,
+          'Claude Code could not be started.', {'error': e.message});
+    }
+    final (code, out, err) = ran;
+    Map<String, Object?> res;
+    try {
+      res = jsonDecode(out) as Map<String, Object?>;
+    } on FormatException {
+      throw AnalysisError(ErrorCode.adapterCompileFailed,
+          'Claude Code returned an unreadable answer (exit $code).',
+          {'stderr': err});
+    }
+    final structured = res['structured_output'];
+    if (code != 0 || res['is_error'] == true || structured is! Map) {
+      throw AnalysisError(ErrorCode.adapterCompileFailed,
+          'Claude Code could not compile this spec. Check that it is signed in.',
+          {'subtype': res['subtype'], 'result': res['result']});
+    }
+    return ClaudeAdapterCompiler.parseOutputs(structured.cast<String, Object?>());
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -366,6 +367,89 @@ void main() {
                 .having((e) => e.errorCode, 'code', 'ADAPTER_COMPILE_FAILED')
                 .having((e) => e.message, 'message', contains(why))));
       }
+    });
+  });
+
+  group('Claude Code compiler (CLI, no API key)', () {
+    const usable = {
+      'outputs': [
+        {
+          'name': 'usable',
+          'bias': -20,
+          'weights': [
+            {'input': 'pose_confidence', 'weight': 10},
+            {'input': 'implement_confidence', 'weight': 10},
+            {'input': 'phase_confidence.downswing', 'weight': 6},
+            {'input': 'phase_confidence.entry', 'weight': 6},
+          ],
+        },
+      ],
+    };
+    late List<(String, List<String>, String)> calls;
+    ClaudeCodeAdapterCompiler cli(Object Function() reply, {int code = 0}) =>
+        ClaudeCodeAdapterCompiler(
+          run: (exe, args, stdin, timeout) async {
+            calls.add((exe, args, stdin));
+            return (code, jsonEncode(reply()), '');
+          },
+        );
+    setUp(() => calls = []);
+
+    test('passes schema and prompt to claude -p and validates the result',
+        () async {
+      final spec = pack.adapters.first;
+      final c = cli(() => {
+            'type': 'result',
+            'subtype': 'success',
+            'is_error': false,
+            'structured_output': usable,
+          });
+      final adapter =
+          await compileAdapter(spec, pack, c, now: DateTime.utc(2026));
+      expect(adapter.compiledBy, 'claude-code:claude-opus-5-5');
+      final (exe, args, stdin) = calls.single;
+      expect(exe, 'claude');
+      expect(args, containsAllInOrder(['-p', '--output-format', 'json']));
+      expect(args[args.indexOf('--tools') + 1], '');
+      expect(args, contains('--no-session-persistence'));
+      final schema =
+          jsonDecode(args[args.indexOf('--json-schema') + 1]) as Map;
+      expect(schema['required'], ['outputs']);
+      expect(stdin, contains(spec.spec));
+      expect(stdin, contains('"usable": false'));
+    });
+
+    test('signed-out, unreadable and timed-out runs fail cleanly', () async {
+      final failures = [
+        cli(() => {'is_error': true, 'subtype': 'error', 'result': 'Not logged in'},
+            code: 1),
+        ClaudeCodeAdapterCompiler(
+            run: (_, _, _, _) async => (1, 'not json', 'boom')),
+        ClaudeCodeAdapterCompiler(
+            run: (_, _, _, t) async => throw TimeoutException('slow', t)),
+        ClaudeCodeAdapterCompiler(
+            run: (_, _, _, _) async =>
+                throw const ProcessException('claude', [], 'missing')),
+      ];
+      for (final c in failures) {
+        await expectLater(
+            compileAdapter(pack.adapters.first, pack, c,
+                now: DateTime.utc(2026)),
+            throwsA(isA<AnalysisError>().having(
+                (e) => e.errorCode, 'code', 'ADAPTER_COMPILE_FAILED')));
+      }
+    });
+
+    test('detect finds an installed CLI and ignores a missing one', () async {
+      expect(
+          await ClaudeCodeAdapterCompiler.detect(
+              run: (_, _, _, _) async => (0, '2.1.322 (Claude Code)', '')),
+          isNotNull);
+      expect(
+          await ClaudeCodeAdapterCompiler.detect(
+              run: (_, _, _, _) async =>
+                  throw const ProcessException('claude', [], 'missing')),
+          isNull);
     });
   });
 }
