@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: claude
-heartbeat: 2026-11-11T18:35:16Z
+heartbeat: 2026-11-11T18:41:07Z
 branch: implementation
 phase: Release packaging
 task: Verified release candidate
-next: Open: #2 physical-device acceptance, #3 coach validation, #4 local voice-note transcription; production signing.
+next: Owner installs whisper-cpp (pacman extra) and places ggml-base.en.bin in app support transcription/; then run test/live_transcription_test.dart with espeak and a real recording, record in VALIDATION.md, PR to implementation.
 owned_paths: 
 active_processes: none
 <!-- STATE:END -->
@@ -82,6 +82,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-11T18:41:07Z **claude** — Issue #4 implemented + fixture-tested (191 app tests pass); real-audio verification pending engine install → next: Owner installs whisper-cpp (pacman extra) and places ggml-base.en.bin in app support transcription/; then run test/live_transcription_test.dart with espeak and a real recording, record in VALIDATION.md, PR to implementation.
 - 2026-11-11T18:35:16Z **claude** — Claimed: Issue #4: local voice-note transcription (whisper.cpp subprocess) with explicit transcript review in CARNE ASADA
 - 2026-11-11T17:50:25Z **claude** — Released: Issue #5 done: CLI adapter compiler merged (PR #10), live compile evidence recorded, issue closed → next: Open: #2 physical-device acceptance, #3 coach validation, #4 local voice-note transcription; production signing.
 - 2026-11-11T17:36:51Z **claude** — Issue #5: CLI adapter compiler + live compile evidence committed; 176 app tests pass → next: Merge PR into implementation once CI is green; close issue #5.
