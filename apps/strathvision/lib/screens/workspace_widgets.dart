@@ -1,124 +1,72 @@
 import 'package:flutter/material.dart';
 
 import '../packs/placeholder_pack.dart';
+import '../design/sv_theme.dart';
 import '../workspace/project.dart' show Mark, MarkLabel;
 import '../workspace/workspace_controller.dart';
 
-const _markGreen = Color(0xFF2E9E5B);
-const _markRed = Color(0xFFD64541);
-
 String formatTime(Duration d) {
-  final neg = d.isNegative;
+  final sign = d.isNegative ? '−' : '';
   d = d.abs();
-  final m = d.inMinutes;
-  final s = d.inSeconds % 60;
-  final cs = (d.inMilliseconds % 1000) ~/ 10;
-  return '${neg ? '-' : ''}$m:${s.toString().padLeft(2, '0')}'
-      '.${cs.toString().padLeft(2, '0')}';
+  return '$sign${d.inMinutes}:${(d.inSeconds % 60).toString().padLeft(2, '0')}.'
+      '${((d.inMilliseconds % 1000) ~/ 10).toString().padLeft(2, '0')}';
 }
 
-String formatOffset(int ms) {
-  final sign = ms < 0 ? '−' : '+';
-  return '$sign${(ms.abs() / 1000).toStringAsFixed(2)} s';
-}
+String formatOffset(int ms) =>
+    '${ms < 0 ? '−' : '+'}${(ms.abs() / 1000).toStringAsFixed(2)} s';
 
-// ---- top bar --------------------------------------------------------------
-
-class WorkspaceTopBar extends StatelessWidget {
-  const WorkspaceTopBar({super.key, required this.controller, this.action});
-
+class SyncStatusPill extends StatelessWidget {
+  const SyncStatusPill({super.key, required this.controller});
   final WorkspaceController controller;
-
-  /// The screen's primary action (Analyze), when available.
-  final Widget? action;
-
   @override
   Widget build(BuildContext context) {
-    final c = controller;
-    final theme = Theme.of(context);
-    return SizedBox(
-      height: 52,
-      child: Row(
-        children: [
-          const BackButton(),
-          Expanded(
-            child: Text(c.project.name,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleMedium),
-          ),
-          SyncStatusPill(controller: c),
-          const SizedBox(width: 8),
-          if (action != null) ...[action!, const SizedBox(width: 4)],
-          IconButton(
-            key: const Key('undo'),
-            tooltip: 'Undo (Ctrl+Z)',
-            onPressed: c.canUndo ? c.undo : null,
-            icon: const Icon(Icons.undo),
-          ),
-          const SizedBox(width: 4),
-        ],
+    final c = controller, scheme = Theme.of(context).colorScheme;
+    final sync = c.sync;
+    final label = sync == null
+        ? (c.hasBothClips ? 'Not linked' : 'Single view')
+        : '${c.locked ? 'Linked' : 'Independent'} · B ${formatOffset(sync.offsetMs)}';
+    return Semantics(
+      liveRegion: true,
+      child: Container(
+        key: const Key('sync-status'),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: c.locked
+              ? scheme.primaryContainer
+              : scheme.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Wrap(
+          spacing: 6,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Icon(
+              c.locked
+                  ? Icons.link
+                  : c.hasBothClips
+                  ? Icons.link_off
+                  : Icons.crop_square,
+              size: 18,
+              color: c.locked
+                  ? scheme.onPrimaryContainer
+                  : scheme.onSurfaceVariant,
+            ),
+            Text(
+              label,
+              style: TextStyle(
+                color: c.locked
+                    ? scheme.onPrimaryContainer
+                    : scheme.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-/// Sync state is always visible (Dual-Video-Workspace.md).
-class SyncStatusPill extends StatelessWidget {
-  const SyncStatusPill({super.key, required this.controller});
-
-  final WorkspaceController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = controller;
-    final scheme = Theme.of(context).colorScheme;
-    final sync = c.sync;
-    final (String label, IconData icon, Color bg, Color fg) = switch (sync) {
-      null when !c.hasBothClips => (
-          'Single view',
-          Icons.crop_square,
-          scheme.surfaceContainerHigh,
-          scheme.onSurfaceVariant
-        ),
-      null => (
-          'Not synced',
-          Icons.link_off,
-          scheme.surfaceContainerHigh,
-          scheme.onSurfaceVariant
-        ),
-      _ when c.locked => (
-          'Locked · B ${formatOffset(sync.offsetMs)}',
-          Icons.link,
-          scheme.primaryContainer,
-          scheme.onPrimaryContainer
-        ),
-      _ => (
-          'Synced · B ${formatOffset(sync.offsetMs)}',
-          Icons.link,
-          scheme.secondaryContainer,
-          scheme.onSecondaryContainer
-        ),
-    };
-    return AnimatedContainer(
-      key: const Key('sync-status'),
-      duration: const Duration(milliseconds: 150),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration:
-          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
-      child: Row(mainAxisSize: MainAxisSize.min, children: [
-        Icon(icon, size: 16, color: fg),
-        const SizedBox(width: 6),
-        Text(label,
-            style: TextStyle(
-                color: fg,
-                fontWeight: FontWeight.w600,
-                fontFeatures: const [FontFeature.tabularFigures()])),
-      ]),
-    );
-  }
-}
-
-// ---- stage ----------------------------------------------------------------
 
 class StagePanel extends StatelessWidget {
   const StagePanel({
@@ -126,142 +74,157 @@ class StagePanel extends StatelessWidget {
     required this.controller,
     required this.stage,
     required this.onLoad,
+    this.onScrub,
   });
-
   final WorkspaceController controller;
   final Stage stage;
   final VoidCallback onLoad;
-
+  final ValueChanged<Duration>? onScrub;
   @override
   Widget build(BuildContext context) {
-    final c = controller;
-    final scheme = Theme.of(context).colorScheme;
-    final clip = c.clipOn(stage);
+    final c = controller, scheme = Theme.of(context).colorScheme;
+    final clip = c.clipOn(stage), player = c.player(stage);
     final active = c.activeStage == stage && clip != null;
-    final pl = c.player(stage);
     final label = stage == Stage.a ? 'A' : 'B';
-
     return Column(
       children: [
         Expanded(
-          child: GestureDetector(
-            onTap: () => c.setActiveStage(stage),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 120),
-              decoration: BoxDecoration(
-                color: clip == null ? scheme.surfaceContainerHighest : Colors.black,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: active ? scheme.primary : Colors.transparent,
-                  width: 2,
+          child: Semantics(
+            button: true,
+            selected: active,
+            label: 'Select video $label',
+            child: GestureDetector(
+              onTap: () => c.setActiveStage(stage),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: clip == null
+                      ? scheme.surfaceContainerHighest
+                      : SvColors.graphite,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: active ? scheme.primary : Colors.transparent,
+                    width: 2,
+                  ),
                 ),
+                clipBehavior: Clip.antiAlias,
+                child: clip == null
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Review footage',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              const SizedBox(height: 12),
+                              FilledButton.icon(
+                                key: Key('load-$label'),
+                                onPressed: onLoad,
+                                icon: const Icon(Icons.add),
+                                label: const Text('Add a clip'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          if (player.hasMedia)
+                            RepaintBoundary(
+                              child: player.view(
+                                mirror: stage == Stage.b && c.mirrorB,
+                              ),
+                            )
+                          else
+                            const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(24),
+                                child: Text(
+                                  'Source unavailable. Replace this clip to continue.',
+                                  style: TextStyle(color: SvColors.white),
+                                ),
+                              ),
+                            ),
+                          Positioned(
+                            left: 8,
+                            right: 60,
+                            top: 8,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: SvColors.graphite,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    label,
+                                    style: const TextStyle(
+                                      color: SvColors.white,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      '${active ? 'Active · ' : ''}${clip.displayName}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        color: SvColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  if (stage == Stage.b && c.mirrorB)
+                                    const Icon(
+                                      Icons.flip,
+                                      size: 18,
+                                      color: SvColors.white,
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 4,
+                            top: 4,
+                            child: IconButton(
+                              key: Key('replace-$label'),
+                              tooltip: 'Replace clip on $label',
+                              onPressed: onLoad,
+                              style: IconButton.styleFrom(
+                                backgroundColor: SvColors.graphite,
+                                foregroundColor: SvColors.white,
+                              ),
+                              icon: const Icon(Icons.swap_horiz_rounded),
+                            ),
+                          ),
+                        ],
+                      ),
               ),
-              clipBehavior: Clip.antiAlias,
-              child: clip == null
-                  ? _EmptyStage(label: label, onLoad: onLoad)
-                  : Stack(fit: StackFit.expand, children: [
-                      pl.view(mirror: stage == Stage.b && c.mirrorB),
-                      Positioned(
-                        left: 8,
-                        top: 8,
-                        child: _StageTag(
-                          label: label,
-                          name: clip.displayName,
-                          mirrored: stage == Stage.b && c.mirrorB,
-                        ),
-                      ),
-                      Positioned(
-                        right: 4,
-                        top: 4,
-                        child: IconButton(
-                          key: Key('replace-$label'),
-                          tooltip: 'Replace clip on $label',
-                          onPressed: onLoad,
-                          color: Colors.white70,
-                          icon: const Icon(Icons.swap_horiz_rounded, size: 20),
-                        ),
-                      ),
-                    ]),
             ),
           ),
         ),
         if (clip != null)
           Timeline(
             key: Key('timeline-$label'),
-            position: pl.position,
-            duration: pl.duration,
+            position: player.position,
+            duration: player.duration,
             marks: c.marksFor(stage),
             active: active,
-            onScrub: (d) => c.scrub(stage, d),
+            onScrub: onScrub ?? (d) => c.scrub(stage, d),
           ),
       ],
     );
   }
 }
 
-class _EmptyStage extends StatelessWidget {
-  const _EmptyStage({required this.label, required this.onLoad});
-
-  final String label;
-  final VoidCallback onLoad;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Center(
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Text(label,
-            style: theme.textTheme.displaySmall
-                ?.copyWith(color: theme.colorScheme.outlineVariant)),
-        const SizedBox(height: 12),
-        FilledButton.tonalIcon(
-          key: Key('load-$label'),
-          onPressed: onLoad,
-          icon: const Icon(Icons.add),
-          label: Text(label == 'A' ? 'Add a clip' : 'Add a clip to compare'),
-        ),
-      ]),
-    );
-  }
-}
-
-class _StageTag extends StatelessWidget {
-  const _StageTag(
-      {required this.label, required this.name, required this.mirrored});
-
-  final String label;
-  final String name;
-  final bool mirrored;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-          color: Colors.black54, borderRadius: BorderRadius.circular(6)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Text(label,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.w700)),
-          const SizedBox(width: 6),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 180),
-            child: Text(name,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Colors.white70)),
-          ),
-          if (mirrored) ...[
-            const SizedBox(width: 6),
-            const Icon(Icons.flip, size: 14, color: Colors.white70),
-          ],
-        ]),
-      ),
-    );
-  }
-}
-
-/// Scrub bar with red/green mark ticks painted on the track.
 class Timeline extends StatelessWidget {
   const Timeline({
     super.key,
@@ -271,200 +234,362 @@ class Timeline extends StatelessWidget {
     required this.active,
     required this.onScrub,
   });
-
-  final Duration position;
-  final Duration duration;
+  final Duration position, duration;
   final List<Mark> marks;
   final bool active;
   final ValueChanged<Duration> onScrub;
-
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final total = duration.inMilliseconds;
-    final value =
-        total <= 0 ? 0.0 : (position.inMilliseconds / total).clamp(0.0, 1.0);
-    final timeStyle = TextStyle(
+    final value = total <= 0
+        ? 0.0
+        : (position.inMilliseconds / total).clamp(0.0, 1.0);
+    final style = TextStyle(
+      fontSize: 14,
       fontFeatures: const [FontFeature.tabularFigures()],
-      fontSize: 12,
-      color: active ? scheme.onSurface : scheme.onSurfaceVariant,
+      color: active
+          ? Theme.of(context).colorScheme.onSurface
+          : Theme.of(context).colorScheme.onSurfaceVariant,
     );
-    return SizedBox(
-      height: 40,
-      child: Row(children: [
-        SizedBox(
-            width: 64,
-            child: Text(formatTime(position),
-                textAlign: TextAlign.right, style: timeStyle)),
-        Expanded(
-          child: Stack(alignment: Alignment.center, children: [
+    final track = Semantics(
+      label:
+          '${marks.where((m) => m.label == MarkLabel.green).length} good marks; '
+          '${marks.where((m) => m.label == MarkLabel.red).length} needs-work marks',
+      child: SizedBox(
+        height: 48,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
             Positioned.fill(
-              child: CustomPaint(
-                painter: _MarkTicksPainter(
-                    marks: marks, totalMs: total, inset: 24),
-              ),
+              child: CustomPaint(painter: _MarkTicks(marks, total)),
             ),
-            SliderTheme(
-              data: SliderTheme.of(context).copyWith(
-                trackHeight: 3,
-                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
-                overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
-              ),
-              child: Slider(
-                value: value,
-                onChanged: total <= 0
-                    ? null
-                    : (v) => onScrub(Duration(milliseconds: (v * total).round())),
-              ),
+            Slider(
+              value: value,
+              semanticFormatterCallback: (v) =>
+                  formatTime(Duration(milliseconds: (v * total).round())),
+              onChanged: total <= 0
+                  ? null
+                  : (v) => onScrub(Duration(milliseconds: (v * total).round())),
             ),
-          ]),
+          ],
         ),
-        SizedBox(
-            width: 64,
-            child: Text(formatTime(duration), style: timeStyle)),
-      ]),
+      ),
+    );
+    if (MediaQuery.textScalerOf(context).scale(14) > 21) {
+      return Column(
+        children: [
+          Wrap(
+            spacing: 12,
+            children: [
+              Text(formatTime(position), style: style),
+              Text(formatTime(duration), style: style),
+            ],
+          ),
+          track,
+        ],
+      );
+    }
+    return Row(
+      children: [
+        SizedBox(width: 64, child: Text(formatTime(position), style: style)),
+        Expanded(child: track),
+        SizedBox(width: 64, child: Text(formatTime(duration), style: style)),
+      ],
     );
   }
 }
 
-class _MarkTicksPainter extends CustomPainter {
-  _MarkTicksPainter(
-      {required this.marks, required this.totalMs, required this.inset});
-
+class _MarkTicks extends CustomPainter {
+  _MarkTicks(this.marks, this.total);
   final List<Mark> marks;
-  final int totalMs;
-  final double inset;
-
+  final int total;
   @override
   void paint(Canvas canvas, Size size) {
-    if (totalMs <= 0) return;
-    final width = size.width - inset * 2;
-    final paint = Paint()..strokeWidth = 3..strokeCap = StrokeCap.round;
-    for (final m in marks) {
-      final x = inset + width * (m.timeMs / totalMs).clamp(0.0, 1.0);
-      paint.color = m.label == MarkLabel.green ? _markGreen : _markRed;
-      canvas.drawLine(Offset(x, size.height / 2 - 10),
-          Offset(x, size.height / 2 - 4), paint);
+    if (total <= 0) return;
+    final paint = Paint()
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
+    for (final mark in marks) {
+      final x = 24 + (size.width - 48) * (mark.timeMs / total).clamp(0.0, 1.0);
+      final y = size.height / 2 - 10;
+      paint.color = mark.label == MarkLabel.green
+          ? SvColors.good
+          : SvColors.needsWork;
+      if (mark.label == MarkLabel.green) {
+        canvas.drawLine(Offset(x - 3, y), Offset(x, y + 3), paint);
+        canvas.drawLine(Offset(x, y + 3), Offset(x + 4, y - 3), paint);
+      } else {
+        canvas.drawLine(Offset(x - 3, y - 3), Offset(x + 3, y + 3), paint);
+        canvas.drawLine(Offset(x - 3, y + 3), Offset(x + 3, y - 3), paint);
+      }
     }
   }
 
   @override
-  bool shouldRepaint(_MarkTicksPainter old) =>
-      old.marks != marks || old.totalMs != totalMs;
+  bool shouldRepaint(_MarkTicks old) =>
+      old.marks != marks || old.total != total;
 }
-
-// ---- transport ------------------------------------------------------------
 
 const playbackRates = [0.1, 0.25, 0.5, 1.0];
 
 class TransportBar extends StatelessWidget {
-  const TransportBar(
-      {super.key, required this.controller, required this.onAnnotate});
-
+  const TransportBar({
+    super.key,
+    required this.controller,
+    required this.onAnnotate,
+    this.run,
+    this.enabled = true,
+  });
   final WorkspaceController controller;
   final VoidCallback onAnnotate;
+  final Future<void> Function(Future<void> Function())? run;
+  final bool enabled;
+  void invoke(Future<void> Function() action) {
+    if (run != null) {
+      run!(action);
+    } else {
+      action();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final c = controller;
-    final hasClip = c.clipOn(Stage.a) != null || c.clipOn(Stage.b) != null;
-    if (!hasClip) return const SizedBox(height: 8);
-
-    final scheme = Theme.of(context).colorScheme;
+    if (c.clipOn(Stage.a) == null && c.clipOn(Stage.b) == null) {
+      return const SizedBox(height: 8);
+    }
+    Widget icon(
+      String key,
+      String label,
+      IconData image,
+      Future<void> Function() action,
+    ) => IconButton(
+      key: Key(key),
+      tooltip: label,
+      onPressed: enabled ? () => invoke(action) : null,
+      icon: Icon(image),
+    );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 4,
-        runSpacing: 4,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: LayoutBuilder(
+        builder: (context, bounds) {
+          final compact =
+              bounds.maxWidth < 600 ||
+              MediaQuery.textScalerOf(context).scale(16) > 24;
+          return Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              icon(
+                'step-back',
+                'Previous frame (←)',
+                Icons.skip_previous_rounded,
+                () => c.stepFrame(forward: false),
+              ),
+              FilledButton(
+                key: const Key('play'),
+                onPressed: enabled ? () => invoke(c.togglePlay) : null,
+                child: Semantics(
+                  label: c.playing ? 'Pause' : 'Play',
+                  child: Icon(
+                    c.playing ? Icons.pause : Icons.play_arrow,
+                    size: 28,
+                  ),
+                ),
+              ),
+              icon(
+                'step-forward',
+                'Next frame (→)',
+                Icons.skip_next_rounded,
+                () => c.stepFrame(forward: true),
+              ),
+              if (compact)
+                DropdownButton<double>(
+                  key: const Key('rate'),
+                  value: playbackRates.contains(c.rate) ? c.rate : 1,
+                  underline: const SizedBox(),
+                  items: [
+                    for (final r in playbackRates)
+                      DropdownMenuItem(
+                        value: r,
+                        child: Text('${r == 1 ? '1' : r}×'),
+                      ),
+                  ],
+                  onChanged: enabled
+                      ? (r) {
+                          if (r != null) invoke(() => c.setRate(r));
+                        }
+                      : null,
+                )
+              else
+                SegmentedButton<double>(
+                  key: const Key('rate'),
+                  showSelectedIcon: false,
+                  segments: [
+                    for (final r in playbackRates)
+                      ButtonSegment(
+                        value: r,
+                        label: Text(
+                          r == 1 ? '1×' : '$r×'.replaceFirst('0.', '.'),
+                        ),
+                      ),
+                  ],
+                  selected: {playbackRates.contains(c.rate) ? c.rate : 1.0},
+                  onSelectionChanged: enabled
+                      ? (s) => invoke(() => c.setRate(s.first))
+                      : null,
+                ),
+              if (c.hasBothClips) ...[
+                if (c.sync == null)
+                  OutlinedButton.icon(
+                    key: const Key('set-sync'),
+                    onPressed: enabled ? () => invoke(c.setSyncPoint) : null,
+                    icon: const Icon(Icons.link),
+                    label: const Text('Sync here'),
+                  )
+                else ...[
+                  OutlinedButton.icon(
+                    key: const Key('lock'),
+                    onPressed: enabled
+                        ? () => invoke(() => c.setLocked(!c.locked))
+                        : null,
+                    icon: Icon(c.locked ? Icons.link : Icons.link_off),
+                    label: Text(c.locked ? 'Linked' : 'Independent'),
+                  ),
+                  icon(
+                    'resync',
+                    'Set sync again here (S)',
+                    Icons.my_location,
+                    c.setSyncPoint,
+                  ),
+                  icon('clear-sync', 'Clear sync', Icons.link_off, c.clearSync),
+                ],
+                icon('mirror', 'Mirror B (M)', Icons.flip, c.toggleMirrorB),
+                icon('swap', 'Swap A and B', Icons.swap_horiz, c.swapStages),
+              ],
+              TextButton.icon(
+                key: const Key('annotate'),
+                onPressed: enabled ? onAnnotate : null,
+                icon: const Icon(Icons.sticky_note_2_outlined),
+                label: const Text('Note'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Explicit human judgments, never model grades or start/contact markers.
+class MarkBar extends StatelessWidget {
+  const MarkBar({
+    super.key,
+    required this.controller,
+    required this.pack,
+    this.onMark,
+    this.enabled = true,
+  });
+  final WorkspaceController controller;
+  final PackInfo pack;
+  final Future<void> Function(MarkLabel)? onMark;
+  final bool enabled;
+  @override
+  Widget build(BuildContext context) {
+    final c = controller;
+    final extra = pack.moreAttributes
+        .where((a) => !c.attributes.contains(a))
+        .toList();
+    Widget mark(
+      String key,
+      String label,
+      IconData icon,
+      Color color,
+      MarkLabel value,
+    ) => FilledButton.icon(
+      key: Key(key),
+      onPressed: enabled && c.activeAttribute != null
+          ? () {
+              if (onMark != null) {
+                onMark!(value);
+              } else {
+                c.mark(value);
+              }
+            }
+          : null,
+      style: FilledButton.styleFrom(
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        minimumSize: const Size(140, 56),
+      ),
+      icon: Icon(icon),
+      label: Text(label),
+    );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+      child: Column(
         children: [
-          IconButton(
-            key: const Key('step-back'),
-            tooltip: 'Previous frame (←)',
-            onPressed: () => c.stepFrame(forward: false),
-            icon: const Icon(Icons.skip_previous_rounded),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (final attribute in c.attributes)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: ChoiceChip(
+                      key: Key('attr-$attribute'),
+                      label: Text(attribute),
+                      selected: c.activeAttribute == attribute,
+                      showCheckmark: false,
+                      selectedColor: SvColors.cobalt,
+                      labelStyle: TextStyle(
+                        color: c.activeAttribute == attribute
+                            ? SvColors.white
+                            : Theme.of(context).colorScheme.onSurface,
+                      ),
+                      onSelected: enabled
+                          ? (_) => c.selectAttribute(attribute)
+                          : null,
+                    ),
+                  ),
+                if (extra.isNotEmpty)
+                  PopupMenuButton<String>(
+                    key: const Key('attr-add'),
+                    tooltip: 'Add attribute',
+                    enabled: enabled,
+                    onSelected: c.selectAttribute,
+                    icon: const Icon(Icons.add),
+                    itemBuilder: (_) => [
+                      for (final attr in extra)
+                        PopupMenuItem(value: attr, child: Text(attr)),
+                    ],
+                  ),
+              ],
+            ),
           ),
-          IconButton.filled(
-            key: const Key('play'),
-            tooltip: c.playing ? 'Pause (Space)' : 'Play (Space)',
-            iconSize: 32,
-            onPressed: c.togglePlay,
-            icon: Icon(c.playing ? Icons.pause_rounded : Icons.play_arrow_rounded),
-          ),
-          IconButton(
-            key: const Key('step-forward'),
-            tooltip: 'Next frame (→)',
-            onPressed: () => c.stepFrame(forward: true),
-            icon: const Icon(Icons.skip_next_rounded),
-          ),
-          const SizedBox(width: 8),
-          SegmentedButton<double>(
-            key: const Key('rate'),
-            showSelectedIcon: false,
-            style: const ButtonStyle(visualDensity: VisualDensity.compact),
-            segments: [
-              for (final r in playbackRates)
-                ButtonSegment(
-                    value: r,
-                    label: Text(r == 1.0 ? '1×' : '$r×'.replaceFirst('0.', '.'))),
-            ],
-            selected: {
-              playbackRates.contains(c.rate) ? c.rate : 1.0,
-            },
-            onSelectionChanged: (s) => c.setRate(s.first),
-          ),
-          if (c.hasBothClips) ...[
-            const SizedBox(width: 8),
-            if (c.sync == null)
-              FilledButton.icon(
-                key: const Key('set-sync'),
-                onPressed: c.setSyncPoint,
-                icon: const Icon(Icons.link),
-                label: const Text('Sync here'),
-              )
-            else ...[
-              FilterChip(
-                key: const Key('lock'),
-                selected: c.locked,
-                onSelected: c.setLocked,
-                avatar: Icon(c.locked ? Icons.lock : Icons.lock_open, size: 18),
-                label: Text(c.locked ? 'Locked' : 'Independent'),
-                showCheckmark: false,
+          const SizedBox(height: 8),
+          Wrap(
+            alignment: WrapAlignment.end,
+            spacing: 12,
+            runSpacing: 8,
+            children: [
+              mark(
+                'mark-green',
+                'Good',
+                Icons.check,
+                SvColors.good,
+                MarkLabel.green,
               ),
-              IconButton(
-                key: const Key('resync'),
-                tooltip: 'Set sync again here (S)',
-                onPressed: c.setSyncPoint,
-                icon: const Icon(Icons.my_location),
-              ),
-              IconButton(
-                key: const Key('clear-sync'),
-                tooltip: 'Clear sync',
-                onPressed: c.clearSync,
-                icon: const Icon(Icons.link_off),
+              mark(
+                'mark-red',
+                'Needs work',
+                Icons.close,
+                SvColors.needsWork,
+                MarkLabel.red,
               ),
             ],
-            IconButton(
-              key: const Key('mirror'),
-              tooltip: 'Mirror B (M)',
-              isSelected: c.mirrorB,
-              selectedIcon: Icon(Icons.flip, color: scheme.primary),
-              onPressed: c.toggleMirrorB,
-              icon: const Icon(Icons.flip),
-            ),
-            IconButton(
-              key: const Key('swap'),
-              tooltip: 'Swap A and B',
-              onPressed: c.swapStages,
-              icon: const Icon(Icons.swap_vert_rounded),
-            ),
-          ],
-          IconButton(
-            key: const Key('annotate'),
-            tooltip: 'Add a note at this moment',
-            onPressed: c.clipOn(c.activeStage) == null ? null : onAnnotate,
-            icon: const Icon(Icons.sticky_note_2_outlined),
           ),
         ],
       ),
@@ -472,121 +597,14 @@ class TransportBar extends StatelessWidget {
   }
 }
 
-// ---- marks ----------------------------------------------------------------
-
-/// Attribute chips + red/green, bottom-right (spatial memory rule).
-class MarkBar extends StatelessWidget {
-  const MarkBar({super.key, required this.controller, required this.pack});
-
-  final WorkspaceController controller;
-  final PackInfo pack;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = controller;
-    final scheme = Theme.of(context).colorScheme;
-    final extra =
-        pack.moreAttributes.where((a) => !c.attributes.contains(a)).toList();
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 2, 12, 10),
-      child: Row(children: [
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            reverse: true,
-            child: Row(children: [
-              for (final a in c.attributes)
-                Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: ChoiceChip(
-                    key: Key('attr-$a'),
-                    label: Text(a),
-                    selected: c.activeAttribute == a,
-                    showCheckmark: false,
-                    selectedColor: scheme.primaryContainer,
-                    onSelected: (_) => c.selectAttribute(a),
-                  ),
-                ),
-              if (extra.isNotEmpty)
-                PopupMenuButton<String>(
-                  key: const Key('attr-add'),
-                  tooltip: 'Add attribute',
-                  icon: const Icon(Icons.add, size: 20),
-                  onSelected: c.selectAttribute,
-                  itemBuilder: (_) => [
-                    for (final a in extra) PopupMenuItem(value: a, child: Text(a)),
-                  ],
-                ),
-            ]),
-          ),
-        ),
-        const SizedBox(width: 12),
-        _MarkButton(
-          key: const Key('mark-red'),
-          color: _markRed,
-          icon: Icons.close_rounded,
-          tooltip: 'Red (R)',
-          onPressed: c.activeAttribute == null ? null : () => c.mark(MarkLabel.red),
-        ),
-        const SizedBox(width: 10),
-        _MarkButton(
-          key: const Key('mark-green'),
-          color: _markGreen,
-          icon: Icons.check_rounded,
-          tooltip: 'Green (G)',
-          onPressed:
-              c.activeAttribute == null ? null : () => c.mark(MarkLabel.green),
-        ),
-      ]),
-    );
-  }
-}
-
-class _MarkButton extends StatelessWidget {
-  const _MarkButton({
-    super.key,
-    required this.color,
-    required this.icon,
-    required this.tooltip,
-    required this.onPressed,
-  });
-
-  final Color color;
-  final IconData icon;
-  final String tooltip;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      child: Material(
-        color: color,
-        shape: const CircleBorder(),
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: onPressed,
-          child: SizedBox(
-            width: 56,
-            height: 56,
-            child: Icon(icon, color: Colors.white, size: 30),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class AnnotationDialog extends StatefulWidget {
   const AnnotationDialog({super.key});
-
   @override
   State<AnnotationDialog> createState() => _AnnotationDialogState();
 }
 
 class _AnnotationDialogState extends State<AnnotationDialog> {
   final _text = TextEditingController();
-
   @override
   void dispose() {
     _text.dispose();
@@ -594,25 +612,26 @@ class _AnnotationDialogState extends State<AnnotationDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Note at this moment'),
-      content: TextField(
-        key: const Key('annotation-text'),
-        controller: _text,
-        autofocus: true,
-        maxLines: 3,
-        minLines: 1,
-        onSubmitted: (v) => Navigator.pop(context, v),
+  Widget build(BuildContext context) => AlertDialog(
+    title: const Text('Note at this moment'),
+    content: TextField(
+      key: const Key('annotation-text'),
+      controller: _text,
+      autofocus: true,
+      maxLines: 3,
+      minLines: 1,
+      onSubmitted: (v) => Navigator.pop(context, v),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: const Text('Cancel'),
       ),
-      actions: [
-        TextButton(
-            onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-        FilledButton(
-            key: const Key('annotation-save'),
-            onPressed: () => Navigator.pop(context, _text.text),
-            child: const Text('Save')),
-      ],
-    );
-  }
+      FilledButton(
+        key: const Key('annotation-save'),
+        onPressed: () => Navigator.pop(context, _text.text),
+        child: const Text('Save'),
+      ),
+    ],
+  );
 }

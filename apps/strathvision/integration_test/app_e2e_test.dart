@@ -170,18 +170,19 @@ void main() {
       ),
     );
     await idle(tester, 1500);
+    await tap('event-picker');
+    await tap('event-timber/underhand');
     expect(find.text('Underhand'), findsOneWidget);
     await snap('library_empty');
 
     // ---- Review workspace with real video ---------------------------------
-    await tap('open-workspace', after: 1000);
     clipQueue.addAll(['$clipDir/clip30.mp4', '$clipDir/clip25.mp4']);
-    await tap('load-A', after: 3000);
+    await tap('open-workspace', after: 3000);
     await tap('load-B', after: 3000);
-    expect(find.text('Not synced'), findsOneWidget);
+    expect(find.text('Not linked'), findsOneWidget);
     await snap('workspace_two_clips');
     await tap('set-sync', after: 800);
-    expect(find.textContaining('Locked ·'), findsOneWidget);
+    expect(find.textContaining('Linked ·'), findsOneWidget);
     await tester.tap(find.text('.25×'));
     await idle(tester, 300);
     await tap('play', after: 2000);
@@ -203,9 +204,8 @@ void main() {
 
     // ---- Analyze (no profile yet): real pose on a real swing ---------------
     await back();
-    await tap('open-workspace', after: 1000);
     clipQueue.add('$clipDir/cleave.webm');
-    await tap('load-A', after: 2000);
+    await tap('open-workspace', after: 2000);
     await tap('analyze', after: 500);
     await wait(tester, find.byKey(const Key('analysis-metrics')), seconds: 120);
     await tester.dragUntilVisible(
@@ -220,14 +220,18 @@ void main() {
     await back();
 
     // Reopen the first review: sync, rate, mirror, marks restored.
-    await wait(tester, find.textContaining('Review '));
-    await tester.tap(find.textContaining('Review ').last);
+    final reviews = await tester.runAsync(
+      () => db.select(db.projectRows).get(),
+    );
+    final firstReview = reviews!.firstWhere((r) => r.name == 'clip30');
+    await tester.tap(find.byKey(Key('project-${firstReview.projectId}')));
     await idle(tester, 2500);
-    expect(find.textContaining('Locked ·'), findsOneWidget);
+    expect(find.textContaining('Linked ·'), findsOneWidget);
     await snap('reopened_review');
     await back();
 
     // ---- Reject repeated footage; use the explicitly synthetic package ----
+    await tap('library-tools');
     await tap('build-profile', after: 800);
     await tester.enterText(
       find.byKey(const Key('coach-name')),
@@ -260,9 +264,9 @@ void main() {
     debugPrint('e2e synthetic package installed');
 
     // ---- Compare a clip with the profile --------------------------------
-    await tap('open-workspace', after: 1000);
+    await back();
     clipQueue.add('$clipDir/cleave.webm');
-    await tap('load-A', after: 1500);
+    await tap('open-workspace', after: 2000);
     await tap('analyze', after: 500);
     await wait(tester, find.byKey(const Key('comparison')), seconds: 120);
     expect(find.text('style match with Laptop Coach · v1'), findsOneWidget);
@@ -276,6 +280,8 @@ void main() {
     await idle(tester, 600);
     await snap('delta_expanded');
     await back();
+
+    await tap('library-tools');
 
     // ---- Trend, export --------------------------------------------------
     final row = (await tester.runAsync(db.allProfiles))!.single;
@@ -298,8 +304,15 @@ void main() {
     await tap('workbench-$id', after: 1500);
     await tap('add-probe-clips', after: 500);
     await wait(tester, find.text('1 clips'), seconds: 120);
-    await wait(tester, find.byWidgetPredicate((w) =>
-        w is ButtonStyleButton && w.key == const Key('run-harness') && w.onPressed != null));
+    await wait(
+      tester,
+      find.byWidgetPredicate(
+        (w) =>
+            w is ButtonStyleButton &&
+            w.key == const Key('run-harness') &&
+            w.onPressed != null,
+      ),
+    );
     await tap('run-harness', after: 1000);
     await wait(
       tester,

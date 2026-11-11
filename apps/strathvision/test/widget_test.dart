@@ -19,15 +19,26 @@ void main() {
     db = AppDatabase(NativeDatabase.memory());
     store = Directory.systemTemp.createTempSync('sv-widget-');
   });
-  tearDown(() async { await db.close(); store.deleteSync(recursive: true); });
+  tearDown(() async {
+    await db.close();
+    store.deleteSync(recursive: true);
+  });
 
-  Future<void> pumpApp(WidgetTester tester, {String? path}) async {
-    await tester.pumpWidget(StrathvisionApp(
-      db: db,
-      profileStore: () async => store,
-      pickPath: () async => path,
-      playerFactory: FakeStagePlayer.new,
-    ));
+  Future<void> pumpApp(
+    WidgetTester tester, {
+    String? path,
+    String? clip,
+  }) async {
+    await tester.pumpWidget(
+      StrathvisionApp(
+        db: db,
+        pickClip: () async => clip,
+        sourceSignature: (path) async => 'test:$path',
+        profileStore: () async => store,
+        pickPath: () async => path,
+        playerFactory: FakeStagePlayer.new,
+      ),
+    );
     await tester.pumpAndSettle();
   }
 
@@ -39,27 +50,41 @@ void main() {
   }
 
   testWidgets('Library navigates to Workspace and back', (tester) async {
-    await pumpApp(tester);
-    expect(find.text('Library'), findsOneWidget);
+    await pumpApp(tester, clip: '/clips/session.mp4');
+    expect(find.text('Your footage'), findsOneWidget);
     expect(find.text('Add a clip to start'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('open-workspace')));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Review '), findsOneWidget);
+    expect(find.text('session'), findsOneWidget);
     expect(find.text('Single view'), findsOneWidget);
     expect(find.byKey(const Key('stage-A')), findsOneWidget);
-    expect(find.byKey(const Key('stage-B')), findsOneWidget);
+    expect(find.byKey(const Key('stage-B')), findsNothing);
 
     await tester.pageBack();
     await tester.pumpAndSettle();
-    expect(find.text('Library'), findsOneWidget);
-    expect(find.text('Reviews'), findsOneWidget);
+    expect(find.text('Your footage'), findsOneWidget);
+    expect(find.byType(Scrollable), findsWidgets);
+    await unmountApp(tester);
+  });
+
+  testWidgets('canceling Add clip stores no empty review', (tester) async {
+    await pumpApp(tester);
+    await tester.tap(find.byKey(const Key('open-workspace')));
+    await tester.pumpAndSettle();
+    expect(find.text('Your footage'), findsOneWidget);
+    expect(
+      await tester.runAsync(() => db.select(db.projectRows).get()),
+      isEmpty,
+    );
     await unmountApp(tester);
   });
 
   testWidgets('importing the dummy profile lists its metadata', (tester) async {
     final path = File('test/fixtures/dummy_profile.json').absolute.path;
     await pumpApp(tester, path: path);
+    await tester.tap(find.byKey(const Key('library-tools')));
+    await tester.pumpAndSettle();
 
     // Keep pumping while real file I/O and Drift complete. A fixed delay
     // races on CI, and awaiting a DB query without frames can deadlock a
@@ -69,8 +94,12 @@ void main() {
     });
     final deadline = DateTime.now().add(const Duration(seconds: 10));
     while (find.text('Dummy Coach · v1').evaluate().isEmpty) {
-      if (DateTime.now().isAfter(deadline)) fail('Profile import did not finish');
-      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 20)));
+      if (DateTime.now().isAfter(deadline)) {
+        fail('Profile import did not finish');
+      }
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 20)),
+      );
       await tester.pump();
     }
     await tester.pumpAndSettle();
@@ -82,11 +111,14 @@ void main() {
     await unmountApp(tester);
   });
 
-  testWidgets('invalid profile shows the error and stores nothing',
-      (tester) async {
+  testWidgets('invalid profile shows the error and stores nothing', (
+    tester,
+  ) async {
     final bad = File('${Directory.systemTemp.createTempSync().path}/bad.json')
       ..writeAsStringSync('{"version": 1}');
     await pumpApp(tester, path: bad.path);
+    await tester.tap(find.byKey(const Key('library-tools')));
+    await tester.pumpAndSettle();
 
     await tester.runAsync(() async {
       await tester.tap(find.byKey(const Key('import-profile')));
@@ -101,8 +133,7 @@ void main() {
 
   test('metadata persists across database reopen', () async {
     final file = File('${Directory.systemTemp.createTempSync().path}/sv.db');
-    final meta =
-        await readProfilePackage('test/fixtures/dummy_profile.json');
+    final meta = await readProfilePackage('test/fixtures/dummy_profile.json');
 
     final first = AppDatabase(NativeDatabase(file));
     await first.saveProfile(meta, 'dummy_profile.json');

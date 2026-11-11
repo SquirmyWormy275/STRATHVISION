@@ -33,30 +33,34 @@ void main() {
   /// A ready profile fitted from 15 synthetic clips of one coach.
   Future<Profile> coachProfile() async {
     final b = ProfileBuilder(
-        engine: AnalysisEngine(
-            pack: pack, pose: const StubPoseEstimator(styleSeed: 42)));
+      engine: AnalysisEngine(
+        pack: pack,
+        pose: const StubPoseEstimator(styleSeed: 42),
+      ),
+    );
     final q = await Future.wait([
       for (var i = 0; i < 15; i++)
         b.evaluate(
-            ClipSource(clipId: 'ref-$i', path: '/r$i', durationMs: 6000, fps: 30),
-            displayName: 'ref-$i'),
+          ClipSource(clipId: 'ref-$i', path: '/r$i', durationMs: 6000, fps: 30),
+          displayName: 'ref-$i',
+        ),
     ]);
     return (b.build(
-            coachName: 'Coach',
-            clips: q,
-            newProfileId: 'prof-1',
-            now: DateTime.utc(2026, 11, 4)) as BuildReady)
-        .profile;
+      coachName: 'Coach',
+      clips: q,
+      newProfileId: 'prof-1',
+      now: DateTime.utc(2026, 11, 4),
+    ) as BuildReady).profile;
   }
 
   String patchV2() => jsonEncode({
-        'head': 'slope_residual',
-        'version': 2,
-        'base': 'slope_residual/placeholder/v1',
-        'edits': [
-          {'tensor': 'b2', 'index': [], 'delta': 0.25},
-        ],
-      });
+    'head': 'slope_residual',
+    'version': 2,
+    'base': 'slope_residual/placeholder/v1',
+    'edits': [
+      {'tensor': 'b2', 'index': [], 'delta': 0.25},
+    ],
+  });
 
   group('UI', () {
     late WorkspaceController ws;
@@ -67,8 +71,11 @@ void main() {
 
     setUpAll(() async => profile = await coachProfile());
 
-    Future<void> pump(WidgetTester tester,
-        {List<ProfileChoice>? choices, Map<String, String>? patches}) async {
+    Future<void> pump(
+      WidgetTester tester, {
+      List<ProfileChoice>? choices,
+      Map<String, String>? patches,
+    }) async {
       tester.view.physicalSize = const Size(1600, 1200);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
@@ -87,16 +94,21 @@ void main() {
         run: (clip, p, reference) {
           patchesSeen.add(p);
           return AnalysisEngine(
-                  pack: pack,
-                  // The athlete: a different style from the coach.
-                  pose: const StubPoseEstimator(styleSeed: 7),
-                  heads: applyPatches(headsFor(pack), p))
-              .analyzeDetailed(clip, reference: reference);
+            pack: pack,
+            // The athlete: a different style from the coach.
+            pose: const StubPoseEstimator(styleSeed: 7),
+            heads: applyPatches(headsFor(pack), p),
+          ).analyzeDetailed(clip, reference: reference);
         },
-        listProfiles: () async => choices ??
+        listProfiles: () async =>
+            choices ??
             const [
               ProfileChoice(
-                  profileId: 'prof-1', version: 1, label: 'Coach · v1', path: '/coach.zip'),
+                profileId: 'prof-1',
+                version: 1,
+                label: 'Coach · v1',
+                path: '/coach.zip',
+              ),
             ],
         loadBundle: (path) async =>
             ProfileBundle(profile: profile, patchFiles: patches ?? const {}),
@@ -106,13 +118,15 @@ void main() {
         analysis.dispose();
         ws.dispose();
       });
-      await tester.pumpWidget(MaterialApp(
-        home: WorkspaceScreen(
-          controller: ws,
-          analysis: analysis,
-          pickClip: () async => '/clips/athlete.mp4',
+      await tester.pumpWidget(
+        MaterialApp(
+          home: WorkspaceScreen(
+            controller: ws,
+            analysis: analysis,
+            pickClip: () async => '/clips/athlete.mp4',
+          ),
         ),
-      ));
+      );
       await tester.tap(find.byKey(const Key('load-A')));
       await tester.pumpAndSettle();
     }
@@ -122,9 +136,21 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('cached stage comparisons are scoped to the selected coach', (tester) async {
-      const first = ProfileChoice(profileId: 'prof-1', version: 1, label: 'One', path: '/one');
-      const second = ProfileChoice(profileId: 'prof-1', version: 2, label: 'Two', path: '/two');
+    testWidgets('cached stage comparisons are scoped to the selected coach', (
+      tester,
+    ) async {
+      const first = ProfileChoice(
+        profileId: 'prof-1',
+        version: 1,
+        label: 'One',
+        path: '/one',
+      );
+      const second = ProfileChoice(
+        profileId: 'prof-1',
+        version: 2,
+        label: 'Two',
+        path: '/two',
+      );
       await pump(tester, choices: [first, second]);
       await analysis.analyze();
       await ws.loadClip(Stage.b, '/clips/other.mp4');
@@ -144,12 +170,13 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     });
 
-    testWidgets('score and ranked deltas against the selected profile',
-        (tester) async {
+    testWidgets('score and ranked deltas against the selected profile', (
+      tester,
+    ) async {
       await pump(tester, patches: {'slope_residual_v2.patch': patchV2()});
       await tap(tester, 'analyze');
 
-      expect(find.text('Compare with'), findsOneWidget);
+      expect(find.text('Profile'), findsOneWidget);
       expect(find.text('Coach · v1'), findsOneWidget);
       expect(find.byKey(const Key('comparison')), findsOneWidget);
 
@@ -187,21 +214,23 @@ void main() {
       expect(coachText, contains(top.coachCenter.toStringAsFixed(1)));
     });
 
-    testWidgets('"Nobody" shows measurements only; no profiles → hint',
-        (tester) async {
+    testWidgets('"Nobody" shows measurements only; no profiles → hint', (
+      tester,
+    ) async {
       await pump(tester);
       await tap(tester, 'analyze');
       expect(find.byKey(const Key('comparison')), findsOneWidget);
       await tap(tester, 'profile-select');
-      await tester.tap(find.text('Nobody').last);
+      await tester.tap(find.text('Measurements only').last);
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('comparison')), findsNothing);
       expect(find.byKey(const Key('analysis-metrics')), findsOneWidget);
       expect(saved, hasLength(1)); // only the compared run is stored
     });
 
-    testWidgets('without installed profiles the panel says how to get one',
-        (tester) async {
+    testWidgets('without installed profiles the panel says how to get one', (
+      tester,
+    ) async {
       await pump(tester, choices: const []);
       await tap(tester, 'analyze');
       expect(find.byKey(const Key('no-profiles')), findsOneWidget);
@@ -209,25 +238,35 @@ void main() {
     });
 
     testWidgets('a rejected patch is skipped and warned about', (tester) async {
-      await pump(tester, patches: {
-        'slope_residual_v2.patch': patchV2(),
-        'slope_residual_v3.patch': '{broken',
-      });
+      await pump(
+        tester,
+        patches: {
+          'slope_residual_v2.patch': patchV2(),
+          'slope_residual_v3.patch': '{broken',
+        },
+      );
       await tap(tester, 'analyze');
       final r = saved.single;
       expect(r.appliedPatches, ['slope_residual_v2']);
-      expect(r.warnings,
-          contains('Specialist patch slope_residual_v3.patch was rejected and not applied.'));
+      expect(
+        r.warnings,
+        contains(
+          'Specialist patch slope_residual_v3.patch was rejected and not applied.',
+        ),
+      );
     });
 
-    testWidgets('same clip, same profile → same score (deterministic)',
-        (tester) async {
+    testWidgets('same clip, same profile → same score (deterministic)', (
+      tester,
+    ) async {
       await pump(tester);
       await tap(tester, 'analyze');
       await tap(tester, 'analysis-rerun');
       expect(saved, hasLength(2));
-      expect(jsonEncode({...saved[0].toJson(), 'result_id': ''}),
-          jsonEncode({...saved[1].toJson(), 'result_id': ''}));
+      expect(
+        jsonEncode({...saved[0].toJson(), 'result_id': ''}),
+        jsonEncode({...saved[1].toJson(), 'result_id': ''}),
+      );
     });
   });
 
@@ -243,42 +282,59 @@ void main() {
       dir.deleteSync(recursive: true);
     });
 
-    test('bundle reader returns the profile and its patches from a zip', () async {
-      final profile = await coachProfile();
-      final archive = Archive()
-        ..add(ArchiveFile.bytes('coach/profile.json',
-            utf8.encode(jsonEncode(profile.toJson()))))
-        ..add(ArchiveFile.directory('coach/specialist_patches/'))
-        ..add(ArchiveFile.bytes(
-            'coach/specialist_patches/slope_residual_v2.patch', utf8.encode(patchV2())))
-        ..add(ArchiveFile.directory('coach/adapters/'));
-      final path = '${dir.path}/coach.zip';
-      File(path).writeAsBytesSync(ZipEncoder().encode(archive));
-      final bundle = await readProfileBundle(path);
-      expect(bundle.profile.profileId, profile.profileId);
-      expect(bundle.profile.referenceClips, hasLength(15));
-      expect(bundle.patchFiles.keys, ['slope_residual_v2.patch']);
-    });
+    test(
+      'bundle reader returns the profile and its patches from a zip',
+      () async {
+        final profile = await coachProfile();
+        final archive = Archive()
+          ..add(
+            ArchiveFile.bytes(
+              'coach/profile.json',
+              utf8.encode(jsonEncode(profile.toJson())),
+            ),
+          )
+          ..add(ArchiveFile.directory('coach/specialist_patches/'))
+          ..add(
+            ArchiveFile.bytes(
+              'coach/specialist_patches/slope_residual_v2.patch',
+              utf8.encode(patchV2()),
+            ),
+          )
+          ..add(ArchiveFile.directory('coach/adapters/'));
+        final path = '${dir.path}/coach.zip';
+        File(path).writeAsBytesSync(ZipEncoder().encode(archive));
+        final bundle = await readProfileBundle(path);
+        expect(bundle.profile.profileId, profile.profileId);
+        expect(bundle.profile.referenceClips, hasLength(15));
+        expect(bundle.patchFiles.keys, ['slope_residual_v2.patch']);
+      },
+    );
 
-    test('bundle reader handles package directories and builder zips', () async {
-      final profile = await coachProfile();
-      final zip = await storeProfilePackage(profile, dir);
-      expect((await readProfileBundle(zip)).patchFiles, isEmpty);
-      final pkg = Directory('${dir.path}/pkg/specialist_patches')
-        ..createSync(recursive: true);
-      File('${dir.path}/pkg/profile.json')
-          .writeAsStringSync(jsonEncode(profile.toJson()));
-      File('${pkg.path}/slope_residual_v2.patch').writeAsStringSync(patchV2());
-      final b = await readProfileBundle('${dir.path}/pkg');
-      expect(b.patchFiles.keys, ['slope_residual_v2.patch']);
-    });
+    test(
+      'bundle reader handles package directories and builder zips',
+      () async {
+        final profile = await coachProfile();
+        final zip = await storeProfilePackage(profile, dir);
+        expect((await readProfileBundle(zip)).patchFiles, isEmpty);
+        final pkg = Directory('${dir.path}/pkg/specialist_patches')
+          ..createSync(recursive: true);
+        File('${dir.path}/pkg/profile.json')
+            .writeAsStringSync(jsonEncode(profile.toJson()));
+        File('${pkg.path}/slope_residual_v2.patch')
+            .writeAsStringSync(patchV2());
+        final b = await readProfileBundle('${dir.path}/pkg');
+        expect(b.patchFiles.keys, ['slope_residual_v2.patch']);
+      },
+    );
 
     test('compatible profiles: ready and same pack/event only', () async {
       final profile = await coachProfile();
       final zip = await storeProfilePackage(profile, dir);
       await db.saveProfile(await readProfilePackage(zip), zip);
       // Another event's profile is not offered.
-      final other = await readProfilePackage('test/fixtures/dummy_profile.json');
+      final other = await readProfilePackage(
+        'test/fixtures/dummy_profile.json',
+      );
       await db.saveProfile(other, 'test/fixtures/dummy_profile.json');
       final choices = await compatibleProfiles(db, placeholderPack);
       expect(choices.map((c) => c.label), ['Coach · v1']);
@@ -287,17 +343,30 @@ void main() {
 
     test('comparison results are stored for drift', () async {
       final profile = await coachProfile();
-      final v = (await AnalysisEngine(
-                  pack: pack, pose: const StubPoseEstimator(styleSeed: 42))
-              .analyze(const ClipSource(
-                  clipId: 'c', path: '/c', durationMs: 6000, fps: 30)))
-          as AnalysisSuccess;
+      final v =
+          (await AnalysisEngine(
+                pack: pack,
+                pose: const StubPoseEstimator(styleSeed: 42),
+              ).analyze(
+                const ClipSource(
+                  clipId: 'c',
+                  path: '/c',
+                  durationMs: 6000,
+                  fps: 30,
+                ),
+              ))
+              as AnalysisSuccess;
       for (var i = 0; i < 2; i++) {
-        final r = (compare(vector: v.vector, profile: profile, resultId: 'r$i')
-                as ComparisonSuccess)
-            .result;
+        final r = (compare(
+          vector: v.vector,
+          profile: profile,
+          resultId: 'r$i',
+        ) as ComparisonSuccess).result;
         await db.saveComparison(
-            projectId: 'p', result: r, at: DateTime.utc(2026, 11, 4, i));
+          projectId: 'p',
+          result: r,
+          at: DateTime.utc(2026, 11, 4, i),
+        );
       }
       final rows = await db.comparisonsForProfile('prof-1');
       expect(rows.map((r) => r.resultId), ['r0', 'r1']);

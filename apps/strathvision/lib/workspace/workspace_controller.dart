@@ -12,14 +12,11 @@ import 'stage_player.dart';
 
 enum Stage { a, b }
 
-/// Persists projects. Implemented by the database; faked in tests.
 abstract class ProjectStore {
   Future<void> saveProject(Project project);
 }
 
-/// Implements the Workspace Events contract (docs/INTERFACES.md):
-/// load, independent scrub, set/clear sync, locked/independent play, rate,
-/// frame step, mirror B, swap, annotate, red/green mark — plus one-tap undo.
+/// Workspace Events contract: playback, sync, annotation and reversible marks.
 class WorkspaceController extends ChangeNotifier {
   WorkspaceController({
     required Project project,
@@ -38,28 +35,77 @@ class WorkspaceController extends ChangeNotifier {
        _activeAttribute = attributes.isEmpty ? null : attributes.first,
        _clock = clock ?? DateTime.now {
     for (final s in Stage.values) {
-      _subs.add(_players[s]!.changes.listen((_) => notifyListeners()));
+      _subs.add(_players[s]!.changes.listen((_) => _notify()));
     }
   }
-
   final ProjectStore store;
-  final String? packId, eventId;
-  final Duration driftTolerance;
-  final Duration driftCheckInterval;
+  String? packId, eventId;
+  final Duration driftTolerance, driftCheckInterval;
   final DateTime Function() _clock;
   final Map<Stage, StagePlayer> _players;
   final List<StreamSubscription<void>> _subs = [];
   final List<Project> _undo = [];
   static const _uuid = Uuid();
-
   Project _project;
   Stage _activeStage = Stage.a;
   final List<String> _attributes;
   String? _activeAttribute;
   Timer? _driftTimer;
   bool _disposed = false;
+  Future<void> _pendingInputs = Future<void>.value();
+  Future<void> _writes = Future<void>.value();
+  int _revision = 0, _savedRevision = 0;
 
-  // ---- read state ---------------------------------------------------------
+  /// Domain writes are ordered. Resume timers never write Project JSON.
+  Future<void> _persist(Project snapshot, int revision) {
+    final write = _writes.then((_) async {
+      await store.saveProject(snapshot);
+      if (revision > _savedRevision) _savedRevision = revision;
+    });
+    _writes = write.then<void>((_) {}, onError: (Object _, StackTrace _) {});
+    return write;
+  }
+
+  Future<void> flush() async {
+    await _pendingInputs;
+    await _writes;
+    if (_savedRevision < _revision) await _persist(_project, _revision);
+  }
+
+  /// Only future marks use a newly chosen context; historical marks are immutable.
+  void configureContext({
+    String? packId,
+    String? eventId,
+    required List<String> attributes,
+    String? selectedAttribute,
+  }) {
+    this.packId = packId;
+    this.eventId = eventId;
+    _attributes
+      ..clear()
+      ..addAll(attributes);
+    _activeAttribute = attributes.contains(selectedAttribute)
+        ? selectedAttribute
+        : attributes.firstOrNull;
+    _notify();
+  }
+
+  Duration displayedPosition(Stage stage) {
+    final current = player(stage);
+    return current is MediaKitStagePlayer
+        ? current.decoderPosition
+        : current.position;
+  }
+
+  Future<bool> settleFrames() async {
+    for (final stage in locked ? Stage.values : [activeStage]) {
+      final current = player(stage);
+      if (current is MediaKitStagePlayer && !await current.settleSeek()) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   Project get project => _project;
   Stage get activeStage => _activeStage;
@@ -74,7 +120,6 @@ class WorkspaceController extends ChangeNotifier {
   List<String> get attributes => List.unmodifiable(_attributes);
   String? get activeAttribute => _activeAttribute;
   bool get hasBothClips => clipOn(Stage.a) != null && clipOn(Stage.b) != null;
-
   List<Mark> marksFor(Stage s) {
     final id = _stageClipId(s);
     return _project.marks.where((m) => m.clipId == id).toList();
@@ -84,9 +129,6 @@ class WorkspaceController extends ChangeNotifier {
       ? _project.workspace.stageAClipId
       : _project.workspace.stageBClipId;
 
-  // ---- lifecycle ----------------------------------------------------------
-
-  /// Opens the clips saved on each stage (re-opening a project).
   Future<void> restore() async {
     for (final s in Stage.values) {
       final clip = clipOn(s);
@@ -117,17 +159,14 @@ class WorkspaceController extends ChangeNotifier {
     if (undoable) _undo.add(_project);
     _project = next;
     _notify();
-    await store.saveProject(_project);
+    await _persist(_project, ++_revision);
   }
-
-  // ---- events -------------------------------------------------------------
 
   void setActiveStage(Stage s) {
     _activeStage = s;
     _notify();
   }
 
-  /// Load clip into stage A or B.
   Future<void> loadClip(Stage stage, String path) async {
     await _pauseAll();
     var clips = _project.clips;
@@ -145,18 +184,41 @@ class WorkspaceController extends ChangeNotifier {
     final ws = stage == Stage.a
         ? _project.workspace.copyWith(stageAClipId: () => id)
         : _project.workspace.copyWith(stageBClipId: () => id);
-    await player(stage).open(path);
-    await player(stage).setRate(rate);
+    final previous = clipOn(stage), previousPosition = player(stage).position;
+    try {
+      await player(stage).open(path);
+      await player(stage).setRate(rate);
+    } catch (_) {
+      if (previous != null && previous.path != path) {
+        try {
+          await player(stage).open(previous.path);
+          await player(stage).setRate(rate);
+          await player(stage).seek(previousPosition);
+        } catch (_) {
+          /* Retain the original reference and recovery controls. */
+        }
+      }
+      rethrow;
+    }
     _activeStage = stage;
     await _commit(_project.copyWith(clips: clips, workspace: ws));
     if (locked) await _alignB();
   }
 
-  /// The saved choice of who to analyse in [clipId] (null = automatic).
+  /// Hide a stage without deleting footage, marks or saved sync relationships.
+  Future<void> clearStage(Stage stage) async {
+    if (clipOn(stage) == null) return;
+    await _pauseAll();
+    final ws = stage == Stage.a
+        ? _project.workspace.copyWith(stageAClipId: () => null)
+        : _project.workspace.copyWith(stageBClipId: () => null);
+    await player(stage).close();
+    _activeStage = stage == Stage.a ? Stage.b : Stage.a;
+    await _commit(_project.copyWith(workspace: ws));
+  }
+
   Map<String, Object?>? athleteFor(String clipId) =>
       _project.clipById(clipId)?.athlete;
-
-  /// Saves who to analyse in [clipId] (null returns to automatic).
   Future<void> setAthlete(String clipId, Map<String, Object?>? athlete) async {
     if (_project.clipById(clipId) == null) return;
     await _commit(
@@ -169,7 +231,7 @@ class WorkspaceController extends ChangeNotifier {
     );
   }
 
-  /// Scrub one stage. When locked, the other stage follows at the offset.
+  /// Locked seeks align from the requested A target, not stale decoder state.
   Future<void> scrub(Stage stage, Duration position) async {
     _activeStage = stage;
     final s = sync;
@@ -179,8 +241,6 @@ class WorkspaceController extends ChangeNotifier {
           : position - Duration(milliseconds: s.offsetMs);
       final aTarget = _clamp(Stage.a, a);
       await player(Stage.a).seek(aTarget);
-      // Seeks are asynchronous on a real decoder; align from the target, not
-      // from A's (possibly stale) reported position.
       await _alignB(aPosition: aTarget);
     } else {
       await player(stage).seek(_clamp(stage, position));
@@ -188,7 +248,6 @@ class WorkspaceController extends ChangeNotifier {
     _notify();
   }
 
-  /// Records offset_ms = B - A at the current positions and locks the pair.
   Future<void> setSyncPoint() async {
     final a = _stageClipId(Stage.a), b = _stageClipId(Stage.b);
     if (a == null || b == null) return;
@@ -228,7 +287,6 @@ class WorkspaceController extends ChangeNotifier {
     );
   }
 
-  /// Switch between locked and independent playback (needs a sync point).
   Future<void> setLocked(bool value) async {
     if (value && sync == null) return;
     if (value == _project.workspace.locked) return;
@@ -238,17 +296,13 @@ class WorkspaceController extends ChangeNotifier {
     );
     if (value) {
       await _alignB();
-      if (playing) {
-        await _playLocked();
-      }
+      if (playing) await _playLocked();
     } else {
       _stopDriftCorrection();
     }
   }
 
   Future<void> togglePlay() => playing ? _pauseAll() : play();
-
-  /// Play locked (both at offset) or independent (active stage only).
   Future<void> play() async {
     if (locked) {
       await _playLocked();
@@ -266,7 +320,6 @@ class WorkspaceController extends ChangeNotifier {
   }
 
   Future<void> pause() => _pauseAll();
-
   Future<void> _pauseAll() async {
     _stopDriftCorrection();
     for (final s in Stage.values) {
@@ -276,7 +329,6 @@ class WorkspaceController extends ChangeNotifier {
     _notify();
   }
 
-  /// Playback rate for both stages, including values below 1.0.
   Future<void> setRate(double value) async {
     for (final s in Stage.values) {
       await player(s).setRate(value);
@@ -290,8 +342,6 @@ class WorkspaceController extends ChangeNotifier {
     if (locked) await _alignB();
   }
 
-  /// Frame step the locked pair (A steps; B re-aligns to the offset) or the
-  /// active stage.
   Future<void> stepFrame({required bool forward}) async {
     _stopDriftCorrection();
     if (locked) {
@@ -309,11 +359,9 @@ class WorkspaceController extends ChangeNotifier {
   }
 
   Future<void> _stepAndSettle(Stage s, bool forward) async {
-    final pl = player(s);
-    final before = pl.position;
+    final pl = player(s), before = player(s).position;
     final moved = pl.changes.firstWhere((_) => pl.position != before);
     await pl.stepFrame(forward: forward);
-    // The decoder reports the new position asynchronously.
     await moved.timeout(const Duration(milliseconds: 300), onTimeout: () {});
   }
 
@@ -323,8 +371,7 @@ class WorkspaceController extends ChangeNotifier {
     ),
   );
 
-  /// Swap the clips on A and B. A sync relationship is carried over with the
-  /// pair reversed and the offset negated, so lock survives the swap.
+  /// Reverse the sync offset with the pair; preserve linked playback.
   Future<void> swapStages() async {
     await _pauseAll();
     final a = _stageClipId(Stage.a), b = _stageClipId(Stage.b);
@@ -349,7 +396,6 @@ class WorkspaceController extends ChangeNotifier {
     await _reopenStages(seekA: posB, seekB: posA);
   }
 
-  /// Annotate on the active stage at its current position.
   Future<void> annotate(String text) async {
     final clip = clipOn(_activeStage);
     if (clip == null || text.trim().isEmpty) return;
@@ -360,7 +406,7 @@ class WorkspaceController extends ChangeNotifier {
           Annotation(
             annotationId: _uuid.v4(),
             clipId: clip.clipId,
-            timeMs: player(_activeStage).position.inMilliseconds,
+            timeMs: displayedPosition(_activeStage).inMilliseconds,
             text: text.trim(),
             createdAt: _clock(),
           ),
@@ -375,22 +421,28 @@ class WorkspaceController extends ChangeNotifier {
     _notify();
   }
 
-  /// Red/green on the selected attribute for the current stroke of the
-  /// active stage. Does not move the playhead.
-  Future<void> mark(
+  Future<void> mark(MarkLabel label, {MarkAuthor author = MarkAuthor.athlete}) {
+    final previous = _pendingInputs;
+    final work = _mark(label, author: author);
+    _pendingInputs = Future.wait<void>([previous, work])
+        .then<void>((_) {}, onError: (Object _, StackTrace _) {});
+    return work;
+  }
+
+  Future<void> _mark(
     MarkLabel label, {
     MarkAuthor author = MarkAuthor.athlete,
   }) async {
-    final clip = clipOn(_activeStage);
-    final attribute = _activeAttribute;
+    final clip = clipOn(_activeStage), attribute = _activeAttribute;
     if (clip == null || attribute == null) return;
-    final timeMs = player(_activeStage).position.inMilliseconds;
+    final timeMs = displayedPosition(_activeStage).inMilliseconds;
+    final markedPack = packId, markedEvent = eventId;
     final createdAt = _clock();
     String? hash;
     try {
       if (File(clip.path).existsSync()) hash = await sourceHash(clip.path);
     } catch (_) {
-      /* retained locally */
+      /* Retain locally without inventing provenance. */
     }
     if (_disposed) return;
     await _commit(
@@ -401,8 +453,8 @@ class WorkspaceController extends ChangeNotifier {
             markId: _uuid.v4(),
             clipId: clip.clipId,
             timeMs: timeMs,
-            packId: packId,
-            eventId: eventId,
+            packId: markedPack,
+            eventId: markedEvent,
             sourceSha256: hash,
             attribute: attribute,
             label: label,
@@ -414,17 +466,17 @@ class WorkspaceController extends ChangeNotifier {
     );
   }
 
-  /// One-tap undo of the last mark, annotation, sync, load, swap, or mirror.
   Future<void> undo() async {
     if (_undo.isEmpty) return;
-    final before = _project;
-    final restored = _undo.removeLast();
-    _project = restored.copyWith(workspace: restored.workspace.copyWith(
-      playbackRate: before.workspace.playbackRate,
-      locked: before.workspace.locked && restored.activeSync != null,
-    ));
+    final before = _project, restored = _undo.removeLast();
+    _project = restored.copyWith(
+      workspace: restored.workspace.copyWith(
+        playbackRate: before.workspace.playbackRate,
+        locked: before.workspace.locked && restored.activeSync != null,
+      ),
+    );
     _notify();
-    await store.saveProject(_project);
+    await _persist(_project, ++_revision);
     final stagesChanged =
         before.workspace.stageAClipId != _project.workspace.stageAClipId ||
         before.workspace.stageBClipId != _project.workspace.stageBClipId;
@@ -437,8 +489,6 @@ class WorkspaceController extends ChangeNotifier {
       await _alignB();
     }
   }
-
-  // ---- internals ----------------------------------------------------------
 
   Future<void> _reopenStages({Duration? seekA, Duration? seekB}) async {
     for (final (s, seekTo) in [(Stage.a, seekA), (Stage.b, seekB)]) {
@@ -462,7 +512,6 @@ class WorkspaceController extends ChangeNotifier {
     return d;
   }
 
-  /// Puts B exactly at A + offset. Pass [aPosition] when A was just seeked.
   Future<void> _alignB({Duration? aPosition}) async {
     final s = sync;
     if (s == null) return;
@@ -487,16 +536,8 @@ class WorkspaceController extends ChangeNotifier {
   }
 
   bool _bRateNudged = false;
-
-  /// Drift above this is fixed with a hard seek; below it B's speed is nudged.
-  /// Hard seeks stall a real decoder briefly, so seeking to fix small drift
-  /// makes drift worse.
   static const hardResyncThreshold = Duration(milliseconds: 250);
-
-  /// Wall time over which a speed nudge should close the gap.
   static const _catchUpSeconds = 0.5;
-
-  /// Keeps B on A + offset while locked playback runs.
   @visibleForTesting
   Future<void> correctDrift() async {
     final s = sync;
@@ -505,9 +546,8 @@ class WorkspaceController extends ChangeNotifier {
       Stage.b,
       player(Stage.a).position + Duration(milliseconds: s.offsetMs),
     );
-    final drift = player(Stage.b).position - target; // + means B is ahead
+    final drift = player(Stage.b).position - target;
     final size = drift.abs();
-
     if (size > hardResyncThreshold) {
       await player(Stage.b).seek(target);
       if (_bRateNudged) {
@@ -515,8 +555,6 @@ class WorkspaceController extends ChangeNotifier {
         await player(Stage.b).setRate(rate);
       }
     } else if (size > driftTolerance) {
-      // Speed change that closes the gap in ~_catchUpSeconds of wall time,
-      // capped at ±50% of the playback rate.
       final delta = (drift.inMicroseconds / 1e6 / _catchUpSeconds).clamp(
         -rate * 0.5,
         rate * 0.5,
@@ -529,7 +567,6 @@ class WorkspaceController extends ChangeNotifier {
     }
   }
 
-  /// B's current speed differs from [rate] to absorb drift.
   @visibleForTesting
   bool get bRateNudged => _bRateNudged;
 }
