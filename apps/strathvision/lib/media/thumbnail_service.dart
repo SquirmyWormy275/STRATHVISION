@@ -152,8 +152,9 @@ class ThumbnailService {
           return;
         }
         final bytes = await _decode(path);
+        // Keep a finished decode even if every tile was scrolled away; the
+        // finally block only delivers to requests that are still live.
         if (_disposed ||
-            requests.every((r) => r.cancelled) ||
             bytes == null ||
             bytes.isEmpty ||
             await presentationSignature(path) != signature) {

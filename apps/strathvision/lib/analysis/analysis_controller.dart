@@ -204,7 +204,9 @@ class AnalysisController extends ChangeNotifier {
     } else {
       _selected = _choices.firstOrNull;
       _requestedKey = _selected?.key;
-      _selectionEstablished = true;
+      // With no compatible profile there was no choice to pin; a profile
+      // installed later may still become this review's default.
+      _selectionEstablished = _selected != null;
     }
     _notify();
   }

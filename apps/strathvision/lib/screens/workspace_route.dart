@@ -79,6 +79,7 @@ class _WorkspaceRouteState extends State<WorkspaceRoute>
   final _loadedSignatures = <String, String>{};
   Timer? _timer, _debounce;
   Future<void>? _saving;
+  bool _saveAgain = false;
   bool _ready = false,
       _closed = false,
       _leaving = false,
@@ -265,16 +266,25 @@ class _WorkspaceRouteState extends State<WorkspaceRoute>
 
   Future<void> _checkpoint() async {
     if (_saving != null) {
+      // The in-flight save captured older state; save again once it ends.
+      _saveAgain = true;
       await _saving;
       return;
     }
-    final work = _save();
+    final work = _saveUntilCurrent();
     _saving = work;
     try {
       await work;
     } finally {
       _saving = null;
     }
+  }
+
+  Future<void> _saveUntilCurrent() async {
+    do {
+      _saveAgain = false;
+      await _save();
+    } while (_saveAgain && !_closed);
   }
 
   Future<void> _save() async {
@@ -429,7 +439,9 @@ class _WorkspaceRouteState extends State<WorkspaceRoute>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) _saveQuietly();
+    // Before restore finishes, players sit at 0; saving would overwrite the
+    // saved positions that _initialize is about to restore.
+    if (state != AppLifecycleState.resumed && _ready) _saveQuietly();
   }
 
   @override

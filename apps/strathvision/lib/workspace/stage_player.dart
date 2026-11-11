@@ -66,10 +66,18 @@ class MediaKitStagePlayer implements StagePlayer {
   Future<bool> settleSeek() async {
     final target = _confirmationTarget;
     if (target == null || playing) return true;
-    final toleranceUs = (500000 / await frameRate()).round() + 2000;
+    final frameUs = 1e6 / await frameRate();
+    final toleranceUs = (frameUs / 2).round() + 2000;
+    // A seek at or past the last frame settles on that frame's start time,
+    // about one frame before the reported duration.
+    final durationUs = duration.inMicroseconds;
+    final atEnd =
+        durationUs > 0 && target.inMicroseconds >= durationUs - 1.5 * frameUs;
     final end = DateTime.now().add(const Duration(seconds: 2));
     while (DateTime.now().isBefore(end)) {
-      if ((decoderPosition - target).inMicroseconds.abs() <= toleranceUs) {
+      final decoderUs = decoderPosition.inMicroseconds;
+      if ((decoderUs - target.inMicroseconds).abs() <= toleranceUs ||
+          (atEnd && decoderUs >= durationUs - 2.5 * frameUs)) {
         if (_confirmationTarget == target) _confirmationTarget = null;
         return true;
       }
@@ -164,7 +172,14 @@ class MediaKitStagePlayer implements StagePlayer {
   }
 
   @override
-  Future<void> play() => _player.play();
+  Future<void> play() {
+    // Playback supersedes any unconfirmed seek; a later pause must not wait
+    // for the decoder to return to the old target.
+    _pendingSeek = null;
+    _confirmationTarget = null;
+    return _player.play();
+  }
+
   @override
   Future<void> pause() => _player.pause();
   @override

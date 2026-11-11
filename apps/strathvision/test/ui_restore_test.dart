@@ -68,6 +68,24 @@ void main() {
     expect(analysis.profileSelectionEstablished, isTrue);
   });
 
+  test('no compatible profile does not pin measurements-only', () async {
+    var installed = <ProfileChoice>[];
+    final analysis = AnalysisController(
+      workspace: workspace,
+      pack: placeholderPack.analysisPack,
+      run: empty,
+      listProfiles: () async => installed,
+    );
+    addTearDown(analysis.dispose);
+    await analysis.refreshProfiles();
+    expect(analysis.selectedProfile, isNull);
+    expect(analysis.profileSelectionEstablished, isFalse);
+    installed = [newer];
+    await analysis.refreshProfiles();
+    expect(analysis.selectedProfile?.key, newer.key);
+    expect(analysis.profileSelectionEstablished, isTrue);
+  });
+
   test('missing exact version blocks comparison until explicit choice', () async {
     await workspace.loadClip(Stage.a, '/fixture/clip.mp4');
     var runs = 0;

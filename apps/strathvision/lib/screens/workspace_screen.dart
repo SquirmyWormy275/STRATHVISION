@@ -123,7 +123,10 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   });
   Future<void> _annotate() => _run(() async {
     await c.pause();
-    if (!await c.settleFrames() || !mounted) return;
+    if (!await c.settleFrames()) {
+      throw StateError('Wait for the displayed frame.');
+    }
+    if (!mounted) return;
     _modal = true;
     try {
       final text = await showDialog<String>(

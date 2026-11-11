@@ -59,6 +59,32 @@ void main() {
     expect(peak, 1);
     expect(decoded, 1);
   });
+  test('decode finished after every request cancelled is still cached', () async {
+    var decoded = 0;
+    final gate = Completer<void>(), entered = Completer<void>();
+    final service = ThumbnailService(
+      directory: () async => Directory('${root.path}/cache'),
+      decoder: (_) async {
+        decoded++;
+        if (!entered.isCompleted) entered.complete();
+        await gate.future;
+        return Uint8List.fromList([1, 2, 3]);
+      },
+    );
+    final scrolledAway = service.request(source.path);
+    await entered.future;
+    scrolledAway.cancel();
+    gate.complete();
+    await scrolledAway.result;
+    // The single worker runs jobs in order, so this one finishing means the
+    // cancelled decode has finished too.
+    final other = File('${root.path}/other.mp4')..writeAsStringSync('other');
+    await service.request(other.path).result;
+    expect(decoded, 2);
+    expect(await service.request(source.path).result, isNotNull);
+    expect(decoded, 2);
+    await service.dispose();
+  });
   test('mutation during decoding rejects stale preview', () async {
     final service = ThumbnailService(
       directory: () async => Directory('${root.path}/cache'),
