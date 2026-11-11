@@ -19,3 +19,20 @@ Rendered candidates use actual Flutter widgets and deterministic test players, n
 ## Review priorities
 
 Save/close ordering; canceled or failed imports; event change followed by reopening; missing profile versions; corrupt/future settings; large text and short windows; source change; native decoder seeking/screenshots; profile/export/workbench parity. Keep the draft unmerged while required checks fail.
+
+## Claude completion pass, 2026-11-11
+
+- **Linux CI repair.** The native `Real Linux decoder` step failed at `1315a14`: `MediaKitStagePlayer.open` treated mpv's nonfatal `Could not open codec.` message as a failed open, though the same clips decode on main. `open` now fails only when no playable duration follows the error within 2 s. Broken files still fail; the 10 s overall timeout is unchanged.
+- **Review fixes** (from a code review of this PR against the review priorities above):
+  - Playback clears an unconfirmed seek target, so a later pause can still mark or save.
+  - Seeks clamped to the end of a clip confirm on the last frame's start time.
+  - Lifecycle saves wait until restore finishes, so they no longer overwrite saved positions with 0.
+  - A checkpoint requested during an in-flight save saves again with the newer state.
+  - With no compatible profile, an implicit measurements-only choice is no longer pinned.
+  - Note reports a frame-settle failure instead of doing nothing.
+  - A preview decoded after every tile cancelled is still cached.
+  - Regression tests were added for the profile and preview-cache fixes; each fails on the previous source.
+- **Deliberately unchanged:** reviews with no saved event still open without one, with the event chooser offered, rather than inheriting the library's current selection. That matches the "library event changes do not relabel existing reviews" contract.
+- **Observed:** analyzer clean, 173 app tests pass locally. All 11 jobs in builds, ui-review-evidence and ui-regression-diagnostics passed on the same source tree (run 42977893581): the native Linux decoder, pose and full desktop workflow, plus the Android, Windows, macOS and iOS builds.
+- **Native screenshots:** the 14 native Linux screenshots from that run were inspected, with real footage visible in single, linked, mirrored, analysis and library views. They are inspected candidates, not approved golden baselines.
+- **Still open (unchanged):** physical-device acceptance, production signing, measured 60 fps / frame-time performance on target hardware, and coaching/model validity.
