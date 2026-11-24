@@ -2,14 +2,14 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-24T06:57:22Z
+owner: none
+heartbeat: 2026-11-24T06:57:46Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Owner: complete Request Access at https://appstoreconnect.apple.com/access/integrations/api. Once enabled, obtain action-time approval for STRATHVISION GitHub team App Manager key and encrypted GitHub testflight signing secrets; then dispatch builds.yml on implementation with upload_testflight=true and verify Apple processing and real iPhone behavior.
-owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/DECISIONS.md docs/handoff/STATUS.md apps/strathvision/ios apps/strathvision/integration_test/native_runtime_test.dart
-active_processes: none; cloud run 45340735890 completed with all eight validation jobs successful; TestFlight upload intentionally skipped; waiting for owner Apple API access approval
+next: Complete the pending Apple API Request Access step, then approve creation/storage of a dedicated team key and configure the four testflight environment secrets. Run builds.yml with upload_testflight=true; verify signed upload, Apple processing and real iPhone acceptance before external invitations.
+owned_paths: 
+active_processes: none
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T06:57:46Z **codex** — Released: Cloud TestFlight automation and iOS runtime recovery are saved on implementation; all eight validation jobs pass for e073b73; Apple API owner approval remains pending → next: Complete the pending Apple API Request Access step, then approve creation/storage of a dedicated team key and configure the four testflight environment secrets. Run builds.yml with upload_testflight=true; verify signed upload, Apple processing and real iPhone acceptance before external invitations.
 - 2026-11-24T06:57:22Z **codex** — All eight cloud jobs pass for e073b73, including iOS release linking and both models in iPhone Simulator; Apple app registered and TestFlight automation prepared → next: Owner: complete Request Access at https://appstoreconnect.apple.com/access/integrations/api. Once enabled, obtain action-time approval for STRATHVISION GitHub team App Manager key and encrypted GitHub testflight signing secrets; then dispatch builds.yml on implementation with upload_testflight=true and verify Apple processing and real iPhone behavior.
 - 2026-11-24T06:40:07Z **codex** — iOS release build and runtime symbol check now pass using official same-version NuGet framework; seven other cloud jobs pass; iOS Simulator inference running → next: Finish iOS Simulator verification in run 45340735890 (source e073b73). Owner must complete Apple API Request Access; then obtain action-time approval for team App Manager key and configure encrypted GitHub signing secrets before a signed run.
 - 2026-11-24T06:28:27Z **codex** — WIP: seven cloud validation jobs passed; iOS blocked by removed ONNX archive; pinned same-version NuGet framework and added native model smoke check, which passes on Linux → next: Dispatch builds.yml on implementation with upload_testflight=false; verify new iOS release linking and Simulator model execution. Owner must complete App Store Connect API Request Access before a dedicated upload key can be configured.
