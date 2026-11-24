@@ -69,6 +69,8 @@ python scripts/check_links.py
 
 The local tests exercise wrong-app/team rejection, expired/development/ad hoc profiles, wrong IPA identity/SDK, missing credentials without secret disclosure, and build-number retries. They do not simulate Apple enrollment, native codesigning or a phone installation.
 
+The iOS Podfile replaces only the ONNX Runtime plugin's native pod. Its old Microsoft CocoaPods archive returned HTTP 404 during the 2026-11-24 cloud build. The replacement uses the same **1.15.1** C API and official device/simulator XCFramework from [Microsoft's NuGet package](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime/1.15.1), pinned by SHA-256 in `apps/strathvision/ios/onnxruntime.podspec`. It retains Microsoft's MIT license, uses the plugin's existing Dart FFI bindings and leaves other platforms and the shared Pub cache unchanged. CI checks that the release executable contains `OrtGetApiBase` and runs both shipped models on synthetic input in an iOS Simulator. These checks do not establish physical-device behavior or coaching accuracy.
+
 - **Account not enabled / pending enrollment:** resolve the membership with Apple; no workflow setting can activate it.
 - **Missing signing inputs:** populate the `testflight` environment; never substitute placeholder credentials.
 - **API authorization failure:** verify the team key's role, active membership and accepted agreements. The script stops before creating signing assets when the app-record check fails.
