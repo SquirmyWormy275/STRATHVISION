@@ -1,0 +1,50 @@
+{
+  "format": "strathvision-testflight-internal-verification/1",
+  "verified_at": "2026-11-24T19:46:45.219227+00:00",
+  "app_store_id": "6838607473",
+  "version": "1.0.0",
+  "build": "1.63.1",
+  "build_id": "ac329d48-27fa-4cb6-b815-6fc1abc01c93",
+  "upload_evidence": "testflight-sdk27-20261124.json",
+  "authorization": "Owner approved proceeding with the initial beta excluding France and arranging the first owner iPhone test.",
+  "compliance": {
+    "encryption_answer": "Standard encryption algorithms instead of, or in addition to, using or accessing the encryption within Apple's operating system",
+    "france_distribution_answer": false,
+    "saved": true,
+    "observed_status_after_save": "Ready to Submit",
+    "french_declaration_filed": false,
+    "library_changes": false,
+    "info_plist_changed": false
+  },
+  "internal_group": {
+    "id": "ac4912cc-316c-4cf9-8e9f-daaf97174b52",
+    "name": "Owner iPhone Check",
+    "tester_count": 1,
+    "tester": "Existing account holder; personal email omitted from public record",
+    "tester_status": "Invited",
+    "build_count": 1,
+    "build_status": "Ready to Test",
+    "build_distribution": "Manual for Xcode Builds"
+  },
+  "distribution_policy": {
+    "initial_beta_excludes_france": true,
+    "named_invitations_only": true,
+    "public_link_created": false,
+    "geographic_block_verified": false,
+    "app_store_territories_changed": false
+  },
+  "verification_method": "App Store Connect live UI: saved questionnaire, Ready to Submit build state, group build Ready to Test, one account-holder tester Invited and Manual for Xcode Builds setting.",
+  "local_screenshots": [
+    "research-data/testflight-20261124/owner-invited.png",
+    "research-data/testflight-20261124/owner-ready-to-test.png"
+  ],
+  "screenshots_published": false,
+  "physical_device_acceptance": "Awaiting owner installation and checks; no device result inferred from invitation.",
+  "external_beta_review": "not submitted",
+  "external_invitations": "not sent",
+  "sources": [
+    "https://developer.apple.com/help/app-store-connect/reference/app-information/export-compliance-documentation-for-encryption/",
+    "https://developer.apple.com/help/app-store-connect/test-a-beta-version/add-internal-testers/",
+    "https://developer.apple.com/help/app-store-connect/test-a-beta-version/invite-external-testers/"
+  ]
+}
