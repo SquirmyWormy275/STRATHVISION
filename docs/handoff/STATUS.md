@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-24T05:47:57Z
+owner: codex
+heartbeat: 2026-11-24T05:50:28Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
 next: Next implementation: confirm Apple team/app registration and signing credentials, add TestFlight to docs/DECISIONS.md and docs/DISTRIBUTION.md, implement a manual signed IPA/upload workflow, then perform and record iPhone acceptance before external invitations. Coach validation and local transcription remain open.
-owned_paths: 
+owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/DECISIONS.md docs/handoff/STATUS.md
 active_processes: none
 <!-- STATE:END -->
 
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T05:50:28Z **codex** — Claimed: Set up user-requested GitHub cloud signing and TestFlight automation; Apple account onboarding pending
 - 2026-11-24T05:47:57Z **codex** — Released: Apple beta distribution assessment complete; recommended GitHub-hosted macOS signing and TestFlight; no app/configuration changes or uploads → next: Next implementation: confirm Apple team/app registration and signing credentials, add TestFlight to docs/DECISIONS.md and docs/DISTRIBUTION.md, implement a manual signed IPA/upload workflow, then perform and record iPhone acceptance before external invitations. Coach validation and local transcription remain open.
 - 2026-11-24T05:47:57Z **codex** — Assessed iOS beta readiness: existing unsigned cloud build, bundle ID confirmed, repository Actions secrets empty; user chose cloud builds; reconciled stale compiler status → next: For TestFlight setup, confirm active Apple team and app record for com.strathvision.strathvision; update docs/DECISIONS.md and docs/DISTRIBUTION.md, add signed IPA/upload workflow using protected secrets and supported Xcode, then record an actual iPhone check in docs/VALIDATION.md. No app has been signed or uploaded.
 - 2026-11-24T05:46:08Z **codex** — Claimed: Assess iOS demo distribution readiness and advise Apple Developer/TestFlight next steps; no release or signing changes
