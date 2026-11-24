@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-24T16:37:05Z
+owner: codex
+heartbeat: 2026-11-24T16:41:22Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
 next: Owner: in a regular browser, replace the active STRATHVISION GitHub team key with the same App Manager role and save its one-time .p8 to Downloads. Agent: securely store/validate that file, update testflight key ID and APP_STORE_CONNECT_PRIVATE_KEY, verify read-only app access, dispatch builds.yml upload_testflight=true, then verify Apple processing. Existing RSA key and metadata are outside checkout at ~/.local/share/strathvision/apple-signing.
-owned_paths: 
+owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/handoff/STATUS.md
 active_processes: none
 <!-- STATE:END -->
 
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T16:41:22Z **codex** — Claimed: Owner downloaded Apple key; securely configure final signing secrets, verify Apple access and run first TestFlight upload
 - 2026-11-24T16:37:05Z **codex** — Released: Apple download retry completed; original key revoked with approval; one active replacement has no retrievable private file; cloud upload awaits regular-browser download → next: Owner: in a regular browser, replace the active STRATHVISION GitHub team key with the same App Manager role and save its one-time .p8 to Downloads. Agent: securely store/validate that file, update testflight key ID and APP_STORE_CONNECT_PRIVATE_KEY, verify read-only app access, dispatch builds.yml upload_testflight=true, then verify Apple processing. Existing RSA key and metadata are outside checkout at ~/.local/share/strathvision/apple-signing.
 - 2026-11-24T16:36:40Z **codex** — Retried Apple key recovery with owner-approved replacement; original revoked, replacement download also unavailable; ordinary p8 test download works; manual browser download required → next: Owner must use a regular browser at App Store Connect Integrations to replace the unavailable active key with a fresh STRATHVISION GitHub team App Manager key, then save its one-time .p8 to Downloads. Once saved, securely import it, update encrypted testflight key ID/private-key secrets, verify Apple app access, and dispatch builds.yml with upload_testflight=true. Active/revoked identities and RSA key are in ~/.local/share/strathvision/apple-signing; no upload has started.
 - 2026-11-24T14:53:00Z **codex** — Claimed: Retry the Apple API key download requested by owner; preserve existing key and signing setup
