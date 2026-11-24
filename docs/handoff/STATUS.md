@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T17:54:48Z
+heartbeat: 2026-11-24T18:00:02Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Monitor run 45453199177 through platform builds and signed upload. Await owner choice between France pending confirmed classification and investigating a larger native iPhone rewrite; no media rewrite or exemption claim yet. TestFlight email and physical iPhone acceptance remain open.
+next: Continue monitoring run 45453199177; verify SDK27.2 unsigned build, simulator inference, signed upload and fresh Apple processing. France exemption remains unestablished after full-runtime audit; await owner answer to pending classification-versus-native-rewrite question and TestFlight email.
 owned_paths: docs/handoff/STATUS.md docs/DISTRIBUTION.md .github/workflows/builds.yml
 active_processes: GitHub Actions run 45453199177: Xcode 27.2 validation and signed TestFlight upload; agents reviewing France exemption uncertainty
 <!-- STATE:END -->
@@ -86,6 +86,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T18:00:02Z **codex** — Xcode27.2 migration run 45453199177 has passed app/research/training, Windows and Android; iOS and macOS builds plus Linux end-to-end still running → next: Continue monitoring run 45453199177; verify SDK27.2 unsigned build, simulator inference, signed upload and fresh Apple processing. France exemption remains unestablished after full-runtime audit; await owner answer to pending classification-versus-native-rewrite question and TestFlight email.
 - 2026-11-24T17:54:48Z **codex** — Three cloud checks pass for Xcode27.2 migration; signed IPA crypto inventory confirms Flutter, archive and media findings; Apple France questionnaire requires documents and was cancelled unsaved → next: Monitor run 45453199177 through platform builds and signed upload. Await owner choice between France pending confirmed classification and investigating a larger native iPhone rewrite; no media rewrite or exemption claim yet. TestFlight email and physical iPhone acceptance remain open.
 - 2026-11-24T17:51:39Z **codex** — Prepared Xcode 27.2 Apple-silicon iOS workflow and SDK>=27 upload gate; 19 tests pass. Actionlint passes with only its outdated xcode-27 label catalog ignored. France audit also found Flutter BoringSSL and retained archive AES/ZipCrypto, so media replacement alone is insufficient. → next: Dispatch builds.yml on implementation with upload_testflight=true; verify iOS27.2 build, simulator, signing, upload and Apple processing. Continue read-only French exemption investigation before an AVFoundation rewrite: current runtime and ZIP importer also contain encryption. No France declaration or exemption assertion is authorized without factual support.
 - 2026-11-24T17:47:15Z **codex** — Claimed: Assess compliant France distribution without filing and address Apple SDK warning; inspect encryption removal and Xcode availability
