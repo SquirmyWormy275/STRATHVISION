@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T17:00:05Z
+heartbeat: 2026-11-24T17:18:19Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Continue run 45440667314 (8048383) through simulator, signing and upload; verify Apple processing. Owner chose own iPhone for first device check. Apple encryption questionnaire may remain because the plist has no declaration; bundled media libraries include third-party cryptography, so do not assume none. No external review or invitations authorized yet.
+next: Monitor signing job 138633204212 in run 45440667314; verify uploaded manifest and Apple processing. Owner will test first on their own iPhone. Resolve any actual Apple export-compliance question with factual bundled-library evidence before device invitation.
 owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/handoff/STATUS.md
 active_processes: GitHub Actions 45440667314: first signed TestFlight upload for source 8048383; local background processes none
 <!-- STATE:END -->
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T17:18:19Z **codex** — All eight validation jobs passed for 8048383 in run 45440667314; TestFlight signing job 138633204212 started → next: Monitor signing job 138633204212 in run 45440667314; verify uploaded manifest and Apple processing. Owner will test first on their own iPhone. Resolve any actual Apple export-compliance question with factual bundled-library evidence before device invitation.
 - 2026-11-24T17:00:06Z **codex** — First TestFlight run 45440667314 has seven successful jobs; iOS release compiled and simulator model check is running → next: Continue run 45440667314 (8048383) through simulator, signing and upload; verify Apple processing. Owner chose own iPhone for first device check. Apple encryption questionnaire may remain because the plist has no declaration; bundled media libraries include third-party cryptography, so do not assume none. No external review or invitations authorized yet.
 - 2026-11-24T16:47:11Z **codex** — Note: Owner will perform the first physical iPhone installation check after the build is accepted; external testers remain a later step.
 - 2026-11-24T16:45:46Z **codex** — Started authorized first TestFlight workflow 45440667314 for source 8048383; key access and signing configuration verified → next: Monitor https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314 through eight checks and TestFlight upload; fix concrete failures, verify Apple processing, then arrange first physical iPhone acceptance. No invitations or external beta review submitted.
