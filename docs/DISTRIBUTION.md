@@ -22,7 +22,7 @@ The implementation-only GitHub `testflight` environment has all four encrypted s
 
 ### France encryption assessment
 
-The signed build's [encryption inventory](verification/encryption-inventory-20261124.json) records Mbed TLS frameworks, FFmpeg encryption symbols, Flutter runtime BoringSSL markers, and retained Dart archive AES/ZipCrypto metadata. These establish packaged capabilities, not execution of every capability or a legal classification. The app's ZIP calls omit passwords, and its ordinary iOS review/analysis flows operate locally.
+The signed build's [encryption inventory](verification/encryption-inventory-20261124.json) records Mbed TLS frameworks, FFmpeg encryption symbols, Flutter runtime BoringSSL markers, and retained Dart archive AES/ZipCrypto metadata. These identify packaged encryption-related code and metadata; they do not establish runtime use or legal classification. The app's ZIP calls omit passwords, and its ordinary iOS review/analysis flows operate locally.
 
 Apple's [declaration guidance](https://developer.apple.com/documentation/security/complying-with-encryption-export-regulations) includes third-party libraries. Its [documentation table](https://developer.apple.com/help/app-store-connect/reference/app-information/export-compliance-documentation-for-encryption/) distinguishes operating-system encryption from bundled standard algorithms. The live questionnaire for build 1.60.1 requests documentation when standard bundled encryption and France are selected; the draft was cancelled without submission.
 

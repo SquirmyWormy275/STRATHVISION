@@ -7,7 +7,7 @@
   "source_commit": "8048383cb8c1d44e279e792726399c5e105d41f4",
   "workflow_run": "https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314",
   "ipa_sha256": "331d3489c60585d2c7a2c91e7e2eb9bc2e685728ed1191a972c72c6348e59558",
-  "method": "Exact byte-marker search within the signed IPA, plus framework names. Positive markers establish packaged encryption-related code/metadata, not execution of every capability or legal classification.",
+  "method": "Exact byte-marker search within the signed IPA, plus framework names. Positive markers identify packaged encryption-related code and metadata; they do not establish runtime use or legal classification.",
   "components": [
     {
       "binary": "Flutter.framework/Flutter",
