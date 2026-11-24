@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-24T20:40:20Z
+owner: none
+heartbeat: 2026-11-24T20:40:37Z
 branch: implementation
 phase: Issue #4 complete
 task: Verified local transcription and explicit voice review
-next: Close issue #4 as completed, then release ownership. Await the user’s bigger-issue details; real iPhone acceptance remains open. macOS app voice support needs a signed bundled helper.
-owned_paths: apps/strathvision/lib/workbench apps/strathvision/lib/screens/carne_screen.dart apps/strathvision/test tools/transcription docs .github/workflows
+next: Await the user’s bigger-issue details. Owner iPhone installation check remains open. macOS voice integration requires a future signed bundled helper; keep the sandbox enabled.
+owned_paths: 
 active_processes: none
 <!-- STATE:END -->
 
@@ -90,6 +90,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T20:40:37Z **codex** — Released: Issue #4 fixed, verified, pushed to implementation and closed. 204 app tests pass; Linux UI/release and real-audio CI verified. No iPhone upload. → next: Await the user’s bigger-issue details. Owner iPhone installation check remains open. macOS voice integration requires a future signed bundled helper; keep the sandbox enabled.
 - 2026-11-24T20:40:20Z **codex** — Issue #4 complete: all three native jobs passed on 5380ff2; Linux UI and release verified; final platform evidence and limitations recorded. → next: Close issue #4 as completed, then release ownership. Await the user’s bigger-issue details; real iPhone acceptance remains open. macOS app voice support needs a signed bundled helper.
 - 2026-11-24T20:31:08Z **codex** — Voice review hardening complete: 204 app tests pass (one existing skip); changed sources reset dependent edits, cancellation/provenance/persistence regressions pass. Native Linux UI with real speech verified. App scope explicitly Linux/Windows; macOS standalone adapter verified but sandboxed app fails closed. → next: Verify latest local transcription workflow for this commit, rerun native Linux voice UI on committed source, record evidence and release ownership. macOS app requires future bundled signed helper; do not disable sandbox or upload iPhone builds.
 - 2026-11-24T20:23:00Z **codex** — Issue #4 local transcription and explicit reviewed feedback implemented; 200 app tests pass (one existing skip), analyzer clean, Linux real speech passes. Native desktop matrix next. → next: Watch the new local transcription workflow for implementation; fix Windows/macOS failures, finish independent review and document native evidence. No iPhone beta changes.
