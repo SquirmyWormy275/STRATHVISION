@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-24T14:44:59Z
+owner: codex
+heartbeat: 2026-11-24T14:53:00Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
 next: User: resolve the pending Save/download prompt or provide the saved .p8 folder. Resume using metadata and RSA key in ~/.local/share/strathvision/apple-signing; securely set APP_STORE_CONNECT_PRIVATE_KEY in testflight, validate read-only Apple access, then start builds.yml with upload_testflight=true and verify processing. Do not recreate or revoke the existing key without resolving its download.
-owned_paths: 
+owned_paths: docs/handoff/STATUS.md
 active_processes: none
 <!-- STATE:END -->
 
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T14:53:00Z **codex** — Claimed: Retry the Apple API key download requested by owner; preserve existing key and signing setup
 - 2026-11-24T14:44:59Z **codex** — Released: Approved Apple API key created; three GitHub signing secrets configured; awaiting the one-time .p8 file after browser download did not return a local path → next: User: resolve the pending Save/download prompt or provide the saved .p8 folder. Resume using metadata and RSA key in ~/.local/share/strathvision/apple-signing; securely set APP_STORE_CONNECT_PRIVATE_KEY in testflight, validate read-only Apple access, then start builds.yml with upload_testflight=true and verify processing. Do not recreate or revoke the existing key without resolving its download.
 - 2026-11-24T14:43:54Z **codex** — Owner approved signing; created dedicated Apple API key and persistent certificate key; three encrypted GitHub secrets configured, one-time Apple key download unresolved → next: Locate the generated .p8 download (key identity in ~/.local/share/strathvision/apple-signing/apple-signing.json); user was asked about the Save prompt/folder. Securely store it outside the checkout, add APP_STORE_CONNECT_PRIVATE_KEY to testflight, validate keys and read-only Apple app access, then dispatch builds.yml with upload_testflight=true. Do not duplicate/revoke the existing key while locating the download.
 - 2026-11-24T14:39:13Z **codex** — Claimed: Owner approved Apple team key, encrypted GitHub signing credentials and first TestFlight upload; check for existing key before creation
