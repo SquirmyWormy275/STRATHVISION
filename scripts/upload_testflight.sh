@@ -60,7 +60,9 @@ xcode-project use-profiles \
   --project "$app/ios/Runner.xcodeproj" \
   --profile "$signing_dir/profiles/*.mobileprovision" \
   --export-options-plist "$signing_dir/export-options.plist" \
-  --custom-export-options '{"method":"app-store-connect","manageAppVersionAndBuildNumber":false}'
+  --custom-export-options '{"manageAppVersionAndBuildNumber":false}'
+# Codemagic 0.71.0 emits the legacy name; Xcode uses app-store-connect.
+python "$root/scripts/apple_beta.py" normalize-export "$signing_dir/export-options.plist"
 python "$root/scripts/apple_beta.py" check-export "$signing_dir/export-options.plist"
 
 cd "$app"

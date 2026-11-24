@@ -76,10 +76,31 @@ class AppleBetaChecks(unittest.TestCase):
                 'manageAppVersionAndBuildNumber': False,
                 'provisioningProfiles': {ENV['IOS_BUNDLE_ID']: 'fixture-profile'}}
         beta.check_export(good, ENV)
-        for change in ({'teamID': 'OTHERTEAM1'}, {'method': 'ad-hoc'},
+        for change in ({'teamID': 'OTHERTEAM1'}, {'method': 'ad-hoc'}, {'method': 'app-store'},
                        {'manageAppVersionAndBuildNumber': True}, {'provisioningProfiles': {}}):
             with self.subTest(change=change), self.assertRaises(beta.BetaError):
                 beta.check_export({**good, **change}, ENV)
+
+    def test_normalize_export_preserves_options_and_requires_app_store_profile(self):
+        legacy = {'teamID': ENV['IOS_TEAM_ID'], 'method': 'app-store',
+                  'manageAppVersionAndBuildNumber': False,
+                  'provisioningProfiles': {ENV['IOS_BUNDLE_ID']: 'fixture-profile'},
+                  'signingStyle': 'manual', 'uploadSymbols': True}
+        expected = {**legacy, 'method': 'app-store-connect'}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'export-options.plist'
+            for original in (legacy, expected):
+                path.write_bytes(plistlib.dumps(original))
+                result = subprocess.run([sys.executable, str(SCRIPT), 'normalize-export', str(path)],
+                                        env={**os.environ, **ENV}, capture_output=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(plistlib.loads(path.read_bytes()), expected)
+            for change in ({'method': 'ad-hoc'}, {'method': 'development'},
+                           {'method': 'enterprise'}, {'method': None},
+                           {'teamID': 'OTHERTEAM1'}, {'manageAppVersionAndBuildNumber': True},
+                           {'provisioningProfiles': {}}):
+                with self.subTest(change=change), self.assertRaises(beta.BetaError):
+                    beta.normalize_export({**legacy, **change}, ENV)
 
     def profile(self):
         return {'TeamIdentifier': [ENV['IOS_TEAM_ID']],

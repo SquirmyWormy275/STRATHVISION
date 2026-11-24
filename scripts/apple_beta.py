@@ -103,6 +103,15 @@ def check_export(data, env):
         raise BetaError('The export profile does not cover the STRATHVISION bundle ID.')
 
 
+def normalize_export(data, env):
+    # Codemagic 0.71.0 accepts only the legacy App Store export-method name.
+    if data.get('method') not in ('app-store', 'app-store-connect'):
+        raise BetaError('Only an App Store export profile can be normalized for TestFlight.')
+    normalized = {**data, 'method': 'app-store-connect'}
+    check_export(normalized, env)
+    return normalized
+
+
 def inspect_ipa(ipa, env, build_number):
     with zipfile.ZipFile(ipa) as archive:
         entries = [name for name in archive.namelist()
@@ -171,7 +180,7 @@ def write_manifest(directory, env, build_number):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['preflight', 'check-app', 'check-export', 'next-build', 'manifest', 'uploaded'])
+    parser.add_argument('command', choices=['preflight', 'check-app', 'normalize-export', 'check-export', 'next-build', 'manifest', 'uploaded'])
     parser.add_argument('path', nargs='?', type=Path)
     parser.add_argument('build_number', nargs='?')
     args = parser.parse_args()
@@ -184,6 +193,9 @@ def main():
         print('Apple signing inputs are present and structurally valid; account access is checked next.')
     elif args.command == 'check-app':
         check_app(json.loads(args.path.read_text()), env)
+    elif args.command == 'normalize-export':
+        normalized = normalize_export(plistlib.loads(args.path.read_bytes()), env)
+        args.path.write_bytes(plistlib.dumps(normalized))
     elif args.command == 'check-export':
         check_export(plistlib.loads(args.path.read_bytes()), env)
     elif args.command == 'next-build':
