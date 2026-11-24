@@ -3,7 +3,7 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T16:45:46Z
+heartbeat: 2026-11-24T16:46:35Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T16:47:11Z **codex** — Note: Owner will perform the first physical iPhone installation check after the build is accepted; external testers remain a later step.
 - 2026-11-24T16:45:46Z **codex** — Started authorized first TestFlight workflow 45440667314 for source 8048383; key access and signing configuration verified → next: Monitor https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314 through eight checks and TestFlight upload; fix concrete failures, verify Apple processing, then arrange first physical iPhone acceptance. No invitations or external beta review submitted.
 - 2026-11-24T16:44:36Z **codex** — Apple key imported securely; app access verified; all four encrypted signing secrets configured; fixed CLI export compatibility; 18 script tests and workflow checks pass → next: Dispatch builds.yml on implementation with upload_testflight=true; verify all eight validation jobs and signed upload, then confirm Apple processing before iPhone acceptance. Private material stays outside checkout.
 - 2026-11-24T16:41:22Z **codex** — Claimed: Owner downloaded Apple key; securely configure final signing secrets, verify Apple access and run first TestFlight upload
