@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T18:06:51Z
+heartbeat: 2026-11-24T18:13:59Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Monitor GitHub Actions45455404551 to all nine successful jobs; download and verify new signed IPA/SDK/manifest, confirm Apple processing VALID, then update docs and evidence. France awaits user scope choice; no compliance submission or library rewrite.
+next: Monitor run45455404551 through simulator/Linux completion and signed upload. Verify IPA hash, manifest, Mach-O SDK and Apple VALID; update docs/evidence. France classification/scope choice remains pending.
 owned_paths: docs/handoff/STATUS.md docs/DISTRIBUTION.md .github/workflows/builds.yml
 active_processes: GitHub Actions run 45455404551 at e44908f: full Xcode 27.2 validation and signed TestFlight upload; France classification pending user scope choice
 <!-- STATE:END -->
@@ -86,6 +86,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T18:13:59Z **codex** — SDK27.2 run45455404551 passed app/research/training, Windows, Android and macOS; iOS release compiled and simulator inference is running alongside Linux end-to-end → next: Monitor run45455404551 through simulator/Linux completion and signed upload. Verify IPA hash, manifest, Mach-O SDK and Apple VALID; update docs/evidence. France classification/scope choice remains pending.
 - 2026-11-24T18:06:51Z **codex** — Simulator selector regression fix passed 25 local script tests; fresh full SDK27.2 run45455404551 at e44908f is running. Independent review verified all recorded encryption markers and hashes. → next: Monitor GitHub Actions45455404551 to all nine successful jobs; download and verify new signed IPA/SDK/manifest, confirm Apple processing VALID, then update docs and evidence. France awaits user scope choice; no compliance submission or library rewrite.
 - 2026-11-24T18:03:52Z **codex** — iOS27.2 release compiles; fixed simulator selector for device-family suffixes after run45453199177 failed before inference; 25 script tests pass → next: Dispatch fresh builds.yml upload_testflight=true on implementation. Verify simulator inference and new signed upload, then inspect IPA SDK and Apple processing. France classification remains unresolved; no library or compliance-answer changes made.
 - 2026-11-24T18:00:02Z **codex** — Xcode27.2 migration run 45453199177 has passed app/research/training, Windows and Android; iOS and macOS builds plus Linux end-to-end still running → next: Continue monitoring run 45453199177; verify SDK27.2 unsigned build, simulator inference, signed upload and fresh Apple processing. France exemption remains unestablished after full-runtime audit; await owner answer to pending classification-versus-native-rewrite question and TestFlight email.
