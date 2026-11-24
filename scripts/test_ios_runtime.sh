@@ -19,7 +19,7 @@ cleanup() {
 }
 trap cleanup EXIT
 # Keep licensed fixture data out of production assets. The unsigned release
-# artifact is already built; this temporary declaration only enters the test
+# artifact is already built; these temporary declarations only enter the test
 # app, where rootBundle copies the file into its own sandbox.
 python - "$pubspec" <<'PY'
 from pathlib import Path
@@ -30,7 +30,9 @@ text = path.read_text()
 anchor = "  assets:\n"
 if text.count(anchor) != 1:
     raise SystemExit("Expected exactly one Flutter assets section")
-path.write_text(text.replace(anchor, anchor + "    - integration_test/assets/cleave.webm\n", 1))
+fixtures = ["cleave.webm", "coach_package.zip", "hdr_hlg.mov", "cleave_sideways.webm", "clip25.mp4"]
+assets = "".join(f"    - integration_test/assets/{name}\n" for name in fixtures)
+path.write_text(text.replace(anchor, anchor + assets, 1))
 PY
 xcrun simctl list devices available --json > "$devices"
 device="$(python "$root/scripts/select_ios_simulator.py" "$devices")"

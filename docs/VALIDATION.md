@@ -18,6 +18,48 @@ Release artifacts must come from one successful eight-job run. Production signin
 
 ## Automated checks
 
+### iPhone analysis and expanded regression audit, 2026-11-24
+
+Inspection of the actual signed TestFlight **1.63.1 IPA** confirmed that archive
+stripping removed the `_OrtGetApiBase` dynamic export. The previous pre-archive
+symbol check and synthetic simulator model test missed this delivery defect.
+[Binary evidence](verification/iphone-analysis-20261124.json) records the old
+artifact hashes and independent export-table checks. The release now preserves
+external symbols, and the unsigned archive, signed archive and final exported IPA
+must all pass the dynamic-export verifier before upload.
+
+The expanded audit also reproduced and corrected these failures:
+
+| Failure | Regression evidence |
+| --- | --- |
+| Native startup failures left empty/stale analysis | Phone error display, retry, and core playback remain usable |
+| Photos picker exports could disappear with temporary cleanup | Every new iOS pick is copied before saving; native test deletes the original export |
+| An iOS update could invalidate owned absolute clip/profile paths | Actual directory relocation and database reopen preserve bytes, profile version, marks, notes, athlete choice and history |
+| Replacing footage at the same path reused old tracking | A failing-before/passing-after test verifies the changed athlete; production cache keys use current content and each explicit Analyze action refreshes the result |
+| Cancel during transcript persistence still left a draft | A failing-before/passing-after test verifies both memory and disk are cancelled; retained audio can retry |
+
+The final local app suite passed **222 tests**, with the existing opt-in live
+compiler test skipped; the engine passed **116** and scripts passed **35**.
+Both analyzers were clean. The native phone-layout check used the real decoder,
+shipped models and production analysis runner: **10 finite measurements and one
+usable stroke**, then imported a synthetic coach fixture, compared all ten
+measurements using its patch and adapters, and reopened saved comparison history.
+The fixture checks software operation, not a validated coaching profile.
+
+Additional native Linux checks passed for HDR/SDR decoding, sideways detection,
+no-person rejection, corrupt-video rejection and the CARNE experiment export/cache
+flow. The iOS simulator gate now includes real-video analysis, package comparison,
+history persistence and those media/error cases. The licensed test assets are
+staged only for the test and excluded from release bundles. A failed grouped Linux
+test launch was repeated as separate invocations; all individual checks passed.
+Run Flutter unit and native commands sequentially in a checkout: overlapping
+builds can overwrite their shared shader/native-asset test manifests.
+
+The corrected unsigned archive passed its export gate in interim run `45486844873`; that run was deliberately cancelled before upload so the broader audit fixes could ship together. The final cloud run and signed replacement IPA are pending. Physical iPhone
+acceptance is still required: simulator operation and package inspection do not
+establish actual-device behavior. Already-deleted temporary clips require reimport.
+
+
 ### Local voice review, 2026-11-24
 
 Issue #4 adds optional local transcription with pinned runtime/model integrity,

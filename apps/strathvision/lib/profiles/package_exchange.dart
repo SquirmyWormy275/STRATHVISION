@@ -96,10 +96,7 @@ Future<ExportPlan> planExport(
     final marks = <Map<String, Object?>>[];
     final seen = <String>{};
     var excluded = 0;
-    for (final r in await db.select(db.projectRows).get()) {
-      final project = Project.fromJson(
-        jsonDecode(r.json) as Map<String, Object?>,
-      );
+    for (final project in await db.allProjects()) {
       final names = {for (final c in project.clips) c.clipId: c.displayName};
       for (final m in project.marks) {
         if (!attributes.contains(m.attribute)) continue;
@@ -330,10 +327,7 @@ Future<String> _mergeExtras(
     final local = <String, String>{};
     final existingMarks = <String>{};
     final paths = <String>{};
-    for (final r in await db.select(db.projectRows).get()) {
-      final project = Project.fromJson(
-        jsonDecode(r.json) as Map<String, Object?>,
-      );
+    for (final project in await db.allProjects()) {
       existingMarks.addAll(project.marks.map((m) => m.markId));
       paths.addAll(project.clips.map((c) => c.path).where((p) => p.isNotEmpty));
     }

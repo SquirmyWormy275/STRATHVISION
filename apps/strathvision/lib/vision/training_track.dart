@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:analysis_engine/analysis_engine.dart';
 
 import '../data/database.dart';
-import '../workspace/project.dart';
 import 'athlete.dart';
 import 'pose_service.dart';
 
@@ -13,10 +12,7 @@ typedef TrainingTrackLoader = Future<AthleteTrack> Function(ClipSource clip);
 /// conflicting reviews of the same file.
 TrainingTrackLoader reviewedTrainingTrack(AppDatabase db) => (clip) async {
   final choices = <String, AthleteTarget>{};
-  for (final row in await db.select(db.projectRows).get()) {
-    final project = Project.fromJson(
-      jsonDecode(row.json) as Map<String, Object?>,
-    );
+  for (final project in await db.allProjects()) {
     for (final c in project.clips) {
       if (c.path == clip.path && c.athlete != null) {
         final target = AthleteTarget.fromJson(c.athlete!);

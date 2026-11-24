@@ -149,11 +149,10 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     final analysis = a;
     if (analysis == null || analysis.running) return;
     try {
-      if (analysis.result != null) {
-        analysis.openPanel();
-      } else {
-        await analysis.analyze();
-      }
+      // An explicit Analyze request must refresh the measurements. A source
+      // may have changed since the previous panel was closed; the production
+      // runner can still reuse its content-keyed track for unchanged footage.
+      await analysis.analyze();
     } catch (_) {
       if (mounted) {
         setState(

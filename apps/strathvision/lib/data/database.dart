@@ -9,6 +9,7 @@ import 'package:analysis_engine/analysis_engine.dart' show ComparisonResult;
 import '../profiles/profile_package.dart';
 import '../workspace/project.dart';
 import '../workspace/workspace_controller.dart';
+import 'stored_paths.dart';
 
 part 'database.g.dart';
 
@@ -75,64 +76,126 @@ class Settings extends Table {
 
 @DriftDatabase(tables: [Profiles, ProjectRows, ComparisonRows, Settings])
 class AppDatabase extends _$AppDatabase implements ProjectStore {
-  AppDatabase([QueryExecutor? executor])
-      : super(executor ??
+  AppDatabase([QueryExecutor? executor, StoredPaths? storedPaths])
+    : _storedPaths = storedPaths ?? StoredPaths(),
+      super(
+        executor ??
             driftDatabase(
               name: 'strathvision',
               native: const DriftNativeOptions(
                 databaseDirectory: getApplicationSupportDirectory,
               ),
-            ));
+            ),
+      );
+
+  final StoredPaths _storedPaths;
+
+  Future<Project> _mapPaths(
+    Project project,
+    Future<String> Function(String) map,
+  ) async => project.copyWith(
+    clips: [
+      for (final clip in project.clips)
+        Clip(
+          clipId: clip.clipId,
+          path: await map(clip.path),
+          displayName: clip.displayName,
+          addedAt: clip.addedAt,
+          athlete: clip.athlete,
+        ),
+    ],
+  );
+
+  Future<Project> _readProject(ProjectRow row) => _mapPaths(
+    Project.fromJson(jsonDecode(row.json) as Map<String, Object?>),
+    _storedPaths.decode,
+  );
+
+  Future<ProfileRow> _readProfile(ProfileRow row) async =>
+      row.copyWith(sourcePath: await _storedPaths.decode(row.sourcePath));
 
   @override
   int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) => m.createAll(),
-        onUpgrade: (m, from, to) async {
-          if (from < 2) await m.createTable(projectRows);
-          if (from < 3) await m.createTable(comparisonRows);
-          if (from < 4) await m.createTable(settings);
-        },
-      );
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) await m.createTable(projectRows);
+      if (from < 3) await m.createTable(comparisonRows);
+      if (from < 4) await m.createTable(settings);
+    },
+  );
 
   // ---- projects -----------------------------------------------------------
 
   @override
-  Future<void> saveProject(Project project) =>
-      into(projectRows).insertOnConflictUpdate(ProjectRowsCompanion.insert(
+  Future<void> saveProject(Project project) async {
+    final stored = await _mapPaths(project, _storedPaths.encode);
+    await into(projectRows).insertOnConflictUpdate(
+      ProjectRowsCompanion.insert(
         projectId: project.projectId,
         name: project.name,
-        json: jsonEncode(project.toJson()),
+        json: jsonEncode(stored.toJson()),
         updatedAt: DateTime.now(),
-      ));
-
-  Future<Project?> loadProject(String projectId) async {
-    final row = await (select(projectRows)
-          ..where((t) => t.projectId.equals(projectId)))
-        .getSingleOrNull();
-    return row == null
-        ? null
-        : Project.fromJson(jsonDecode(row.json) as Map<String, Object?>);
+      ),
+    );
   }
 
-  Stream<List<ProjectRow>> watchProjects() => (select(projectRows)
-        ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
-      .watch();
+  Future<Project?> loadProject(String projectId) async {
+    final row = await (select(
+      projectRows,
+    )..where((t) => t.projectId.equals(projectId))).getSingleOrNull();
+    return row == null ? null : _readProject(row);
+  }
+
+  /// Resolved local paths; raw table JSON is the private storage representation.
+  Future<List<Project>> allProjects() async => [
+    for (final row in await select(projectRows).get()) await _readProject(row),
+  ];
+
+  Stream<List<ProjectRow>> watchProjects() =>
+      (select(
+        projectRows,
+      )..orderBy([(t) => OrderingTerm.desc(t.updatedAt)])).watch().asyncMap(
+        (rows) async => [
+          for (final row in rows) await _readProjectListing(row),
+        ],
+      );
+
+  Future<ProjectRow> _readProjectListing(ProjectRow row) async {
+    try {
+      return row.copyWith(json: jsonEncode((await _readProject(row)).toJson()));
+    } on FormatException {
+      // A damaged project must not hide the rest of the footage library.
+      return row;
+    } on TypeError {
+      return row;
+    }
+  }
 
   /// Every red/green mark, across projects, on clips at [path].
-  Future<List<Mark>> marksForPath(String path, {
-    String? packId, String? eventId, String? sourceSha256,
+  Future<List<Mark>> marksForPath(
+    String path, {
+    String? packId,
+    String? eventId,
+    String? sourceSha256,
   }) async {
     final out = <Mark>[];
-    for (final row in await select(projectRows).get()) {
-      final project = Project.fromJson(jsonDecode(row.json) as Map<String, Object?>);
-      final ids = {for (final c in project.clips) if (c.path == path) c.clipId};
-      out.addAll(project.marks.where((m) => ids.contains(m.clipId) &&
-          (packId == null || m.packId == packId) &&
-          (eventId == null || m.eventId == eventId) &&
-          (sourceSha256 == null || m.sourceSha256 == sourceSha256)));
+    for (final project in await allProjects()) {
+      final ids = {
+        for (final c in project.clips)
+          if (c.path == path) c.clipId,
+      };
+      out.addAll(
+        project.marks.where(
+          (m) =>
+              ids.contains(m.clipId) &&
+              (packId == null || m.packId == packId) &&
+              (eventId == null || m.eventId == eventId) &&
+              (sourceSha256 == null || m.sourceSha256 == sourceSha256),
+        ),
+      );
     }
     return out;
   }
@@ -144,27 +207,28 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
   Future<void> setSetting(String key, String value) => into(settings)
       .insertOnConflictUpdate(SettingsCompanion.insert(key: key, value: value));
 
-  Stream<String?> watchSetting(String key) =>
-      (select(settings)..where((t) => t.key.equals(key)))
-          .watchSingleOrNull()
-          .map((r) => r?.value);
+  Stream<String?> watchSetting(String key) => (select(
+    settings,
+  )..where((t) => t.key.equals(key))).watchSingleOrNull().map((r) => r?.value);
 
   // ---- comparison results -------------------------------------------------
 
-  Future<void> saveComparison(
-          {required String projectId,
-          required ComparisonResult result,
-          DateTime? at}) =>
-      into(comparisonRows).insertOnConflictUpdate(ComparisonRowsCompanion.insert(
-        resultId: result.resultId,
-        projectId: projectId,
-        clipId: result.clipId,
-        profileId: result.profileId,
-        profileVersion: result.profileVersion,
-        overallScore: result.overallScore,
-        json: jsonEncode(result.toJson()),
-        createdAt: at ?? DateTime.now(),
-      ));
+  Future<void> saveComparison({
+    required String projectId,
+    required ComparisonResult result,
+    DateTime? at,
+  }) => into(comparisonRows).insertOnConflictUpdate(
+    ComparisonRowsCompanion.insert(
+      resultId: result.resultId,
+      projectId: projectId,
+      clipId: result.clipId,
+      profileId: result.profileId,
+      profileVersion: result.profileVersion,
+      overallScore: result.overallScore,
+      json: jsonEncode(result.toJson()),
+      createdAt: at ?? DateTime.now(),
+    ),
+  );
 
   /// Stored results for one profile, oldest first (the drift series).
   Future<List<ComparisonRow>> comparisonsForProfile(String profileId) =>
@@ -175,24 +239,34 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
 
   // ---- profiles -----------------------------------------------------------
 
-  Future<List<ProfileRow>> allProfiles() => (select(profiles)
-        ..orderBy([
-          (t) => OrderingTerm.desc(t.importedAt),
-          (t) => OrderingTerm.desc(t.version),
-        ]))
-      .get();
+  Future<List<ProfileRow>> allProfiles() async => [
+    for (final row
+        in await (select(profiles)..orderBy([
+              (t) => OrderingTerm.desc(t.importedAt),
+              (t) => OrderingTerm.desc(t.version),
+            ]))
+            .get())
+      await _readProfile(row),
+  ];
 
-  Stream<List<ProfileRow>> watchProfiles() => (select(profiles)
-        ..orderBy([
-          (t) => OrderingTerm.desc(t.importedAt),
-          (t) => OrderingTerm.desc(t.version),
-        ]))
-      .watch();
+  Stream<List<ProfileRow>> watchProfiles() =>
+      (select(profiles)..orderBy([
+            (t) => OrderingTerm.desc(t.importedAt),
+            (t) => OrderingTerm.desc(t.version),
+          ]))
+          .watch()
+          .asyncMap(
+            (rows) async => [for (final row in rows) await _readProfile(row)],
+          );
 
   /// Stores imported metadata. Re-importing the same id + version replaces the
   /// earlier row (the replace/keep/merge choice arrives with real packages).
-  Future<void> saveProfile(ProfileMetadata m, String sourcePath,
-      {DateTime? importedAt, bool replace = true}) async {
+  Future<void> saveProfile(
+    ProfileMetadata m,
+    String sourcePath, {
+    DateTime? importedAt,
+    bool replace = true,
+  }) async {
     final row = ProfilesCompanion.insert(
       profileId: m.profileId,
       version: m.version,
@@ -205,7 +279,7 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
       metricCount: m.metricCount,
       minClipsMet: m.minClipsMet,
       selfConsistencyPassed: m.selfConsistencyPassed,
-      sourcePath: sourcePath,
+      sourcePath: await _storedPaths.encode(sourcePath),
       importedAt: importedAt ?? DateTime.now(),
     );
     if (replace) {
@@ -216,8 +290,8 @@ class AppDatabase extends _$AppDatabase implements ProjectStore {
   }
 
   Future<void> removeProfile(String profileId, int version) =>
-      (delete(profiles)
-            ..where(
-                (t) => t.profileId.equals(profileId) & t.version.equals(version)))
+      (delete(profiles)..where(
+            (t) => t.profileId.equals(profileId) & t.version.equals(version),
+          ))
           .go();
 }

@@ -3,13 +3,13 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T21:10:37Z
+heartbeat: 2026-11-24T21:19:39Z
 branch: implementation
 phase: iPhone analysis repair
 task: Restore native analysis in signed TestFlight app
-next: Finish iOS managed-path relocation fix and expanded native phone package/comparison/persistence test; rerun complete suites, dispatch final cloud build, verify final IPA and owner TestFlight flow.
+next: Dispatch builds.yml on implementation with upload_testflight=true. Verify all final-source jobs, signed IPA exports/assets and Apple processing; add replacement to existing owner-only group with France excluded, then request physical iPhone retest.
 owned_paths: apps/strathvision/lib/analysis apps/strathvision/lib/vision apps/strathvision/lib/screens apps/strathvision/ios apps/strathvision/integration_test docs .github/workflows
-active_processes: GitHub Actions run 45486844873: gated replacement TestFlight build with iOS archive exports and real-video simulator check
+active_processes: None locally; interim run 45486844873 cancelled after unsigned archive verification; dispatch final expanded regression build next
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -53,7 +53,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 
 ## Blockers / questions for the human
 
-- **Owner reported iPhone analysis failure on 2026-11-24.** The actual signed 1.63.1 IPA lacks the dynamic `OrtGetApiBase` export required by ONNX initialization; the debug simulator and pre-archive symbol tests missed deployment stripping. Release/Profile symbol retention, archive/final-IPA gates, visible failure/retry and durable new iOS video imports are being verified for a replacement beta. The 213 app tests, 116 engine tests and 35 script tests pass locally. See `docs/verification/iphone-analysis-20261124.json`; do not treat the earlier Apple VALID status as functional analysis acceptance. Owner symptom wording remains pending; final physical iPhone retest follows the replacement.
+- **Owner reported iPhone analysis failure and requested a full regression audit on 2026-11-24.** The actual signed 1.63.1 IPA lacks the dynamic `OrtGetApiBase` export required by ONNX; debug simulator and pre-archive checks missed deployment stripping. Release export preservation, final-IPA gates, visible errors/retry, durable imports, iOS container relocation, fresh Analyze actions/content-keyed tracks and final-save voice cancellation are repaired. Local verification: 222 app tests (one existing opt-in skip), 116 engine, 35 scripts, both analyzers clean. Native phone-layout real video produces 10 measurements/one usable stroke, imports a synthetic package, compares with its patch/adapters and reopens SQLite history; native HDR/sideways/no-person/corrupt cases pass. Interim run 45486844873 passed the corrected unsigned archive export gate; cancelled before upload to include the expanded fixes together. Dispatch and verify the final replacement run. See docs/VALIDATION.md and docs/verification/iphone-analysis-20261124.json. The final signed IPA and physical iPhone retest remain pending; Apple VALID alone is not functional acceptance.
 
 - **General release signing and device acceptance remain open.** Android is debug/test signed and macOS is unsigned. Signed iOS version 1.0.0 (1.63.1), built with SDK 27.2, uploaded successfully and Apple processed it as VALID, and its TestFlight compliance questions are resolved for the approved beta excluding France; real iPhone acceptance remains open. An Android release keystore is not configured. No physical Android device was connected during release preparation. Follow `docs/DISTRIBUTION.md` and the device record in `docs/VALIDATION.md` before general availability.
 
@@ -92,6 +92,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T21:19:39Z **codex** — Expanded audit fixes complete: iOS owned paths survive updates, Analyze refreshes current footage, cancelled voice drafts are discarded. 222 app, 116 engine, 35 script tests and 3 native phone-flow/model/format checks pass. → next: Dispatch builds.yml on implementation with upload_testflight=true. Verify all final-source jobs, signed IPA exports/assets and Apple processing; add replacement to existing owner-only group with France excluded, then request physical iPhone retest.
 - 2026-11-24T21:10:37Z **codex** — Expanded audit reproduced and fixed stale analysis after same-path footage replacement and cancelled voice drafts surviving their final save. Focused analysis 10 and voice 29 tests pass; native HDR, rotated detector and CARNE checks pass. → next: Finish iOS managed-path relocation fix and expanded native phone package/comparison/persistence test; rerun complete suites, dispatch final cloud build, verify final IPA and owner TestFlight flow.
 - 2026-11-24T21:01:37Z **codex** — iPhone analysis repair ready: preserve ONNX dynamic export through archive stripping, verify final IPA, retain picked videos, show retryable failures. 213 app, 116 engine, 35 script tests pass; native phone-layout real-video check passed with 10 metrics. → next: Dispatch builds.yml on implementation with upload_testflight=true. Verify unsigned archive export, real-video iOS Simulator test, signed archive/final IPA export and Apple processing; then assign replacement to existing owner-only group with France excluded and request phone retest.
 - 2026-11-24T20:53:39Z **codex** — Confirmed signed iPhone build 1.63.1 is missing the dynamic ONNX entry point. Added tested native-error display, retry and unavailable-video preflight; release linkage repair and real-video simulator test in progress. → next: Finish iOS archive export preservation and final-IPA verifier, temporary-picker retention and real-video UI acceptance. Run local checks, then build and verify replacement owner TestFlight beta. User symptom wording is still pending.

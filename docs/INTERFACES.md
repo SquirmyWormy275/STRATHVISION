@@ -445,7 +445,7 @@ Sync state, annotations, and marks must be persistable inside a Project.
 
 ### Project entries
 
-`clips[]`: video files are referenced by local path only. They never leave the device. Newly selected iOS Photos picker exports are copied into private application-support storage before their paths are saved; temporary cleanup must not remove saved footage. Other platforms, including desktop, keep original video references in place. A failed copy does not create a project clip or delete the source.
+`clips[]`: video files are referenced by local path only. They never leave the device. Newly selected iOS Photos picker exports are copied into private application-support storage before their paths are saved; temporary cleanup must not remove saved footage. Other platforms, including desktop, keep original video references in place. A failed copy does not create a project clip or delete the source. The private database stores owned iOS `imported_clips/` and `profiles/` references relative to Application Support and resolves them on read; legacy absolute references to those same owned folders are rebased after container relocation. Domain/export Project objects continue exposing ordinary local paths. External paths and lost temporary exports are not guessed or reconstructed. Saved playhead positions may reset if the source revision cannot be verified after an update.
 
 ```json
 {

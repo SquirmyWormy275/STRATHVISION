@@ -181,6 +181,22 @@ void main() {
     expect(find.byKey(const Key('analysis-rerun')), findsOneWidget);
     await unmountApp(tester);
   });
+  testWidgets('Analyze refreshes previously displayed measurements', (tester) async {
+    var attempts = 0;
+    await pumpApp(tester, (clip, patches, reference) async {
+      if (++attempts > 1) throw StateError('The replacement footage cannot be analyzed');
+      return AnalysisEngine(pack: pack).analyzeDetailed(clip);
+    });
+    clipQueue.add('/clips/session.mp4');
+    await tap(tester, 'open-workspace');
+    await tap(tester, 'analyze');
+    await tap(tester, 'analysis-close');
+    await tap(tester, 'analyze');
+    expect(attempts, 2, reason: 'Analyze must not silently reopen old measurements.');
+    expect(find.byKey(const Key('analysis-error')), findsOneWidget);
+    expect(find.byKey(const Key('analysis-metrics')), findsNothing);
+    await unmountApp(tester);
+  });
   testWidgets('results follow the active stage', (tester) async {
     await pumpApp(tester, recording(AnalysisEngine(pack: pack)));
     clipQueue.addAll(['/clips/a.mp4', '/clips/b.mp4']);
