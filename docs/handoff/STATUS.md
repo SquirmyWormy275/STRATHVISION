@@ -3,13 +3,13 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T06:04:53Z
+heartbeat: 2026-11-24T06:07:31Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Configure the GitHub testflight environment for implementation, push implementation and run builds.yml with upload_testflight=false. Resolve Apple account activation before app/key setup, signed upload and real iPhone acceptance.
+next: Dispatch builds.yml on implementation with upload_testflight=false and verify all eight jobs. Apple activation still blocks signing credentials, signed upload and real iPhone acceptance.
 owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/DECISIONS.md docs/handoff/STATUS.md
-active_processes: none
+active_processes: GitHub builds 45337850536 validates c67eaa7 with upload_testflight=false; no Apple upload requested
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T06:07:31Z **codex** — Created implementation-only testflight environment; first cloud run hit anonymous font API rate limit; authenticated font requests added and 17 script tests plus workflow lint pass → next: Dispatch builds.yml on implementation with upload_testflight=false and verify all eight jobs. Apple activation still blocks signing credentials, signed upload and real iPhone acceptance.
 - 2026-11-24T06:04:53Z **codex** — Implemented manual TestFlight upload with app/team/profile validation and unique build numbers; 15 script tests, workflow lint and documentation checks pass → next: Configure the GitHub testflight environment for implementation, push implementation and run builds.yml with upload_testflight=false. Resolve Apple account activation before app/key setup, signed upload and real iPhone acceptance.
 - 2026-11-24T05:50:28Z **codex** — Claimed: Set up user-requested GitHub cloud signing and TestFlight automation; Apple account onboarding pending
 - 2026-11-24T05:47:57Z **codex** — Released: Apple beta distribution assessment complete; recommended GitHub-hosted macOS signing and TestFlight; no app/configuration changes or uploads → next: Next implementation: confirm Apple team/app registration and signing credentials, add TestFlight to docs/DECISIONS.md and docs/DISTRIBUTION.md, implement a manual signed IPA/upload workflow, then perform and record iPhone acceptance before external invitations. Coach validation and local transcription remain open.

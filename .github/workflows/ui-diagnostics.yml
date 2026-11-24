@@ -15,6 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python scripts/fetch_ui_fonts.py
+        env:
+          GH_TOKEN: ${{ github.token }}
       - uses: subosito/flutter-action@v2
         with: {channel: stable, flutter-version: '3.47.9', cache: true}
       - working-directory: apps/strathvision

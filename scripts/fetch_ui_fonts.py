@@ -4,6 +4,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+import os
 from pathlib import Path
 import tempfile
 import time
@@ -24,8 +25,11 @@ def blob_sha(data: bytes) -> str:
     return hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
 
 def fetch(repo: str, sha: str) -> bytes:
+    headers = {'Accept': 'application/vnd.github+json', 'User-Agent': 'strathvision-font-build'}
+    if token := os.environ.get('GH_TOKEN'):
+        headers['Authorization'] = f'Bearer {token}'
     request = Request(f'https://api.github.com/repos/{repo}/git/blobs/{sha}',
-        headers={'Accept': 'application/vnd.github+json', 'User-Agent': 'strathvision-font-build'})
+        headers=headers)
     for attempt in range(3):
         try:
             with urlopen(request, timeout=30) as response:
