@@ -15,23 +15,7 @@ cleanup() {
 }
 trap cleanup EXIT
 xcrun simctl list devices available --json > "$devices"
-device="$(python - "$devices" <<'PY'
-import json, sys
-with open(sys.argv[1]) as source:
-    runtimes = json.load(source)['devices']
-candidates = []
-for runtime, devices in runtimes.items():
-    if '.iOS-' not in runtime:
-        continue
-    version = tuple(map(int, runtime.split('.iOS-')[1].split('-')))
-    for device in devices:
-        if device['isAvailable'] and device['state'] == 'Shutdown' and device['name'].startswith('iPhone'):
-            candidates.append((version, device['udid']))
-if not candidates:
-    raise SystemExit('No installed, available iPhone simulator was found.')
-print(max(candidates)[1])
-PY
-)"
+device="$(python "$root/scripts/select_ios_simulator.py" "$devices")"
 xcrun simctl boot "$device"
 xcrun simctl bootstatus "$device" -b
 cd "$root/apps/strathvision"
