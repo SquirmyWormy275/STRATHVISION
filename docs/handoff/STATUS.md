@@ -3,13 +3,13 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T19:10:42Z
+heartbeat: 2026-11-24T19:12:07Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Monitor run45461413138 through simulator and signed upload, verify IPA/Mach-O SDK/hash and Apple VALID. If simulator build times out again, supported fallback is prebuild debug test target before boot and flutter drive using prebuilt Runner.app with integration_test driver (5min response timeout). France scope/classification pending.
+next: Monitor signing/upload job for run45461413138; retrieve iOS simulator success log and signed artifact. Verify new IPA/Mach-O SDK27.2/hash/manifest and Apple VALID. France classification/scope choice remains pending.
 owned_paths: docs/handoff/STATUS.md docs/DISTRIBUTION.md .github/workflows/builds.yml
-active_processes: GitHub Actions run45461413138: full SDK27.2 validation and signed TestFlight upload with bounded40min simulator stage; France scope/classification pending
+active_processes: GitHub Actions45461413138: all8validation stages passed including iOS simulator; awaiting iOS job cleanup then signed TestFlight upload. France classification pending.
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -86,6 +86,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T19:12:07Z **codex** — iOS Simulator native model test PASSED in run45461413138 at574ea35; all7otherjobs passed. iOS post-job cleanup is finishing before signed upload. → next: Monitor signing/upload job for run45461413138; retrieve iOS simulator success log and signed artifact. Verify new IPA/Mach-O SDK27.2/hash/manifest and Apple VALID. France classification/scope choice remains pending.
 - 2026-11-24T19:10:42Z **codex** — Run45461413138 at574ea35 passed all7non-iOS jobs and compiled iOS27.2 release; simulator stage138686304876 started18:51:55Z and remains active under40min bound. Docs links44pass. → next: Monitor run45461413138 through simulator and signed upload, verify IPA/Mach-O SDK/hash and Apple VALID. If simulator build times out again, supported fallback is prebuild debug test target before boot and flutter drive using prebuilt Runner.app with integration_test driver (5min response timeout). France scope/classification pending.
 - 2026-11-24T18:46:43Z **codex** — Run45461413138 at574ea35 passed app/research/training, Windows and Android; Linux end-to-end passed and release packaging continues. iOS runner acquired after queue, with40min simulator budget and verbose diagnostics. → next: Monitor run45461413138 to all9successfuljobs; verify downloaded signed IPA/manifest/hash, actual Mach-O SDK27.2, and fresh Apple VALID. France classification/scope decision remains pending; no filing or library rewrite.
 - 2026-11-24T18:36:44Z **codex** — Run45455404551 passed7jobs and iOS27.2 compilation but simulator native build exceeded20min before model execution; increased bounded allowance to40min with verbose diagnostics. Shell/actionlint/diff checks pass. → next: Dispatch builds.yml upload_testflight=true on implementation; verify simulator inference, all9jobs, downloaded IPA SDK/hash/manifest and fresh Apple VALID. France classification and broader scope choice remain pending.
