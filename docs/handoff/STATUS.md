@@ -2,14 +2,14 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-24T19:30:00Z
+owner: none
+heartbeat: 2026-11-24T19:30:12Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Resolve the pending France scope/classification choice in docs/DISTRIBUTION.md before saving compliance answers. Then confirm the first iPhone invitation address and complete device acceptance. No builds remain running.
-owned_paths: docs/handoff/STATUS.md docs/DISTRIBUTION.md .github/workflows/builds.yml
-active_processes: none; run 45461413138 completed successfully, build 1.63.1 Apple VALID; awaiting France classification/scope choice and first iPhone test.
+next: Read docs/DISTRIBUTION.md and docs/verification/testflight-sdk27-20261124.json. Await pending France choice before any larger native rewrite or compliance submission; first iPhone invitation address and device acceptance remain open.
+owned_paths: 
+active_processes: none
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -89,6 +89,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T19:30:12Z **codex** — Released: SDK 27.2 migration and build 1.63.1 upload verified; France needs classification/scope decision. → next: Read docs/DISTRIBUTION.md and docs/verification/testflight-sdk27-20261124.json. Await pending France choice before any larger native rewrite or compliance submission; first iPhone invitation address and device acceptance remain open.
 - 2026-11-24T19:30:00Z **codex** — Verified SDK 27.2 build 1.63.1: all nine cloud jobs passed, signed IPA and Mach-O checked, Apple VALID; France inventory remains unresolved. → next: Resolve the pending France scope/classification choice in docs/DISTRIBUTION.md before saving compliance answers. Then confirm the first iPhone invitation address and complete device acceptance. No builds remain running.
 - 2026-11-24T19:12:07Z **codex** — iOS Simulator native model test PASSED in run45461413138 at574ea35; all7otherjobs passed. iOS post-job cleanup is finishing before signed upload. → next: Monitor signing/upload job for run45461413138; retrieve iOS simulator success log and signed artifact. Verify new IPA/Mach-O SDK27.2/hash/manifest and Apple VALID. France classification/scope choice remains pending.
 - 2026-11-24T19:10:42Z **codex** — Run45461413138 at574ea35 passed all7non-iOS jobs and compiled iOS27.2 release; simulator stage138686304876 started18:51:55Z and remains active under40min bound. Docs links44pass. → next: Monitor run45461413138 through simulator and signed upload, verify IPA/Mach-O SDK/hash and Apple VALID. If simulator build times out again, supported fallback is prebuild debug test target before boot and flutter drive using prebuilt Runner.app with integration_test driver (5min response timeout). France scope/classification pending.
