@@ -38,5 +38,64 @@
     "https://developer.apple.com/documentation/xcode/build-settings-reference"
   ],
   "after": null,
-  "physical_iphone_acceptance": "Pending replacement build and user verification."
+  "physical_iphone_acceptance": "Pending replacement build and user verification.",
+  "expanded_regression": {
+    "source_commit": "9afa916ac9b9e688b27b86972161306c39322a37",
+    "run_url": "https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45489989667",
+    "local_checks": {
+      "app_passed": 222,
+      "app_default_skipped": 1,
+      "engine_passed": 116,
+      "scripts_passed": 35,
+      "analyzers": "clean",
+      "native_phone_suite_passed": 3
+    },
+    "native_linux": {
+      "production_measurements": 10,
+      "usable_strokes": 1,
+      "analysis_ms": 26603,
+      "comparison_measurements": 10,
+      "applied_patch": "slope_residual_v1",
+      "reopened_sqlite_history_rows": 1,
+      "formats": [
+        "HDR tone mapped and decoded",
+        "sideways frame decoded",
+        "no-person analysis rejected",
+        "corrupt video rejected"
+      ]
+    },
+    "additional_fixes": [
+      "iOS picker copies retained privately",
+      "iOS owned paths resolved after container relocation",
+      "Analyze refreshes measurements and content-keyed pose cache",
+      "voice cancellation during final draft save clears persisted transcript"
+    ],
+    "regressions_failed_before_fix": [
+      "same-path footage replacement reused old athlete",
+      "main Analyze reopened old measurements",
+      "voice cancellation during final persistence retained draft"
+    ],
+    "live_compiler": {
+      "status": "blocked_by_sign_in",
+      "cli_version": "2.1.331",
+      "logged_in": false,
+      "provider_executed": false,
+      "adapters_produced": false
+    },
+    "cloud_status": "run_45489989667_cancelled_before_upload_for_final_button_label_correction",
+    "physical_device_acceptance": "pending"
+  },
+  "interim_unsigned_archive": {
+    "source_commit": "845182301b66bd2016eba85ad0ac31715035c1ac",
+    "run_url": "https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45486844873",
+    "job_id": 138777055834,
+    "verified_at": "2026-11-24T21:15:36Z",
+    "arch": "arm64",
+    "required_exports": {
+      "_OrtGetApiBase": "0x8ff2c0"
+    },
+    "export_count": 534,
+    "outcome": "export_gate_passed; run_cancelled_before_upload_to_include_expanded_fixes",
+    "simulator": "cancelled_before_completion_not_counted_as_pass"
+  }
 }

@@ -191,6 +191,7 @@ void main() {
     await tap(tester, 'open-workspace');
     await tap(tester, 'analyze');
     await tap(tester, 'analysis-close');
+    expect(find.text('Analyze again'), findsOneWidget);
     await tap(tester, 'analyze');
     expect(attempts, 2, reason: 'Analyze must not silently reopen old measurements.');
     expect(find.byKey(const Key('analysis-error')), findsOneWidget);

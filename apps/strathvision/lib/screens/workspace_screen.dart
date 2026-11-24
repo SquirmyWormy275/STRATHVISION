@@ -314,7 +314,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
                                       ? 'Analyzing…'
                                       : a!.result == null
                                       ? 'Analyze'
-                                      : 'Details',
+                                      : 'Analyze again',
                                 ),
                               ),
                           ],

@@ -38,8 +38,11 @@ The expanded audit also reproduced and corrected these failures:
 | Replacing footage at the same path reused old tracking | A failing-before/passing-after test verifies the changed athlete; production cache keys use current content and each explicit Analyze action refreshes the result |
 | Cancel during transcript persistence still left a draft | A failing-before/passing-after test verifies both memory and disk are cancelled; retained audio can retry |
 
-The final local app suite passed **222 tests**, with the existing opt-in live
-compiler test skipped; the engine passed **116** and scripts passed **35**.
+The final local app suite passed **222 tests**, with the opt-in live compiler
+excluded from the default run; the engine passed **116** and scripts passed **35**.
+The separately attempted live compiler check could not execute: installed Claude
+Code 2.1.331 reported `loggedIn: false`, and no adapter was produced. The historical
+2026-11-11 live success is not presented as a current authenticated check.
 Both analyzers were clean. The native phone-layout check used the real decoder,
 shipped models and production analysis runner: **10 finite measurements and one
 usable stroke**, then imported a synthetic coach fixture, compared all ten
