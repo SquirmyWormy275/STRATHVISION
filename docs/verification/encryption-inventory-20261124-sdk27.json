@@ -1,0 +1,68 @@
+{
+  "schema": "strathvision-encryption-inventory/1",
+  "inspected_on": "2026-11-24",
+  "build": "1.63.1",
+  "app_version": "1.0.0",
+  "sdk": "iphoneos27.2",
+  "source_commit": "574ea3597c138c2d8c8b607127ea0330b93bfdc2",
+  "workflow_run": "https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45461413138",
+  "ipa_sha256": "b1fce392e793ec0994579067e29a88c7bb229c3ed1fdb1b569df58044964f399",
+  "method": "Exact byte-marker search within the signed IPA, plus framework names. Positive markers identify packaged encryption-related code and metadata; they do not establish runtime use or legal classification.",
+  "components": [
+    {
+      "binary": "Flutter.framework/Flutter",
+      "sha256": "4354820070968f8b89886ed0f52847309ff1a7c40e3a00dbe2aed3da61d5e44b",
+      "markers_present": [
+        "boringssl",
+        "TLS_AES_128_GCM_SHA256",
+        "TLS_CHACHA20_POLY1305_SHA256"
+      ],
+      "markers_absent": []
+    },
+    {
+      "binary": "App.framework/App",
+      "sha256": "de14ca90bbc80589c5ed53950c275c4c4188615508af63d113830ab094fcfdea",
+      "markers_present": [
+        "package:archive/src/util/aes.dart",
+        "package:archive/src/util/aes_ctr.dart",
+        "_decodeAes",
+        "_decodeZipCrypto"
+      ],
+      "markers_absent": []
+    },
+    {
+      "binary": "Avutil.framework/Avutil",
+      "sha256": "ed8dc26eccd9da92839a4c8d4a6ced4b8cedbfd783d60d7f165d4b2c45bb4d05",
+      "markers_present": [
+        "av_aes_crypt",
+        "av_aes_ctr_crypt",
+        "av_des_crypt",
+        "av_rc4_crypt"
+      ],
+      "markers_absent": []
+    },
+    {
+      "binary": "Avformat.framework/Avformat",
+      "sha256": "d189bfa61eae06edf694026496ae52060378d2684cc5acc5ba900a37082681d4",
+      "markers_present": [
+        "av_aes_crypt",
+        "av_aes_ctr_crypt"
+      ],
+      "markers_absent": []
+    }
+  ],
+  "mbed_frameworks": [
+    "Mbedcrypto.framework",
+    "Mbedtls.framework",
+    "Mbedx509.framework"
+  ],
+  "classification": "unresolved",
+  "library_changes_implemented": false,
+  "france_declaration_submitted": false,
+  "exemption_claim_submitted": false,
+  "sources": [
+    "https://developer.apple.com/documentation/security/complying-with-encryption-export-regulations",
+    "https://developer.apple.com/help/app-store-connect/reference/app-information/export-compliance-documentation-for-encryption/",
+    "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000006428332/2026-03-31"
+  ]
+}

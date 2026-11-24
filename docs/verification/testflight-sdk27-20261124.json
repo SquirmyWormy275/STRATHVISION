@@ -1,0 +1,118 @@
+{
+  "format": "strathvision-testflight-verification/1",
+  "verified_at": "2026-11-24T19:28:54.785783+00:00",
+  "upload_manifest": {
+    "format": "strathvision-testflight/1",
+    "status": "uploaded-test-notes-added",
+    "source_commit": "574ea3597c138c2d8c8b607127ea0330b93bfdc2",
+    "run_url": "https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45461413138",
+    "app_store_id": "6838607473",
+    "bundle_id": "com.strathvision.strathvision",
+    "version": "1.0.0",
+    "build_number": "1.63.1",
+    "sdk": "iphoneos27.2",
+    "ipa": "strathvision.ipa",
+    "sha256": "b1fce392e793ec0994579067e29a88c7bb229c3ed1fdb1b569df58044964f399",
+    "physical_device_acceptance": "not verified by this build",
+    "uploaded_at": "2026-11-24T19:23:54.573044+00:00"
+  },
+  "cloud_jobs": {
+    "successful": 9,
+    "failed": 0,
+    "jobs": [
+      {
+        "name": "research",
+        "id": 138684680878,
+        "conclusion": "success"
+      },
+      {
+        "name": "training",
+        "id": 138684681275,
+        "conclusion": "success"
+      },
+      {
+        "name": "test",
+        "id": 138684681406,
+        "conclusion": "success"
+      },
+      {
+        "name": "macos",
+        "id": 138686304767,
+        "conclusion": "success"
+      },
+      {
+        "name": "android",
+        "id": 138686304837,
+        "conclusion": "success"
+      },
+      {
+        "name": "linux",
+        "id": 138686304858,
+        "conclusion": "success"
+      },
+      {
+        "name": "ios",
+        "id": 138686304876,
+        "conclusion": "success"
+      },
+      {
+        "name": "windows",
+        "id": 138686304898,
+        "conclusion": "success"
+      },
+      {
+        "name": "testflight",
+        "id": 138706828971,
+        "conclusion": "success"
+      }
+    ]
+  },
+  "artifact": {
+    "id": 14956916124,
+    "name": "strathvision-testflight-63-1",
+    "size_bytes": 47264807,
+    "sha256": "0d56fcd5e48a6d36d3b20aa3d5e583c98d1c4d0cbc54e8bf5c09c3b8ad658cf6",
+    "archive_integrity": "ZIP and IPA verified",
+    "ipa_checksum_and_identity": "verified",
+    "embedded_profile": "App Store method, bundle identity, team and expiry verified",
+    "profile_cms_content_signature": "verified; Apple certificate-chain trust not independently verified by this local check",
+    "mach_o": {
+      "entry": "Payload/Runner.app/Runner",
+      "plist_sdk": "iphoneos27.2",
+      "slices": [
+        {
+          "arch": "arm64",
+          "cpu_subtype": 0,
+          "command": "LC_BUILD_VERSION",
+          "platform": "iOS",
+          "minimum_os": "15.0.0",
+          "sdk": "27.2.0",
+          "linker": "27106.1.0"
+        }
+      ]
+    }
+  },
+  "ios_simulator": {
+    "job_id": 138686304876,
+    "sdk": "27.2",
+    "architecture": "arm64",
+    "test": "native runtime loads and executes both shipped models",
+    "result": "All tests passed",
+    "test_started_at": "2026-11-24T19:10:06Z",
+    "test_passed_at": "2026-11-24T19:10:27Z",
+    "scope": "Synthetic model compatibility; does not establish physical-device behavior or coaching accuracy."
+  },
+  "apple": {
+    "build_id": "ac329d48-27fa-4cb6-b815-6fc1abc01c93",
+    "processing_state": "VALID",
+    "uses_non_exempt_encryption": null,
+    "beta_test_notes": "saved",
+    "testflight_status": "Missing Compliance",
+    "testflight_status_source": "App Store Connect live build list, 2026-11-24",
+    "remaining_question": "France classification is unresolved; a media-library replacement alone would leave Flutter and archive encryption findings. Scope decision pending."
+  },
+  "encryption_inventory": "encryption-inventory-20261124-sdk27.json",
+  "physical_device_acceptance": "not yet verified",
+  "external_beta_review": "not submitted",
+  "invitations": "not sent"
+}
