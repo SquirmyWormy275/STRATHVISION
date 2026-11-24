@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T16:46:35Z
+heartbeat: 2026-11-24T17:00:05Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Monitor https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314 through eight checks and TestFlight upload; fix concrete failures, verify Apple processing, then arrange first physical iPhone acceptance. No invitations or external beta review submitted.
+next: Continue run 45440667314 (8048383) through simulator, signing and upload; verify Apple processing. Owner chose own iPhone for first device check. Apple encryption questionnaire may remain because the plist has no declaration; bundled media libraries include third-party cryptography, so do not assume none. No external review or invitations authorized yet.
 owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/handoff/STATUS.md
 active_processes: GitHub Actions 45440667314: first signed TestFlight upload for source 8048383; local background processes none
 <!-- STATE:END -->
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T17:00:06Z **codex** — First TestFlight run 45440667314 has seven successful jobs; iOS release compiled and simulator model check is running → next: Continue run 45440667314 (8048383) through simulator, signing and upload; verify Apple processing. Owner chose own iPhone for first device check. Apple encryption questionnaire may remain because the plist has no declaration; bundled media libraries include third-party cryptography, so do not assume none. No external review or invitations authorized yet.
 - 2026-11-24T16:47:11Z **codex** — Note: Owner will perform the first physical iPhone installation check after the build is accepted; external testers remain a later step.
 - 2026-11-24T16:45:46Z **codex** — Started authorized first TestFlight workflow 45440667314 for source 8048383; key access and signing configuration verified → next: Monitor https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314 through eight checks and TestFlight upload; fix concrete failures, verify Apple processing, then arrange first physical iPhone acceptance. No invitations or external beta review submitted.
 - 2026-11-24T16:44:36Z **codex** — Apple key imported securely; app access verified; all four encrypted signing secrets configured; fixed CLI export compatibility; 18 script tests and workflow checks pass → next: Dispatch builds.yml on implementation with upload_testflight=true; verify all eight validation jobs and signed upload, then confirm Apple processing before iPhone acceptance. Private material stays outside checkout.
