@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-24T19:30:12Z
+owner: codex
+heartbeat: 2026-11-24T19:43:06Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
 next: Read docs/DISTRIBUTION.md and docs/verification/testflight-sdk27-20261124.json. Await pending France choice before any larger native rewrite or compliance submission; first iPhone invitation address and device acceptance remain open.
-owned_paths: 
+owned_paths: docs/DISTRIBUTION.md docs/handoff/STATUS.md docs/verification
 active_processes: none
 <!-- STATE:END -->
 
@@ -89,6 +89,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T19:43:06Z **codex** — Claimed: Complete approved non-France TestFlight compliance and prepare owner iPhone test
 - 2026-11-24T19:30:12Z **codex** — Released: SDK 27.2 migration and build 1.63.1 upload verified; France needs classification/scope decision. → next: Read docs/DISTRIBUTION.md and docs/verification/testflight-sdk27-20261124.json. Await pending France choice before any larger native rewrite or compliance submission; first iPhone invitation address and device acceptance remain open.
 - 2026-11-24T19:30:00Z **codex** — Verified SDK 27.2 build 1.63.1: all nine cloud jobs passed, signed IPA and Mach-O checked, Apple VALID; France inventory remains unresolved. → next: Resolve the pending France scope/classification choice in docs/DISTRIBUTION.md before saving compliance answers. Then confirm the first iPhone invitation address and complete device acceptance. No builds remain running.
 - 2026-11-24T19:12:07Z **codex** — iOS Simulator native model test PASSED in run45461413138 at574ea35; all7otherjobs passed. iOS post-job cleanup is finishing before signed upload. → next: Monitor signing/upload job for run45461413138; retrieve iOS simulator success log and signed artifact. Verify new IPA/Mach-O SDK27.2/hash/manifest and Apple VALID. France classification/scope choice remains pending.
