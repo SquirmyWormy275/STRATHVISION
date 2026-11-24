@@ -69,7 +69,11 @@ cd "$app"
 flutter pub get
 flutter build ipa --release --build-number "$build_number" \
   --export-options-plist "$signing_dir/export-options.plist"
+python "$root/scripts/verify_ios_ffi.py" \
+  "$app/build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
 ipa="$(python "$root/scripts/apple_beta.py" manifest "$app/build/ios/ipa" "$build_number")"
+python "$root/scripts/verify_ios_ffi.py" "$ipa" \
+  > "$app/build/ios/ipa/ffi-exports.json"
 
 # --testflight submits for external beta review; intentionally omit it here.
 # Adding test notes waits for Apple to find the uploaded build without invitations.

@@ -1,0 +1,42 @@
+{
+  "format": "strathvision-iphone-analysis/1",
+  "verified_at": "2026-11-24",
+  "status": "release_ffi_export_defect_confirmed; replacement_not_yet_verified",
+  "before": {
+    "source_commit": "574ea3597c138c2d8c8b607127ea0330b93bfdc2",
+    "run_url": "https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45461413138",
+    "bundle_id": "com.strathvision.strathvision",
+    "version": "1.0.0",
+    "build": "1.63.1",
+    "ipa_sha256": "b1fce392e793ec0994579067e29a88c7bb229c3ed1fdb1b569df58044964f399",
+    "entry": "Payload/Runner.app/Runner",
+    "executable_sha256": "6731f9d8ebff9db79c718d95fbff306841d4f3465836710e361aefc5da53fb1d",
+    "arch": "arm64",
+    "reachable_dynamic_exports": [
+      "__mh_execute_header"
+    ],
+    "required_dynamic_export": "_OrtGetApiBase",
+    "required_export_present": false,
+    "verifier": "scripts/verify_ios_ffi.py",
+    "verifier_failure": "arm64 executable lacks callable dynamic exports: _OrtGetApiBase",
+    "independent_checks": [
+      {
+        "tool": "llvm-objdump --macho --exports-trie",
+        "result": "Only __mh_execute_header exported."
+      },
+      {
+        "tool": "llvm-nm --extern-only --defined-only",
+        "result": "Only __mh_execute_header exported."
+      }
+    ],
+    "impact": "The iOS ONNX plugin resolves OrtGetApiBase using DynamicLibrary.process(). This final IPA does not export that entry point, so native analysis cannot initialize.",
+    "prior_test_gap": "Pre-archive nm and debug simulator model checks did not inspect the final exported IPA after deployment stripping."
+  },
+  "planned_correction": "Preserve external symbols with STRIP_STYLE=non-global for Runner Release/Profile; gate unsigned archive and signed exported IPA on required dynamic exports.",
+  "references": [
+    "https://docs.flutter.dev/platform-integration/legacy-ffi-plugin",
+    "https://developer.apple.com/documentation/xcode/build-settings-reference"
+  ],
+  "after": null,
+  "physical_iphone_acceptance": "Pending replacement build and user verification."
+}

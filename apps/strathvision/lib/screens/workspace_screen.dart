@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../analysis/analysis_controller.dart';
+import '../media/picked_video.dart';
 import '../packs/placeholder_pack.dart';
 import '../workspace/project.dart';
 import '../workspace/stage_player.dart';
@@ -14,10 +15,13 @@ import 'analysis_panel.dart';
 import 'workspace_widgets.dart';
 
 typedef ClipPathPicker = Future<String?> Function();
-Future<String?> pickClipFile() async => (await FilePicker.pickFile(
-  dialogTitle: 'Choose a clip',
-  type: FileType.video,
-))?.path;
+Future<String?> pickClipFile() async {
+  final path = (await FilePicker.pickFile(
+    dialogTitle: 'Choose a clip',
+    type: FileType.video,
+  ))?.path;
+  return path == null ? null : retainPickedVideo(path);
+}
 
 /// Review is complete with one clip. Player ownership never depends on layout.
 class WorkspaceScreen extends StatefulWidget {

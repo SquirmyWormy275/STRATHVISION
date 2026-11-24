@@ -306,6 +306,7 @@ Research accuracy follow-up: image-space axe observations and source-disjoint ge
 - Desktop (Windows/macOS/Linux): zip of Flutter build.
 - Packages are ordinary files.
 - Cloud CI and Apple beta distribution do not change the local-first runtime or authorize uploading user footage. Physical iPhone acceptance and independent coaching validation remain separate gates.
+- **iPhone analysis repair (2026-11-24):** the signed 1.63.1 executable had lost its dynamic `OrtGetApiBase` export during deployment stripping, despite passing a pre-archive symbol check and debug simulator model smoke. Preserve external symbols with `STRIP_STYLE=non-global`; verify the reachable Mach-O export table in deployment archives and the final signed IPA before upload. The simulator check additionally drives the production decoder and analysis screen with licensed real footage. Runtime failures remain visible in the analysis panel with retry; unavailable videos are rejected before inference. These checks establish startup and integration behavior, not coaching accuracy. [Binary evidence](verification/iphone-analysis-20261124.json).
 
 ## Edge Cases
 

@@ -1,1 +1,6 @@
 #include "Generated.xcconfig"
+
+// Dart FFI finds the statically linked ONNX entry point with dlsym. Archive
+// postprocessing must preserve external symbols, not just the function's code.
+// https://docs.flutter.dev/platform-integration/legacy-ffi-plugin
+STRIP_STYLE = non-global

@@ -194,13 +194,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
       - uses: subosito/flutter-action@v2
         with: {channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true}
-      - name: Unsigned build
+      - name: Unsigned archive and runtime export verification
         working-directory: apps/strathvision
         run: |
-          flutter build ios --release --no-codesign
-          nm -gU build/ios/iphoneos/Runner.app/Runner | grep ' _OrtGetApiBase$'
-          ditto -c -k --keepParent build/ios/iphoneos/Runner.app strathvision-ios-unsigned.zip
-      - name: Native model inference on iOS Simulator
+          flutter build ipa --release --no-codesign
+          python ../../scripts/verify_ios_ffi.py build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app
+          ditto -c -k --keepParent build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app strathvision-ios-unsigned.zip
+      - name: Native models and video analysis on iOS Simulator
         # The standard Apple silicon host builds the debug app and boots iOS.
         # The previous Intel run already took 19 minutes; keep a bounded budget
         # that also accommodates the Xcode 27 simulator build.
@@ -253,5 +253,6 @@ jobs:
           path: |
             apps/strathvision/build/ios/ipa/*.ipa
             apps/strathvision/build/ios/ipa/testflight-manifest.json
+            apps/strathvision/build/ios/ipa/ffi-exports.json
           if-no-files-found: ignore
           retention-days: 14

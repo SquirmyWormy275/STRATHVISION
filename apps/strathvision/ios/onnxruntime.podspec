@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
   s.libraries = 'c++'
   s.weak_frameworks = 'CoreML'
   s.dependency 'Flutter'
-  # Dart resolves this entry point dynamically; keep it in release links too.
+  # Keep the code linked; Runner's Release.xcconfig also preserves its exported
+  # name through archive stripping so Dart's DynamicLibrary.process can find it.
   s.user_target_xcconfig = { 'OTHER_LDFLAGS' => '$(inherited) -Wl,-u,_OrtGetApiBase' }
 end

@@ -28,12 +28,12 @@ flowchart LR
 
 Desktop builds profiles, tunes specialist heads and runs CARNE ASADA. Phone reviews, annotates and performs inference with imported packages. Profile fitting and weight editing are not mobile flows. Packages move as files, manually or through a user-selected inbox folder. Automatic peer discovery/push is a design direction, not implemented synchronization.
 
-SQLite/Drift stores projects, profile metadata, settings and comparisons. The app owns imported package copies. Videos remain where the user placed them. Exported marks omit filesystem paths; hashes establish byte identity, not person identity, authorship or independent recording sessions. Legacy marks remain unbound when source identity is missing.
+SQLite/Drift stores projects, profile metadata, settings and comparisons. The app owns imported package copies and retains iOS Photos picker exports in private application-support storage before saving a project. Other videos remain where the user placed them. Exported marks omit filesystem paths; hashes establish byte identity, not person identity, authorship or independent recording sessions. Legacy marks remain unbound when source identity is missing.
 
 ## Evidence boundaries
 
 A profile passes count, confidence and self-consistency checks before being used. Self-consistency is not external accuracy. Comparison scores retain their historical meaning while `confidence-v1` orders deltas by contribution times minimum pose/phase/metric confidence and demotes values below 0.6. This is a heuristic, not calibrated uncertainty.
 
-Specialist patches and compiled adapters run locally. Optional adapter creation uses a configured provider on desktop. CARNE ASADA edits are bounded, versioned and reversible; real coaching improvement still needs genuine labels and an independent session holdout. Local voice transcription remains unimplemented.
+Specialist patches and compiled adapters run locally. Optional adapter creation uses a configured provider on desktop. CARNE ASADA edits are bounded, versioned and reversible; real coaching improvement still needs genuine labels and an independent session holdout. Optional [voice review](VOICE_NOTES.md) on Linux and Windows uses a separately configured local transcription runtime; the user reviews and explicitly accepts a bound coaching mark before it can enter the existing CARNE ASADA loop.
 
 Exact contracts: [INTERFACES](INTERFACES.md). Rationale and historical decisions: [DECISIONS](DECISIONS.md). Acceptance status: [VALIDATION](VALIDATION.md) and [ROADMAP](ROADMAP.md).

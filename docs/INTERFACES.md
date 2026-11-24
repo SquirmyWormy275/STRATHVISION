@@ -445,7 +445,7 @@ Sync state, annotations, and marks must be persistable inside a Project.
 
 ### Project entries
 
-`clips[]`: video files are referenced by local path only. They never leave the device.
+`clips[]`: video files are referenced by local path only. They never leave the device. Newly selected iOS Photos picker exports are copied into private application-support storage before their paths are saved; temporary cleanup must not remove saved footage. Other platforms, including desktop, keep original video references in place. A failed copy does not create a project clip or delete the source.
 
 ```json
 {
