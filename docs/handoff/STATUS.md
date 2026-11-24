@@ -3,18 +3,18 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T05:46:08Z
+heartbeat: 2026-11-24T05:47:57Z
 branch: implementation
 phase: Release packaging
-task: Verified release candidate
-next: Open: #2 physical-device acceptance, #3 coach validation, #4 local voice-note transcription; production signing.
+task: Apple beta distribution assessment
+next: For TestFlight setup, confirm active Apple team and app record for com.strathvision.strathvision; update docs/DECISIONS.md and docs/DISTRIBUTION.md, add signed IPA/upload workflow using protected secrets and supported Xcode, then record an actual iPhone check in docs/VALIDATION.md. No app has been signed or uploaded.
 owned_paths: docs/handoff/STATUS.md
 active_processes: none
 <!-- STATE:END -->
 
 ## Current acceptance
 
-The audit repairs package containment/atomicity, feedback provenance, duplicate fitting inputs, failure recovery and confidence-aware ranking; adds PR/research/native CI and coverage; and replaces stale public navigation. See [validation](../VALIDATION.md) for observed results and [roadmap](../ROADMAP.md) for remaining work. Physical-device, coach/holdout and live-provider checks are still open. Local transcription is not implemented.
+The audit repairs package containment/atomicity, feedback provenance, duplicate fitting inputs, failure recovery and confidence-aware ranking; adds PR/research/native CI and coverage; and replaces stale public navigation. See [validation](../VALIDATION.md) for observed results and [roadmap](../ROADMAP.md) for remaining work. Physical-device and coach/holdout checks are still open. The Claude Code CLI adapter compiler was verified live on 2026-11-11; the API-key path still lacks live-provider evidence. Local transcription is not implemented.
 
 ## Inventory-first workstream acceptance
 
@@ -55,10 +55,12 @@ The table below preserves milestone evidence from its original dates. “Done”
 
 - **General release signing and device acceptance remain open.** Android is debug/test signed, macOS is unsigned, and iOS is an unsigned app rather than an installable IPA. Existing Android release-keystore and Apple signing/provisioning locations were requested; none are configured in repository secrets. No physical Android device was connected during release preparation. Follow `docs/DISTRIBUTION.md` and the device record in `docs/VALIDATION.md` before general availability.
 
+- **Apple beta setup:** the user now reports Apple Developer credentials and chose cloud building from Linux. Inspection confirmed the existing GitHub macOS iOS job uses `--no-codesign`, the bundle identifier is `com.strathvision.strathvision`, and repository Actions secrets are empty. TestFlight is the recommended next distribution path; Apple membership/team/app registration and signing/upload material have not been inspected. Implementing that path requires updating `docs/DECISIONS.md` and `docs/DISTRIBUTION.md`, which currently specify ad hoc distribution, adding signing and upload on a supported macOS/Xcode runner, and recording an actual iPhone acceptance run. This assessment did not build, sign, upload or distribute an app.
+
 - **Local speech transcription remains open.** Voice input paths are recorded as awaiting transcription. The standalone experiment report does not copy audio files or bind spoken labels; the UI reports receipt rather than claiming audio was saved.
 - **Gurr coach-learning evidence remains open.** All five parts and 47 unique videos have published coverage/no-feedback controls. The local Gurr review packet and measured-export learning replay are delivered; the twelve real tasks start unlabelled because judgments and field tests do not exist yet. First field step: collect reviewed stroke judgments using `docs/FEEDBACK_REVIEW.md`. Actual learning evidence additionally needs a ready profile with disjoint source provenance and accurate usable measurements. The original HOG/SSDLite axe prototypes failed; the additional-footage Faster R-CNN also remains research-only (1/9 visible test heads, `docs/experiments/New-Footage.md`). Native diagnostics still expose selection/contact failures (`docs/experiments/Gurr-Round2.md`). No learning improvement is claimed.
 
-- **The adapter compiler needs an Anthropic API key on the workbench.** Set `ANTHROPIC_API_KEY`. The default model is `claude-opus-5-5`. The provider and model are a human decision the docs don't make, so confirm or change them. The compile path is unit-tested against the Messages API request and response shape but has not been run live here.
+- **The API-key adapter compiler path remains unverified live.** The alternative signed-in Claude Code CLI path was authorized, implemented and verified on 2026-11-11; a separate API key is not required for that workbench route. See `docs/VALIDATION.md` and `docs/verification/live-adapter-compile-20261111.json`. This does not close independent coaching validation.
 
 - **Review the timber pack v1** (`apps/strathvision/assets/packs/timber.json`): phases, metrics, weights, attribute names. It is an initial catalog written without a coach. Also review the probe interpretations in DECISIONS.md Phase 6.
 
@@ -82,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T05:47:57Z **codex** — Assessed iOS beta readiness: existing unsigned cloud build, bundle ID confirmed, repository Actions secrets empty; user chose cloud builds; reconciled stale compiler status → next: For TestFlight setup, confirm active Apple team and app record for com.strathvision.strathvision; update docs/DECISIONS.md and docs/DISTRIBUTION.md, add signed IPA/upload workflow using protected secrets and supported Xcode, then record an actual iPhone check in docs/VALIDATION.md. No app has been signed or uploaded.
 - 2026-11-24T05:46:08Z **codex** — Claimed: Assess iOS demo distribution readiness and advise Apple Developer/TestFlight next steps; no release or signing changes
 - 2026-11-11T17:50:25Z **claude** — Released: Issue #5 done: CLI adapter compiler merged (PR #10), live compile evidence recorded, issue closed → next: Open: #2 physical-device acceptance, #3 coach validation, #4 local voice-note transcription; production signing.
 - 2026-11-11T17:36:51Z **claude** — Issue #5: CLI adapter compiler + live compile evidence committed; 176 app tests pass → next: Merge PR into implementation once CI is green; close issue #5.
