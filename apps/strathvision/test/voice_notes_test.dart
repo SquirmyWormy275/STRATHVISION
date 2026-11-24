@@ -296,6 +296,43 @@ void main() {
   );
 
   test(
+    'cancellation during final persistence retracts draft and permits retry',
+    () async {
+      final library = _DraftSaveGateLibrary(storage);
+      final c = controller(library: library);
+      await c.drop([audio.path]);
+      final note = c.voiceNotes.single;
+      final job = c.transcribeVoice(note.id);
+      await library.savedDraft.future;
+      expect(c.voiceBusy, isTrue);
+      c.cancelVoice(note.id);
+      library.resume.complete();
+      await job;
+
+      expect(note.status, VoiceNoteStatus.cancelled);
+      expect(note.transcript, isNull);
+      expect(note.draftText, isNull);
+      expect(c.voiceBusy, isFalse);
+      expect(File(note.audioPath).existsSync(), isTrue);
+      final saved = jsonDecode(
+        await File(p.join(storage.path, '${note.id}.json')).readAsString(),
+      ) as Map;
+      expect(saved['status'], 'cancelled');
+      expect(saved['draft_text'], isNull);
+      expect(saved.containsKey('transcription'), isFalse);
+      expect(
+        c.feed.any((line) => line.text.startsWith('Transcript ready')),
+        isFalse,
+      );
+
+      await c.transcribeVoice(note.id);
+      expect(note.status, VoiceNoteStatus.draft);
+      expect(note.draftText, isNotEmpty);
+      expect(c.session.pile.expand((s) => s.marks), isEmpty);
+    },
+  );
+
+  test(
     'mismatched transcribed audio cannot become a draft; retry works',
     () async {
       var wrongHash = true;
@@ -430,6 +467,24 @@ class _VerificationGateLibrary extends VoiceNoteLibrary {
     await super.verifyAudio(note);
     if (++calls == 2) {
       verifying.complete();
+      await resume.future;
+    }
+  }
+}
+
+class _DraftSaveGateLibrary extends VoiceNoteLibrary {
+  _DraftSaveGateLibrary(Directory directory)
+    : super(directory: () async => directory, transcriber: _FakeTranscriber());
+  final savedDraft = Completer<void>();
+  final resume = Completer<void>();
+  var gateNextDraft = true;
+
+  @override
+  Future<void> save(VoiceNote note) async {
+    await super.save(note);
+    if (note.status == VoiceNoteStatus.draft && gateNextDraft) {
+      gateNextDraft = false;
+      savedDraft.complete();
       await resume.future;
     }
   }

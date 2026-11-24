@@ -579,6 +579,15 @@ class CarneController extends ChangeNotifier {
       return;
     }
     final cancellation = TranscriptionCancellation();
+    void discardCancelledResult() {
+      if (cancellation.isCancelled || _disposed) {
+        note.status = VoiceNoteStatus.cancelled;
+        note.transcript = null;
+        note.draftText = null;
+        note.error = null;
+      }
+    }
+
     _voiceJobs[id] = cancellation;
     note.status = VoiceNoteStatus.transcribing;
     note.error = null;
@@ -608,11 +617,6 @@ class CarneController extends ChangeNotifier {
         note.transcript = result;
         note.draftText = result.text;
         note.status = VoiceNoteStatus.draft;
-        feed.add(
-          FeedLine(
-            'Transcript ready for ${note.name}. Review it before using feedback.',
-          ),
-        );
       }
     } catch (error) {
       note.status = cancellation.isCancelled
@@ -622,11 +626,28 @@ class CarneController extends ChangeNotifier {
           ? error.message
           : error.toString();
     } finally {
+      discardCancelledResult();
       try {
         await voiceLibrary.save(note);
+        // Cancel remains available until the job is removed below. It can
+        // arrive while the draft record is being written, so replace that
+        // record before publishing completion or permitting another attempt.
+        if ((cancellation.isCancelled || _disposed) &&
+            note.status != VoiceNoteStatus.cancelled) {
+          discardCancelledResult();
+          await voiceLibrary.save(note);
+        }
       } catch (error) {
+        discardCancelledResult();
         note.error =
             'Couldn’t save the transcript record. Retry before accepting feedback. $error';
+      }
+      if (note.status == VoiceNoteStatus.draft) {
+        feed.add(
+          FeedLine(
+            'Transcript ready for ${note.name}. Review it before using feedback.',
+          ),
+        );
       }
       _voiceJobs.remove(id);
       _changed();

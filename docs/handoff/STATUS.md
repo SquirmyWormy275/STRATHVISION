@@ -3,13 +3,13 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T21:01:37Z
+heartbeat: 2026-11-24T21:10:37Z
 branch: implementation
 phase: iPhone analysis repair
 task: Restore native analysis in signed TestFlight app
-next: Dispatch builds.yml on implementation with upload_testflight=true. Verify unsigned archive export, real-video iOS Simulator test, signed archive/final IPA export and Apple processing; then assign replacement to existing owner-only group with France excluded and request phone retest.
+next: Finish iOS managed-path relocation fix and expanded native phone package/comparison/persistence test; rerun complete suites, dispatch final cloud build, verify final IPA and owner TestFlight flow.
 owned_paths: apps/strathvision/lib/analysis apps/strathvision/lib/vision apps/strathvision/lib/screens apps/strathvision/ios apps/strathvision/integration_test docs .github/workflows
-active_processes: none
+active_processes: GitHub Actions run 45486844873: gated replacement TestFlight build with iOS archive exports and real-video simulator check
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -92,6 +92,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T21:10:37Z **codex** — Expanded audit reproduced and fixed stale analysis after same-path footage replacement and cancelled voice drafts surviving their final save. Focused analysis 10 and voice 29 tests pass; native HDR, rotated detector and CARNE checks pass. → next: Finish iOS managed-path relocation fix and expanded native phone package/comparison/persistence test; rerun complete suites, dispatch final cloud build, verify final IPA and owner TestFlight flow.
 - 2026-11-24T21:01:37Z **codex** — iPhone analysis repair ready: preserve ONNX dynamic export through archive stripping, verify final IPA, retain picked videos, show retryable failures. 213 app, 116 engine, 35 script tests pass; native phone-layout real-video check passed with 10 metrics. → next: Dispatch builds.yml on implementation with upload_testflight=true. Verify unsigned archive export, real-video iOS Simulator test, signed archive/final IPA export and Apple processing; then assign replacement to existing owner-only group with France excluded and request phone retest.
 - 2026-11-24T20:53:39Z **codex** — Confirmed signed iPhone build 1.63.1 is missing the dynamic ONNX entry point. Added tested native-error display, retry and unavailable-video preflight; release linkage repair and real-video simulator test in progress. → next: Finish iOS archive export preservation and final-IPA verifier, temporary-picker retention and real-video UI acceptance. Run local checks, then build and verify replacement owner TestFlight beta. User symptom wording is still pending.
 - 2026-11-24T20:49:01Z **codex** — Claimed: Diagnose and fix analysis failure reported in iPhone TestFlight app

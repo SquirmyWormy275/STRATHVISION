@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../profiles/profile_package.dart';
+import '../profiles/source_identity.dart';
 import '../vision/athlete.dart';
 import '../vision/athlete_choices.dart';
 import '../vision/pose_service.dart';
@@ -22,6 +23,9 @@ AnalysisRunner visionRunner(
 }) => (clip, patches, reference) async {
   final found = await (poses ?? PoseService.instance).trackAthlete(
     clip,
+    // A path can be overwritten while keeping its duration and frame rate.
+    // Cache by the current bytes, as training already does, not the filename.
+    sourceKey: await sourceHash(clip.path),
     target: athletes?.targetFor(clip.clipId),
   );
   athletes?.record(clip, found);
