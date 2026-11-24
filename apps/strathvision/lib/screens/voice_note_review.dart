@@ -84,6 +84,7 @@ class _VoiceNotesDialogState extends State<VoiceNotesDialog> {
                 'Optional local transcription. Video review and CARNE ASADA '
                 'work without a transcription model.',
               ),
+              const Text('Available in the Linux and Windows desktop apps.'),
               const SizedBox(height: 8),
               const Text(
                 'Transcription currently accepts 16 kHz mono PCM16 WAV files '

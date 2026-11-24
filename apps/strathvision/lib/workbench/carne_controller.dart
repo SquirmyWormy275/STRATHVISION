@@ -642,8 +642,14 @@ class CarneController extends ChangeNotifier {
     if (text.length > 32000) {
       throw StateError('Keep the reviewed transcript under 32,000 characters.');
     }
+    final previous = note.draftText;
     note.draftText = text;
-    await voiceLibrary.save(note);
+    try {
+      await voiceLibrary.save(note);
+    } catch (_) {
+      note.draftText = previous;
+      rethrow;
+    }
     _changed();
     _notify();
   }
@@ -727,6 +733,11 @@ class CarneController extends ChangeNotifier {
         );
       }
       await voiceLibrary.verifyAudio(note);
+      if (_disposed) {
+        throw StateError(
+          'The experiment closed before the feedback was accepted.',
+        );
+      }
       final target = voiceTargets.singleWhere(
         (t) => t.clipId == clipId && t.strokeIndex == strokeIndex,
       );
@@ -761,6 +772,7 @@ class CarneController extends ChangeNotifier {
         note.status = VoiceNoteStatus.draft;
         rethrow;
       }
+      if (_disposed) return;
       matching.single.marks.add(
         _VoiceStrokeMark(
           noteId: note.id,

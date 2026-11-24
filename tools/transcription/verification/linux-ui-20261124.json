@@ -1,0 +1,20 @@
+{
+  "format": "local-voice-review-ui/1",
+  "status": "passed",
+  "recorded_at": "2026-11-24T20:26:59.019393Z",
+  "platform": "linux",
+  "engine": "whisper.cpp/1.9.6",
+  "model": "base",
+  "transcript": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+  "audio_sha256": "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e",
+  "draft_edits_persisted": true,
+  "feedback_accepted": false,
+  "video_inputs": 0,
+  "mixture_edits": 0,
+  "profile_fixture": "Synthetic coach profile, no measured footage.",
+  "scope": "Real speech and native Linux review UI; not coaching accuracy.",
+  "screenshot_retained_locally": "research-data/transcription/ui-review.png",
+  "screenshot_sha256": "ca219782e6c880b97263b08e0382b9bcda72065bda850527be6bae7ae0078f65",
+  "original_report_sha256": "4867b392c34455794d98419164b5612dc36c58e6a78e276581fd3d9a96970ab7",
+  "test": "apps/strathvision/integration_test/local_voice_review_test.dart"
+}

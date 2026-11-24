@@ -186,6 +186,148 @@ void main() {
     expect(c.session.pile.expand((s) => s.marks), isEmpty);
   });
 
+  test(
+    'only explicit review enables learning with sufficient footage',
+    () async {
+      var replacement = false;
+      final c = controller(
+        fingerprint: (path) async => sha256
+            .convert(
+              utf8.encode(
+                path == '/one.mp4' && replacement ? 'replacement' : path,
+              ),
+            )
+            .toString(),
+      );
+      await c.drop(['/one.mp4', '/two.mp4', '/three.mp4', audio.path]);
+      expect(c.session.baselineMet, isTrue);
+      final note = c.voiceNotes.single;
+      await c.transcribeVoice(note.id);
+      expect(c.session.edits, isEmpty);
+      final stroke = c.session.pile.firstWhere((s) => s.counts).stroke;
+      await c.acceptVoice(
+        id: note.id,
+        text: 'Reviewed synthetic feedback.',
+        clipId: stroke.clipId,
+        strokeIndex: stroke.index,
+        authorName: 'Fixture reviewer',
+        authorRole: 'coach',
+        attribute: 'Slope',
+        label: 'green',
+      );
+      expect(c.session.edits, isNotEmpty);
+      for (final edit in c.session.edits) {
+        final hull = c.session.hull[edit.metric]!;
+        expect(edit.after.center, inInclusiveRange(hull.$1, hull.$2));
+      }
+      expect(c.session.edits.length, lessThanOrEqualTo(c.session.limit));
+      expect(note.acceptedBinding, isNotNull);
+      replacement = true;
+      await c.drop(['/one.mp4']);
+      expect(note.acceptedBinding!['invalidated_reason'], 'source_changed');
+      expect(c.session.edits, isEmpty);
+      expect(c.session.pile.expand((s) => s.marks), isEmpty);
+    },
+  );
+
+  test(
+    'failed invalidation save cannot resurrect any accepted voice mark',
+    () async {
+      var hash = 'a' * 64;
+      final library = _FailingLibrary(storage);
+      final c = controller(library: library, fingerprint: (_) async => hash);
+      final first = await draft(c);
+      await accept(c, first);
+      final secondAudio = await File(p.join(root.path, 'second.wav'))
+          .writeAsString('different synthetic audio bytes');
+      await c.drop([secondAudio.path]);
+      final second = c.voiceNotes.last;
+      await c.transcribeVoice(second.id);
+      await accept(c, second);
+      expect(c.session.pile.expand((s) => s.marks), hasLength(2));
+
+      library.fail = true;
+      hash = 'b' * 64;
+      await c.drop(['/clip.mp4']);
+      expect((c.runReport()['inputs'] as List).last['status'], 'failed');
+      for (final note in [first, second]) {
+        expect(note.acceptedBinding!['invalidated_reason'], 'source_changed');
+      }
+      expect(c.session.pile.expand((s) => s.marks), isEmpty);
+      expect(c.session.edits, isEmpty);
+
+      // The failed replacement left the original source in the session.
+      // Restoring it forces _refreshMarks to read both accepted bindings.
+      hash = 'a' * 64;
+      await c.drop(['/clip.mp4']);
+      expect((c.runReport()['inputs'] as List).last['status'], 'duplicate');
+      expect(c.session.pile.expand((s) => s.marks), isEmpty);
+      expect(c.session.edits, isEmpty);
+    },
+  );
+
+  test(
+    'cancellation during final audio verification discards the result',
+    () async {
+      final library = _VerificationGateLibrary(storage);
+      final c = controller(library: library);
+      await c.drop([audio.path]);
+      final note = c.voiceNotes.single;
+      final job = c.transcribeVoice(note.id);
+      await library.verifying.future;
+      c.cancelVoice(note.id);
+      library.resume.complete();
+      await job;
+
+      expect(note.status, VoiceNoteStatus.cancelled);
+      expect(note.transcript, isNull);
+      expect(note.draftText, isNull);
+      expect(c.voiceBusy, isFalse);
+      expect(c.session.pile.expand((s) => s.marks), isEmpty);
+      final saved = jsonDecode(
+        await File(p.join(storage.path, '${note.id}.json')).readAsString(),
+      ) as Map;
+      expect(saved['status'], 'cancelled');
+      expect(saved.containsKey('transcription'), isFalse);
+
+      await c.transcribeVoice(note.id);
+      expect(note.status, VoiceNoteStatus.draft);
+    },
+  );
+
+  test(
+    'mismatched transcribed audio cannot become a draft; retry works',
+    () async {
+      var wrongHash = true;
+      final expectedHash = sha256.convert(await audio.readAsBytes()).toString();
+      final c = controller(
+        transcriber: _FakeTranscriber(
+          run: () async => VoiceTranscript(
+            text: 'Text from the selected audio',
+            engine: 'fake',
+            model: 'fake',
+            metadata: {'audio_sha256': wrongHash ? 'f' * 64 : expectedHash},
+          ),
+        ),
+      );
+      await c.drop(['/clip.mp4', audio.path]);
+      final note = c.voiceNotes.single;
+      await c.transcribeVoice(note.id);
+      expect(note.status, VoiceNoteStatus.failed);
+      expect(note.error, contains('transcribed audio changed'));
+      expect(note.transcript, isNull);
+      expect(note.draftText, isNull);
+      await expectLater(accept(c, note), throwsStateError);
+      expect(c.session.pile.expand((s) => s.marks), isEmpty);
+
+      wrongHash = false;
+      await c.transcribeVoice(note.id);
+      expect(note.status, VoiceNoteStatus.draft);
+      expect(note.transcript!.metadata['audio_sha256'], note.audioSha256);
+      expect(note.draftText, 'Text from the selected audio');
+    },
+  );
+
   test('cancellation does not block footage review or apply late results; retry works', () async {
     final pending = Completer<VoiceTranscript>();
     final started = Completer<void>();
@@ -230,6 +372,15 @@ void main() {
     final c = controller(library: library);
     final note = await draft(c);
     library.fail = true;
+    final before = note.draftText;
+    await c.saveRun((_, _) async => '/synthetic-snapshot.json');
+    expect(c.runSaved, isTrue);
+    await expectLater(
+      c.editVoiceDraft(note.id, 'Unsaved edit'),
+      throwsStateError,
+    );
+    expect(note.draftText, before);
+    expect(c.runSaved, isTrue);
     await expectLater(accept(c, note), throwsStateError);
     expect(note.status, VoiceNoteStatus.draft);
     expect(note.acceptedBinding, isNull);
@@ -264,5 +415,22 @@ class _FailingLibrary extends VoiceNoteLibrary {
   Future<void> save(VoiceNote note) {
     if (fail) throw StateError('Simulated disk failure');
     return super.save(note);
+  }
+}
+
+class _VerificationGateLibrary extends VoiceNoteLibrary {
+  _VerificationGateLibrary(Directory directory)
+    : super(directory: () async => directory, transcriber: _FakeTranscriber());
+  final verifying = Completer<void>();
+  final resume = Completer<void>();
+  var calls = 0;
+
+  @override
+  Future<void> verifyAudio(VoiceNote note) async {
+    await super.verifyAudio(note);
+    if (++calls == 2) {
+      verifying.complete();
+      await resume.future;
+    }
   }
 }

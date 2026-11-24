@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/transcription.yml'
       - 'tools/transcription/**'
+      - '!tools/transcription/verification/**'
       - 'apps/strathvision/lib/workbench/local_transcriber.dart'
       - 'apps/strathvision/lib/workbench/voice_notes.dart'
       - 'apps/strathvision/lib/workbench/carne_controller.dart'
@@ -21,6 +22,7 @@ on:
     paths:
       - '.github/workflows/transcription.yml'
       - 'tools/transcription/**'
+      - '!tools/transcription/verification/**'
       - 'apps/strathvision/lib/workbench/local_transcriber.dart'
       - 'apps/strathvision/lib/workbench/voice_notes.dart'
       - 'apps/strathvision/lib/workbench/carne_controller.dart'

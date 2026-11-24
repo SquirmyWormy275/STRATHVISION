@@ -150,6 +150,7 @@ class VoiceNoteLibrary {
 
   Future<VoiceTranscriber> loadTranscriber() async {
     if (transcriber != null) return transcriber!;
+    _requireAppPlatform();
     final root = await _root();
     final settings = File(p.join(root.path, 'settings.json'));
     String? configPath =
@@ -172,11 +173,23 @@ class VoiceNoteLibrary {
   }
 
   Future<void> configure(String path) async {
+    _requireAppPlatform();
     await _fromConfig(path);
     final root = await _root();
     await File(
       p.join(root.path, 'settings.json'),
     ).writeAsString(jsonEncode({'config_path': p.absolute(path)}), flush: true);
+  }
+
+  void _requireAppPlatform() {
+    if (!(Platform.isLinux || Platform.isWindows)) {
+      throw const TranscriptionException(
+        'unsupported_platform',
+        'Local transcription is optional. It is available in the Linux and Windows apps. '
+            'The macOS app needs a bundled, signed helper before this feature can run. '
+            'Your saved audio and ordinary video review remain available.',
+      );
+    }
   }
 
   Future<VoiceTranscriber> _fromConfig(String path) async {

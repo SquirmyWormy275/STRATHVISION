@@ -330,9 +330,11 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         find.textContaining(
-          'Choose the transcriber.json created by voice setup.',
+          Platform.isMacOS
+              ? 'The macOS app needs a bundled, signed helper'
+              : 'Choose the transcriber.json created by voice setup.',
         ),
-        findsOneWidget,
+        Platform.isMacOS ? findsWidgets : findsOneWidget,
       );
       await tap(tester, 'voice-close');
       expect(

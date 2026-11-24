@@ -1,0 +1,46 @@
+{
+  "format": "local-transcription-acceptance/1",
+  "status": "passed",
+  "recorded_at": "2026-11-24T20:26:58.814388Z",
+  "platform": "windows",
+  "os_version": "\"Windows Server 2025 Datacenter\" 10.0 (Build 26100)",
+  "source_commit": "96ec4d9823e9d0211944172da35f9f29134af990",
+  "model_revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+  "model_sha256": "60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe",
+  "executable_sha256": "9c6ea4816ef400d926c30c70c5f5e9672c2c7527cca66121fe4f7d847401b634",
+  "audio_sha256": "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e",
+  "audio_bytes": 352078,
+  "elapsed_ms": 5312,
+  "engine": "whisper.cpp/1.9.6",
+  "model": "base",
+  "language": "en",
+  "text": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+  "expected_phrase": "ask not what your country can do for you",
+  "metadata": {
+    "source_commit": "96ec4d9823e9d0211944172da35f9f29134af990",
+    "model_sha256": "60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe",
+    "executable_sha256": "9c6ea4816ef400d926c30c70c5f5e9672c2c7527cca66121fe4f7d847401b634",
+    "audio_sha256": "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e",
+    "audio_duration_ms": 11000,
+    "segment_count": 2,
+    "reviewed": false
+  },
+  "scope": "Real speech through the app adapter, not a synthetic transcript.",
+  "limitations": [
+    "One short English historical speech sample; not coaching-language accuracy.",
+    "Does not establish other languages, accents, noisy recordings or long-audio accuracy.",
+    "Does not exercise physical desktop UI or human transcript review."
+  ],
+  "ci": {
+    "run_id": 45480237008,
+    "run_url": "https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45480237008",
+    "app_source_commit": "aade34e22fd92594f7db4817c94770b5aa09a3f5",
+    "runner": "windows-latest",
+    "job_id": 138751087471,
+    "job_conclusion": "success",
+    "artifact_id": 14960014046,
+    "artifact_name": "transcription-windows-latest",
+    "github_reported_artifact_digest": "sha256:b2ed32b482ab376e2552e662e1859996b6c7b73296ac6954c3163811e4660a9c",
+    "downloaded_report_sha256": "a769422a79b537f66b07cddbbdd4158119c57b1f60c96cdc1e964bfa127fceab"
+  }
+}

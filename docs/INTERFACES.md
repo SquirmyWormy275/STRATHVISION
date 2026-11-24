@@ -494,13 +494,14 @@ The person chosen is the detected person whose box contains the point on that fr
 
 `workspace`: which clip is on each stage, plus view state, so a reopened project restores the same pair and its sync.
 
-## Quality Gates (profile builder)
-
-### Optional desktop voice review (`local_voice_note/1`)
+## Optional desktop voice review (`local_voice_note/1`)
 
 CARNE ASADA preserves a content-addressed local audio copy before transcription.
 Transcription is an explicit, cancellable local operation with a pinned optional
 runtime/model; it never uploads audio. Missing tools leave ordinary review usable.
+The app integration supports Linux and Windows. The macOS sandbox cannot launch
+the separately installed tool, so app setup/transcription fails closed there
+until a bundled, signed helper is implemented; macOS CLI tests are separate.
 Machine text is a draft, not a mark or a command. A reviewer must edit/confirm it
 and choose the source SHA-256, current pack/event, one measured stroke and its
 half-open time interval, attribute, red/green label, and author name/role before
@@ -515,6 +516,8 @@ metadata/text, not audio bytes. Profile-only exports exclude voice records. Audi
 is currently supported for transcription as 16 kHz mono PCM16 WAV, at most ten
 minutes; other formats are retained with an actionable unsupported-input result.
 See [voice setup and verification](VOICE_NOTES.md).
+
+## Quality Gates (profile builder)
 
 A profile may not be marked ready unless:
 
