@@ -129,6 +129,58 @@ void main() {
     expect(tester.takeException(), isNull);
     await unmountApp(tester);
   });
+  testWidgets('native startup failure stays visible and can be retried on phone', (tester) async {
+    var attempts = 0;
+    await pumpApp(tester, (clip, patches, reference) async {
+      if (++attempts == 1) {
+        throw ArgumentError('Failed to lookup symbol OrtGetApiBase');
+      }
+      return AnalysisEngine(pack: pack).analyzeDetailed(clip);
+    }, size: const Size(420, 900));
+    clipQueue.add('/clips/session.mp4');
+    await tap(tester, 'open-workspace');
+    await tap(tester, 'analyze');
+    expect(find.byKey(const Key('analysis-error')), findsOneWidget);
+    expect(find.text('ANALYSIS_UNAVAILABLE'), findsOneWidget);
+    expect(find.text('Not analyzed yet'), findsNothing);
+    expect(find.byKey(const Key('analysis-rerun')), findsOneWidget);
+    await tap(tester, 'analysis-rerun');
+    expect(attempts, 2);
+    expect(find.byKey(const Key('analysis-error')), findsNothing);
+    expect(find.byKey(const Key('analysis-metrics')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await unmountApp(tester);
+  });
+  testWidgets('failed rerun replaces stale measurements and keeps review usable', (tester) async {
+    var attempts = 0;
+    await pumpApp(tester, (clip, patches, reference) async {
+      if (++attempts > 1) throw StateError('Native inference failed');
+      return AnalysisEngine(pack: pack).analyzeDetailed(clip);
+    });
+    clipQueue.add('/clips/session.mp4');
+    await tap(tester, 'open-workspace');
+    await tap(tester, 'analyze');
+    expect(find.byKey(const Key('analysis-metrics')), findsOneWidget);
+    await tap(tester, 'analysis-rerun');
+    expect(find.byKey(const Key('analysis-error')), findsOneWidget);
+    expect(find.byKey(const Key('analysis-metrics')), findsNothing);
+    expect(tester.takeException(), isNull);
+    await tap(tester, 'step-forward');
+    expect(players[0].position, FakeStagePlayer.frame);
+    await unmountApp(tester);
+  });
+  testWidgets('unavailable restored video is rejected before native analysis', (tester) async {
+    await pumpApp(tester, recording(AnalysisEngine(pack: pack)));
+    clipQueue.add('/clips/session.mp4');
+    await tap(tester, 'open-workspace');
+    await players[0].close();
+    await tester.pumpAndSettle();
+    await tap(tester, 'analyze');
+    expect(requests, isEmpty);
+    expect(find.text('This video is unavailable. Add the clip again before analyzing.'), findsOneWidget);
+    expect(find.byKey(const Key('analysis-rerun')), findsOneWidget);
+    await unmountApp(tester);
+  });
   testWidgets('results follow the active stage', (tester) async {
     await pumpApp(tester, recording(AnalysisEngine(pack: pack)));
     clipQueue.addAll(['/clips/a.mp4', '/clips/b.mp4']);

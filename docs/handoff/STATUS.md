@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T20:49:01Z
+heartbeat: 2026-11-24T20:53:39Z
 branch: implementation
-phase: Issue #4 complete
-task: Verified local transcription and explicit voice review
-next: Await the user’s bigger-issue details. Owner iPhone installation check remains open. macOS voice integration requires a future signed bundled helper; keep the sandbox enabled.
+phase: iPhone analysis repair
+task: Restore native analysis in signed TestFlight app
+next: Finish iOS archive export preservation and final-IPA verifier, temporary-picker retention and real-video UI acceptance. Run local checks, then build and verify replacement owner TestFlight beta. User symptom wording is still pending.
 owned_paths: apps/strathvision/lib/analysis apps/strathvision/lib/vision apps/strathvision/lib/screens apps/strathvision/ios apps/strathvision/integration_test docs .github/workflows
 active_processes: none
 <!-- STATE:END -->
@@ -90,6 +90,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T20:53:39Z **codex** — Confirmed signed iPhone build 1.63.1 is missing the dynamic ONNX entry point. Added tested native-error display, retry and unavailable-video preflight; release linkage repair and real-video simulator test in progress. → next: Finish iOS archive export preservation and final-IPA verifier, temporary-picker retention and real-video UI acceptance. Run local checks, then build and verify replacement owner TestFlight beta. User symptom wording is still pending.
 - 2026-11-24T20:49:01Z **codex** — Claimed: Diagnose and fix analysis failure reported in iPhone TestFlight app
 - 2026-11-24T20:40:37Z **codex** — Released: Issue #4 fixed, verified, pushed to implementation and closed. 204 app tests pass; Linux UI/release and real-audio CI verified. No iPhone upload. → next: Await the user’s bigger-issue details. Owner iPhone installation check remains open. macOS voice integration requires a future signed bundled helper; keep the sandbox enabled.
 - 2026-11-24T20:40:20Z **codex** — Issue #4 complete: all three native jobs passed on 5380ff2; Linux UI and release verified; final platform evidence and limitations recorded. → next: Close issue #4 as completed, then release ownership. Await the user’s bigger-issue details; real iPhone acceptance remains open. macOS app voice support needs a signed bundled helper.

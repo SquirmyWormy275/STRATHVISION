@@ -229,7 +229,16 @@ class AnalysisController extends ChangeNotifier {
     if (_running.contains(clip.clipId)) return _notify();
     _running.add(clip.clipId);
     _notify();
+    var step = 'Preparing analysis';
     try {
+      final player = workspace.player(stage);
+      if (!player.hasMedia || player.duration <= Duration.zero) {
+        throw AnalysisError(
+          ErrorCode.analysisUnavailable,
+          'This video is unavailable. Add the clip again before analyzing.',
+        );
+      }
+      step = 'Loading profiles';
       if (!_loadedChoices) await refreshProfiles();
       if (missingProfileKey != null) {
         _profileError = AnalysisError(
@@ -253,7 +262,7 @@ class AnalysisController extends ChangeNotifier {
           _profileError = e;
         }
       }
-      final player = workspace.player(stage);
+      step = 'Reading video information';
       final fps = await player.frameRate();
       final source = ClipSource(
         clipId: clip.clipId,
@@ -267,6 +276,7 @@ class AnalysisController extends ChangeNotifier {
               for (final e in bundle.profile.metrics.entries)
                 e.key: e.value.center,
             };
+      step = 'Running on-device analysis';
       final detail = await run(source, patches.applied, reference);
       if (_disposed) return;
       final outcome = detail.outcome;
@@ -316,6 +326,7 @@ class AnalysisController extends ChangeNotifier {
                 .toSet();
             if (keys.isEmpty || !keys.every(reliable.contains)) focus = null;
           }
+          step = 'Saving the comparison';
           await saveResult?.call(comparison.result);
         }
       }
@@ -329,6 +340,23 @@ class AnalysisController extends ChangeNotifier {
         usableStrokes: detail.usableStrokes,
       );
       _fps[clip.clipId] = fps;
+    } catch (error) {
+      if (_disposed) return;
+      // Native setup can fail before an engine outcome exists. Keep that
+      // failure inside the analysis panel, including direct rerun callbacks,
+      // instead of leaving stale measurements or an empty "not analyzed" view.
+      _results[clip.clipId] = ClipAnalysis(
+        outcome: AnalysisFailure(
+          error is AnalysisError
+              ? error
+              : AnalysisError(
+                  ErrorCode.analysisUnavailable,
+                  'Analysis could not finish. Try again.',
+                  {'step': step, 'reason': error.toString()},
+                ),
+        ),
+        profileKey: _selected?.key,
+      );
     } finally {
       _running.remove(clip.clipId);
       _notify();

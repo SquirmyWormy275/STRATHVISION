@@ -6,7 +6,8 @@ enum ErrorCode {
   schemaMismatch('SCHEMA_MISMATCH'),
   profileNotReady('PROFILE_NOT_READY'),
   patchRejected('PATCH_REJECTED'),
-  adapterCompileFailed('ADAPTER_COMPILE_FAILED');
+  adapterCompileFailed('ADAPTER_COMPILE_FAILED'),
+  analysisUnavailable('ANALYSIS_UNAVAILABLE');
 
   const ErrorCode(this.wire);
 

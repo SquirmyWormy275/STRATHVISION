@@ -301,6 +301,7 @@ Per metric (optional): `"weight": 1.0` is the pack default weight for style matc
 | Detector did not return every pack phase | `PHASE_DETECTION_FAILED` (`details.missing_phases`) |
 | Mean pose confidence below `min_pose_confidence` | `LOW_POSE_CONFIDENCE` |
 | Invalid pack section, or the engine produced an invalid Metric Vector | `SCHEMA_MISMATCH` |
+| The local video is unavailable, or native setup/inference throws before a result is produced | `ANALYSIS_UNAVAILABLE`; the panel retains the failure and offers retry, without showing stale measurements |
 
 ## Comparison Result
 
@@ -543,7 +544,7 @@ All analysis operations return either a success payload matching the schemas abo
 
 ```json
 {
-  "error_code": "INSUFFICIENT_CLIPS | LOW_POSE_CONFIDENCE | PHASE_DETECTION_FAILED | SCHEMA_MISMATCH | PROFILE_NOT_READY | PATCH_REJECTED | ADAPTER_COMPILE_FAILED",
+  "error_code": "INSUFFICIENT_CLIPS | LOW_POSE_CONFIDENCE | PHASE_DETECTION_FAILED | SCHEMA_MISMATCH | PROFILE_NOT_READY | PATCH_REJECTED | ADAPTER_COMPILE_FAILED | ANALYSIS_UNAVAILABLE",
   "message": "string",
   "details": {}
 }
