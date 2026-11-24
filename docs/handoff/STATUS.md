@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-24T14:38:03Z
+owner: codex
+heartbeat: 2026-11-24T14:39:13Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
 next: Approve STRATHVISION GitHub team App Manager key creation, encrypted testflight API/certificate secrets and the first upload. Then generate/download securely, configure four secrets, verify read-only app access, and dispatch builds.yml on implementation with upload_testflight=true. No key or signed upload exists yet.
-owned_paths: 
+owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/handoff/STATUS.md
 active_processes: none
 <!-- STATE:END -->
 
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T14:39:13Z **codex** — Claimed: Owner approved Apple team key, encrypted GitHub signing credentials and first TestFlight upload; check for existing key before creation
 - 2026-11-24T14:38:03Z **codex** — Released: Apple API access is approved and the dedicated team-key form is ready; key generation and GitHub signing secrets await owner approval → next: Approve STRATHVISION GitHub team App Manager key creation, encrypted testflight API/certificate secrets and the first upload. Then generate/download securely, configure four secrets, verify read-only app access, and dispatch builds.yml on implementation with upload_testflight=true. No key or signed upload exists yet.
 - 2026-11-24T14:37:16Z **codex** — Apple API access approved; dedicated App Manager key form prepared and GitHub environment verified; credential creation awaits owner approval → next: Obtain owner approval for the prepared STRATHVISION GitHub team App Manager key, encrypted testflight API/certificate secrets, and first upload. Then generate/download the key, securely configure four secrets, verify Apple app access, dispatch builds.yml on implementation with upload_testflight=true, and verify Apple processing before physical iPhone acceptance.
 - 2026-11-24T14:33:19Z **codex** — Claimed: Continue TestFlight setup after owner enabled App Store Connect API; prepare dedicated signing key and cloud upload
