@@ -1,0 +1,40 @@
+{
+  "format": "strathvision-testflight-verification/1",
+  "verified_at": "2026-11-24T17:37:00Z",
+  "upload_manifest": {
+    "format": "strathvision-testflight/1",
+    "status": "uploaded-test-notes-added",
+    "source_commit": "8048383cb8c1d44e279e792726399c5e105d41f4",
+    "run_url": "https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314",
+    "app_store_id": "6838607473",
+    "bundle_id": "com.strathvision.strathvision",
+    "version": "1.0.0",
+    "build_number": "1.60.1",
+    "sdk": "iphoneos26.2",
+    "ipa": "strathvision.ipa",
+    "sha256": "331d3489c60585d2c7a2c91e7e2eb9bc2e685728ed1191a972c72c6348e59558",
+    "physical_device_acceptance": "not verified by this build",
+    "uploaded_at": "2026-11-24T17:35:36.409344+00:00"
+  },
+  "cloud_jobs": {
+    "successful": 9,
+    "failed": 0
+  },
+  "artifact": {
+    "id": 14946693533,
+    "name": "strathvision-testflight-60-1",
+    "sha256": "c21235c866eba3869dff2d2f51e22c93663c3fa79c5f35d35cf6b90104061b2a",
+    "archive_integrity": "verified",
+    "ipa_checksum_and_identity": "verified"
+  },
+  "apple": {
+    "build_id": "7052759b-5fc2-40a3-889c-a29b967b117a",
+    "processing_state": "VALID",
+    "beta_test_notes": "saved",
+    "testflight_status": "Missing Compliance",
+    "remaining_question": "Owner must confirm whether this beta will be distributed in France; standard encryption is present in bundled media libraries."
+  },
+  "physical_device_acceptance": "not yet verified",
+  "external_beta_review": "not submitted",
+  "invitations": "not sent"
+}

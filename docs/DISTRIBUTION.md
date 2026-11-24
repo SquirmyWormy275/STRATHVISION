@@ -14,9 +14,11 @@ The normal workflow provides test distribution: Android uses a debug signing key
 
 The maintainer can prepare and trigger the build from Linux. GitHub runs Xcode on its hosted Mac; testers install through Apple's TestFlight app. No Codemagic account is needed: the workflow uses its open-source CLI tools, as documented in [Flutter's iOS release guide](https://docs.flutter.dev/deployment/ios).
 
-**Current readiness:** the workflow and local validation helpers are implemented. Apple membership, app registration and API access have been verified. The owner downloaded the dedicated team key; its private material was validated and saved outside the checkout with restrictive permissions. All four encrypted secrets and both variables are configured in the implementation-only GitHub `testflight` environment. A read-only API request confirmed access to the expected STRATHVISION app. The first signed cloud build is next; upload, Apple processing and real iPhone acceptance remain unverified.
+**Current readiness:** the first signed cloud upload succeeded on 2026-11-24. Version **1.0.0 (1.60.1)** is processed by Apple as **VALID**. The TestFlight page still shows **Missing Compliance**: the encryption questionnaire needs the owner's intended France distribution answer before testing can be enabled. The owner will perform the first iPhone check; the invitation address is pending. Physical-device acceptance and external beta review remain open.
 
-All eight validation jobs passed for source `e073b73` in [cloud run 45340735890](https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45340735890) on 2026-11-24. This includes the unsigned iOS release build, its native runtime symbol check, and both shipped models executing on synthetic input in an iPhone Simulator. The optional signed-upload job was deliberately skipped (`upload_testflight=false`).
+All nine jobs passed for source `8048383` in [cloud run 45440667314](https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314): the eight existing checks/builds plus signed iOS upload. This includes both shipped models executing on synthetic input in an iPhone Simulator. The downloaded signed artifact and IPA checksums, archive integrity, app identity and upload manifest were verified. See the [upload evidence](verification/testflight-20261124.json). The IPA SHA-256 is `331d3489c60585d2c7a2c91e7e2eb9bc2e685728ed1191a972c72c6348e59558`.
+
+The implementation-only GitHub `testflight` environment has all four encrypted secrets and both variables. The owner-downloaded API key and persistent certificate key are retained outside the checkout with restrictive permissions. No private key is committed or included in the app artifact.
 
 ### One-time Apple setup
 
