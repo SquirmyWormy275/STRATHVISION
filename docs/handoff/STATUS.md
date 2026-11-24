@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T17:40:50Z
+heartbeat: 2026-11-24T17:45:12Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Await owner France-distribution answer and invitation email. In App Store Connect build 1.60.1, standard encryption is selected but not saved; answer France truthfully, complete compliance, then create internal group and send the requested owner invitation. Verify actual iPhone behavior before external beta review. No further build is currently needed.
+next: Await owner decision on France scope and TestFlight email. If France is intended, prepare cryptography inventory and developer identity documents, clarify individual-developer filing requirements with ANSSI, obtain authorized declaration through https://demarche.numerique.gouv.fr/commencer/declaration-relative-a-un-moyen-de-cryptologie, then supply Apple documentation. Build 1.60.1 remains VALID with Missing Compliance; complete truthful compliance and owner iPhone acceptance before external review.
 owned_paths: docs/handoff/STATUS.md
 active_processes: none
 <!-- STATE:END -->
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T17:45:12Z **codex** — France requirements researched from Apple and ANSSI: bundled Mbed TLS points to French declaration unless exemption established; plan one-month declaration lead time plus Apple review. No filing or compliance answer submitted. → next: Await owner decision on France scope and TestFlight email. If France is intended, prepare cryptography inventory and developer identity documents, clarify individual-developer filing requirements with ANSSI, obtain authorized declaration through https://demarche.numerique.gouv.fr/commencer/declaration-relative-a-un-moyen-de-cryptologie, then supply Apple documentation. Build 1.60.1 remains VALID with Missing Compliance; complete truthful compliance and owner iPhone acceptance before external review.
 - 2026-11-24T17:40:50Z **codex** — Claimed: Assess France distribution requirements for current signed TestFlight build; read-only research, no filing or compliance submission
 - 2026-11-24T17:39:42Z **codex** — Released: Signed iOS build 1.0.0 (1.60.1) uploaded and processed as VALID; nine cloud jobs pass; owner input needed for compliance and invitation → next: Await owner France-distribution answer and invitation email. In App Store Connect build 1.60.1, standard encryption is selected but not saved; answer France truthfully, complete compliance, then create internal group and send the requested owner invitation. Verify actual iPhone behavior before external beta review. No further build is currently needed.
 - 2026-11-24T17:39:26Z **codex** — First signed iOS upload 1.0.0 (1.60.1) succeeded; all nine jobs passed; Apple processing VALID; downloaded IPA and manifest verified → next: Owner: answer whether this beta will be distributed in France and provide the iPhone TestFlight invitation email. Then save the prepared Apple compliance questionnaire, create an internal test group, add the validated build and invite the owner; verify first physical iPhone acceptance before external beta review. App/build IDs and evidence are in docs/verification/testflight-20261124.json.
