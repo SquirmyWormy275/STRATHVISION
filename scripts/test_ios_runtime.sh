@@ -16,7 +16,12 @@ cleanup() {
 trap cleanup EXIT
 xcrun simctl list devices available --json > "$devices"
 device="$(python "$root/scripts/select_ios_simulator.py" "$devices")"
+printf '[%s] Booting selected iPhone simulator %s\n' "$(date -u +%FT%TZ)" "$device"
 xcrun simctl boot "$device"
 xcrun simctl bootstatus "$device" -b
 cd "$root/apps/strathvision"
-flutter test integration_test/native_runtime_test.dart -d "$device" --reporter expanded
+printf '[%s] Building and running the native model test\n' "$(date -u +%FT%TZ)"
+# The preceding release build already resolved the pinned dependencies. Verbose
+# output preserves the active native-build command if the runner times out.
+flutter test integration_test/native_runtime_test.dart -d "$device" --no-pub --verbose --reporter expanded
+printf '[%s] Native model test passed\n' "$(date -u +%FT%TZ)"

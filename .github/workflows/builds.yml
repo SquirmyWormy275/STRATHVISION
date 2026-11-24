@@ -201,7 +201,10 @@ jobs:
           nm -gU build/ios/iphoneos/Runner.app/Runner | grep ' _OrtGetApiBase$'
           ditto -c -k --keepParent build/ios/iphoneos/Runner.app strathvision-ios-unsigned.zip
       - name: Native model inference on iOS Simulator
-        timeout-minutes: 20
+        # The standard Apple silicon host builds the debug app and boots iOS.
+        # The previous Intel run already took 19 minutes; keep a bounded budget
+        # that also accommodates the Xcode 27 simulator build.
+        timeout-minutes: 40
         run: bash scripts/test_ios_runtime.sh
       - uses: actions/upload-artifact@v4
         with: {name: strathvision-ios-unsigned, path: apps/strathvision/strathvision-ios-unsigned.zip}
