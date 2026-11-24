@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T17:47:15Z
+heartbeat: 2026-11-24T17:51:39Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Await owner France scope and TestFlight invitation email. For France, prepare the final-build crypto inventory and developer documents, resolve individual filing route, then submit only with owner authorization and obtain Apple clearance. Current build 1.60.1 is VALID but Missing Compliance; first real iPhone check precedes external beta review.
+next: Dispatch builds.yml on implementation with upload_testflight=true; verify iOS27.2 build, simulator, signing, upload and Apple processing. Continue read-only French exemption investigation before an AVFoundation rewrite: current runtime and ZIP importer also contain encryption. No France declaration or exemption assertion is authorized without factual support.
 owned_paths: docs/handoff/STATUS.md docs/DISTRIBUTION.md .github/workflows/builds.yml
 active_processes: none
 <!-- STATE:END -->
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T17:51:39Z **codex** — Prepared Xcode 27.2 Apple-silicon iOS workflow and SDK>=27 upload gate; 19 tests pass. Actionlint passes with only its outdated xcode-27 label catalog ignored. France audit also found Flutter BoringSSL and retained archive AES/ZipCrypto, so media replacement alone is insufficient. → next: Dispatch builds.yml on implementation with upload_testflight=true; verify iOS27.2 build, simulator, signing, upload and Apple processing. Continue read-only French exemption investigation before an AVFoundation rewrite: current runtime and ZIP importer also contain encryption. No France declaration or exemption assertion is authorized without factual support.
 - 2026-11-24T17:47:15Z **codex** — Claimed: Assess compliant France distribution without filing and address Apple SDK warning; inspect encryption removal and Xcode availability
 - 2026-11-24T17:45:14Z **codex** — Released: France distribution assessment complete; technical dossier and ANSSI declaration route identified, individual filing details unresolved; no submission or app changes → next: Await owner France scope and TestFlight invitation email. For France, prepare the final-build crypto inventory and developer documents, resolve individual filing route, then submit only with owner authorization and obtain Apple clearance. Current build 1.60.1 is VALID but Missing Compliance; first real iPhone check precedes external beta review.
 - 2026-11-24T17:45:12Z **codex** — France requirements researched from Apple and ANSSI: bundled Mbed TLS points to French declaration unless exemption established; plan one-month declaration lead time plus Apple review. No filing or compliance answer submitted. → next: Await owner decision on France scope and TestFlight email. If France is intended, prepare cryptography inventory and developer identity documents, clarify individual-developer filing requirements with ANSSI, obtain authorized declaration through https://demarche.numerique.gouv.fr/commencer/declaration-relative-a-un-moyen-de-cryptologie, then supply Apple documentation. Build 1.60.1 remains VALID with Missing Compliance; complete truthful compliance and owner iPhone acceptance before external review.

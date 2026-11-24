@@ -180,11 +180,14 @@ jobs:
         with: {name: strathvision-macos, path: apps/strathvision/strathvision-macos.zip}
   ios:
     needs: [test, research, training]
-    runs-on: macos-15-intel
+    runs-on: xcode-27
     steps:
       - uses: actions/checkout@v4
       - name: Select an App Store supported Xcode
-        run: sudo xcode-select --switch /Applications/Xcode_26.3.app/Contents/Developer
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_27.2.app/Contents/Developer
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
       - name: Provision pinned offline UI fonts
         run: python scripts/fetch_ui_fonts.py
         env:
@@ -205,7 +208,7 @@ jobs:
   testflight:
     if: github.event_name == 'workflow_dispatch' && inputs.upload_testflight && github.ref == 'refs/heads/implementation'
     needs: [test, research, training, android, linux, windows, macos, ios]
-    runs-on: macos-15-intel
+    runs-on: xcode-27
     timeout-minutes: 60
     environment: testflight
     concurrency:
@@ -215,7 +218,10 @@ jobs:
       - uses: actions/checkout@v4
         with: {persist-credentials: false}
       - name: Select an App Store supported Xcode
-        run: sudo xcode-select --switch /Applications/Xcode_26.3.app/Contents/Developer
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_27.2.app/Contents/Developer
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - name: Install pinned Apple build tools

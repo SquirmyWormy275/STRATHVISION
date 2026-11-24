@@ -126,8 +126,8 @@ def inspect_ipa(ipa, env, build_number):
         if not re.fullmatch(r'[0-9]+(?:\.[0-9]+){0,2}', version):
             raise BetaError('The IPA is missing a valid marketing version.')
         sdk = re.fullmatch(r'iphoneos([0-9]+)(?:\.[0-9]+)*', info.get('DTSDKName', ''))
-        if not sdk or int(sdk[1]) < 26:
-            raise BetaError('App Store Connect requires the iOS 26 SDK or newer.')
+        if not sdk or int(sdk[1]) < 27:
+            raise BetaError('This TestFlight workflow requires the iOS 27 SDK or newer for the April 2027 upload requirement.')
         profile_name = entries[0].removesuffix('Info.plist') + 'embedded.mobileprovision'
         if profile_name not in archive.namelist():
             raise BetaError('The IPA has no embedded provisioning profile.')

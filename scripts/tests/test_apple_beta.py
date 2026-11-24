@@ -122,7 +122,7 @@ class AppleBetaChecks(unittest.TestCase):
 
     def make_ipa(self, path, change=None, profile=True, extra_app=False):
         info = {'CFBundleIdentifier': ENV['IOS_BUNDLE_ID'], 'CFBundleVersion': '1.78.1',
-                'CFBundleShortVersionString': '1.0.0', 'DTSDKName': 'iphoneos26.2'}
+                'CFBundleShortVersionString': '1.0.0', 'DTSDKName': 'iphoneos27.2'}
         info.update(change or {})
         with zipfile.ZipFile(path, 'w') as archive:
             archive.writestr('Payload/Runner.app/Info.plist', plistlib.dumps(info))
@@ -141,11 +141,22 @@ class AppleBetaChecks(unittest.TestCase):
             cases = [({'CFBundleIdentifier': 'foreign.app'}, True, False),
                      ({'CFBundleVersion': '1.78.2'}, True, False),
                      ({'DTSDKName': 'iphoneos18.5'}, True, False),
+                     ({'DTSDKName': 'iphoneos26.2'}, True, False),
+                     ({'DTSDKName': 'iphonesimulator27.2'}, True, False),
                      ({}, False, False), ({}, True, True)]
             for change, profile, extra in cases:
                 self.make_ipa(path, change, profile, extra)
                 with self.subTest(change=change, profile=profile, extra=extra), self.assertRaises(beta.BetaError):
                     beta.inspect_ipa(path, ENV, '1.78.1')
+
+    def test_ios_27_and_newer_sdk_versions_are_accepted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'beta.ipa'
+            for sdk in ('iphoneos27.0', 'iphoneos27.2', 'iphoneos28.0'):
+                with self.subTest(sdk=sdk):
+                    self.make_ipa(path, {'DTSDKName': sdk})
+                    info, _ = beta.inspect_ipa(path, ENV, '1.78.1')
+                    self.assertEqual(info['DTSDKName'], sdk)
 
     def test_uploaded_record_cannot_be_promoted_twice(self):
         with tempfile.TemporaryDirectory() as tmp:

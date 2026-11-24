@@ -53,7 +53,7 @@ gh workflow run builds.yml --ref implementation -f upload_testflight=true
 Keep the option false for ordinary validation. A TestFlight run:
 
 1. Runs all eight existing checks/platform builds for one source commit.
-2. Selects Xcode 26.3 on `macos-15-intel`, installs the pinned CLI, and checks the Apple app record against the committed bundle ID.
+2. Selects Xcode 27.2 on the standard Apple silicon `xcode-27` runner, installs the pinned CLI, and checks the Apple app record against the committed bundle ID. The unsigned iOS validation job uses the same runner and Xcode.
 3. Uses the persistent signing key to fetch or create signing assets in a temporary keychain. It verifies the selected team and App Store export method before building.
 4. Chooses a build number above both Apple's latest beta and the workflow run/attempt floor. Uploads are serialized; retries retain distinct build numbers even if Apple has not indexed an earlier upload yet.
 5. Builds the IPA and checks its bundle ID, build number, SDK and embedded distribution profile before Apple package validation and upload.
@@ -80,6 +80,7 @@ The iOS Podfile replaces only the ONNX Runtime plugin's native pod. Its old Micr
 - **API authorization failure:** verify the team key's role, active membership and accepted agreements. The script stops before creating signing assets when the app-record check fails.
 - **Upload succeeded but test-note update failed:** inspect TestFlight for that version/build before retrying. The manifest stays a candidate because full confirmation failed. A rerun uses a new build number.
 - **Apple rejects package validation:** keep the failed run and fix the reported bundle/profile/privacy/SDK issue before uploading again. Do not bypass package validation.
+- **ITMS-90725 SDK warning:** build 1.60.1 was accepted with the iOS 26.2 SDK. Apple's [April 2027 requirement](https://developer.apple.com/news/?id=k1mtkt1k) raises the upload minimum to iOS 27. The workflow now selects Xcode 27.2 on GitHub's [standard Apple silicon image](https://github.com/actions/runner-images/blob/main/images/macos/xcode-27-arm64-Readme.md), and the IPA validator rejects SDKs below 27. A new cloud build and Apple processing must pass before this migration is considered verified. The app's minimum supported iOS version remains 15.0.
 
 ## Android: APK sideload
 
