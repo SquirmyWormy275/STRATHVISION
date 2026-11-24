@@ -16,6 +16,8 @@ The maintainer can prepare and trigger the build from Linux. GitHub runs Xcode o
 
 **Current readiness:** the workflow and local validation helpers are implemented. Apple membership and the app registration have been verified; API access and private signing material remain to be configured. A signed upload and real iPhone acceptance are still unverified. A successful unsigned build does not close those gates.
 
+All eight validation jobs passed for source `e073b73` in [cloud run 45340735890](https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45340735890) on 2026-11-24. This includes the unsigned iOS release build, its native runtime symbol check, and both shipped models executing on synthetic input in an iPhone Simulator. The optional signed-upload job was deliberately skipped (`upload_testflight=false`).
+
 ### One-time Apple setup
 
 1. The Apple Account must have an active **Apple Developer Program** membership and access to [App Store Connect](https://appstoreconnect.apple.com/). A free developer login or a pending enrollment is insufficient. Resolve enrollment/payment status with [Apple Developer Support](https://developer.apple.com/contact/) before creating signing credentials.
