@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-24T19:47:08Z
+owner: codex
+heartbeat: 2026-11-24T20:11:33Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
 next: Await owner iPhone installation/checks per docs/VALIDATION.md. Existing Owner iPhone Check group has one invited account holder, one build and manual distribution. Then prepare external review and approved named testers outside France; no public link.
-owned_paths: 
+owned_paths: apps/strathvision/lib/workbench apps/strathvision/lib/screens/carne_screen.dart apps/strathvision/test tools/transcription docs .github/workflows
 active_processes: none
 <!-- STATE:END -->
 
@@ -90,6 +90,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T20:11:33Z **codex** — Claimed: Implement issue #4: optional local voice transcription and explicit reviewed source-bound feedback
 - 2026-11-24T19:47:08Z **codex** — Released: Build 1.63.1 ready for owner iPhone test; compliance saved for beta excluding France and invitation verified. → next: Await owner iPhone installation/checks per docs/VALIDATION.md. Existing Owner iPhone Check group has one invited account holder, one build and manual distribution. Then prepare external review and approved named testers outside France; no public link.
 - 2026-11-24T19:47:01Z **codex** — Non-France compliance cleared; owner-only manual TestFlight group has build 1.63.1 Ready to Test and account holder Invited. Evidence and documentation checks pass. → next: Owner: open the TestFlight invitation on iPhone and install build 1.63.1; record checks in docs/VALIDATION.md. Agent: use the existing group; external review and named invitations outside France follow successful device acceptance.
 - 2026-11-24T19:44:53Z **codex** — Saved bundled-standard-encryption and France No answers for build 1.63.1; Apple shows Ready to Submit and owner group has the build Ready to Test. → next: Finish adding the existing account holder to Owner iPhone Check (automatic distribution off), verify invitation status, save UI/API evidence and update distribution records. No external group/public link.
