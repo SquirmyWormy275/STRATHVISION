@@ -18,6 +18,32 @@ Release artifacts must come from one successful eight-job run. Production signin
 
 ## Automated checks
 
+### Local voice review, 2026-11-24
+
+Issue #4 adds optional local transcription with pinned runtime/model integrity,
+bounded processes, cancellation, timeout and retry. The complete app suite passed
+**204 tests with one existing opt-in live-compiler skip**. The analyzer was clean,
+the Linux release built successfully, and three setup-integrity tests passed.
+Synthetic tests separately cover
+explicit review, persisted consent before learning, idempotence, draft rejection,
+source/audio changes, late cancellation, failed saves and conservative rollback
+of dependent edits. Sufficient synthetic footage plus explicitly accepted feedback
+can enter the existing bounded loop; unreviewed text cannot create marks or issue
+commands.
+
+Real 11-second historical speech passed through the adapter on Linux, Windows and
+Intel macOS. The packaged app integration supports **Linux and Windows**; macOS
+app setup fails closed pending a signed bundled helper compatible with its sandbox.
+The native Linux UI test on source `5380ff2dcc3696789a6f8a4b70b8a252f6b68f1b`
+also transcribed that recording, opened the editable review dialog, kept acceptance
+disabled without a source/swing, and persisted a draft correction. It used a
+synthetic profile, no video measurements and no accepted feedback. See
+[voice setup, platform evidence and limitations](VOICE_NOTES.md). These checks do
+not establish coaching accuracy, multilingual accuracy or physical Windows UI
+acceptance, and do not change the iPhone beta.
+
+### Reproduce regression checks
+
 From the repository root:
 
 ```sh

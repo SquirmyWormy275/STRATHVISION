@@ -1,0 +1,46 @@
+{
+  "format": "local-transcription-acceptance/1",
+  "status": "passed",
+  "recorded_at": "2026-11-24T20:33:20.137454Z",
+  "platform": "linux",
+  "os_version": "Linux 7.0.0-1014-aws #14~24.04.1-Ubuntu SMP PREEMPT Fri Sep 18 21:24:59 UTC 2026",
+  "source_commit": "96ec4d9823e9d0211944172da35f9f29134af990",
+  "model_revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+  "model_sha256": "60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe",
+  "executable_sha256": "d4798ced9be2a973bd9f52096d618ef0bfc7bdb788318d0ba01166e6565e564b",
+  "audio_sha256": "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e",
+  "audio_bytes": 352078,
+  "elapsed_ms": 4142,
+  "engine": "whisper.cpp/1.9.6",
+  "model": "base",
+  "language": "en",
+  "text": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+  "expected_phrase": "ask not what your country can do for you",
+  "metadata": {
+    "source_commit": "96ec4d9823e9d0211944172da35f9f29134af990",
+    "model_sha256": "60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe",
+    "executable_sha256": "d4798ced9be2a973bd9f52096d618ef0bfc7bdb788318d0ba01166e6565e564b",
+    "audio_sha256": "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e",
+    "audio_duration_ms": 11000,
+    "segment_count": 2,
+    "reviewed": false
+  },
+  "scope": "Real speech through the app adapter, not a synthetic transcript.",
+  "limitations": [
+    "One short English historical speech sample; not coaching-language accuracy.",
+    "Does not establish other languages, accents, noisy recordings or long-audio accuracy.",
+    "Does not exercise physical desktop UI or human transcript review."
+  ],
+  "ci": {
+    "run_id": 45481642340,
+    "run_url": "https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45481642340",
+    "app_source_commit": "5380ff2dcc3696789a6f8a4b70b8a252f6b68f1b",
+    "runner": "ubuntu-24.04",
+    "job_id": 138756058578,
+    "job_conclusion": "success",
+    "artifact_id": 14963195155,
+    "artifact_name": "transcription-ubuntu-24.04",
+    "github_reported_artifact_digest": "sha256:bd1edef0481a5ff5bbd976f888340e47785fe091ebed44a86ef6cf9d661c685a",
+    "downloaded_report_sha256": "b26f5ad3c162fafe2aea0b0cd28d3382fa0676158ee26a8787cbc3dc2bad2d9b"
+  }
+}

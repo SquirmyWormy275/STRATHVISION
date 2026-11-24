@@ -3,18 +3,18 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T20:31:08Z
+heartbeat: 2026-11-24T20:40:20Z
 branch: implementation
-phase: Issue #4 local voice review
-task: Optional local transcription with explicit review
-next: Verify latest local transcription workflow for this commit, rerun native Linux voice UI on committed source, record evidence and release ownership. macOS app requires future bundled signed helper; do not disable sandbox or upload iPhone builds.
+phase: Issue #4 complete
+task: Verified local transcription and explicit voice review
+next: Close issue #4 as completed, then release ownership. Await the user’s bigger-issue details; real iPhone acceptance remains open. macOS app voice support needs a signed bundled helper.
 owned_paths: apps/strathvision/lib/workbench apps/strathvision/lib/screens/carne_screen.dart apps/strathvision/test tools/transcription docs .github/workflows
 active_processes: none
 <!-- STATE:END -->
 
 ## Current acceptance
 
-The audit repairs package containment/atomicity, feedback provenance, duplicate fitting inputs, failure recovery and confidence-aware ranking; adds PR/research/native CI and coverage; and replaces stale public navigation. See [validation](../VALIDATION.md) for observed results and [roadmap](../ROADMAP.md) for remaining work. Physical-device and coach/holdout checks are still open. The Claude Code CLI adapter compiler was verified live on 2026-11-11; the API-key path still lacks live-provider evidence. Optional local transcription and explicit voice-feedback review are implemented; Linux real speech is verified, with Windows/macOS native checks in progress. See [VOICE_NOTES.md](../VOICE_NOTES.md).
+The audit repairs package containment/atomicity, feedback provenance, duplicate fitting inputs, failure recovery and confidence-aware ranking; adds PR/research/native CI and coverage; and replaces stale public navigation. See [validation](../VALIDATION.md) for observed results and [roadmap](../ROADMAP.md) for remaining work. Physical-device and coach/holdout checks are still open. The Claude Code CLI adapter compiler was verified live on 2026-11-11; the API-key path still lacks live-provider evidence. Optional Linux/Windows local transcription and explicit voice-feedback review are implemented. Real speech passed the adapter on Linux/Windows/Intel macOS, the native Linux review UI passed on source 5380ff2, and all three jobs passed in run 45481642340. The macOS app remains unavailable pending a signed bundled helper compatible with its sandbox. See [VOICE_NOTES.md](../VOICE_NOTES.md).
 
 ## Inventory-first workstream acceptance
 
@@ -63,7 +63,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 - **SDK migration verified:** build 1.63.1 uses Xcode 27.2/SDK 27.2 and passed all nine jobs plus Apple processing. Earlier run 45453199177 compiled the release but exposed a simulator runtime-name suffix bug, fixed with six regression tests (25 script tests total passed). Run 45455404551 passed seven jobs and release compilation but timed out during simulator native build preparation at 20 minutes, before model tests. The successful run 45461413138 used the bounded 40-minute stage allowance; native model execution passed in approximately 20 seconds after preparation. The stage skips redundant Pub resolution and retains verbose output/timestamps. Actionlint passes with only its outdated xcode-27 label-catalog warning suppressed. Build 1.60.1's ITMS-90725 was an April 2027 deadline warning, not a rejected upload.
 
 
-- **Local speech transcription implemented; native verification in progress.** Voice audio is now copied locally, the pinned optional whisper.cpp/base model produces editable drafts, and explicit source/stroke/event/author/attribute/red-green review is required before feedback. Linux real audio and unit/widget safeguards pass; Windows/macOS native CI is running. See `docs/VOICE_NOTES.md`. Transcription accuracy for coaching speech and learning improvement remain unvalidated.
+- **Local voice review complete for Linux/Windows; scope limits remain explicit.** Local audio copies, the optional pinned whisper.cpp/base model, editable drafts and explicit source/stroke/event/author/attribute/red-green review are implemented. All 204 app tests pass (one existing opt-in skip), the analyzer is clean, and the Linux release builds. Native adapter CI passed on Linux/Windows/Intel macOS at source 5380ff2 in run 45481642340; the native Linux UI independently passed with real speech. The sandboxed macOS app deliberately fails closed until a signed bundled helper is implemented; do not disable its sandbox. See `docs/VOICE_NOTES.md`. Physical Windows UI acceptance, coaching-language accuracy and learning improvement remain unvalidated. No mobile transcription or iPhone upload was part of this change.
 - **Gurr coach-learning evidence remains open.** All five parts and 47 unique videos have published coverage/no-feedback controls. The local Gurr review packet and measured-export learning replay are delivered; the twelve real tasks start unlabelled because judgments and field tests do not exist yet. First field step: collect reviewed stroke judgments using `docs/FEEDBACK_REVIEW.md`. Actual learning evidence additionally needs a ready profile with disjoint source provenance and accurate usable measurements. The original HOG/SSDLite axe prototypes failed; the additional-footage Faster R-CNN also remains research-only (1/9 visible test heads, `docs/experiments/New-Footage.md`). Native diagnostics still expose selection/contact failures (`docs/experiments/Gurr-Round2.md`). No learning improvement is claimed.
 
 - **The API-key adapter compiler path remains unverified live.** The alternative signed-in Claude Code CLI path was authorized, implemented and verified on 2026-11-11; a separate API key is not required for that workbench route. See `docs/VALIDATION.md` and `docs/verification/live-adapter-compile-20261111.json`. This does not close independent coaching validation.
@@ -90,6 +90,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T20:40:20Z **codex** — Issue #4 complete: all three native jobs passed on 5380ff2; Linux UI and release verified; final platform evidence and limitations recorded. → next: Close issue #4 as completed, then release ownership. Await the user’s bigger-issue details; real iPhone acceptance remains open. macOS app voice support needs a signed bundled helper.
 - 2026-11-24T20:31:08Z **codex** — Voice review hardening complete: 204 app tests pass (one existing skip); changed sources reset dependent edits, cancellation/provenance/persistence regressions pass. Native Linux UI with real speech verified. App scope explicitly Linux/Windows; macOS standalone adapter verified but sandboxed app fails closed. → next: Verify latest local transcription workflow for this commit, rerun native Linux voice UI on committed source, record evidence and release ownership. macOS app requires future bundled signed helper; do not disable sandbox or upload iPhone builds.
 - 2026-11-24T20:23:00Z **codex** — Issue #4 local transcription and explicit reviewed feedback implemented; 200 app tests pass (one existing skip), analyzer clean, Linux real speech passes. Native desktop matrix next. → next: Watch the new local transcription workflow for implementation; fix Windows/macOS failures, finish independent review and document native evidence. No iPhone beta changes.
 - 2026-11-24T20:11:33Z **codex** — Claimed: Implement issue #4: optional local voice transcription and explicit reviewed source-bound feedback

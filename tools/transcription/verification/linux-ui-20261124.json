@@ -1,7 +1,7 @@
 {
   "format": "local-voice-review-ui/1",
   "status": "passed",
-  "recorded_at": "2026-11-24T20:26:59.019393Z",
+  "recorded_at": "2026-11-24T20:32:15.579184Z",
   "platform": "linux",
   "engine": "whisper.cpp/1.9.6",
   "model": "base",
@@ -13,8 +13,9 @@
   "mixture_edits": 0,
   "profile_fixture": "Synthetic coach profile, no measured footage.",
   "scope": "Real speech and native Linux review UI; not coaching accuracy.",
+  "app_commit": "5380ff2dcc3696789a6f8a4b70b8a252f6b68f1b",
   "screenshot_retained_locally": "research-data/transcription/ui-review.png",
-  "screenshot_sha256": "ca219782e6c880b97263b08e0382b9bcda72065bda850527be6bae7ae0078f65",
-  "original_report_sha256": "4867b392c34455794d98419164b5612dc36c58e6a78e276581fd3d9a96970ab7",
+  "screenshot_sha256": "07c8bde2ddd822930230b095ce338ddeebfb9136e6336f9193a7cbab68026cdf",
+  "original_report_sha256": "6d9a135aa537e0515dbb59d67090cbc1708b497380eca16e2e0f2deb5d7b934f",
   "test": "apps/strathvision/integration_test/local_voice_review_test.dart"
 }
