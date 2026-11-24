@@ -2,14 +2,14 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: codex
-heartbeat: 2026-11-24T17:39:26Z
+owner: none
+heartbeat: 2026-11-24T17:39:42Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Owner: answer whether this beta will be distributed in France and provide the iPhone TestFlight invitation email. Then save the prepared Apple compliance questionnaire, create an internal test group, add the validated build and invite the owner; verify first physical iPhone acceptance before external beta review. App/build IDs and evidence are in docs/verification/testflight-20261124.json.
-owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/handoff/STATUS.md
-active_processes: none; run 45440667314 completed successfully; awaiting owner France-distribution answer and invitation email
+next: Await owner France-distribution answer and invitation email. In App Store Connect build 1.60.1, standard encryption is selected but not saved; answer France truthfully, complete compliance, then create internal group and send the requested owner invitation. Verify actual iPhone behavior before external beta review. No further build is currently needed.
+owned_paths: 
+active_processes: none
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T17:39:42Z **codex** — Released: Signed iOS build 1.0.0 (1.60.1) uploaded and processed as VALID; nine cloud jobs pass; owner input needed for compliance and invitation → next: Await owner France-distribution answer and invitation email. In App Store Connect build 1.60.1, standard encryption is selected but not saved; answer France truthfully, complete compliance, then create internal group and send the requested owner invitation. Verify actual iPhone behavior before external beta review. No further build is currently needed.
 - 2026-11-24T17:39:26Z **codex** — First signed iOS upload 1.0.0 (1.60.1) succeeded; all nine jobs passed; Apple processing VALID; downloaded IPA and manifest verified → next: Owner: answer whether this beta will be distributed in France and provide the iPhone TestFlight invitation email. Then save the prepared Apple compliance questionnaire, create an internal test group, add the validated build and invite the owner; verify first physical iPhone acceptance before external beta review. App/build IDs and evidence are in docs/verification/testflight-20261124.json.
 - 2026-11-24T17:18:19Z **codex** — All eight validation jobs passed for 8048383 in run 45440667314; TestFlight signing job 138633204212 started → next: Monitor signing job 138633204212 in run 45440667314; verify uploaded manifest and Apple processing. Owner will test first on their own iPhone. Resolve any actual Apple export-compliance question with factual bundled-library evidence before device invitation.
 - 2026-11-24T17:00:06Z **codex** — First TestFlight run 45440667314 has seven successful jobs; iOS release compiled and simulator model check is running → next: Continue run 45440667314 (8048383) through simulator, signing and upload; verify Apple processing. Owner chose own iPhone for first device check. Apple encryption questionnaire may remain because the plist has no declaration; bundled media libraries include third-party cryptography, so do not assume none. No external review or invitations authorized yet.
