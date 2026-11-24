@@ -5,3 +5,9 @@
 research-data/
 
 **/coverage/
+
+# Apple signing material is stored outside the checkout and in GitHub secrets.
+*.p8
+*.p12
+*.mobileprovision
+/apple-signing/

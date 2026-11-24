@@ -1,0 +1,2 @@
+# Official Flutter release guide uses these CLI tools; no Codemagic account is needed.
+codemagic-cli-tools==0.71.0

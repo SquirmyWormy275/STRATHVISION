@@ -3,11 +3,11 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T05:50:28Z
+heartbeat: 2026-11-24T06:04:53Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Next implementation: confirm Apple team/app registration and signing credentials, add TestFlight to docs/DECISIONS.md and docs/DISTRIBUTION.md, implement a manual signed IPA/upload workflow, then perform and record iPhone acceptance before external invitations. Coach validation and local transcription remain open.
+next: Configure the GitHub testflight environment for implementation, push implementation and run builds.yml with upload_testflight=false. Resolve Apple account activation before app/key setup, signed upload and real iPhone acceptance.
 owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/DECISIONS.md docs/handoff/STATUS.md
 active_processes: none
 <!-- STATE:END -->
@@ -55,7 +55,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 
 - **General release signing and device acceptance remain open.** Android is debug/test signed, macOS is unsigned, and iOS is an unsigned app rather than an installable IPA. Existing Android release-keystore and Apple signing/provisioning locations were requested; none are configured in repository secrets. No physical Android device was connected during release preparation. Follow `docs/DISTRIBUTION.md` and the device record in `docs/VALIDATION.md` before general availability.
 
-- **Apple beta setup:** the user now reports Apple Developer credentials and chose cloud building from Linux. Inspection confirmed the existing GitHub macOS iOS job uses `--no-codesign`, the bundle identifier is `com.strathvision.strathvision`, and repository Actions secrets are empty. TestFlight is the recommended next distribution path; Apple membership/team/app registration and signing/upload material have not been inspected. Implementing that path requires updating `docs/DECISIONS.md` and `docs/DISTRIBUTION.md`, which currently specify ad hoc distribution, adding signing and upload on a supported macOS/Xcode runner, and recording an actual iPhone acceptance run. This assessment did not build, sign, upload or distribute an app.
+- **Apple beta setup:** the user authorized cloud-build automation from Linux. A manual TestFlight signing/upload job, credential/artifact validation helpers and distribution contract updates are implemented. Local helper tests and workflow lint pass; cloud validation is next. Apple account activation currently prevents App Store Connect access; team/app registration and signing/upload credentials remain unavailable. Resolve account access, then follow `docs/DISTRIBUTION.md` to populate the branch-restricted `testflight` environment and request the signed run. No signed IPA, upload or iPhone acceptance is claimed.
 
 - **Local speech transcription remains open.** Voice input paths are recorded as awaiting transcription. The standalone experiment report does not copy audio files or bind spoken labels; the UI reports receipt rather than claiming audio was saved.
 - **Gurr coach-learning evidence remains open.** All five parts and 47 unique videos have published coverage/no-feedback controls. The local Gurr review packet and measured-export learning replay are delivered; the twelve real tasks start unlabelled because judgments and field tests do not exist yet. First field step: collect reviewed stroke judgments using `docs/FEEDBACK_REVIEW.md`. Actual learning evidence additionally needs a ready profile with disjoint source provenance and accurate usable measurements. The original HOG/SSDLite axe prototypes failed; the additional-footage Faster R-CNN also remains research-only (1/9 visible test heads, `docs/experiments/New-Footage.md`). Native diagnostics still expose selection/contact failures (`docs/experiments/Gurr-Round2.md`). No learning improvement is claimed.
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T06:04:53Z **codex** — Implemented manual TestFlight upload with app/team/profile validation and unique build numbers; 15 script tests, workflow lint and documentation checks pass → next: Configure the GitHub testflight environment for implementation, push implementation and run builds.yml with upload_testflight=false. Resolve Apple account activation before app/key setup, signed upload and real iPhone acceptance.
 - 2026-11-24T05:50:28Z **codex** — Claimed: Set up user-requested GitHub cloud signing and TestFlight automation; Apple account onboarding pending
 - 2026-11-24T05:47:57Z **codex** — Released: Apple beta distribution assessment complete; recommended GitHub-hosted macOS signing and TestFlight; no app/configuration changes or uploads → next: Next implementation: confirm Apple team/app registration and signing credentials, add TestFlight to docs/DECISIONS.md and docs/DISTRIBUTION.md, implement a manual signed IPA/upload workflow, then perform and record iPhone acceptance before external invitations. Coach validation and local transcription remain open.
 - 2026-11-24T05:47:57Z **codex** — Assessed iOS beta readiness: existing unsigned cloud build, bundle ID confirmed, repository Actions secrets empty; user chose cloud builds; reconciled stale compiler status → next: For TestFlight setup, confirm active Apple team and app record for com.strathvision.strathvision; update docs/DECISIONS.md and docs/DISTRIBUTION.md, add signed IPA/upload workflow using protected secrets and supported Xcode, then record an actual iPhone check in docs/VALIDATION.md. No app has been signed or uploaded.

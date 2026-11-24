@@ -302,9 +302,10 @@ Research accuracy follow-up: image-space axe observations and source-disjoint ge
 ## Distribution
 
 - Android: APK/AAB sideload for testing.
-- iOS: ad-hoc provisioning (UDIDs, signed IPA + profile). 100-device cap.
+- iOS: TestFlight through an explicitly requested GitHub-hosted macOS build (owner-authorized, 2026-11-23). The manual `builds` workflow can sign and upload only after its eight existing validation/build jobs pass for the same source commit. Apple enrollment, agreements and initial API access remain account-owner steps. Private signing material belongs in the restricted `testflight` GitHub environment, never the repository or app. Upload does not submit an App Store release, invite testers or claim device acceptance. Ad hoc provisioning remains an alternative for registered devices.
 - Desktop (Windows/macOS/Linux): zip of Flutter build.
 - Packages are ordinary files.
+- Cloud CI and Apple beta distribution do not change the local-first runtime or authorize uploading user footage. Physical iPhone acceptance and independent coaching validation remain separate gates.
 
 ## Edge Cases
 

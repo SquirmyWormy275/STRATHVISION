@@ -6,11 +6,17 @@ on:
   pull_request:
     branches: [main, implementation]
   workflow_dispatch:
+    inputs:
+      upload_testflight:
+        description: 'After all checks pass, sign and upload the iOS beta to App Store Connect'
+        required: true
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
-  group: builds-${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
-  cancel-in-progress: true
+  group: builds-${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}-${{ github.event_name == 'workflow_dispatch' && inputs.upload_testflight && 'testflight' || 'checks' }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' || !inputs.upload_testflight }}
 env:
   FLUTTER_VERSION: '3.47.9'
 jobs:
@@ -167,6 +173,8 @@ jobs:
     runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
+      - name: Select an App Store supported Xcode
+        run: sudo xcode-select --switch /Applications/Xcode_26.3.app/Contents/Developer
       - name: Provision pinned offline UI fonts
         run: python scripts/fetch_ui_fonts.py
       - uses: subosito/flutter-action@v2
@@ -178,3 +186,45 @@ jobs:
           ditto -c -k --keepParent build/ios/iphoneos/Runner.app strathvision-ios-unsigned.zip
       - uses: actions/upload-artifact@v4
         with: {name: strathvision-ios-unsigned, path: apps/strathvision/strathvision-ios-unsigned.zip}
+  testflight:
+    if: github.event_name == 'workflow_dispatch' && inputs.upload_testflight && github.ref == 'refs/heads/implementation'
+    needs: [test, research, training, android, linux, windows, macos, ios]
+    runs-on: macos-15-intel
+    timeout-minutes: 60
+    environment: testflight
+    concurrency:
+      group: strathvision-testflight-upload
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - name: Select an App Store supported Xcode
+        run: sudo xcode-select --switch /Applications/Xcode_26.3.app/Contents/Developer
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install pinned Apple build tools
+        run: python -m pip install -r scripts/apple-requirements.txt
+      - name: Provision pinned offline UI fonts
+        run: python scripts/fetch_ui_fonts.py
+      - uses: subosito/flutter-action@v2
+        with: {channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true}
+      - name: Sign, verify and upload the iOS beta
+        env:
+          IOS_BUNDLE_ID: com.strathvision.strathvision
+          IOS_TEAM_ID: ${{ vars.IOS_TEAM_ID }}
+          APP_STORE_ID: ${{ vars.APP_STORE_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          CERTIFICATE_PRIVATE_KEY: ${{ secrets.CERTIFICATE_PRIVATE_KEY }}
+        run: bash scripts/upload_testflight.sh
+      - name: Retain the signed package and upload record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: strathvision-testflight-${{ github.run_number }}-${{ github.run_attempt }}
+          path: |
+            apps/strathvision/build/ios/ipa/*.ipa
+            apps/strathvision/build/ios/ipa/testflight-manifest.json
+          if-no-files-found: ignore
+          retention-days: 14
