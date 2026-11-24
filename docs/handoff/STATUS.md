@@ -3,13 +3,13 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T16:44:36Z
+heartbeat: 2026-11-24T16:45:46Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Dispatch builds.yml on implementation with upload_testflight=true; verify all eight validation jobs and signed upload, then confirm Apple processing before iPhone acceptance. Private material stays outside checkout.
+next: Monitor https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314 through eight checks and TestFlight upload; fix concrete failures, verify Apple processing, then arrange first physical iPhone acceptance. No invitations or external beta review submitted.
 owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/handoff/STATUS.md
-active_processes: none
+active_processes: GitHub Actions 45440667314: first signed TestFlight upload for source 8048383; local background processes none
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T16:45:46Z **codex** — Started authorized first TestFlight workflow 45440667314 for source 8048383; key access and signing configuration verified → next: Monitor https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314 through eight checks and TestFlight upload; fix concrete failures, verify Apple processing, then arrange first physical iPhone acceptance. No invitations or external beta review submitted.
 - 2026-11-24T16:44:36Z **codex** — Apple key imported securely; app access verified; all four encrypted signing secrets configured; fixed CLI export compatibility; 18 script tests and workflow checks pass → next: Dispatch builds.yml on implementation with upload_testflight=true; verify all eight validation jobs and signed upload, then confirm Apple processing before iPhone acceptance. Private material stays outside checkout.
 - 2026-11-24T16:41:22Z **codex** — Claimed: Owner downloaded Apple key; securely configure final signing secrets, verify Apple access and run first TestFlight upload
 - 2026-11-24T16:37:05Z **codex** — Released: Apple download retry completed; original key revoked with approval; one active replacement has no retrievable private file; cloud upload awaits regular-browser download → next: Owner: in a regular browser, replace the active STRATHVISION GitHub team key with the same App Manager role and save its one-time .p8 to Downloads. Agent: securely store/validate that file, update testflight key ID and APP_STORE_CONNECT_PRIVATE_KEY, verify read-only app access, dispatch builds.yml upload_testflight=true, then verify Apple processing. Existing RSA key and metadata are outside checkout at ~/.local/share/strathvision/apple-signing.
