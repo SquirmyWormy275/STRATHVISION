@@ -3,13 +3,13 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T06:07:31Z
+heartbeat: 2026-11-24T06:13:55Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Dispatch builds.yml on implementation with upload_testflight=false and verify all eight jobs. Apple activation still blocks signing credentials, signed upload and real iPhone acceptance.
+next: Inspect App Store Connect Integrations for API access and obtain any required owner approval for a dedicated upload key. Cloud validation run 45338145369 has passed three test jobs; verify remaining platform builds before signed upload.
 owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/DECISIONS.md docs/handoff/STATUS.md
-active_processes: GitHub builds 45337850536 validates c67eaa7 with upload_testflight=false; no Apple upload requested
+active_processes: GitHub builds 45338145369 validates 20a2bc6 with upload_testflight=false; first run 45337850536 exposed font API throttling, now fixed
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -55,7 +55,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 
 - **General release signing and device acceptance remain open.** Android is debug/test signed, macOS is unsigned, and iOS is an unsigned app rather than an installable IPA. Existing Android release-keystore and Apple signing/provisioning locations were requested; none are configured in repository secrets. No physical Android device was connected during release preparation. Follow `docs/DISTRIBUTION.md` and the device record in `docs/VALIDATION.md` before general availability.
 
-- **Apple beta setup:** the user authorized cloud-build automation from Linux. A manual TestFlight signing/upload job, credential/artifact validation helpers and distribution contract updates are implemented. Local helper tests and workflow lint pass; cloud validation is next. Apple account activation currently prevents App Store Connect access; team/app registration and signing/upload credentials remain unavailable. Resolve account access, then follow `docs/DISTRIBUTION.md` to populate the branch-restricted `testflight` environment and request the signed run. No signed IPA, upload or iPhone acceptance is claimed.
+- **Apple beta setup:** the user authorized cloud-build automation from Linux. A manual TestFlight signing/upload job, credential/artifact validation helpers and distribution contract updates are implemented. Seventeen script tests and workflow lint pass. Cloud run 45338145369 has passed its three test jobs; five platform builds are running. The account holder has resolved Apple access; active membership and the new STRATHVISION app/bundle registration are verified. The implementation-only GitHub `testflight` environment contains the team/app variables. API access and private signing material are still required before a signed run. No signed IPA, upload or iPhone acceptance is claimed.
 
 - **Local speech transcription remains open.** Voice input paths are recorded as awaiting transcription. The standalone experiment report does not copy audio files or bind spoken labels; the UI reports receipt rather than claiming audio was saved.
 - **Gurr coach-learning evidence remains open.** All five parts and 47 unique videos have published coverage/no-feedback controls. The local Gurr review packet and measured-export learning replay are delivered; the twelve real tasks start unlabelled because judgments and field tests do not exist yet. First field step: collect reviewed stroke judgments using `docs/FEEDBACK_REVIEW.md`. Actual learning evidence additionally needs a ready profile with disjoint source provenance and accurate usable measurements. The original HOG/SSDLite axe prototypes failed; the additional-footage Faster R-CNN also remains research-only (1/9 visible test heads, `docs/experiments/New-Footage.md`). Native diagnostics still expose selection/contact failures (`docs/experiments/Gurr-Round2.md`). No learning improvement is claimed.
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T06:13:55Z **codex** — Apple access restored by owner; active membership verified; STRATHVISION app and bundle ID registered; GitHub signing environment app/team variables configured → next: Inspect App Store Connect Integrations for API access and obtain any required owner approval for a dedicated upload key. Cloud validation run 45338145369 has passed three test jobs; verify remaining platform builds before signed upload.
 - 2026-11-24T06:07:31Z **codex** — Created implementation-only testflight environment; first cloud run hit anonymous font API rate limit; authenticated font requests added and 17 script tests plus workflow lint pass → next: Dispatch builds.yml on implementation with upload_testflight=false and verify all eight jobs. Apple activation still blocks signing credentials, signed upload and real iPhone acceptance.
 - 2026-11-24T06:04:53Z **codex** — Implemented manual TestFlight upload with app/team/profile validation and unique build numbers; 15 script tests, workflow lint and documentation checks pass → next: Configure the GitHub testflight environment for implementation, push implementation and run builds.yml with upload_testflight=false. Resolve Apple account activation before app/key setup, signed upload and real iPhone acceptance.
 - 2026-11-24T05:50:28Z **codex** — Claimed: Set up user-requested GitHub cloud signing and TestFlight automation; Apple account onboarding pending
