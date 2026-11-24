@@ -14,11 +14,19 @@ The normal workflow provides test distribution: Android uses a debug signing key
 
 The maintainer can prepare and trigger the build from Linux. GitHub runs Xcode on its hosted Mac; testers install through Apple's TestFlight app. No Codemagic account is needed: the workflow uses its open-source CLI tools, as documented in [Flutter's iOS release guide](https://docs.flutter.dev/deployment/ios).
 
-**Current readiness:** the first signed cloud upload succeeded on 2026-11-24. Version **1.0.0 (1.60.1)** is processed by Apple as **VALID**. The TestFlight page still shows **Missing Compliance**: the encryption questionnaire needs the owner's intended France distribution answer before testing can be enabled. The owner will perform the first iPhone check; the invitation address is pending. Physical-device acceptance and external beta review remain open.
+**Current readiness:** the first signed cloud upload succeeded on 2026-11-24. Version **1.0.0 (1.60.1)** is processed by Apple as **VALID**. The TestFlight page still shows **Missing Compliance**. The owner wants France availability without a declaration; an applicable exemption has not been established, and no compliance answer has been submitted. The owner will perform the first iPhone check; the invitation address is pending. Physical-device acceptance and external beta review remain open.
 
 All nine jobs passed for source `8048383` in [cloud run 45440667314](https://github.com/SquirmyWormy275/STRATHVISION/actions/runs/45440667314): the eight existing checks/builds plus signed iOS upload. This includes both shipped models executing on synthetic input in an iPhone Simulator. The downloaded signed artifact and IPA checksums, archive integrity, app identity and upload manifest were verified. See the [upload evidence](verification/testflight-20261124.json). The IPA SHA-256 is `331d3489c60585d2c7a2c91e7e2eb9bc2e685728ed1191a972c72c6348e59558`.
 
 The implementation-only GitHub `testflight` environment has all four encrypted secrets and both variables. The owner-downloaded API key and persistent certificate key are retained outside the checkout with restrictive permissions. No private key is committed or included in the app artifact.
+
+### France encryption assessment
+
+The signed build's [encryption inventory](verification/encryption-inventory-20261124.json) records Mbed TLS frameworks, FFmpeg encryption symbols, Flutter runtime BoringSSL markers, and retained Dart archive AES/ZipCrypto metadata. These establish packaged capabilities, not execution of every capability or a legal classification. The app's ZIP calls omit passwords, and its ordinary iOS review/analysis flows operate locally.
+
+Apple's [declaration guidance](https://developer.apple.com/documentation/security/complying-with-encryption-export-regulations) includes third-party libraries. Its [documentation table](https://developer.apple.com/help/app-store-connect/reference/app-information/export-compliance-documentation-for-encryption/) distinguishes operating-system encryption from bundled standard algorithms. The live questionnaire for build 1.60.1 requests documentation when standard bundled encryption and France are selected; the draft was cancelled without submission.
+
+The owner authorized investigation of library changes. An AVFoundation replacement could remove the iOS media stack, but would also need to preserve playback, exact seeks, frame stepping, metadata, thumbnails, analysis frames, orientation and HDR handling. It would leave the Flutter runtime and archive findings unresolved. No media replacement or encryption flag change has been implemented. Confirm the classification for the actual app before assuming this rewrite removes documentation requirements. A sports-app or beta-testing exemption has not been established from the reviewed [French exemptions](https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000006428332/2026-03-31).
 
 ### One-time Apple setup
 
