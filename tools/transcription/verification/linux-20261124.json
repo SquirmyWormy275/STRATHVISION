@@ -1,0 +1,34 @@
+{
+  "format": "local-transcription-acceptance/1",
+  "status": "passed",
+  "recorded_at": "2026-11-24T20:18:56.698083Z",
+  "platform": "linux",
+  "os_version": "Linux 7.2.15-1-omarchy #1 SMP PREEMPT_DYNAMIC Mon, 02 Nov 2026 10:32:17 +0000",
+  "source_commit": "96ec4d9823e9d0211944172da35f9f29134af990",
+  "model_revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+  "model_sha256": "60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe",
+  "executable_sha256": "ff6431150850599710527d9e9e5d369b37d7f41017c0624ca94ca9cea8fadf4e",
+  "audio_sha256": "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e",
+  "audio_bytes": 352078,
+  "elapsed_ms": 4348,
+  "engine": "whisper.cpp/1.9.6",
+  "model": "base",
+  "language": "en",
+  "text": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+  "expected_phrase": "ask not what your country can do for you",
+  "metadata": {
+    "source_commit": "96ec4d9823e9d0211944172da35f9f29134af990",
+    "model_sha256": "60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe",
+    "executable_sha256": "ff6431150850599710527d9e9e5d369b37d7f41017c0624ca94ca9cea8fadf4e",
+    "audio_sha256": "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e",
+    "audio_duration_ms": 11000,
+    "segment_count": 2,
+    "reviewed": false
+  },
+  "scope": "Real speech through the app adapter, not a synthetic transcript.",
+  "limitations": [
+    "One short English historical speech sample; not coaching-language accuracy.",
+    "Does not establish other languages, accents, noisy recordings or long-audio accuracy.",
+    "Does not exercise physical desktop UI or human transcript review."
+  ]
+}

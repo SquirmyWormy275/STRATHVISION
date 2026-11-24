@@ -496,6 +496,26 @@ The person chosen is the detected person whose box contains the point on that fr
 
 ## Quality Gates (profile builder)
 
+### Optional desktop voice review (`local_voice_note/1`)
+
+CARNE ASADA preserves a content-addressed local audio copy before transcription.
+Transcription is an explicit, cancellable local operation with a pinned optional
+runtime/model; it never uploads audio. Missing tools leave ordinary review usable.
+Machine text is a draft, not a mark or a command. A reviewer must edit/confirm it
+and choose the source SHA-256, current pack/event, one measured stroke and its
+half-open time interval, attribute, red/green label, and author name/role before
+it can enter the existing bounded learning loop. Recognition never infers these
+fields. Acceptance rechecks source/audio identity and is idempotent. Changing
+competitor selection invalidates earlier voice bindings for that source.
+
+Local records retain original machine text, reviewed text, runtime/model identity,
+audio hash/path, status, and the accepted binding/time. Records and audio survive
+transcription failures and remain local; experiment exports include their audit
+metadata/text, not audio bytes. Profile-only exports exclude voice records. Audio
+is currently supported for transcription as 16 kHz mono PCM16 WAV, at most ten
+minutes; other formats are retained with an actionable unsupported-input result.
+See [voice setup and verification](VOICE_NOTES.md).
+
 A profile may not be marked ready unless:
 
 - `source_clip_count` >= pack-defined minimum (default target 15)

@@ -3,18 +3,18 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T20:11:33Z
+heartbeat: 2026-11-24T20:23:00Z
 branch: implementation
-phase: Release packaging
-task: Apple beta distribution assessment
-next: Await owner iPhone installation/checks per docs/VALIDATION.md. Existing Owner iPhone Check group has one invited account holder, one build and manual distribution. Then prepare external review and approved named testers outside France; no public link.
+phase: Issue #4 local voice review
+task: Optional local transcription with explicit review
+next: Watch the new local transcription workflow for implementation; fix Windows/macOS failures, finish independent review and document native evidence. No iPhone beta changes.
 owned_paths: apps/strathvision/lib/workbench apps/strathvision/lib/screens/carne_screen.dart apps/strathvision/test tools/transcription docs .github/workflows
 active_processes: none
 <!-- STATE:END -->
 
 ## Current acceptance
 
-The audit repairs package containment/atomicity, feedback provenance, duplicate fitting inputs, failure recovery and confidence-aware ranking; adds PR/research/native CI and coverage; and replaces stale public navigation. See [validation](../VALIDATION.md) for observed results and [roadmap](../ROADMAP.md) for remaining work. Physical-device and coach/holdout checks are still open. The Claude Code CLI adapter compiler was verified live on 2026-11-11; the API-key path still lacks live-provider evidence. Local transcription is not implemented.
+The audit repairs package containment/atomicity, feedback provenance, duplicate fitting inputs, failure recovery and confidence-aware ranking; adds PR/research/native CI and coverage; and replaces stale public navigation. See [validation](../VALIDATION.md) for observed results and [roadmap](../ROADMAP.md) for remaining work. Physical-device and coach/holdout checks are still open. The Claude Code CLI adapter compiler was verified live on 2026-11-11; the API-key path still lacks live-provider evidence. Optional local transcription and explicit voice-feedback review are implemented; Linux real speech is verified, with Windows/macOS native checks in progress. See [VOICE_NOTES.md](../VOICE_NOTES.md).
 
 ## Inventory-first workstream acceptance
 
@@ -90,6 +90,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T20:23:00Z **codex** — Issue #4 local transcription and explicit reviewed feedback implemented; 200 app tests pass (one existing skip), analyzer clean, Linux real speech passes. Native desktop matrix next. → next: Watch the new local transcription workflow for implementation; fix Windows/macOS failures, finish independent review and document native evidence. No iPhone beta changes.
 - 2026-11-24T20:11:33Z **codex** — Claimed: Implement issue #4: optional local voice transcription and explicit reviewed source-bound feedback
 - 2026-11-24T19:47:08Z **codex** — Released: Build 1.63.1 ready for owner iPhone test; compliance saved for beta excluding France and invitation verified. → next: Await owner iPhone installation/checks per docs/VALIDATION.md. Existing Owner iPhone Check group has one invited account holder, one build and manual distribution. Then prepare external review and approved named testers outside France; no public link.
 - 2026-11-24T19:47:01Z **codex** — Non-France compliance cleared; owner-only manual TestFlight group has build 1.63.1 Ready to Test and account holder Invited. Evidence and documentation checks pass. → next: Owner: open the TestFlight invitation on iPhone and install build 1.63.1; record checks in docs/VALIDATION.md. Agent: use the existing group; external review and named invitations outside France follow successful device acceptance.

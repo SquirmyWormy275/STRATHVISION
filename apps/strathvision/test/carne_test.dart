@@ -40,11 +40,12 @@ void main() {
 
   ({Profile profile, Map<String, String> research})? written;
   final notes = <String, String>{};
-  CarneController controller({bool marked = true, double conf = 0.85}) {
+  CarneController controller({bool marked = true, double conf = 0.85, VoiceNoteLibrary? voiceLibrary}) {
     final c = CarneController(
       pack: info.analysisPack,
       attributes: [...info.topAttributes, ...info.moreAttributes],
       bundle: ProfileBundle(profile: coach, patchFiles: const {}),
+      voiceLibrary: voiceLibrary,
       probe: (path) async => const ClipInfo(durationMs: 60000, fps: 30),
       analyze: (clip) => AnalysisEngine(
               pack: info.analysisPack,
@@ -141,7 +142,11 @@ void main() {
   });
 
   testWidgets('below threshold → use anyway; notes and voice notes', (tester) async {
-    final c = controller(marked: false, conf: 0.55);
+    final voiceDir = Directory.systemTemp.createTempSync('sv_voice');
+    addTearDown(() => voiceDir.deleteSync(recursive: true));
+    final voice = File('${voiceDir.path}/coach.m4a')..writeAsStringSync('synthetic fixture');
+    final c = controller(marked: false, conf: 0.55,
+      voiceLibrary: VoiceNoteLibrary(directory: () async => Directory('${voiceDir.path}/saved')));
     notes['/feed/n.txt'] = 'priority: hinge\nignore this clip\n';
     await pump(tester, c, ['/feed/dim.mp4']);
     await tap(tester, 'choose-files');
@@ -151,13 +156,13 @@ void main() {
     await tap(tester, 'use-anyway-$sourceId');
     expect(c.session.usableSeconds, greaterThan(50));
 
-    await c.drop(['/feed/n.txt', '/feed/coach.m4a', '/feed/readme.pdf']);
+    await tester.runAsync(() => c.drop(['/feed/n.txt', voice.path, '/feed/readme.pdf']));
     await tester.pumpAndSettle();
     final texts = c.feed.map((l) => l.text).toList();
     expect(texts, contains('Priority is hinge. Only hinge updates will be considered this session.'));
     expect(texts, contains('Ignoring dim.'));
     expect(c.session.usableSeconds, 0);
-    expect(texts, contains('Received the voice note. Spoken labels need a transcriber on this computer.'));
+    expect(texts, contains('Voice note saved on this computer. Open Voice notes to transcribe and review it.'));
     expect(texts, contains('Can’t use readme.pdf.'));
 
     // A coaching package for the same event widens the coach hull.

@@ -1,0 +1,83 @@
+name: local transcription
+on:
+  workflow_dispatch:
+  push:
+    branches: [implementation]
+    paths:
+      - '.github/workflows/transcription.yml'
+      - 'tools/transcription/**'
+      - 'apps/strathvision/lib/workbench/local_transcriber.dart'
+      - 'apps/strathvision/lib/workbench/voice_notes.dart'
+      - 'apps/strathvision/lib/workbench/carne_controller.dart'
+      - 'apps/strathvision/lib/screens/carne_screen.dart'
+      - 'apps/strathvision/lib/screens/voice_note_review.dart'
+      - 'apps/strathvision/test/local_transcriber_test.dart'
+      - 'apps/strathvision/test/voice_notes_test.dart'
+      - 'apps/strathvision/test/voice_note_review_test.dart'
+      - 'apps/strathvision/tool/transcription_check.dart'
+      - 'apps/strathvision/pubspec.*'
+  pull_request:
+    branches: [main, implementation]
+    paths:
+      - '.github/workflows/transcription.yml'
+      - 'tools/transcription/**'
+      - 'apps/strathvision/lib/workbench/local_transcriber.dart'
+      - 'apps/strathvision/lib/workbench/voice_notes.dart'
+      - 'apps/strathvision/lib/workbench/carne_controller.dart'
+      - 'apps/strathvision/lib/screens/carne_screen.dart'
+      - 'apps/strathvision/lib/screens/voice_note_review.dart'
+      - 'apps/strathvision/test/local_transcriber_test.dart'
+      - 'apps/strathvision/test/voice_notes_test.dart'
+      - 'apps/strathvision/test/voice_note_review_test.dart'
+      - 'apps/strathvision/tool/transcription_check.dart'
+      - 'apps/strathvision/pubspec.*'
+permissions:
+  contents: read
+concurrency:
+  group: transcription-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+env:
+  FLUTTER_VERSION: '3.47.9'
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15-intel, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: subosito/flutter-action@v2
+        with: {channel: stable, flutter-version: '${{ env.FLUTTER_VERSION }}', cache: true}
+      - name: Setup integrity safeguards
+        run: python -m unittest discover -s tools/transcription -v
+      - name: Explicit pinned CPU runtime and model setup
+        run: python tools/transcription/setup.py --destination "${{ runner.temp }}/strathvision-transcription" --jobs 3
+      - name: Provision the app's pinned offline fonts
+        run: python scripts/fetch_ui_fonts.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Adapter regression tests
+        working-directory: apps/strathvision
+        run: |
+          flutter pub get
+          flutter test test/local_transcriber_test.dart test/voice_notes_test.dart test/voice_note_review_test.dart
+      - name: Real speech through the app adapter
+        working-directory: apps/strathvision
+        env:
+          STRATHVISION_TRANSCRIBER_CONFIG: ${{ runner.temp }}/strathvision-transcription/transcriber.json
+          STRATHVISION_TRANSCRIPTION_AUDIO: ${{ runner.temp }}/strathvision-transcription/source/samples/jfk.wav
+          STRATHVISION_TRANSCRIPTION_REPORT: ${{ github.workspace }}/research-data/transcription-acceptance/native.json
+        run: dart run tool/transcription_check.dart
+      - name: Retain compact real-audio evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transcription-${{ matrix.os }}
+          path: research-data/transcription-acceptance/native.json
+          if-no-files-found: ignore
+          retention-days: 14

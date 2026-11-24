@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../workbench/carne_controller.dart';
 import '../vision/pose_service.dart' show PeopleLoader;
 import 'athlete_picker.dart';
+import 'voice_note_review.dart';
 
 typedef AnyFilesPicker = Future<List<String>> Function();
 
@@ -39,6 +40,7 @@ class CarneScreen extends StatefulWidget {
     this.pickFiles = pickAnyFiles,
     this.saveExperiment = saveExperimentFile,
     this.loadPeople,
+    this.pickTranscriber = pickTranscriberConfig,
   });
 
   final CarneController controller;
@@ -46,6 +48,7 @@ class CarneScreen extends StatefulWidget {
   final AnyFilesPicker pickFiles;
   final ExperimentWriter saveExperiment;
   final PeopleLoader? loadPeople;
+  final TranscriberConfigPicker pickTranscriber;
 
   @override
   State<CarneScreen> createState() => _CarneScreenState();
@@ -64,7 +67,21 @@ class _CarneScreenState extends State<CarneScreen> {
         final scheme = theme.colorScheme;
         final s = c.session;
         return Scaffold(
-          appBar: AppBar(title: Text('CARNE ASADA · ${widget.title}')),
+          appBar: AppBar(
+            title: Text('CARNE ASADA · ${widget.title}'),
+            actions: [
+              TextButton.icon(
+                key: const Key('voice-notes'),
+                onPressed: () => showVoiceNotes(
+                  context,
+                  c,
+                  pickConfig: widget.pickTranscriber,
+                ),
+                icon: const Icon(Icons.mic_none),
+                label: Text('Voice notes (${c.voiceNotes.length})'),
+              ),
+            ],
+          ),
           body: LayoutBuilder(
             builder: (context, box) {
               final left = Column(

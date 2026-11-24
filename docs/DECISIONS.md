@@ -187,7 +187,7 @@ See docs/CARNE_ASADA.md for full specification.
 - **Ingestion.**
   - Videos are probed, split into strokes, and analyzed per stroke. Red/green marks come from any project that has the same clip file, bound to the stroke containing each mark's time.
   - Text notes understand `priority: <attribute>` and `ignore this clip`.
-  - Voice notes are saved, but spoken labels need a local transcriber. None is chosen yet (see Blockers).
+  - Voice notes use optional local whisper.cpp v1.9.6 with the pinned multilingual base model (MIT). Audio is preserved locally. Transcription produces an editable draft; only explicit source/stroke/event/author/attribute/red-green review can create feedback. Text never executes note commands. See [VOICE_NOTES.md](VOICE_NOTES.md) for setup, limits and platform evidence.
   - A dropped package for the same event merges its coach strokes into the hull and the held-out set ("Added N coach strokes from <coach> · vN to the coach hull."). Packages for another event are ignored.
 - **Undo and save.**
   - Undo removes the last accepted edit and restores its metric exactly.

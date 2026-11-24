@@ -14,8 +14,11 @@ import '../vision/athlete.dart';
 import '../workspace/project.dart' show Mark;
 import 'carne_run.dart';
 import 'carne_athletes.dart';
+import 'voice_notes.dart';
+import 'local_transcriber.dart';
 
 export 'carne_run.dart' show ExperimentWriter;
+export 'voice_notes.dart';
 
 typedef StrokeAnalyzer = Future<List<StrokeDetail>> Function(ClipSource clip);
 
@@ -67,6 +70,17 @@ class FeedLine {
   final String? athleteClip;
 }
 
+class _VoiceStrokeMark extends StrokeMark {
+  const _VoiceStrokeMark({
+    required this.noteId,
+    required super.attribute,
+    required super.label,
+    required super.author,
+    required super.createdAt,
+  });
+  final String noteId;
+}
+
 const _video = {'.mp4', '.mov', '.m4v', '.avi', '.mkv', '.webm'};
 const _audio = {'.m4a', '.mp3', '.wav', '.aac', '.ogg', '.flac'};
 
@@ -83,11 +97,13 @@ class CarneController extends ChangeNotifier {
     required this.write,
     ClipFingerprinter? fingerprint,
     CarneAthleteState? athletes,
+    VoiceNoteLibrary? voiceLibrary,
     this.analysisMetadata = const {'provider': 'unspecified'},
     this.phaseLabel,
     this.metricLabel,
     DateTime Function()? clock,
   }) : athletes = athletes ?? CarneAthleteState(),
+       voiceLibrary = voiceLibrary ?? VoiceNoteLibrary(),
        _clock = clock ?? DateTime.now,
        _fingerprint = fingerprint ?? hashVideoContent {
     startedAt = _clock().toUtc();
@@ -117,6 +133,22 @@ class CarneController extends ChangeNotifier {
   final ClipFingerprinter _fingerprint;
   final Map<String, Object?> analysisMetadata;
   final CarneAthleteState athletes;
+  final VoiceNoteLibrary voiceLibrary;
+  final List<VoiceNote> _voiceNotes = [];
+  final Map<String, TranscriptionCancellation> _voiceJobs = {};
+  List<VoiceNote> get voiceNotes => List.unmodifiable(_voiceNotes);
+  bool get voiceBusy => _voiceJobs.isNotEmpty;
+  List<VoiceTarget> get voiceTargets => [
+    for (final item in session.pile)
+      if (!item.ignored && !_pendingAthletes.contains(item.stroke.clipId))
+        VoiceTarget(
+          clipId: item.stroke.clipId,
+          name: item.clipName,
+          strokeIndex: item.stroke.index,
+          startMs: (item.stroke.startFrame / item.stroke.fps * 1000).ceil(),
+          endMs: ((item.stroke.endFrame + 1) / item.stroke.fps * 1000).ceil(),
+        ),
+  ];
   final Set<String> _pendingAthletes = {};
   bool needsAthleteChoice(String id) => _pendingAthletes.contains(id);
   static const _uuid = Uuid();
@@ -272,6 +304,7 @@ class CarneController extends ChangeNotifier {
       input['sha256'] = hash;
       input['clip_id'] = id;
       if (_pathHashes[path] != null && _pathHashes[path] != hash) {
+        await _invalidateVoice('sha256:${_pathHashes[path]}', 'source_changed');
         _changedPaths[path] = _clock().toUtc();
         feed.add(
           FeedLine(
@@ -359,12 +392,27 @@ class CarneController extends ChangeNotifier {
       input['status'] = 'note_received';
     } else if (_audio.contains(ext)) {
       input['kind'] = 'audio';
+      final note = await voiceLibrary.preserve(path);
+      final existing = _voiceNotes
+          .where((n) => n.audioSha256 == note.audioSha256)
+          .firstOrNull;
+      if (existing != null) {
+        input['status'] = 'duplicate_audio';
+        input['voice_note_id'] = existing.id;
+        feed.add(
+          const FeedLine(
+            'This voice note is already saved. Open Voice notes to review it.',
+          ),
+        );
+        return;
+      }
+      _voiceNotes.add(note);
+      input['voice_note_id'] = note.id;
+      input['audio_sha256'] = note.audioSha256;
       input['status'] = 'awaiting_transcription';
-      // No local transcriber yet (DECISIONS.md edge case: keep audio, drop
-      // the language binding).
       feed.add(
         const FeedLine(
-          'Received the voice note. Spoken labels need a transcriber on this computer.',
+          'Voice note saved on this computer. Open Voice notes to transcribe and review it.',
         ),
       );
     } else if (ext == '.zip' || ext == '.json') {
@@ -443,7 +491,299 @@ class CarneController extends ChangeNotifier {
                 author: mark.author.name,
                 createdAt: mark.createdAt,
               ),
+          ..._voiceMarks(item.stroke.clipId, item.stroke.index),
         ]);
+    }
+  }
+
+  Iterable<StrokeMark> _voiceMarks(String clipId, int index) sync* {
+    for (final note in _voiceNotes) {
+      final binding = note.acceptedBinding;
+      if (note.status != VoiceNoteStatus.accepted ||
+          binding == null ||
+          binding['invalidated_at'] != null ||
+          binding['clip_id'] != clipId ||
+          binding['stroke_index'] != index) {
+        continue;
+      }
+      yield _VoiceStrokeMark(
+        noteId: note.id,
+        attribute: binding['attribute'] as String,
+        label: binding['label'] as String,
+        author: binding['author_role'] as String,
+        createdAt: DateTime.parse(binding['accepted_at'] as String),
+      );
+    }
+  }
+
+  VoiceNote _voice(String id) => _voiceNotes.firstWhere((n) => n.id == id);
+
+  Future<void> _invalidateVoice(String clipId, String reason) async {
+    final invalid = _voiceNotes
+        .where(
+          (n) =>
+              n.acceptedBinding?['clip_id'] == clipId &&
+              n.acceptedBinding?['invalidated_at'] == null,
+        )
+        .toList();
+    if (invalid.isEmpty) return;
+    final ids = invalid.map((n) => n.id).toSet();
+    for (final item in session.pile) {
+      item.marks.removeWhere(
+        (m) => m is _VoiceStrokeMark && ids.contains(m.noteId),
+      );
+    }
+    // Existing proposals can depend on any earlier mark. Restore the baseline
+    // conservatively; the normal bounded loop may reconsider remaining marks.
+    while (session.edits.isNotEmpty) {
+      session.undo();
+    }
+    for (final note in invalid) {
+      note.acceptedBinding!['invalidated_at'] = _clock()
+          .toUtc()
+          .toIso8601String();
+      note.acceptedBinding!['invalidated_reason'] = reason;
+    }
+    // Invalidate all in memory first, even if a later disk write fails.
+    for (final note in invalid) {
+      await voiceLibrary.save(note);
+    }
+    feed.add(
+      const FeedLine(
+        'Source changed. Earlier voice feedback was invalidated and session edits reset for fresh review.',
+      ),
+    );
+    _changed();
+  }
+
+  Future<void> configureTranscriber(String configPath) async {
+    if (voiceBusy) {
+      throw StateError('Wait for transcription to finish or cancel it first.');
+    }
+    await voiceLibrary.configure(configPath);
+    feed.add(
+      const FeedLine(
+        'Local voice tools are ready. Audio stays on this computer.',
+      ),
+    );
+    _changed();
+    _notify();
+  }
+
+  Future<void> transcribeVoice(String id) async {
+    final note = _voice(id);
+    if (_disposed ||
+        voiceBusy ||
+        busy ||
+        note.status == VoiceNoteStatus.accepted) {
+      return;
+    }
+    final cancellation = TranscriptionCancellation();
+    _voiceJobs[id] = cancellation;
+    note.status = VoiceNoteStatus.transcribing;
+    note.error = null;
+    _changed();
+    _notify();
+    try {
+      await voiceLibrary.verifyAudio(note);
+      final transcriber = await voiceLibrary.loadTranscriber();
+      final result = await transcriber.transcribe(
+        note.audioPath,
+        cancellation: cancellation,
+      );
+      if (cancellation.isCancelled || _disposed) {
+        note.status = VoiceNoteStatus.cancelled;
+      } else {
+        await voiceLibrary.verifyAudio(note);
+        if (cancellation.isCancelled || _disposed) {
+          note.status = VoiceNoteStatus.cancelled;
+          return;
+        }
+        final transcribedHash = result.metadata['audio_sha256'];
+        if (transcribedHash != null && transcribedHash != note.audioSha256) {
+          throw StateError(
+            'The transcribed audio changed. Add the original voice note again.',
+          );
+        }
+        note.transcript = result;
+        note.draftText = result.text;
+        note.status = VoiceNoteStatus.draft;
+        feed.add(
+          FeedLine(
+            'Transcript ready for ${note.name}. Review it before using feedback.',
+          ),
+        );
+      }
+    } catch (error) {
+      note.status = cancellation.isCancelled
+          ? VoiceNoteStatus.cancelled
+          : VoiceNoteStatus.failed;
+      note.error = error is TranscriptionException
+          ? error.message
+          : error.toString();
+    } finally {
+      try {
+        await voiceLibrary.save(note);
+      } catch (error) {
+        note.error =
+            'Couldn’t save the transcript record. Retry before accepting feedback. $error';
+      }
+      _voiceJobs.remove(id);
+      _changed();
+      _notify();
+    }
+  }
+
+  void cancelVoice(String id) => _voiceJobs[id]?.cancel();
+
+  Future<void> editVoiceDraft(String id, String text) async {
+    final note = _voice(id);
+    if (note.status != VoiceNoteStatus.draft) return;
+    if (text.length > 32000) {
+      throw StateError('Keep the reviewed transcript under 32,000 characters.');
+    }
+    note.draftText = text;
+    await voiceLibrary.save(note);
+    _changed();
+    _notify();
+  }
+
+  Future<void> rejectVoice(String id) async {
+    final note = _voice(id);
+    if (busy ||
+        note.status == VoiceNoteStatus.accepted ||
+        note.status == VoiceNoteStatus.transcribing) {
+      return;
+    }
+    final previous = note.status;
+    note.status = VoiceNoteStatus.rejected;
+    try {
+      await voiceLibrary.save(note);
+    } catch (_) {
+      note.status = previous;
+      rethrow;
+    }
+    _changed();
+    _notify();
+  }
+
+  Future<void> acceptVoice({
+    required String id,
+    required String text,
+    required String clipId,
+    required int strokeIndex,
+    required String authorName,
+    required String authorRole,
+    required String attribute,
+    required String label,
+  }) async {
+    if (busy || _disposed) {
+      throw StateError('Wait for the current operation to finish.');
+    }
+    final note = _voice(id);
+    if (note.status != VoiceNoteStatus.draft) {
+      throw StateError('This transcript is no longer awaiting review.');
+    }
+    if (text.trim().isEmpty ||
+        text.length > 32000 ||
+        authorName.trim().isEmpty ||
+        authorName.length > 200 ||
+        !{'coach', 'athlete'}.contains(authorRole) ||
+        !attributes.contains(attribute) ||
+        !{'red', 'green'}.contains(label)) {
+      throw StateError(
+        'Review the text and select the author, attribute and red or green feedback.',
+      );
+    }
+    _pendingDrops++;
+    _notify();
+    final job = _queue.then((_) async {
+      final source = _sources[clipId];
+      final matching = session.pile
+          .where(
+            (s) => s.stroke.clipId == clipId && s.stroke.index == strokeIndex,
+          )
+          .toList();
+      if (source == null ||
+          matching.length != 1 ||
+          matching.single.ignored ||
+          _pendingAthletes.isNotEmpty ||
+          note.status != VoiceNoteStatus.draft) {
+        throw StateError(
+          'Choose a current clip and swing after resolving competitor selection.',
+        );
+      }
+      var sourcePresent = false;
+      for (final path in source.paths) {
+        try {
+          if (await _fingerprint(path) == source.hash) sourcePresent = true;
+        } catch (_) {
+          /* Try another preserved alias. */
+        }
+      }
+      if (!sourcePresent) {
+        throw StateError(
+          'The selected footage changed or is missing. Add it again and review the new source.',
+        );
+      }
+      await voiceLibrary.verifyAudio(note);
+      final target = voiceTargets.singleWhere(
+        (t) => t.clipId == clipId && t.strokeIndex == strokeIndex,
+      );
+      final at = _clock().toUtc().toIso8601String();
+      final previousText = note.draftText;
+      note.acceptedBinding = {
+        'session_id': sessionId,
+        'clip_id': clipId,
+        'source_sha256': source.hash,
+        'source_name': source.name,
+        'pack_id': pack.packId,
+        'event_id': pack.eventId,
+        'stroke_index': strokeIndex,
+        'start_ms': target.startMs,
+        'end_ms': target.endMs,
+        'time_ms': target.startMs,
+        'author_name': authorName.trim(),
+        'author_role': authorRole,
+        'attribute': attribute,
+        'label': label,
+        'reviewed_text': text.trim(),
+        'accepted_at': at,
+      };
+      note.draftText = text.trim();
+      note.status = VoiceNoteStatus.accepted;
+      try {
+        // Durably record consent/provenance before adding a mark or learning.
+        await voiceLibrary.save(note);
+      } catch (_) {
+        note.acceptedBinding = null;
+        note.draftText = previousText;
+        note.status = VoiceNoteStatus.draft;
+        rethrow;
+      }
+      matching.single.marks.add(
+        _VoiceStrokeMark(
+          noteId: note.id,
+          attribute: attribute,
+          label: label,
+          author: authorRole,
+          createdAt: DateTime.parse(at),
+        ),
+      );
+      feed.add(
+        FeedLine(
+          'Reviewed feedback added to ${source.name} at ${(target.startMs / 1000).toStringAsFixed(2)} s.',
+        ),
+      );
+      _changed();
+      _tryUpdate();
+    });
+    _queue = job.then<void>((_) {}, onError: (Object _, StackTrace _) {});
+    try {
+      await job;
+    } finally {
+      _pendingDrops--;
+      _notify();
     }
   }
 
@@ -492,6 +832,7 @@ class CarneController extends ChangeNotifier {
     }
     final aliases = _sources[id]?.paths.toList() ?? [clip.path];
     if (_sources.containsKey(id)) {
+      await _invalidateVoice(id, 'competitor_changed');
       for (final path in aliases) {
         _changedPaths[path] = _clock().toUtc();
       }
@@ -661,6 +1002,7 @@ class CarneController extends ChangeNotifier {
         'ground_truth_accuracy_verified': false,
       },
       'inputs': _inputs,
+      'voice_notes': [for (final note in _voiceNotes) note.toJson()],
       'sources': [
         for (final source in _sources.values)
           {
@@ -819,6 +1161,9 @@ class CarneController extends ChangeNotifier {
   @override
   void dispose() {
     _disposed = true;
+    for (final job in _voiceJobs.values) {
+      job.cancel();
+    }
     super.dispose();
   }
 }

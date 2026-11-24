@@ -12,7 +12,7 @@ The audit implementation is a correctness and delivery baseline. It does not tur
 | P1 | Public repository and handoff | Current README and learning path; preserve research failures; reconcile main/implementation; explicitly scoped handoff commits |
 | P1 — open | [Physical-device acceptance #2](https://github.com/SquirmyWormy275/STRATHVISION/issues/2) | Actual Windows/macOS/Android/iPhone review, persistence and offline package transfer; Apple signing and devices required |
 | P1 — open | [Coach and independent-session evidence #3](https://github.com/SquirmyWormy275/STRATHVISION/issues/3) | Real labels, frozen session-disjoint holdout, contact/implement accuracy, controlled learning comparison, coach-approved packs/Springboard |
-| P2 — open | [Local transcription #4](https://github.com/SquirmyWormy275/STRATHVISION/issues/4) | Choose a local runtime/model, review transcripts before binding, verify real audio and recovery; currently absent |
+| P2 — native verification in progress | [Local transcription #4](https://github.com/SquirmyWormy275/STRATHVISION/issues/4) | Pinned local runtime/model, explicit transcript/source/stroke/author review, cancellation and recovery implemented; real speech passes Linux. Windows/macOS checks pending. [Setup and evidence](VOICE_NOTES.md) |
 | P2 — done 2026-11-11 | [Live adapter compiler #5](https://github.com/SquirmyWormy275/STRATHVISION/issues/5) | Live compile via signed-in Claude Code CLI (no API key), both specs pass all examples, offline `.paw` reload verified; see VALIDATION.md. API-key HTTP path remains fixture-tested only |
 
 ## Research promotion sequence

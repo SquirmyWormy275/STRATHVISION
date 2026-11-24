@@ -23,6 +23,7 @@ The engineering contribution is a complete path from video review to a versioned
 | Private profiles | Desktop fitting, quality gates, versioned file transfer, phone inference | [Builder](packages/analysis_engine/lib/src/builder.dart); renamed copies count once, but different files are not necessarily independent sessions |
 | Inspectable comparison | Score decomposition, confidence-aware ordering, warnings and historical results | [Comparison tests](packages/analysis_engine/test/compare_test.dart); confidence is heuristic, not calibrated uncertainty or a technique grade |
 | Research workbench | Specialist patches, optional adapter compilation, bounded CARNE ASADA updates | [Research records](docs/CARNE_RUN_REPORT.md); synthetic tests establish software behavior, not coaching improvement |
+| Optional voice notes | Local speech drafts with explicit source, swing, author and red/green review | [Setup and verification](docs/VOICE_NOTES.md); desktop WAV input, no upload, recognition accuracy for coaching speech remains unvalidated |
 
 The latest full-duration study processed **47 recordings in 195 windows** with no failed windows. Contact-timing diagnostics still matched only **2 of 15** annotated contacts. The committed population-review snapshot contains no coach judgments and establishes no learning improvement. Axe detectors failed validation; the barbell pilot remains research-only. Read the [study reports](docs/RESEARCH_STATUS.md) before using analysis as evidence about technique.
 

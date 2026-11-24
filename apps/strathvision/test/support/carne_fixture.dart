@@ -58,6 +58,7 @@ class CarneFixture {
     ResearchWriter? write,
     ClipFingerprinter? fingerprint,
     CarneAthleteState? athletes,
+    VoiceNoteLibrary? voiceLibrary,
     DateTime Function()? clock,
     double confidence = .85,
   }) => CarneController(
@@ -73,6 +74,7 @@ class CarneFixture {
             throw StateError('Unexpected profile save'),
     fingerprint: fingerprint,
     athletes: athletes,
+    voiceLibrary: voiceLibrary,
     clock: clock ?? () => DateTime.utc(2026, 11, 4),
     phaseLabel: info.phaseLabel,
     metricLabel: info.metricLabel,
