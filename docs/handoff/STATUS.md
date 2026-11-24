@@ -2,13 +2,13 @@
 
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
-owner: none
-heartbeat: 2026-11-24T06:57:46Z
+owner: codex
+heartbeat: 2026-11-24T14:33:19Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
 next: Complete the pending Apple API Request Access step, then approve creation/storage of a dedicated team key and configure the four testflight environment secrets. Run builds.yml with upload_testflight=true; verify signed upload, Apple processing and real iPhone acceptance before external invitations.
-owned_paths: 
+owned_paths: .github/workflows scripts docs/DISTRIBUTION.md docs/handoff/STATUS.md
 active_processes: none
 <!-- STATE:END -->
 
@@ -84,6 +84,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T14:33:19Z **codex** — Claimed: Continue TestFlight setup after owner enabled App Store Connect API; prepare dedicated signing key and cloud upload
 - 2026-11-24T06:57:46Z **codex** — Released: Cloud TestFlight automation and iOS runtime recovery are saved on implementation; all eight validation jobs pass for e073b73; Apple API owner approval remains pending → next: Complete the pending Apple API Request Access step, then approve creation/storage of a dedicated team key and configure the four testflight environment secrets. Run builds.yml with upload_testflight=true; verify signed upload, Apple processing and real iPhone acceptance before external invitations.
 - 2026-11-24T06:57:22Z **codex** — All eight cloud jobs pass for e073b73, including iOS release linking and both models in iPhone Simulator; Apple app registered and TestFlight automation prepared → next: Owner: complete Request Access at https://appstoreconnect.apple.com/access/integrations/api. Once enabled, obtain action-time approval for STRATHVISION GitHub team App Manager key and encrypted GitHub testflight signing secrets; then dispatch builds.yml on implementation with upload_testflight=true and verify Apple processing and real iPhone behavior.
 - 2026-11-24T06:40:07Z **codex** — iOS release build and runtime symbol check now pass using official same-version NuGet framework; seven other cloud jobs pass; iOS Simulator inference running → next: Finish iOS Simulator verification in run 45340735890 (source e073b73). Owner must complete Apple API Request Access; then obtain action-time approval for team App Manager key and configure encrypted GitHub signing secrets before a signed run.
