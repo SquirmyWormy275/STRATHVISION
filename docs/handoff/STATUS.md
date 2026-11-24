@@ -3,13 +3,13 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T18:36:44Z
+heartbeat: 2026-11-24T18:46:43Z
 branch: implementation
 phase: Release packaging
 task: Apple beta distribution assessment
-next: Dispatch builds.yml upload_testflight=true on implementation; verify simulator inference, all9jobs, downloaded IPA SDK/hash/manifest and fresh Apple VALID. France classification and broader scope choice remain pending.
+next: Monitor run45461413138 to all9successfuljobs; verify downloaded signed IPA/manifest/hash, actual Mach-O SDK27.2, and fresh Apple VALID. France classification/scope decision remains pending; no filing or library rewrite.
 owned_paths: docs/handoff/STATUS.md docs/DISTRIBUTION.md .github/workflows/builds.yml
-active_processes: GitHub Actions run 45455404551 at e44908f: full Xcode 27.2 validation and signed TestFlight upload; France classification pending user scope choice
+active_processes: GitHub Actions run45461413138: full SDK27.2 validation and signed TestFlight upload with bounded40min simulator stage; France scope/classification pending
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -86,6 +86,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-24T18:46:43Z **codex** — Run45461413138 at574ea35 passed app/research/training, Windows and Android; Linux end-to-end passed and release packaging continues. iOS runner acquired after queue, with40min simulator budget and verbose diagnostics. → next: Monitor run45461413138 to all9successfuljobs; verify downloaded signed IPA/manifest/hash, actual Mach-O SDK27.2, and fresh Apple VALID. France classification/scope decision remains pending; no filing or library rewrite.
 - 2026-11-24T18:36:44Z **codex** — Run45455404551 passed7jobs and iOS27.2 compilation but simulator native build exceeded20min before model execution; increased bounded allowance to40min with verbose diagnostics. Shell/actionlint/diff checks pass. → next: Dispatch builds.yml upload_testflight=true on implementation; verify simulator inference, all9jobs, downloaded IPA SDK/hash/manifest and fresh Apple VALID. France classification and broader scope choice remain pending.
 - 2026-11-24T18:13:59Z **codex** — SDK27.2 run45455404551 passed app/research/training, Windows, Android and macOS; iOS release compiled and simulator inference is running alongside Linux end-to-end → next: Monitor run45455404551 through simulator/Linux completion and signed upload. Verify IPA hash, manifest, Mach-O SDK and Apple VALID; update docs/evidence. France classification/scope choice remains pending.
 - 2026-11-24T18:06:51Z **codex** — Simulator selector regression fix passed 25 local script tests; fresh full SDK27.2 run45455404551 at e44908f is running. Independent review verified all recorded encryption markers and hashes. → next: Monitor GitHub Actions45455404551 to all nine successful jobs; download and verify new signed IPA/SDK/manifest, confirm Apple processing VALID, then update docs and evidence. France awaits user scope choice; no compliance submission or library rewrite.
