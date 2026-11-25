@@ -1,0 +1,81 @@
+{
+  "format": "user-footage-audit/1",
+  "selection": "7 original Gurr recordings with documented underhand, standing block and springboard event context; crowd, sideways, idle and known judge-selection risk. Videos are not cropped or copied. Person identities and coaching judgments are not inferred.",
+  "clips": [
+    {
+      "id": "dev-standing",
+      "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/24-25/IMG_3690.MOV",
+      "sha256": "8a68ad811b7dc2fa195b36bd7d493ba1e1ca5d9249047f15fe02f8d1592a5d2b",
+      "pack_id": "timber",
+      "event_id": "standing_block",
+      "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=dev-standing",
+      "reference_window_start_s": 4,
+      "reference_window_duration_s": 8,
+      "representative_ui": true
+    },
+    {
+      "id": "dev-crowded",
+      "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/IMG_8055.MOV",
+      "sha256": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+      "pack_id": "timber",
+      "event_id": "standing_block",
+      "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=dev-crowded",
+      "reference_window_start_s": 8,
+      "reference_window_duration_s": 8,
+      "representative_ui": false
+    },
+    {
+      "id": "dev-sideways",
+      "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/24-25/IMG_3692.MOV",
+      "sha256": "a2b67f2ea38f2bb03decdd9485cf6c5344a174e12043e051f860b1c14113e665",
+      "pack_id": "timber",
+      "event_id": "standing_block",
+      "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=dev-sideways",
+      "reference_window_start_s": 3,
+      "reference_window_duration_s": 8,
+      "representative_ui": false
+    },
+    {
+      "id": "test-idle",
+      "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/24-25/IMG_3694.MOV",
+      "sha256": "e4faf999f11510287fce02dfd9cc5d004c9ca85794e5b2c4ddc2dbdf2f348cdb",
+      "pack_id": "timber",
+      "event_id": "standing_block",
+      "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=test-idle",
+      "reference_window_start_s": 40,
+      "reference_window_duration_s": 8,
+      "representative_ui": false
+    },
+    {
+      "id": "test-underhand",
+      "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/IMG_3862.MOV",
+      "sha256": "a2321359094f94acd4ab0ba93562e923f01283e0691d468a08d79f3f0810af0f",
+      "pack_id": "timber",
+      "event_id": "underhand",
+      "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=test-underhand",
+      "reference_window_start_s": 30,
+      "reference_window_duration_s": 8,
+      "representative_ui": true
+    },
+    {
+      "id": "test-crowded",
+      "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/IMG_8065.MOV",
+      "sha256": "72a809451b1ad03f9ab9db6b6b8fb4f0d35cb4b0c1806003a16429670bf4f80e",
+      "pack_id": "timber",
+      "event_id": "standing_block",
+      "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=test-crowded",
+      "reference_window_start_s": 24,
+      "reference_window_duration_s": 8,
+      "representative_ui": true
+    },
+    {
+      "id": "springboard-3-board-img3925",
+      "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/3-Board/IMG_3925.MOV",
+      "sha256": "0d455a55999b4d78dfd7c684efef9d24c98b4761e4dfed9ef8bd7af9c53298ee",
+      "pack_id": "timber",
+      "event_id": "springboard",
+      "metadata_source": "docs/DECISIONS.md Springboard human decision; Training Videos/Gurr Academy/Competition/3-Board/IMG_3925.MOV",
+      "representative_ui": true
+    }
+  ]
+}

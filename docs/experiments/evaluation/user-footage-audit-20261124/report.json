@@ -1,0 +1,1342 @@
+{
+  "format": "user-footage-runtime-audit/1",
+  "started_utc": "2026-11-24T21:53:16.954878Z",
+  "manifest_sha256": "fe89338e93adac1da967eb18a7e4dad42a470c9db84af53fbe9bc01b427c2eda",
+  "manifest": {
+    "format": "user-footage-audit/1",
+    "selection": "7 original Gurr recordings with documented underhand, standing block and springboard event context; crowd, sideways, idle and known judge-selection risk. Videos are not cropped or copied. Person identities and coaching judgments are not inferred.",
+    "clips": [
+      {
+        "id": "dev-standing",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/24-25/IMG_3690.MOV",
+        "sha256": "8a68ad811b7dc2fa195b36bd7d493ba1e1ca5d9249047f15fe02f8d1592a5d2b",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=dev-standing",
+        "reference_window_start_s": 4,
+        "reference_window_duration_s": 8,
+        "representative_ui": true
+      },
+      {
+        "id": "dev-crowded",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/IMG_8055.MOV",
+        "sha256": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=dev-crowded",
+        "reference_window_start_s": 8,
+        "reference_window_duration_s": 8,
+        "representative_ui": false
+      },
+      {
+        "id": "dev-sideways",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/24-25/IMG_3692.MOV",
+        "sha256": "a2b67f2ea38f2bb03decdd9485cf6c5344a174e12043e051f860b1c14113e665",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=dev-sideways",
+        "reference_window_start_s": 3,
+        "reference_window_duration_s": 8,
+        "representative_ui": false
+      },
+      {
+        "id": "test-idle",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/24-25/IMG_3694.MOV",
+        "sha256": "e4faf999f11510287fce02dfd9cc5d004c9ca85794e5b2c4ddc2dbdf2f348cdb",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=test-idle",
+        "reference_window_start_s": 40,
+        "reference_window_duration_s": 8,
+        "representative_ui": false
+      },
+      {
+        "id": "test-underhand",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/IMG_3862.MOV",
+        "sha256": "a2321359094f94acd4ab0ba93562e923f01283e0691d468a08d79f3f0810af0f",
+        "pack_id": "timber",
+        "event_id": "underhand",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=test-underhand",
+        "reference_window_start_s": 30,
+        "reference_window_duration_s": 8,
+        "representative_ui": true
+      },
+      {
+        "id": "test-crowded",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/IMG_8065.MOV",
+        "sha256": "72a809451b1ad03f9ab9db6b6b8fb4f0d35cb4b0c1806003a16429670bf4f80e",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=test-crowded",
+        "reference_window_start_s": 24,
+        "reference_window_duration_s": 8,
+        "representative_ui": true
+      },
+      {
+        "id": "springboard-3-board-img3925",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/3-Board/IMG_3925.MOV",
+        "sha256": "0d455a55999b4d78dfd7c684efef9d24c98b4761e4dfed9ef8bd7af9c53298ee",
+        "pack_id": "timber",
+        "event_id": "springboard",
+        "metadata_source": "docs/DECISIONS.md Springboard human decision; Training Videos/Gurr Academy/Competition/3-Board/IMG_3925.MOV",
+        "representative_ui": true
+      }
+    ]
+  },
+  "platform": "linux",
+  "source_revision": "855026091d8313aece2a7cdf045f15af54d5c321",
+  "phone_viewport": [
+    390,
+    844
+  ],
+  "runtime": "production visionRunner and MediaKitStagePlayer",
+  "profile": null,
+  "limitations": [
+    "No reference profile or human labels are generated.",
+    "Automatic athlete selection is not a verified identity.",
+    "Event provenance is supplied by the manifest, not inferred here.",
+    "A desktop phone-sized view does not verify physical iPhone behavior.",
+    "The OS picker and WorkspaceRoute presentation restoration are outside this audit.",
+    "Reported FPS can be the player fallback; automatic person selection can use a content-keyed pose cache.",
+    "Screenshots document the UI; native video textures may be absent from them.",
+    "Measurement-only outcomes are recorded here; the app does not persist them as comparison history."
+  ],
+  "complete": true,
+  "clips": [
+    {
+      "input": {
+        "id": "dev-standing",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/24-25/IMG_3690.MOV",
+        "sha256": "8a68ad811b7dc2fa195b36bd7d493ba1e1ca5d9249047f15fe02f8d1592a5d2b",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=dev-standing",
+        "reference_window_start_s": 4,
+        "reference_window_duration_s": 8,
+        "representative_ui": true
+      },
+      "status": "analysis_success",
+      "started_utc": "2026-11-24T21:53:17.017542Z",
+      "source_sha256_before": "8a68ad811b7dc2fa195b36bd7d493ba1e1ca5d9249047f15fe02f8d1592a5d2b",
+      "source_bytes": 32504248,
+      "imported_via_workspace_ui": true,
+      "duration_ms": 28848,
+      "fps": 29.984402,
+      "outcome": {
+        "clip_id": "440f1d4d-f186-4813-9f05-e71945e1e0d7",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metric_schema_version": "timber-standing-block-1",
+        "phases": {
+          "setup": {
+            "start_frame": 746,
+            "end_frame": 749,
+            "confidence": 0.9787
+          },
+          "backswing": {
+            "start_frame": 750,
+            "end_frame": 753,
+            "confidence": 0.9787
+          },
+          "downswing": {
+            "start_frame": 754,
+            "end_frame": 764,
+            "confidence": 0.9787
+          },
+          "entry": {
+            "start_frame": 765,
+            "end_frame": 779,
+            "confidence": 0.9787
+          },
+          "recovery": {
+            "start_frame": 780,
+            "end_frame": 786,
+            "confidence": 0.9787
+          }
+        },
+        "metrics": {
+          "entry_slope": {
+            "value": -11.7404,
+            "confidence": 0.9446,
+            "phase": "downswing"
+          },
+          "downswing_slope": {
+            "value": -11.1233,
+            "confidence": 0.9446,
+            "phase": "downswing"
+          },
+          "backswing_top_slope": {
+            "value": -31.0574,
+            "confidence": 0.9705,
+            "phase": "backswing"
+          },
+          "hinge_at_entry": {
+            "value": 131.017,
+            "confidence": 0.9507,
+            "phase": "entry"
+          },
+          "lead_elbow_at_entry": {
+            "value": 147.7149,
+            "confidence": 0.7381,
+            "phase": "entry"
+          },
+          "trail_elbow_downswing": {
+            "value": 132.4316,
+            "confidence": 0.9386,
+            "phase": "downswing"
+          },
+          "shoulder_lift_backswing": {
+            "value": 19.6209,
+            "confidence": 0.9782,
+            "phase": "backswing"
+          },
+          "backswing_time": {
+            "value": 0.3335,
+            "confidence": 0.982,
+            "phase": "backswing"
+          },
+          "downswing_time": {
+            "value": 0.3669,
+            "confidence": 0.982,
+            "phase": "downswing"
+          },
+          "recovery_time": {
+            "value": 0.2335,
+            "confidence": 0.9818,
+            "phase": "recovery"
+          }
+        },
+        "pose_confidence_summary": 0.9762,
+        "specialist_residuals": {
+          "slope_residual": 0.0
+        }
+      },
+      "strokes": 15,
+      "usable_strokes": 14,
+      "phase_pose_confidence": {
+        "setup": 0.9812,
+        "backswing": 0.9946,
+        "downswing": 0.9748,
+        "entry": 0.9664,
+        "recovery": 0.9749
+      },
+      "implement_confidence": 0.9825,
+      "pose_frames": 423,
+      "pose_mean_confidence": 0.9760192342599828,
+      "automatic_target": {
+        "quarter_turns": 0,
+        "frame": 58,
+        "x": 0.4492524724740248,
+        "y": 0.5173064174815121
+      },
+      "ambiguous": false,
+      "orientation_sure": true,
+      "candidates_frame": 58,
+      "candidates": [
+        {
+          "box": [
+            0.3558498281444176,
+            0.3097439657112816,
+            0.542655116803632,
+            0.7248688692517427
+          ],
+          "score": 0.7552924942025498
+        }
+      ],
+      "user_selection_required": false,
+      "selected_profile": null,
+      "analysis_error_visible": false,
+      "analysis_metrics_visible": true,
+      "schema_problems": [],
+      "reopened_project": {
+        "same_original_path": true,
+        "has_media": true,
+        "duration_ms": 28848,
+        "decode_check": {
+          "opened": true,
+          "workspace_seek_settled": true,
+          "decoded_frame": true,
+          "frame_width": 1920,
+          "frame_height": 1080,
+          "tone_mapped": true
+        },
+        "analyze_button_visible": true
+      },
+      "source_sha256_after": "8a68ad811b7dc2fa195b36bd7d493ba1e1ca5d9249047f15fe02f8d1592a5d2b",
+      "source_unchanged": true,
+      "elapsed_ms": 40335,
+      "completed_utc": "2026-11-24T21:53:57.358521Z"
+    },
+    {
+      "input": {
+        "id": "dev-crowded",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/IMG_8055.MOV",
+        "sha256": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=dev-crowded",
+        "reference_window_start_s": 8,
+        "reference_window_duration_s": 8,
+        "representative_ui": false
+      },
+      "status": "analysis_success",
+      "started_utc": "2026-11-24T21:53:57.405511Z",
+      "source_sha256_before": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+      "source_bytes": 35422520,
+      "imported_via_workspace_ui": true,
+      "duration_ms": 32001,
+      "fps": 29.996876,
+      "outcome": {
+        "clip_id": "aaa2b9d3-b38c-4bf4-889e-15310b3e1425",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metric_schema_version": "timber-standing-block-1",
+        "phases": {
+          "setup": {
+            "start_frame": 296,
+            "end_frame": 297,
+            "confidence": 0.3666
+          },
+          "backswing": {
+            "start_frame": 298,
+            "end_frame": 311,
+            "confidence": 0.7332
+          },
+          "downswing": {
+            "start_frame": 312,
+            "end_frame": 320,
+            "confidence": 0.7332
+          },
+          "entry": {
+            "start_frame": 321,
+            "end_frame": 323,
+            "confidence": 0.7332
+          },
+          "recovery": {
+            "start_frame": 324,
+            "end_frame": 362,
+            "confidence": 0.7332
+          }
+        },
+        "metrics": {
+          "entry_slope": {
+            "value": -24.7455,
+            "confidence": 0.71,
+            "phase": "downswing"
+          },
+          "downswing_slope": {
+            "value": -10.031,
+            "confidence": 0.71,
+            "phase": "downswing"
+          },
+          "backswing_top_slope": {
+            "value": 18.0805,
+            "confidence": 0.7476,
+            "phase": "backswing"
+          },
+          "hinge_at_entry": {
+            "value": 150.2076,
+            "confidence": 0.7516,
+            "phase": "entry"
+          },
+          "lead_elbow_at_entry": {
+            "value": 118.4279,
+            "confidence": 0.6538,
+            "phase": "entry"
+          },
+          "trail_elbow_downswing": {
+            "value": 131.1339,
+            "confidence": 0.6392,
+            "phase": "downswing"
+          },
+          "shoulder_lift_backswing": {
+            "value": 41.5819,
+            "confidence": 0.5637,
+            "phase": "backswing"
+          },
+          "backswing_time": {
+            "value": 0.4667,
+            "confidence": 0.8209,
+            "phase": "backswing"
+          },
+          "downswing_time": {
+            "value": 0.4334,
+            "confidence": 0.8209,
+            "phase": "downswing"
+          },
+          "recovery_time": {
+            "value": 0.7001,
+            "confidence": 0.8665,
+            "phase": "recovery"
+          }
+        },
+        "pose_confidence_summary": 0.9279,
+        "specialist_residuals": {
+          "slope_residual": 0.0
+        }
+      },
+      "strokes": 13,
+      "usable_strokes": 7,
+      "phase_pose_confidence": {
+        "setup": 0.9267,
+        "backswing": 0.921,
+        "downswing": 0.921,
+        "entry": 0.9295,
+        "recovery": 0.9457
+      },
+      "implement_confidence": 0.8144,
+      "pose_frames": 472,
+      "pose_mean_confidence": 0.9236900920079131,
+      "automatic_target": {
+        "quarter_turns": 0,
+        "frame": 60,
+        "x": 0.5048392287686339,
+        "y": 0.5521041131936587
+      },
+      "ambiguous": false,
+      "orientation_sure": true,
+      "candidates_frame": 60,
+      "candidates": [
+        {
+          "box": [
+            0.3675404839710593,
+            0.4374044983064736,
+            0.6421379735662085,
+            0.6668037280808438
+          ],
+          "score": 0.7805691689098637
+        },
+        {
+          "box": [
+            0.5120873414344836,
+            0.7301328331049635,
+            1.0,
+            0.9964186492056984
+          ],
+          "score": 0.6911319825676898
+        },
+        {
+          "box": [
+            0.5442416273843105,
+            0.4658760050334702,
+            0.6507308673442342,
+            0.635195084472679
+          ],
+          "score": 0.4956476380087764
+        },
+        {
+          "box": [
+            0.26399057494183065,
+            0.874962562363011,
+            0.4188438872810592,
+            0.9976401755039042
+          ],
+          "score": 0.33144631260119084
+        },
+        {
+          "box": [
+            0.10167990667464366,
+            0.43021401508398566,
+            0.1739515068258895,
+            0.478271984390173
+          ],
+          "score": 0.26344171685644824
+        }
+      ],
+      "user_selection_required": false,
+      "selected_profile": null,
+      "analysis_error_visible": false,
+      "analysis_metrics_visible": true,
+      "schema_problems": [],
+      "source_sha256_after": "a8078602647835496dedf9ce6ead276984ce3c89c89692a85289e1fb24c0a64a",
+      "source_unchanged": true,
+      "elapsed_ms": 48891,
+      "completed_utc": "2026-11-24T21:54:46.308004Z"
+    },
+    {
+      "input": {
+        "id": "dev-sideways",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/24-25/IMG_3692.MOV",
+        "sha256": "a2b67f2ea38f2bb03decdd9485cf6c5344a174e12043e051f860b1c14113e665",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=dev-sideways",
+        "reference_window_start_s": 3,
+        "reference_window_duration_s": 8,
+        "representative_ui": false
+      },
+      "status": "analysis_success",
+      "started_utc": "2026-11-24T21:54:46.350694Z",
+      "source_sha256_before": "a2b67f2ea38f2bb03decdd9485cf6c5344a174e12043e051f860b1c14113e665",
+      "source_bytes": 29459725,
+      "imported_via_workspace_ui": true,
+      "duration_ms": 26035,
+      "fps": 29.998079,
+      "outcome": {
+        "clip_id": "ee88dd28-411c-4921-8197-0ad55aa3498d",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metric_schema_version": "timber-standing-block-1",
+        "phases": {
+          "setup": {
+            "start_frame": 698,
+            "end_frame": 699,
+            "confidence": 0.4703
+          },
+          "backswing": {
+            "start_frame": 700,
+            "end_frame": 703,
+            "confidence": 0.9407
+          },
+          "downswing": {
+            "start_frame": 704,
+            "end_frame": 716,
+            "confidence": 0.9407
+          },
+          "entry": {
+            "start_frame": 717,
+            "end_frame": 731,
+            "confidence": 0.9407
+          },
+          "recovery": {
+            "start_frame": 732,
+            "end_frame": 742,
+            "confidence": 0.9407
+          }
+        },
+        "metrics": {
+          "entry_slope": {
+            "value": -10.6341,
+            "confidence": 0.9291,
+            "phase": "downswing"
+          },
+          "downswing_slope": {
+            "value": -9.1186,
+            "confidence": 0.9291,
+            "phase": "downswing"
+          },
+          "backswing_top_slope": {
+            "value": -36.0264,
+            "confidence": 0.9462,
+            "phase": "backswing"
+          },
+          "hinge_at_entry": {
+            "value": 136.4006,
+            "confidence": 0.8979,
+            "phase": "entry"
+          },
+          "lead_elbow_at_entry": {
+            "value": 127.3033,
+            "confidence": 0.5568,
+            "phase": "entry"
+          },
+          "trail_elbow_downswing": {
+            "value": 124.0384,
+            "confidence": 0.897,
+            "phase": "downswing"
+          },
+          "shoulder_lift_backswing": {
+            "value": 10.6254,
+            "confidence": 0.9577,
+            "phase": "backswing"
+          },
+          "backswing_time": {
+            "value": 0.4,
+            "confidence": 0.9647,
+            "phase": "backswing"
+          },
+          "downswing_time": {
+            "value": 0.4334,
+            "confidence": 0.9647,
+            "phase": "downswing"
+          },
+          "recovery_time": {
+            "value": 0.6667,
+            "confidence": 0.9623,
+            "phase": "recovery"
+          }
+        },
+        "pose_confidence_summary": 0.9513,
+        "specialist_residuals": {
+          "slope_residual": 0.0
+        }
+      },
+      "strokes": 8,
+      "usable_strokes": 7,
+      "phase_pose_confidence": {
+        "setup": 0.9661,
+        "backswing": 0.9826,
+        "downswing": 0.961,
+        "entry": 0.9314,
+        "recovery": 0.9451
+      },
+      "implement_confidence": 0.9662,
+      "pose_frames": 390,
+      "pose_mean_confidence": 0.9431119965280093,
+      "automatic_target": {
+        "quarter_turns": 1,
+        "frame": 60,
+        "x": 0.34909086044018084,
+        "y": 0.5878313504732572
+      },
+      "ambiguous": false,
+      "orientation_sure": true,
+      "candidates_frame": 60,
+      "candidates": [
+        {
+          "box": [
+            0.17295331706597586,
+            0.17727502564677025,
+            0.5252284038143858,
+            0.9983876752997441
+          ],
+          "score": 0.9159587430692753
+        }
+      ],
+      "user_selection_required": false,
+      "selected_profile": null,
+      "analysis_error_visible": false,
+      "analysis_metrics_visible": true,
+      "schema_problems": [],
+      "source_sha256_after": "a2b67f2ea38f2bb03decdd9485cf6c5344a174e12043e051f860b1c14113e665",
+      "source_unchanged": true,
+      "elapsed_ms": 33114,
+      "completed_utc": "2026-11-24T21:55:19.476150Z"
+    },
+    {
+      "input": {
+        "id": "test-idle",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/24-25/IMG_3694.MOV",
+        "sha256": "e4faf999f11510287fce02dfd9cc5d004c9ca85794e5b2c4ddc2dbdf2f348cdb",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=test-idle",
+        "reference_window_start_s": 40,
+        "reference_window_duration_s": 8,
+        "representative_ui": false
+      },
+      "status": "analysis_success",
+      "started_utc": "2026-11-24T21:55:19.504098Z",
+      "source_sha256_before": "e4faf999f11510287fce02dfd9cc5d004c9ca85794e5b2c4ddc2dbdf2f348cdb",
+      "source_bytes": 113249246,
+      "imported_via_workspace_ui": true,
+      "duration_ms": 102341,
+      "fps": 29.997068,
+      "outcome": {
+        "clip_id": "60a27ca5-cfe9-4ba1-bc5a-ed3906052009",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metric_schema_version": "timber-standing-block-1",
+        "phases": {
+          "setup": {
+            "start_frame": 288,
+            "end_frame": 369,
+            "confidence": 0.9562
+          },
+          "backswing": {
+            "start_frame": 370,
+            "end_frame": 469,
+            "confidence": 0.9562
+          },
+          "downswing": {
+            "start_frame": 470,
+            "end_frame": 484,
+            "confidence": 0.9562
+          },
+          "entry": {
+            "start_frame": 485,
+            "end_frame": 959,
+            "confidence": 0.9562
+          },
+          "recovery": {
+            "start_frame": 960,
+            "end_frame": 960,
+            "confidence": 0.4781
+          }
+        },
+        "metrics": {
+          "entry_slope": {
+            "value": -7.4803,
+            "confidence": 0.946,
+            "phase": "downswing"
+          },
+          "downswing_slope": {
+            "value": 1.0507,
+            "confidence": 0.946,
+            "phase": "downswing"
+          },
+          "backswing_top_slope": {
+            "value": -41.1803,
+            "confidence": 0.9648,
+            "phase": "backswing"
+          },
+          "hinge_at_entry": {
+            "value": 125.3388,
+            "confidence": 0.8905,
+            "phase": "entry"
+          },
+          "lead_elbow_at_entry": {
+            "value": 134.6327,
+            "confidence": 0.4397,
+            "phase": "entry"
+          },
+          "trail_elbow_downswing": {
+            "value": 132.4077,
+            "confidence": 0.9414,
+            "phase": "downswing"
+          },
+          "shoulder_lift_backswing": {
+            "value": 31.4128,
+            "confidence": 0.972,
+            "phase": "backswing"
+          },
+          "backswing_time": {
+            "value": 4.4338,
+            "confidence": 0.9754,
+            "phase": "backswing"
+          },
+          "downswing_time": {
+            "value": 0.5,
+            "confidence": 0.9754,
+            "phase": "downswing"
+          },
+          "recovery_time": {
+            "value": 3.6337,
+            "confidence": 0.9807,
+            "phase": "recovery"
+          }
+        },
+        "pose_confidence_summary": 0.9584,
+        "specialist_residuals": {
+          "slope_residual": 0.0
+        }
+      },
+      "strokes": 6,
+      "usable_strokes": 4,
+      "phase_pose_confidence": {
+        "setup": 0.9683,
+        "backswing": 0.9876,
+        "downswing": 0.9632,
+        "entry": 0.923,
+        "recovery": 0.9107
+      },
+      "implement_confidence": 0.9518,
+      "pose_frames": 1535,
+      "pose_mean_confidence": 0.9433554851971443,
+      "automatic_target": {
+        "quarter_turns": 0,
+        "frame": 60,
+        "x": 0.3806791076293358,
+        "y": 0.5765173374078212
+      },
+      "ambiguous": false,
+      "orientation_sure": true,
+      "candidates_frame": 60,
+      "candidates": [
+        {
+          "box": [
+            0.2548808432794364,
+            0.16102215667298303,
+            0.5064773719792353,
+            0.9920125181426594
+          ],
+          "score": 0.903796087418371
+        }
+      ],
+      "user_selection_required": false,
+      "selected_profile": null,
+      "analysis_error_visible": false,
+      "analysis_metrics_visible": true,
+      "schema_problems": [],
+      "source_sha256_after": "e4faf999f11510287fce02dfd9cc5d004c9ca85794e5b2c4ddc2dbdf2f348cdb",
+      "source_unchanged": true,
+      "elapsed_ms": 107577,
+      "completed_utc": "2026-11-24T21:57:07.091447Z"
+    },
+    {
+      "input": {
+        "id": "test-underhand",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/IMG_3862.MOV",
+        "sha256": "a2321359094f94acd4ab0ba93562e923f01283e0691d468a08d79f3f0810af0f",
+        "pack_id": "timber",
+        "event_id": "underhand",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=test-underhand",
+        "reference_window_start_s": 30,
+        "reference_window_duration_s": 8,
+        "representative_ui": true
+      },
+      "status": "analysis_success",
+      "started_utc": "2026-11-24T21:57:07.118383Z",
+      "source_sha256_before": "a2321359094f94acd4ab0ba93562e923f01283e0691d468a08d79f3f0810af0f",
+      "source_bytes": 87123320,
+      "imported_via_workspace_ui": true,
+      "duration_ms": 78373,
+      "fps": 29.997448,
+      "outcome": {
+        "clip_id": "cdcd08f0-2428-4dc6-993b-648ba4e2fa22",
+        "pack_id": "timber",
+        "event_id": "underhand",
+        "metric_schema_version": "timber-underhand-1",
+        "phases": {
+          "setup": {
+            "start_frame": 1438,
+            "end_frame": 1439,
+            "confidence": 0.4832
+          },
+          "backswing": {
+            "start_frame": 1440,
+            "end_frame": 1451,
+            "confidence": 0.9663
+          },
+          "downswing": {
+            "start_frame": 1452,
+            "end_frame": 1467,
+            "confidence": 0.9663
+          },
+          "entry": {
+            "start_frame": 1468,
+            "end_frame": 1473,
+            "confidence": 0.9663
+          },
+          "recovery": {
+            "start_frame": 1474,
+            "end_frame": 1474,
+            "confidence": 0.4832
+          }
+        },
+        "metrics": {
+          "entry_slope": {
+            "value": -75.9022,
+            "confidence": 0.943,
+            "phase": "downswing"
+          },
+          "downswing_slope": {
+            "value": -31.6054,
+            "confidence": 0.943,
+            "phase": "downswing"
+          },
+          "backswing_top_slope": {
+            "value": 20.7163,
+            "confidence": 0.9624,
+            "phase": "backswing"
+          },
+          "hinge_at_entry": {
+            "value": 102.511,
+            "confidence": 0.8474,
+            "phase": "entry"
+          },
+          "lead_knee_at_entry": {
+            "value": 151.2263,
+            "confidence": 0.8374,
+            "phase": "entry"
+          },
+          "trail_knee_at_entry": {
+            "value": 156.255,
+            "confidence": 0.762,
+            "phase": "entry"
+          },
+          "trail_elbow_downswing": {
+            "value": 133.447,
+            "confidence": 0.7646,
+            "phase": "downswing"
+          },
+          "shoulder_lift_backswing": {
+            "value": 70.2029,
+            "confidence": 0.8201,
+            "phase": "backswing"
+          },
+          "backswing_time": {
+            "value": 0.4,
+            "confidence": 0.9754,
+            "phase": "backswing"
+          },
+          "downswing_time": {
+            "value": 0.5668,
+            "confidence": 0.9754,
+            "phase": "downswing"
+          }
+        },
+        "pose_confidence_summary": 0.9399,
+        "specialist_residuals": {
+          "slope_residual": 0.0
+        }
+      },
+      "strokes": 31,
+      "usable_strokes": 14,
+      "phase_pose_confidence": {
+        "setup": 0.9396,
+        "backswing": 0.9637,
+        "downswing": 0.9271,
+        "entry": 0.926,
+        "recovery": 0.9413
+      },
+      "implement_confidence": 0.9361,
+      "pose_frames": 1109,
+      "pose_mean_confidence": 0.9198948157983287,
+      "automatic_target": {
+        "quarter_turns": 0,
+        "frame": 60,
+        "x": 0.3159994712242713,
+        "y": 0.471261350517599
+      },
+      "ambiguous": false,
+      "orientation_sure": true,
+      "candidates_frame": 60,
+      "candidates": [
+        {
+          "box": [
+            0.25082309046282464,
+            0.24177245354428561,
+            0.381175851985718,
+            0.7007502474909123
+          ],
+          "score": 0.8563469252513443
+        },
+        {
+          "box": [
+            0.7992236482657177,
+            0.49168237296957173,
+            0.8384258466023407,
+            0.6163948963644877
+          ],
+          "score": 0.6283397618663145
+        },
+        {
+          "box": [
+            0.7229118622908658,
+            0.5544049905649969,
+            0.7541562329621982,
+            0.6438932680941701
+          ],
+          "score": 0.4303083973816513
+        },
+        {
+          "box": [
+            0.12595703540827413,
+            0.3907052922893138,
+            0.16189191402409892,
+            0.5394099917745633
+          ],
+          "score": 0.34165619238259737
+        },
+        {
+          "box": [
+            0.9744456918744616,
+            0.5233235169282473,
+            0.9997242811229835,
+            0.6571745247300727
+          ],
+          "score": 0.267380895636526
+        }
+      ],
+      "user_selection_required": false,
+      "selected_profile": null,
+      "analysis_error_visible": false,
+      "analysis_metrics_visible": true,
+      "schema_problems": [],
+      "reopened_project": {
+        "same_original_path": true,
+        "has_media": true,
+        "duration_ms": 78373,
+        "decode_check": {
+          "opened": true,
+          "workspace_seek_settled": true,
+          "decoded_frame": true,
+          "frame_width": 1920,
+          "frame_height": 1080,
+          "tone_mapped": true
+        },
+        "analyze_button_visible": true
+      },
+      "source_sha256_after": "a2321359094f94acd4ab0ba93562e923f01283e0691d468a08d79f3f0810af0f",
+      "source_unchanged": true,
+      "elapsed_ms": 94485,
+      "completed_utc": "2026-11-24T21:58:41.614522Z"
+    },
+    {
+      "input": {
+        "id": "test-crowded",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/IMG_8065.MOV",
+        "sha256": "72a809451b1ad03f9ab9db6b6b8fb4f0d35cb4b0c1806003a16429670bf4f80e",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metadata_source": "docs/experiments/evaluation/gurr-inputs.json window_id=test-crowded",
+        "reference_window_start_s": 24,
+        "reference_window_duration_s": 8,
+        "representative_ui": true
+      },
+      "status": "analysis_success",
+      "started_utc": "2026-11-24T21:58:41.640793Z",
+      "source_sha256_before": "72a809451b1ad03f9ab9db6b6b8fb4f0d35cb4b0c1806003a16429670bf4f80e",
+      "source_bytes": 69663765,
+      "imported_via_workspace_ui": true,
+      "duration_ms": 62838,
+      "fps": 29.996817,
+      "outcome": {
+        "clip_id": "04729f6c-9737-48db-aa54-44b125974810",
+        "pack_id": "timber",
+        "event_id": "standing_block",
+        "metric_schema_version": "timber-standing-block-1",
+        "phases": {
+          "setup": {
+            "start_frame": 1288,
+            "end_frame": 1289,
+            "confidence": 0.4519
+          },
+          "backswing": {
+            "start_frame": 1290,
+            "end_frame": 1327,
+            "confidence": 0.9038
+          },
+          "downswing": {
+            "start_frame": 1328,
+            "end_frame": 1342,
+            "confidence": 0.9038
+          },
+          "entry": {
+            "start_frame": 1343,
+            "end_frame": 1347,
+            "confidence": 0.9038
+          },
+          "recovery": {
+            "start_frame": 1348,
+            "end_frame": 1396,
+            "confidence": 0.9038
+          }
+        },
+        "metrics": {
+          "entry_slope": {
+            "value": -19.1192,
+            "confidence": 0.6797,
+            "phase": "downswing"
+          },
+          "downswing_slope": {
+            "value": -5.0771,
+            "confidence": 0.6797,
+            "phase": "downswing"
+          },
+          "backswing_top_slope": {
+            "value": -34.4735,
+            "confidence": 0.6883,
+            "phase": "backswing"
+          },
+          "hinge_at_entry": {
+            "value": 151.6974,
+            "confidence": 0.7547,
+            "phase": "entry"
+          },
+          "lead_elbow_at_entry": {
+            "value": 126.6103,
+            "confidence": 0.5971,
+            "phase": "entry"
+          },
+          "trail_elbow_downswing": {
+            "value": 122.789,
+            "confidence": 0.5984,
+            "phase": "downswing"
+          },
+          "shoulder_lift_backswing": {
+            "value": 38.3828,
+            "confidence": 0.5916,
+            "phase": "backswing"
+          },
+          "backswing_time": {
+            "value": 0.6001,
+            "confidence": 0.8308,
+            "phase": "backswing"
+          },
+          "downswing_time": {
+            "value": 0.3667,
+            "confidence": 0.8308,
+            "phase": "downswing"
+          },
+          "recovery_time": {
+            "value": 0.6334,
+            "confidence": 0.8308,
+            "phase": "recovery"
+          }
+        },
+        "pose_confidence_summary": 0.9061,
+        "specialist_residuals": {
+          "slope_residual": 0.0
+        }
+      },
+      "strokes": 21,
+      "usable_strokes": 9,
+      "phase_pose_confidence": {
+        "setup": 0.902,
+        "backswing": 0.8975,
+        "downswing": 0.9156,
+        "entry": 0.9263,
+        "recovery": 0.9094
+      },
+      "implement_confidence": 0.7749,
+      "pose_frames": 934,
+      "pose_mean_confidence": 0.9139111579275956,
+      "automatic_target": {
+        "quarter_turns": 0,
+        "frame": 60,
+        "x": 0.6466161450769147,
+        "y": 0.514127797805346
+      },
+      "ambiguous": false,
+      "orientation_sure": true,
+      "candidates_frame": 60,
+      "candidates": [
+        {
+          "box": [
+            0.5631110789293929,
+            0.4000097178215297,
+            0.7301212112244364,
+            0.6282458777891623
+          ],
+          "score": 0.85045416240024
+        },
+        {
+          "box": [
+            0.11717239802288654,
+            0.6186887986139405,
+            0.4564570851756217,
+            0.8858279817624938
+          ],
+          "score": 0.6821053391147203
+        },
+        {
+          "box": [
+            0.7802581056521677,
+            0.8637744489664847,
+            0.9555122665918602,
+            0.9986456881454726
+          ],
+          "score": 0.6679989048708315
+        },
+        {
+          "box": [
+            0.7108136131088638,
+            0.4126738422881358,
+            0.794639512934472,
+            0.5521183817889421
+          ],
+          "score": 0.4960075225961589
+        },
+        {
+          "box": [
+            0.7842458299276174,
+            0.42987440740509264,
+            0.8983939686198501,
+            0.5585452056078081
+          ],
+          "score": 0.4745451696639691
+        }
+      ],
+      "user_selection_required": false,
+      "selected_profile": null,
+      "analysis_error_visible": false,
+      "analysis_metrics_visible": true,
+      "schema_problems": [],
+      "reopened_project": {
+        "same_original_path": true,
+        "has_media": true,
+        "duration_ms": 62838,
+        "decode_check": {
+          "opened": true,
+          "workspace_seek_settled": true,
+          "decoded_frame": true,
+          "frame_width": 1080,
+          "frame_height": 1920,
+          "tone_mapped": true
+        },
+        "analyze_button_visible": true
+      },
+      "source_sha256_after": "72a809451b1ad03f9ab9db6b6b8fb4f0d35cb4b0c1806003a16429670bf4f80e",
+      "source_unchanged": true,
+      "elapsed_ms": 80509,
+      "completed_utc": "2026-11-24T22:00:02.160014Z"
+    },
+    {
+      "input": {
+        "id": "springboard-3-board-img3925",
+        "path": "/run/media/kingoftheeast/Seagate Portable Drive/CARNE ASADA/Training Videos/Gurr Academy/Competition/3-Board/IMG_3925.MOV",
+        "sha256": "0d455a55999b4d78dfd7c684efef9d24c98b4761e4dfed9ef8bd7af9c53298ee",
+        "pack_id": "timber",
+        "event_id": "springboard",
+        "metadata_source": "docs/DECISIONS.md Springboard human decision; Training Videos/Gurr Academy/Competition/3-Board/IMG_3925.MOV",
+        "representative_ui": true
+      },
+      "status": "analysis_success",
+      "started_utc": "2026-11-24T22:00:02.186801Z",
+      "source_sha256_before": "0d455a55999b4d78dfd7c684efef9d24c98b4761e4dfed9ef8bd7af9c53298ee",
+      "source_bytes": 186690865,
+      "imported_via_workspace_ui": true,
+      "duration_ms": 169783,
+      "fps": 29.997055,
+      "outcome": {
+        "clip_id": "e096fb82-a35d-40da-97bb-9cc41477e190",
+        "pack_id": "timber",
+        "event_id": "springboard",
+        "metric_schema_version": "timber-springboard-1",
+        "phases": {
+          "setup": {
+            "start_frame": 5022,
+            "end_frame": 5024,
+            "confidence": 0.9522
+          },
+          "backswing": {
+            "start_frame": 5025,
+            "end_frame": 5027,
+            "confidence": 0.9522
+          },
+          "downswing": {
+            "start_frame": 5028,
+            "end_frame": 5040,
+            "confidence": 0.9522
+          },
+          "entry": {
+            "start_frame": 5041,
+            "end_frame": 5078,
+            "confidence": 0.9522
+          },
+          "recovery": {
+            "start_frame": 5079,
+            "end_frame": 5079,
+            "confidence": 0.4761
+          }
+        },
+        "metrics": {
+          "entry_slope": {
+            "value": -10.9508,
+            "confidence": 0.8251,
+            "phase": "downswing"
+          },
+          "downswing_slope": {
+            "value": -6.1368,
+            "confidence": 0.8251,
+            "phase": "downswing"
+          },
+          "backswing_top_slope": {
+            "value": -30.8827,
+            "confidence": 0.7994,
+            "phase": "backswing"
+          },
+          "hinge_at_entry": {
+            "value": 157.0321,
+            "confidence": 0.8201,
+            "phase": "entry"
+          },
+          "lead_elbow_at_entry": {
+            "value": 145.1973,
+            "confidence": 0.755,
+            "phase": "entry"
+          },
+          "lead_knee_at_entry": {
+            "value": 154.7717,
+            "confidence": 0.8117,
+            "phase": "entry"
+          },
+          "trail_knee_at_entry": {
+            "value": 155.0035,
+            "confidence": 0.825,
+            "phase": "entry"
+          },
+          "trail_elbow_downswing": {
+            "value": 130.3947,
+            "confidence": 0.7038,
+            "phase": "downswing"
+          },
+          "shoulder_lift_backswing": {
+            "value": 9.1306,
+            "confidence": 0.782,
+            "phase": "backswing"
+          },
+          "backswing_time": {
+            "value": 0.2,
+            "confidence": 0.9037,
+            "phase": "backswing"
+          },
+          "downswing_time": {
+            "value": 0.5334,
+            "confidence": 0.9037,
+            "phase": "downswing"
+          },
+          "recovery_time": {
+            "value": 0.7334,
+            "confidence": 0.9033,
+            "phase": "recovery"
+          }
+        },
+        "pose_confidence_summary": 0.9327,
+        "specialist_residuals": {
+          "slope_residual": 0.0
+        }
+      },
+      "strokes": 50,
+      "usable_strokes": 35,
+      "phase_pose_confidence": {
+        "setup": 0.9326,
+        "backswing": 0.926,
+        "downswing": 0.9319,
+        "entry": 0.9291,
+        "recovery": 0.9365
+      },
+      "implement_confidence": 0.8823,
+      "pose_frames": 1513,
+      "pose_mean_confidence": 0.9272130404826696,
+      "automatic_target": {
+        "quarter_turns": 0,
+        "frame": 60,
+        "x": 0.6280171453443348,
+        "y": 0.6755784979233375
+      },
+      "ambiguous": false,
+      "orientation_sure": true,
+      "candidates_frame": 60,
+      "candidates": [
+        {
+          "box": [
+            0.5021499649904559,
+            0.5514320698536469,
+            0.7538843256982137,
+            0.7997249259930279
+          ],
+          "score": 0.7692425752225347
+        },
+        {
+          "box": [
+            0.8676618577907617,
+            0.91827614958691,
+            0.9889631285806615,
+            1.0
+          ],
+          "score": 0.5000817413006331
+        }
+      ],
+      "user_selection_required": false,
+      "selected_profile": null,
+      "analysis_error_visible": false,
+      "analysis_metrics_visible": true,
+      "schema_problems": [],
+      "reopened_project": {
+        "same_original_path": true,
+        "has_media": true,
+        "duration_ms": 169783,
+        "decode_check": {
+          "opened": true,
+          "workspace_seek_settled": true,
+          "decoded_frame": true,
+          "frame_width": 1080,
+          "frame_height": 1920,
+          "tone_mapped": true
+        },
+        "analyze_button_visible": true
+      },
+      "source_sha256_after": "0d455a55999b4d78dfd7c684efef9d24c98b4761e4dfed9ef8bd7af9c53298ee",
+      "source_unchanged": true,
+      "elapsed_ms": 149332,
+      "completed_utc": "2026-11-24T22:02:31.528405Z"
+    }
+  ],
+  "status_counts": {
+    "analysis_success": 7
+  },
+  "completed_utc": "2026-11-24T22:02:31.556150Z"
+}

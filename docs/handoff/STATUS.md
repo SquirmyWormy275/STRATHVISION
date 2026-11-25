@@ -3,13 +3,13 @@
 <!-- Machine-updated by scripts/handoff.sh. The fields between the markers are parsed; edit them by hand only if the script can't. -->
 <!-- STATE:BEGIN -->
 owner: codex
-heartbeat: 2026-11-24T21:25:42Z
+heartbeat: 2026-11-25T21:02:04Z
 branch: implementation
 phase: iPhone analysis repair
 task: Restore native analysis in signed TestFlight app
-next: Dispatch builds.yml upload_testflight=true on this source. Verify final iOS native tests and signed IPA, then resolve Apple processing/compliance and add only to Owner iPhone Check; physical iPhone retest remains required.
+next: When Seagate volume is reconnected, enumerate and SHA-256 all Gurr Academy originals, upload them as assets to public STRATHVISION release original-footage-2026-11-24, verify remote size and digest for every file, publish release, and update docs/experiments/evaluation/user-footage-audit-20261124/README.md. Do not claim iPhone or coaching accuracy from desktop success.
 owned_paths: apps/strathvision/lib/analysis apps/strathvision/lib/vision apps/strathvision/lib/screens apps/strathvision/ios apps/strathvision/integration_test docs .github/workflows
-active_processes: none; dispatch final cloud build after Analyze again label correction
+active_processes: none; first seven original-footage audit completed; Seagate disconnected before GitHub media upload; public release draft prepared
 <!-- STATE:END -->
 
 ## Current acceptance
@@ -92,6 +92,7 @@ The table below preserves milestone evidence from its original dates. “Done”
 ## Log
 
 <!-- newest first; scripts/handoff.sh prepends entries below this line -->
+- 2026-11-25T21:02:04Z **codex** — Published seven-source native audit manifest and raw report; public footage release draft exists but contains no video because Seagate was disconnected → next: When Seagate volume is reconnected, enumerate and SHA-256 all Gurr Academy originals, upload them as assets to public STRATHVISION release original-footage-2026-11-24, verify remote size and digest for every file, publish release, and update docs/experiments/evaluation/user-footage-audit-20261124/README.md. Do not claim iPhone or coaching accuracy from desktop success.
 - 2026-11-24T21:25:42Z **codex** — Completed expanded audit evidence and corrected the refresh action label to Analyze again; 10 focused analysis regressions pass. Optional desktop compiler live check blocked by signed-out Claude CLI. → next: Dispatch builds.yml upload_testflight=true on this source. Verify final iOS native tests and signed IPA, then resolve Apple processing/compliance and add only to Owner iPhone Check; physical iPhone retest remains required.
 - 2026-11-24T21:19:39Z **codex** — Expanded audit fixes complete: iOS owned paths survive updates, Analyze refreshes current footage, cancelled voice drafts are discarded. 222 app, 116 engine, 35 script tests and 3 native phone-flow/model/format checks pass. → next: Dispatch builds.yml on implementation with upload_testflight=true. Verify all final-source jobs, signed IPA exports/assets and Apple processing; add replacement to existing owner-only group with France excluded, then request physical iPhone retest.
 - 2026-11-24T21:10:37Z **codex** — Expanded audit reproduced and fixed stale analysis after same-path footage replacement and cancelled voice drafts surviving their final save. Focused analysis 10 and voice 29 tests pass; native HDR, rotated detector and CARNE checks pass. → next: Finish iOS managed-path relocation fix and expanded native phone package/comparison/persistence test; rerun complete suites, dispatch final cloud build, verify final IPA and owner TestFlight flow.
